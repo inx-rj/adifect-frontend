@@ -1,0 +1,10 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap");
+
+@import "tailwindcss/base";
+/* @import "./components/base/index.css"; */
+
+@import "tailwindcss/components";
+@import "./components/index.css";
+
+@import "tailwindcss/utilities";
+/* @import "./components/utilities/index.css"; */

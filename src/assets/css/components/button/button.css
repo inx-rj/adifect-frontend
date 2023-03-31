@@ -1,0 +1,11 @@
+.btn {
+  @apply h-12 text-center gap-1 px-3 py-1.5 rounded text-base  hover:bg-opacity-90 transition-all;
+}
+
+.btn-primary {
+  @apply bg-theme border-solid border-theme text-white disabled:bg-dark-100 disabled:text-title-color;
+}
+
+.link-btn {
+  @apply block text-theme border border-theme rounded py-2.5 mt-4 w-full
+}
