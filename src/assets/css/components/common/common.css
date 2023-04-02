@@ -8,17 +8,13 @@
 }
 
 .input-style {
-    @apply h-12 w-full py-px pl-3.5 pr-0.5 border-[#0000001a] rounded;
-}
-
-.input-style:focus {
-    @apply border border-white;
+    @apply h-12 w-full py-px pl-3.5 pr-0.5 border border-[#0000001a] rounded outline-none focus:border-theme;
 }
 
 .error-style {
     @apply mb-1 text-sm text-danger block text-right
 }
 
-.text-danger .input-style{
+.text-danger .input-style {
     @apply border-danger
 }

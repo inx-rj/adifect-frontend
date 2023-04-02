@@ -1,6 +1,4 @@
 import { Suspense, lazy, useState } from "react";
-// import "./assets/css/App.css";
-// import "./assets/css/Responsive.css";
 
 const RouteApp = lazy(() => import("./RouteApp"));
 
