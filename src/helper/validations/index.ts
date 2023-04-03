@@ -99,7 +99,7 @@ export const category_name = (value) => {
   return null;
 };
 
-export const passwordRequired = (value) => {
+export const passwordRequired = (value:string) => {
   if (!value) return "Password is required";
 
   // if (!value.match(/^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$/g))
@@ -150,7 +150,7 @@ export const jobImages = (value) => {
   return null;
 };
 
-export const emailRequired = (value) => {
+export const emailRequired = (value:string) => {
   if (!value) return "Username/Email is required";
   return null;
 };

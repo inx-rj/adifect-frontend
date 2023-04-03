@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import { validateUsername, firstName, lastName, validateEmail, validatePassword, confirmPassword, validateRole } from "../../helper/utility/validations";
+import { validateUsername, firstName, lastName, validateEmail, validatePassword, confirmPassword, validateRole } from "helper/validations";
 import { MenuItem, Select } from "@mui/material";
 
 export default function Signup() {

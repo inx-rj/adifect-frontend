@@ -1,7 +1,8 @@
-// Define common types 
+// Define common types
 export interface RouteType {
   path: string;
   component: JSX.Element;
+  permission?: number[];
 }
 
 export interface EmailType {
@@ -12,31 +13,10 @@ export interface PasswordType {
   password: string;
 }
 
-export type EmailPWDType = EmailType & PasswordType
-
-export interface CodePhoneType {
-  phone_number: string;
-  country_code: string;
-}
-
-export interface CountryCodeType {
-  country_code?: string;
-}
-
-export interface PhoneNumType {
-  phone_number: string;
-}
-
-export interface TwoFACodePhoneType extends PhoneNumType {
-  "2fa_country_code"?: string;
-}
+export type EmailPWDType = EmailType & PasswordType;
 
 export interface RefreshToken {
   refresh: string;
-}
-
-export interface APIKeyType {
-  api_key: string;
 }
 
 export interface LoadingType {
@@ -59,8 +39,4 @@ export interface SidebarRoutesTypes {
   children: SidebarRoutesTypes[];
 }
 
-export interface appInitialType {
-  value: boolean;
-  persist: boolean;
-  isMiniSidebar: boolean;
-}
+export type OnChangeFiledValueType = { target: { value: string } };
