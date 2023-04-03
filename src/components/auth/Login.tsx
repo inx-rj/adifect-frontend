@@ -11,7 +11,7 @@ import { useAppDispatch } from "../../redux/store";
 import {
   emailRequired,
   passwordRequired,
-} from "../../helper/utility/validations";
+} from "helper/validations";
 // import { defaultPageLoader } from "../../redux/actions/other-actions";
 // import swal from "sweetalert";
 
@@ -159,7 +159,7 @@ const Login = () => {
                   setPassword(e.target.value);
                 }}
               />
-              {errors.email && <span className="error-style">{errors.password ?? "valid"}</span>}
+              {errors.password && <span className="error-style">{errors.password ?? "valid"}</span>}
             </div>
             <div className="mt-2 text-center w-full">
               <button

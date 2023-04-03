@@ -2,6 +2,7 @@
 export interface RouteType {
   path: string;
   component: JSX.Element;
+  permission?: number[];
 }
 
 export interface EmailType {

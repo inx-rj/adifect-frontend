@@ -9,5 +9,5 @@ export const AUTH_ROUTE: Readonly<{
   SIGNUP: string;
 }> = Object.freeze({
   LOGIN: `${SYSTEM.HOME}`,
-  SIGNUP: `${SYSTEM.HOME}/signup`,
+  SIGNUP: `${SYSTEM.HOME}signup`,
 });

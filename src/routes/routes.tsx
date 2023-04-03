@@ -1,6 +1,7 @@
 import { lazy, Suspense } from "react";
 import { RouteType } from "../helper/types";
 import { AUTH_ROUTE } from "./baseRoute";
+import { Roles } from "helper/config";
 
 // Import lazy load component
 const Login = lazy(() => import("../components/auth/Login"));
@@ -15,6 +16,8 @@ export const AUTH_ROUTES: RouteType[] = [
         <Login />
       </Suspense>
     ),
+    permission: [
+    ],
   },
   {
     path: AUTH_ROUTE.SIGNUP,
@@ -23,5 +26,7 @@ export const AUTH_ROUTES: RouteType[] = [
         <Signup />
       </Suspense>
     ),
+    permission: [
+    ],
   },
 ];
