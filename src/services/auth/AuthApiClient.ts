@@ -1,9 +1,8 @@
 import axiosPrivate from "../../api/axios";
 import { API_URL } from "../../helper/env";
-import { EmailPWDType } from "../../helper/types";
+import { EmailPWDType, EmailType } from "../../helper/types";
 
 class AuthApiClient {
-
   // User Registration
   register = (data: any) =>
     axiosPrivate.post(`${API_URL.AUTH.REGISTER}/`, data, {
@@ -15,6 +14,22 @@ class AuthApiClient {
   // User Login
   login = (data: EmailPWDType) =>
     axiosPrivate.post(`${API_URL.AUTH.LOGIN}/`, data, {
+      headers: {
+        Authorization: "",
+      },
+    });
+
+  // Forgot Password
+  forgotPassword = (data: EmailType) =>
+    axiosPrivate.post(`${API_URL.AUTH.FORGOT_PASSWORD}/`, data, {
+      headers: {
+        Authorization: "",
+      },
+    });
+
+  // Reset Password
+  resetPassword = (data: any) =>
+    axiosPrivate.post(`${API_URL.AUTH.CHANGE_PASSWORD}/`, data, {
       headers: {
         Authorization: "",
       },

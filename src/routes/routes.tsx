@@ -6,6 +6,8 @@ import { Roles } from "helper/config";
 // Import lazy load component
 const Login = lazy(() => import("../components/auth/Login"));
 const Signup = lazy(() => import("../components/auth/Signup"));
+const Thankyou = lazy(() => import("components/auth/Thankyou"));
+const ForgotPassword = lazy(() => import("components/auth/ForgotPassword"));
 
 // Define Authentication Route
 export const AUTH_ROUTES: RouteType[] = [
@@ -16,8 +18,7 @@ export const AUTH_ROUTES: RouteType[] = [
         <Login />
       </Suspense>
     ),
-    permission: [
-    ],
+    permission: [],
   },
   {
     path: AUTH_ROUTE.SIGNUP,
@@ -26,7 +27,24 @@ export const AUTH_ROUTES: RouteType[] = [
         <Signup />
       </Suspense>
     ),
-    permission: [
-    ],
+    permission: [],
+  },
+  {
+    path: AUTH_ROUTE.THANK_YOU,
+    component: (
+      <Suspense fallback={""}>
+        <Thankyou />
+      </Suspense>
+    ),
+    permission: [],
+  },
+  {
+    path: AUTH_ROUTE.FORGOT_PASSWORD,
+    component: (
+      <Suspense fallback={""}>
+        <ForgotPassword />
+      </Suspense>
+    ),
+    permission: [],
   },
 ];
