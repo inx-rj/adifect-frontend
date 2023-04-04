@@ -9,5 +9,7 @@ export const API_URL = {
   AUTH: {
     REGISTER: `${env.API_URL}registerview`,
     LOGIN: `${env.API_URL}loginview`,
+    FORGOT_PASSWORD: `${env.API_URL}forget-password`,
+    CHANGE_PASSWORD: `${env.API_URL}loginview`,
   },
 };
