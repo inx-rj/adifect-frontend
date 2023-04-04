@@ -1,13 +1,21 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { AuthInitialType } from '../../../helper/types/auth/authType';
-import { RootState } from '../../rootReducer';
+import { createSlice } from "@reduxjs/toolkit";
+import { AuthInitialType } from "../../../helper/types/auth/authType";
+import { RootState } from "../../rootReducer";
 
 const initialState: AuthInitialType = {
   loading: false,
   user: {
     loading: false,
     hasData: false,
-    data: {},
+    data: {
+      user_id: 0,
+      name: "",
+      email: "",
+      first_name: "",
+      last_name: "",
+      role: 0,
+      user_level: 0,
+    },
   },
 };
 
@@ -37,7 +45,7 @@ export const authSlice = createSlice({
     }),
 
     CLEAR_AUTH: () => ({
-      ...initialState
+      ...initialState,
     }),
   },
 });
