@@ -1,4 +1,9 @@
 // Define common types
+
+import { Dispatch, SetStateAction } from "react";
+
+export type UseStateType<DataType> = Dispatch<SetStateAction<DataType>>;
+
 export interface RouteType {
   path: string;
   component: JSX.Element;

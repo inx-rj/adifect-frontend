@@ -1,8 +1,9 @@
 {
   "name": "first-react-app",
   "version": "0.1.0",
-  "private": true,
+  "public": true,
   "type": "module",
+  "main": "src/index.tsx",
   "scripts": {
     "start": "PORT=3001 react-scripts start",
     "build": "react-scripts build",
