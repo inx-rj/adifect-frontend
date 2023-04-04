@@ -3,6 +3,8 @@ export const env = {
   API_URL: process.env["REACT_APP_BACKEND_API_URL"],
 };
 
+console.log(process.env);
+
 export const API_URL = {
   AUTH: {
     REGISTER: `${env.API_URL}registerview`,

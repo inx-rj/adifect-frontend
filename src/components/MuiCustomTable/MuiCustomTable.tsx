@@ -12,14 +12,14 @@ import {
 } from "@mui/material";
 import CustomPagination from "./CustomPagination";
 import { TableDataResponseType, TablePaginationType, TableRowColType } from "helper/types/muiCustomTable/muiCustomTable";
-import { OnChangeFiledValueType } from "helper/types";
+import { OnChangeFiledValueType, UseStateType } from "helper/types";
 
 interface MuiCustomTablePropsType {
   loader: boolean;
   data: TableRowColType;
   allData: TableDataResponseType;
   paginationData: TablePaginationType;
-  setPaginationData: Dispatch<SetStateAction<TablePaginationType>>;
+  setPaginationData: UseStateType<TablePaginationType>;
   [restProps: string]: any;
 }
 
