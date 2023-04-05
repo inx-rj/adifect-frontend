@@ -1,9 +1,9 @@
 import { Images } from "helper/images";
-import { message } from "./../../../helper/validations/index";
 import {
-  SET_AUTH_LOADING,
-  USER_PROFILE_DATA,
-  USER_PROFILE_LOADING,
+  SET_USER_DATA,
+  SET_USER_DATA_LOADING,
+  SET_USER_PROFILE_DATA,
+  SET_USER_PROFILE_LOADING,
 } from "../../reducers/auth/auth.slice";
 import { AppDispatch } from "../../store";
 import { EmailPWDType, EmailType } from "../../../helper/types";
@@ -17,11 +17,11 @@ const REGISTER_USER = (data: any) => async (dispatch: AppDispatch) => {
 
 // Perform Login
 const TRIGGER_LOGIN = (data: EmailPWDType) => async (dispatch: AppDispatch) => {
-  dispatch(USER_PROFILE_LOADING(true));
+  dispatch(SET_USER_DATA_LOADING(true));
   return await AuthApiClient.login(data)
     .then((response) => {
       if (response.status === 200) {
-        dispatch(USER_PROFILE_DATA(response?.data));
+        dispatch(SET_USER_DATA(response?.data));
         localStorage.setItem("userData", JSON.stringify(response?.data));
       }
     })
@@ -39,7 +39,34 @@ const TRIGGER_LOGIN = (data: EmailPWDType) => async (dispatch: AppDispatch) => {
       }
     })
     .finally(() => {
-      dispatch(USER_PROFILE_LOADING(false));
+      dispatch(SET_USER_DATA_LOADING(false));
+    });
+};
+
+// get user details
+const GET_USER_DETAILS = () => async (dispatch: AppDispatch) => {
+  dispatch(SET_USER_PROFILE_LOADING(true));
+  return await AuthApiClient.editProfile()
+    .then((response) => {
+      if (response.status === 200) {
+        dispatch(SET_USER_PROFILE_DATA(response?.data));
+      }
+    })
+    .catch((error) => {
+      if (error?.response.status === 400) {
+        swal({
+          title: "Error",
+          text: error?.response?.data?.message,
+          className: "errorAlert-login",
+          // icon: "/img/logonew-red.svg",
+          icon: Images.Logo,
+          // buttons: false,
+          timer: 1500,
+        });
+      }
+    })
+    .finally(() => {
+      dispatch(SET_USER_PROFILE_LOADING(false));
     });
 };
 
@@ -57,6 +84,7 @@ const TRIGGER_RESET_PASSWORD = (data: any) => async () => {
 export {
   REGISTER_USER,
   TRIGGER_LOGIN,
+  GET_USER_DETAILS,
   TRIGGER_FORGOT_PASSWORD,
   TRIGGER_RESET_PASSWORD,
 };

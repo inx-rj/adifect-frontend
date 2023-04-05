@@ -1,0 +1,11 @@
+.header {
+  @apply px-5 bg-white flex items-center justify-between sticky top-0 right-0 z-20 border;
+}
+
+.header .h-icon {
+  @apply w-[25px] h-[25px] flex items-center justify-center;
+}
+
+.header .btn-ic {
+  @apply w-[22px] h-[22px] cursor-pointer;
+}

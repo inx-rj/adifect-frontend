@@ -4,7 +4,7 @@ import { Images } from "../../helper/images";
 import { TRIGGER_LOGIN } from "../../redux/actions/auth/auth.actions";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
 import { emailRequired, passwordRequired } from "helper/validations";
-import { USER_DATA } from "redux/reducers/auth/auth.slice";
+import { GET_USER_DATA } from "redux/reducers/auth/auth.slice";
 import swal from "sweetalert";
 
 const Login = () => {
@@ -17,7 +17,7 @@ const Login = () => {
     password: null,
   });
 
-  const userData = useAppSelector(USER_DATA);
+  const userData = useAppSelector(GET_USER_DATA);
   const redirect =
     window.location.search && window.location.search?.split("=")[1];
   const validateSubmit = (e: any) => {

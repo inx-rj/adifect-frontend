@@ -1,10 +1,12 @@
 import { lazy, Suspense } from "react";
 import { Route, Routes } from "react-router-dom";
 import { RouteType } from "./helper/types";
-import { AUTH_ROUTES } from "./routes/routes";
-import AuthLayout from "./layouts/AuthLayout";
+import { AUTH_ROUTES, PAGES_ROUTES } from "./routes/routes";
+import DashLayout from "layouts/DashLayout";
 
 // Import lazy load component
+const Master = lazy(() => import("layouts/Master"));
+const AuthLayout = lazy(() => import("./layouts/AuthLayout"));
 
 const RouteApp = () => {
   return (
@@ -26,6 +28,35 @@ const RouteApp = () => {
             />
           );
         })}
+      </Route>
+
+      {/* All pages route  */}
+      <Route
+        element={
+          <Suspense fallback={""}>
+            <Master />
+          </Suspense>
+        }
+      >
+        {/* Agency Routes  */}
+        <Route
+          element={
+            <Suspense fallback={""}>
+              <DashLayout />
+            </Suspense>
+          }
+        >
+          {/* Homepage Route  */}
+          {PAGES_ROUTES?.map((pageItem: RouteType, pageIndex: number) => {
+            return (
+              <Route
+                key={pageIndex}
+                path={pageItem?.path}
+                element={pageItem.component}
+              />
+            );
+          })}
+        </Route>
       </Route>
 
       {/* Not Found Page  */}

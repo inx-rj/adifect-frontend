@@ -1,5 +1,5 @@
 import axiosPrivate from "../../api/axios";
-import { API_URL } from "../../helper/env";
+import { API_URL, env } from "../../helper/env";
 import { EmailPWDType, EmailType } from "../../helper/types";
 
 class AuthApiClient {
@@ -30,6 +30,14 @@ class AuthApiClient {
   // Reset Password
   resetPassword = (data: any) =>
     axiosPrivate.post(`${API_URL.AUTH.CHANGE_PASSWORD}/`, data, {
+      headers: {
+        Authorization: "",
+      },
+    });
+
+  // Edit profile
+  editProfile = () =>
+    axiosPrivate.get(`${API_URL.AUTH.EDIT_PROFILE}/`, {
       headers: {
         Authorization: "",
       },
