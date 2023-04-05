@@ -46,3 +46,15 @@
   @apply text-[#59cf65] tracking-[0.5px];
   /* font-family: "Figtree", sans-serif; */
 }
+
+.text-danger .input-style {
+  @apply border-danger;
+}
+
+.tableHead {
+  @apply flex items-center;
+}
+
+.tableHead img {
+  @apply ml-1
+}

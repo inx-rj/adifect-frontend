@@ -1,10 +1,7 @@
 /** @type {import("tailwindcss").Config} */
 
 module.exports = {
-  content: [
-    "./src/**/*.{js,jsx,ts,tsx}",
-    "./src/**/*.{html,js}",
-  ],
+  content: ["./src/**/*.{js,jsx,ts,tsx}", "./src/**/*.{html,js}"],
   theme: {
     extend: {
       fontFamily: {
@@ -14,7 +11,8 @@ module.exports = {
         danger: "#d14f4f",
         success: "#03b54a",
         warning: "#f1c40f",
-        "primary": "#2472fc",
+        primary: "#2472fc",
+        disable: "#71757B",
         "title-color": "#444444",
         "desc-color": "#848484",
         "success-bg": "#EBFBF6",

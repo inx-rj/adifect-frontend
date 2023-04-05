@@ -3,6 +3,7 @@ import { Route, Routes } from "react-router-dom";
 import { RouteType } from "./helper/types";
 import { AUTH_ROUTES } from "./routes/routes";
 import AuthLayout from "./layouts/AuthLayout";
+import InviteUser from "components/ProfileDropdown/InviteUser";
 
 // Import lazy load component
 
@@ -27,6 +28,15 @@ const RouteApp = () => {
           );
         })}
       </Route>
+
+      <Route
+        path="/invite-user"
+        element={
+          <Suspense fallback={""}>
+            <InviteUser />
+          </Suspense>
+        }
+      />
 
       {/* Not Found Page  */}
       <Route

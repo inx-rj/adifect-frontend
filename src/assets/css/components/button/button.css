@@ -1,5 +1,5 @@
 .btn {
-  @apply h-12 text-center gap-1 px-3 py-1.5 rounded text-base hover:bg-opacity-90 transition-all;
+  @apply h-12 text-center px-3 py-1.5 rounded text-base hover:bg-opacity-90 transition-all;
 }
 
 .btn.btn-primary {
@@ -8,4 +8,8 @@
 
 .link-btn {
   @apply block text-theme border border-theme rounded py-2.5 mt-4 w-full;
+}
+
+.btn-label {
+  @apply font-sans font-semibold text-sm leading-4 text-center text-white;
 }
