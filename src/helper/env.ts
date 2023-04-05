@@ -4,17 +4,18 @@ export const env = {
 };
 
 export const BASE_URL = {
-  COMPANIES: `https://dev-api.adifect.com/community/`,
-  COMPANY: `https://dev-api.adifect.com/company/`,
+  COMPANIES: `${env.API_URL}community/`,
+  AGENCY: `${env.API_URL}agency/`,
+  COMPANY: `${env.API_URL}company/`,
 };
 
 export const API_URL = {
   AUTH: {
-    REGISTER: `https://dev-api.adifect.com/registerview`,
-    LOGIN: `https://dev-api.adifect.com/loginview`,
-    FORGOT_PASSWORD: `https://dev-api.adifect.com/forget-password`,
-    CHANGE_PASSWORD: `https://dev-api.adifect.com/loginview`,
-    EDIT_PROFILE: `https://dev-api.adifect.com/edit-profile`,
+    REGISTER: `${env.API_URL}registerview`,
+    LOGIN: `${env.API_URL}loginview`,
+    FORGOT_PASSWORD: `${env.API_URL}forget-password`,
+    CHANGE_PASSWORD: `${env.API_URL}loginview`,
+    EDIT_PROFILE: `${env.API_URL}edit-profile`,
   },
   COMPANIES: {
     COMPANY_PROJECTS: `${BASE_URL.COMPANIES}stories/`,
@@ -22,6 +23,9 @@ export const API_URL = {
     TAGS: `${BASE_URL.COMPANIES}tags/`,
   },
   COMPANY: {
-    COMPANY_PROJECTS: `${BASE_URL.COMPANY}/`,
+    COMPANY_LIST: `${BASE_URL.AGENCY}company`,
+  },
+  INVITE: {
+    INVITE_USERS: `${BASE_URL.AGENCY}invite-member`,
   },
 };

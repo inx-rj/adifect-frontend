@@ -563,13 +563,13 @@ console.log("userData", userData);
             {rowadd && (
               <>
                 <div className="topmenunavbar">
-                  {open && (
+                  {/* {open && (
                     // first && count &&
                     <span className="agencyiconsec">
                       {" "}
                       <img className="headericonimg" src="/img/bakimgh2.png" />
                     </span>
-                  )}
+                  )} */}
 
                   <Menu
                     id="fade-menu"

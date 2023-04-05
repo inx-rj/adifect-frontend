@@ -1,3 +1,5 @@
+import { SidebarRoutesTypes } from "helper/types";
+
 export const SYSTEM: Readonly<{ LOGIN: string; HOME: string }> = Object.freeze({
   LOGIN: "/login",
   HOME: "/",
@@ -34,7 +36,7 @@ export const PAGE_ROUTE: Readonly<{
   HELP: string;
 }> = Object.freeze({
   HOME: `${MAIN_ROUTE.HOME}`,
-  DASHBOARD: `${MAIN_ROUTE.HOME}/home`,
+  DASHBOARD: `${MAIN_ROUTE.HOME}home`,
   WORKFLOW: `${MAIN_ROUTE.HOME}`,
   COMPANY: `${MAIN_ROUTE.HOME}company`,
   COMPANIES: `${MAIN_ROUTE.HOME}`,
@@ -130,3 +132,142 @@ export const DASHBOARD_HELP_ROUTE: Readonly<{
   HOME: `${DASH_HELP.HOME}`,
   CREATE_HELP: `${DASH_HELP.HOME}add`,
 });
+
+
+
+// Define Sidebar Route
+export const SIDEBAR_ROUTES: SidebarRoutesTypes[] = [
+  // Dashboard
+  //Agency Sidebar
+  {
+    name: "Dashboard",
+    path: PAGE_ROUTE.DASHBOARD,
+    icon: "radix-icons:dashboard",
+    children: [],
+  },
+  {
+    name: "Workflow",
+    path: DASHBOARD_WORKFLOW_ROUTE.HOME,
+    children: [],
+  },
+  {
+    name: "Companies",
+    // imgPath: "/img/Projects.png",
+    path: DASHBOARD_COMPANIES_ROUTE.HOME,
+    children: [
+      {
+        name: "Company Projects",
+        path: DASHBOARD_COMPANIES_ROUTE.COMPANIES_PROJECTS,
+        children: [],
+        // imgPath: "/img/tabsicon.png",
+      },
+      {
+        name: "Tags",
+        // imgPath: "/img/tabsicon.png",
+        path: DASHBOARD_COMPANIES_ROUTE.TAGS,
+        children: [],
+      },
+      // {
+      //   title: "Stories Options",
+      //   imgPath: "/img/tabsicon.png",
+      //   path: "/company-project/stories-options",
+      // },
+    ],
+  },
+  {
+    name: "Media",
+    path: PAGE_ROUTE.MEDIA,
+    children: [],
+  },
+  { name: "My Jobs", path: DASHBOARD_MY_JOBS_ROUTE.HOME, children: [] },
+  // { name: "Media", imgPath: "/img/Projects.png", path: "/Media" },
+  {
+    name: "Draft Jobs",
+    path: PAGE_ROUTE.DRAFT_JOBS,
+    children: [],
+  },
+  {
+    name: "Templates",
+    path: DASHBOARD_TEMPLATES_ROUTES.HOME,
+    children: [],
+  },
+  {
+    name: "Company",
+    path: DASHBOARD_COMPANY_ROUTE.HOME,
+    children: [],
+  },
+  { name: "Help", path: DASHBOARD_HELP_ROUTE.HOME, children: [] },
+
+  //Agency Member - ADMIN Sidebar
+  // { name: "Home", path: "/home" },
+  // {
+  //   name: "Workflow",
+  //   path: "/workflow",
+  // },
+  // { name: "My Projects", path: "/projects" },
+  // {
+  //   name: "Media",
+  //   path: "/member-media",
+  // },
+  // { name: "My Jobs", path: "/jobs/list" },
+  // // { name: "Media", imgPath: "/img/Projects.png", path: "/Media" },
+  // {
+  //   name: "Draft Jobs",
+  //   path: "/member-draft-jobs/",
+  // },
+  // {
+  //   name: "Templates",
+  //   path: "/member-templates/list",
+  // },
+  // {
+  //   name: "Company",
+  //   path: "/member/company",
+  // },
+  // { name: "Help", path: "/help" },
+
+  // //Agency Member - MARKETER Sidebar
+  // { name: "Home", path: "/home" },
+  // {
+  //   name: "Workflow",
+  //   path: "/workflow",
+  // },
+  // { name: "My Projects", path: "/projects" },
+  // {
+  //   name: "Media",
+  //   path: "/member-media",
+  // },
+  // { name: "My Jobs", path: "/jobs/list" },
+  // {
+  //   name: "Templates",
+  //   path: "/member-templates/list",
+  // },
+  // {
+  //   name: "Company",
+  //   path: "/member/company",
+  // },
+  // { name: "Help", path: "/help" },
+
+  // //Agency Member - APPROVER Sidebar
+
+  // { name: "Home", path: "/home" },
+  // {
+  //   name: "Media",
+  //   path: "/member-media",
+  // },
+  // { name: "My Jobs", path: "/jobs/list" },
+  // {
+  //   name: "Company",
+  //   path: "/member/company",
+  // },
+  // { name: "Help", path: "/help" },
+
+  // //Agency Member - IN-HOUSE DESIGNER Sidebar
+  // { name: "Home", path: "/home" },
+  // {
+  //   name: "Media",
+  //   path: "/member-media",
+  // },
+  // { name: "My Projects", path: "/projects" },
+  // { name: "My Jobs", path: "/jobs/list" },
+  // { name: "Help", path: "/help" },
+];

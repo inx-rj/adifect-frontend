@@ -6,7 +6,7 @@ const Master = () => {
   // Redux states
   const isPersist = useAppSelector(IS_PERSISTED);
 
-  return isPersist ? (
+  return !isPersist ? (
     <div>
       <Outlet />
     </div>
