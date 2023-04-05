@@ -54,3 +54,14 @@
 ul.MuiMenu-list {
   @apply py-0;
 }
+.text-danger .input-style {
+  @apply border-danger;
+}
+
+.tableHead {
+  @apply flex items-center;
+}
+
+.tableHead img {
+  @apply ml-1;
+}

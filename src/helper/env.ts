@@ -5,6 +5,7 @@ export const env = {
 
 export const BASE_URL = {
   COMPANIES: `${env.API_URL}community/`,
+  AGENCY: `${env.API_URL}agency/`,
   COMPANY: `${env.API_URL}company/`,
 };
 
@@ -22,6 +23,9 @@ export const API_URL = {
     TAGS: `${BASE_URL.COMPANIES}tags/`,
   },
   COMPANY: {
-    COMPANY_PROJECTS: `${BASE_URL.COMPANY}/`,
+    COMPANY_LIST: `${BASE_URL.AGENCY}company`,
+  },
+  INVITE: {
+    INVITE_USERS: `${BASE_URL.AGENCY}invite-member`,
   },
 };

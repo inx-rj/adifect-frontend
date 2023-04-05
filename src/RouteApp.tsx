@@ -3,6 +3,7 @@ import { Route, Routes } from "react-router-dom";
 import { RouteType } from "./helper/types";
 import { AUTH_ROUTES, PAGES_ROUTES } from "./routes/routes";
 import DashLayout from "layouts/DashLayout";
+import InviteUser from "components/ProfileDropdown/InviteUser";
 
 // Import lazy load component
 const Master = lazy(() => import("layouts/Master"));
@@ -85,6 +86,15 @@ const RouteApp = () => {
           })}
         </Route>
       </Route>
+
+      <Route
+        path="/invite-user"
+        element={
+          <Suspense fallback={""}>
+            <InviteUser />
+          </Suspense>
+        }
+      />
 
       {/* Not Found Page  */}
       <Route
