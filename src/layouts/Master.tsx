@@ -1,4 +1,4 @@
-import { Outlet } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 import { IS_PERSISTED } from "redux/reducers/config/app/app.slice";
 import { useAppSelector } from "redux/store";
 
@@ -11,7 +11,7 @@ const Master = () => {
       <Outlet />
     </div>
   ) : (
-    <></>
+    <Navigate to={"/login"} />
   );
 };
 

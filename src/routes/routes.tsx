@@ -1,4 +1,4 @@
-import { lazy, Suspense } from "react";
+import React, { lazy, Suspense } from "react";
 import { RouteType, SidebarRoutesTypes } from "../helper/types";
 import {
   AUTH_ROUTE,
@@ -12,12 +12,13 @@ import {
   PAGE_ROUTE,
 } from "./baseRoute";
 import { Roles } from "helper/config";
+import HomePage from "pages/dashboard/home/HomePage";
 
 // Import lazy load component
 const Login = lazy(() => import("../components/auth/Login"));
 const Signup = lazy(() => import("../components/auth/Signup"));
-const Thankyou = lazy(() => import("components/auth/Thankyou"));
-const ForgotPassword = lazy(() => import("components/auth/ForgotPassword"));
+const Thankyou = lazy(() => import("../components/auth/Thankyou"));
+const ForgotPassword = lazy(() => import("../components/auth/ForgotPassword"));
 
 // Define Authentication Route
 export const AUTH_ROUTES: RouteType[] = [
@@ -203,6 +204,7 @@ export const PAGES_ROUTES: RouteType[] = [
     component: (
       <Suspense fallback={""}>
         <p>Home Dashboard</p>
+        <HomePage />
       </Suspense>
     ),
     permission: [],

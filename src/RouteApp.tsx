@@ -1,8 +1,9 @@
-import { lazy, Suspense } from "react";
+import React, { lazy, Suspense } from "react";
 import { Route, Routes } from "react-router-dom";
 import { RouteType } from "./helper/types";
 import { AUTH_ROUTES, PAGES_ROUTES } from "./routes/routes";
 import DashLayout from "layouts/DashLayout";
+import InviteUser from "components/ProfileDropdown/InviteUser";
 
 // Import lazy load component
 const Master = lazy(() => import("layouts/Master"));
@@ -28,6 +29,33 @@ const RouteApp = () => {
             />
           );
         })}
+      </Route>
+      {/* Dashboard Routing  */}
+      <Route
+        element={
+          <Suspense fallback={""}>
+            <Master />{" "}
+          </Suspense>
+        }
+      >
+        <Route
+          element={
+            <Suspense fallback={""}>
+              <DashLayout />
+            </Suspense>
+          }
+        >
+          {/* Homepage Route  */}
+          {PAGES_ROUTES?.map((dashItem: RouteType, dashIndex: number) => {
+            return (
+              <Route
+                key={dashIndex}
+                path={dashItem?.path}
+                element={dashItem.component}
+              />
+            );
+          })}
+        </Route>
       </Route>
 
       {/* All pages route  */}
@@ -58,6 +86,15 @@ const RouteApp = () => {
           })}
         </Route>
       </Route>
+
+      <Route
+        path="/invite-user"
+        element={
+          <Suspense fallback={""}>
+            <InviteUser />
+          </Suspense>
+        }
+      />
 
       {/* Not Found Page  */}
       <Route
