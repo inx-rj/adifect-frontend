@@ -13,7 +13,7 @@ const initialState: AuthInitialType = {
       email: "",
       first_name: "",
       last_name: "",
-      role: 0,
+      role: 2,
       user_level: 0,
     },
   },
@@ -58,3 +58,6 @@ export const {
 } = authSlice.actions;
 
 export const USER_DATA = (state: RootState) => state.auth.user;
+
+export const LOGIN_USER_DATA = (state: RootState) => state.auth.user.data;
+

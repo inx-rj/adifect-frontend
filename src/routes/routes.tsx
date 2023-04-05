@@ -1,13 +1,16 @@
 import { lazy, Suspense } from "react";
 import { RouteType } from "../helper/types";
-import { AUTH_ROUTE } from "./baseRoute";
-import { Roles } from "helper/config";
+import { AUTH_ROUTE, DASH_CHILD } from "./baseRoute";
+import { Roles } from "../helper/config";
+import HomePage from "../pages/dashboard/home/HomePage";
+import Dashboard from "../layouts/Dashboard";
+import React from "react";
 
 // Import lazy load component
 const Login = lazy(() => import("../components/auth/Login"));
 const Signup = lazy(() => import("../components/auth/Signup"));
-const Thankyou = lazy(() => import("components/auth/Thankyou"));
-const ForgotPassword = lazy(() => import("components/auth/ForgotPassword"));
+const Thankyou = lazy(() => import("../components/auth/Thankyou"));
+const ForgotPassword = lazy(() => import("../components/auth/ForgotPassword"));
 
 // Define Authentication Route
 export const AUTH_ROUTES: RouteType[] = [
@@ -46,5 +49,18 @@ export const AUTH_ROUTES: RouteType[] = [
       </Suspense>
     ),
     permission: [],
+  },
+];
+
+// Define Dashboard Route
+export const DASHBOARD_ROUTES: RouteType[] = [
+  {
+    path: DASH_CHILD.HOME,
+    component: (
+      <Suspense fallback={""}>
+        {/* <Dashboard /> */}
+        <HomePage />
+      </Suspense>
+    ),
   },
 ];
