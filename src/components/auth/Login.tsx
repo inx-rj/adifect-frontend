@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Images } from "../../helper/images";
 import { TRIGGER_LOGIN } from "../../redux/actions/auth/auth.actions";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
 import { emailRequired, passwordRequired } from "helper/validations";
 import { GET_USER_DATA } from "redux/reducers/auth/auth.slice";
 import swal from "sweetalert";
+import { DASHBOARD_ROUTE } from "../../routes/baseRoute";
 
 const Login = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate()
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -52,7 +54,7 @@ const Login = () => {
 
       setTimeout(() => {
         // navigate(redirect ? redirect : "/home");
-        // navigate(DASHBOARD_ROUTE.HOME, { replace: true, state: true });
+        navigate(DASHBOARD_ROUTE.HOME, { replace: true, state: true });
         // navigate("/home");
       }, 1500);
     }

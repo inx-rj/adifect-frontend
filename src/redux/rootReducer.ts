@@ -3,7 +3,7 @@ import { authSlice } from "./reducers/auth/auth.slice";
 import { companiesSlice } from "./reducers/companies/companies.slice";
 import { persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
-import { configReducer } from './reducers/config/config.reducer';
+import { configReducer } from "./reducers/config/config.reducer";
 
 const persistAppConfig = {
   key: "app",

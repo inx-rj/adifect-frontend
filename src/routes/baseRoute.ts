@@ -1,4 +1,5 @@
-export const SYSTEM: Readonly<{ HOME: string }> = Object.freeze({
+export const SYSTEM: Readonly<{ LOGIN: string; HOME: string }> = Object.freeze({
+  LOGIN: "/login",
   HOME: "/",
 });
 
@@ -13,7 +14,7 @@ export const AUTH_ROUTE: Readonly<{
   THANK_YOU: string;
   FORGOT_PASSWORD: string;
 }> = Object.freeze({
-  LOGIN: `${SYSTEM.HOME}`,
+  LOGIN: `${SYSTEM.LOGIN}`,
   SIGNUP: `${SYSTEM.HOME}signup`,
   THANK_YOU: `${SYSTEM.HOME}/thank-you`,
   FORGOT_PASSWORD: `${SYSTEM.HOME}/forgot-password`,
@@ -23,14 +24,14 @@ export const AUTH_ROUTE: Readonly<{
 export const PAGE_ROUTE: Readonly<{
   HOME: string;
   DASHBOARD: string;
-  WORKFLOW: string,
+  WORKFLOW: string;
   COMPANY: string;
-  COMPANIES: string,
-  MEDIA: string,
-  MY_JOBS: string,
-  DRAFT_JOBS: string,
-  TEMPLATES: string,
-  HELP: string,
+  COMPANIES: string;
+  MEDIA: string;
+  MY_JOBS: string;
+  DRAFT_JOBS: string;
+  TEMPLATES: string;
+  HELP: string;
 }> = Object.freeze({
   HOME: `${MAIN_ROUTE.HOME}`,
   DASHBOARD: `${MAIN_ROUTE.HOME}/home`,
@@ -43,7 +44,6 @@ export const PAGE_ROUTE: Readonly<{
   TEMPLATES: `${MAIN_ROUTE.HOME}templates`,
   HELP: `${MAIN_ROUTE.HOME}`,
 });
-
 
 // Companies Route
 export const DASHBOARD_COMPANIES_ROUTE: Readonly<{
