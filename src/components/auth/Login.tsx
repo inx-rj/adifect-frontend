@@ -60,17 +60,20 @@ const Login = () => {
 
   return (
     <>
-      <div className="login-signup-wrapper max-w-[380px]">
-        <div className="card">
+      <div className="login-signup-wrapper  flex items-center p-20 justify-center min-h-screen">
+        <div className="card max-w-[380px]">
           <div className="mt-2.5 mb-4 inline-flex items-center justify-center w-full h-full">
-            <img src={Images.Logo} className="h-auto max-w-[200px]" alt="" />
+            <img
+              src={Images.Logo}
+              className="h-auto max-w-[200px] mx-auto"
+              alt=""
+            />
           </div>
           <div className="text-center">
-            <h2 className="mb-2 font-bold">Welcome to Adifect</h2>
-            <p className="text-base">
-              Log into your account by entering your
-              <br />
-              username, email and password.
+            <h2 className="mb-2 font-bold text-2xl">Welcome to Adifect</h2>
+            <p className="text-base font-normal break-words">
+              Log into your account by entering your username, email and
+              password.
             </p>
           </div>
           <form id="websiteUserLoginForm" onSubmit={validateSubmit}>
@@ -134,7 +137,7 @@ const Login = () => {
               </Link>
             </div>
             <div className="text-center mt-4 text-theme">
-              <h5>
+              <h5 className="text-base font-medium">
                 <Link to="/forgot-password">Forgot Password ?</Link>
               </h5>
             </div>

@@ -188,239 +188,247 @@ export default function Signup() {
   return (
     <>
       {/* {loading ? <LoadingSpinner /> : isLoading ? <LoadingSpinner /> : <></>} */}
-      <div className="login-signup-wrapper max-w-[650px]">
-        <div className="card">
-          <div className="mt-2.5 mb-4 inline-flex items-center justify-center w-full h-full">
-            <img src={Images.Logo} className="h-auto max-w-[200px]" alt="" />
-          </div>
-          <div className="text-center">
-            <h2 className="mb-2 font-bold">Create your adifect account</h2>
-          </div>
-          <form onSubmit={validateSubmit} id="websiteUserRegisterForm">
-            <div className="form-group-one grid grid-cols-2 gap-4">
-              <div
-                className={
-                  errors.username
-                    ? "input-fields-wrapper text-danger"
-                    : "input-fields-wrapper"
-                }
-              >
-                <h5 className="form-label mt-2">Username:</h5>
-                <input
-                  className="input-style"
-                  type="text"
-                  autoComplete="nope"
-                  value={username}
-                  onChange={(e) => {
-                    setErrors({ ...errors, username: null });
-                    setUsername(e.target.value);
-                  }}
-                  name="f_Username"
-                  id="Username"
-                />
-
-                {errors.username && (
-                  <span className="error-style">
-                    {errors.username ?? "valid"}
-                  </span>
-                )}
-              </div>
-              <div
-                className={
-                  errors.firstname
-                    ? "input-fields-wrapper text-danger"
-                    : "input-fields-wrapper"
-                }
-              >
-                <h5 className="form-label mt-2">First Name:</h5>
-                <input
-                  className="input-style"
-                  type="text"
-                  autoComplete="nope"
-                  value={firstname}
-                  onChange={(e) => {
-                    setErrors({ ...errors, firstname: null });
-                    setFirstName(e.target.value);
-                  }}
-                  name="f_name"
-                  id="firstname"
-                />
-                {errors.firstname && (
-                  <span className="error-style">
-                    {errors.firstname ?? "valid"}
-                  </span>
-                )}
-              </div>
+      <div className="login-signup-wrapper flex items-center p-20 justify-center min-h-screen">
+        <div className="card max-w-[650px] ">
+          <div className="px-5">
+            {/* <div className="mt-2 mb-5"> */}
+            <div className="mt-2.5 inline-flex items-center justify-center w-full h-full">
+              <img src={Images.Logo} className="h-auto max-w-[200px]" alt="" />
             </div>
-            <div className="form-group-one grid grid-cols-2 gap-4">
-              <div
-                className={
-                  errors.lastname
-                    ? "input-fields-wrapper text-danger"
-                    : "input-fields-wrapper"
-                }
-              >
-                <h5 className="form-label mt-2">Last Name:</h5>
-                <input
-                  className="input-style"
-                  type="text"
-                  autoComplete="nope"
-                  value={lastname}
-                  onChange={(e) => {
-                    setErrors({ ...errors, lastname: null });
-                    setLastName(e.target.value);
-                  }}
-                  name="l_name"
-                  id="lastname"
-                />
-                {errors.lastname && (
-                  <span className="error-style">
-                    {errors.lastname ?? "valid"}
-                  </span>
-                )}
-              </div>
-              <div
-                className={
-                  errors.email
-                    ? "input-fields-wrapper text-danger"
-                    : "input-fields-wrapper"
-                }
-              >
-                <h5 className="form-label mt-2">Email Address:</h5>
-                <input
-                  className="input-style"
-                  type="text"
-                  value={email}
-                  onChange={(e) => {
-                    setErrors({ ...errors, email: null });
-                    setEmail(e.target.value);
-                  }}
-                  name="email"
-                  id="email"
-                />
-                {errors.email && (
-                  <span className="error-style">{errors.email ?? "valid"}</span>
-                )}
-              </div>
+            <div className="text-center">
+              <h2 className="mb-2 mt-3 text-xl font-bold">
+                Create your adifect account
+              </h2>
+              {/* </div> */}
             </div>
-            <div className="form-group-one grid grid-cols-2 gap-4">
-              <div
-                className={
-                  errors.password
-                    ? "input-fields-wrapper text-danger"
-                    : "input-fields-wrapper"
-                }
-              >
-                <h5 className="form-label mt-2">
-                  Password: (must be 7 or more)
-                </h5>
-                <input
-                  className="input-style"
-                  value={password}
-                  autoComplete="new-password"
-                  onChange={(e) => {
-                    setErrors({ ...errors, password: null });
-                    setPassword(e.target.value);
-                  }}
-                  type="password"
-                  name="password"
-                  id="password"
-                />
-                {errors.password && (
-                  <span className="error-style">
-                    {errors.password ?? "valid"}
-                  </span>
-                )}
-              </div>
-              <div
-                className={
-                  errors.confirmPassword
-                    ? "input-fields-wrapper text-danger"
-                    : "input-fields-wrapper"
-                }
-              >
-                <h5 className="form-label mt-2">Confirm Password:</h5>
-                <input
-                  className="input-style"
-                  value={confirm_password}
-                  onChange={(e) => {
-                    setErrors({ ...errors, confirmPassword: null });
-                    setConfirmPassword(e.target.value);
-                  }}
-                  type="password"
-                  name="confirm_password"
-                  // Agency
-                  id="confirm_password"
-                />
-                {errors.confirmPassword && (
-                  <span className="error-style">
-                    {errors.confirmPassword ?? "valid"}
-                  </span>
-                )}
-              </div>
-            </div>
-            {!redirectMyUrl && (
-              <div className="form-group-one grid grid-cols-2 gap-4">
+            <form onSubmit={validateSubmit} id="websiteUserRegisterForm">
+              <div className="form-group-one grid grid-cols-2 gap-5">
                 <div
                   className={
-                    errors.role
+                    errors.username
                       ? "input-fields-wrapper text-danger"
                       : "input-fields-wrapper"
                   }
                 >
-                  <h5 className="form-label Role_1 mt-2">Role: </h5>
-                  <Select
-                    className={`${
-                      role === "" ? "text-[#939393]" : "text-[#000]"
-                    } input-style`}
-                    value={role}
-                    open={isOpen}
-                    disabled={redirectMyUrl}
-                    onOpen={() => {
-                      setIsOpen(true);
-                    }}
-                    onClose={() => {
-                      setIsOpen(false);
-                    }}
-                    MenuProps={menuProps}
-                    id="role"
+                  <h5 className="form-label my-2 font-medium">Username:</h5>
+                  <input
+                    className="input-style"
+                    type="text"
+                    autoComplete="nope"
+                    value={username}
                     onChange={(e) => {
-                      setRole(e.target.value);
-                      setErrors({ ...errors, role: null });
+                      setErrors({ ...errors, username: null });
+                      setUsername(e.target.value);
                     }}
-                    // disableScrollLock={true}
-                    displayEmpty
-                    inputProps={{ "aria-label": "Without label" }}
-                  >
-                    <MenuItem value=""> Select Role </MenuItem>
-                    <MenuItem value="1">Creator</MenuItem>
-                    <MenuItem value="2">Agency</MenuItem>
-                  </Select>
-                  {errors.role && (
+                    name="f_Username"
+                    id="Username"
+                  />
+
+                  {errors.username && (
                     <span className="error-style">
-                      {errors.role ?? "valid"}
+                      {errors.username ?? "valid"}
+                    </span>
+                  )}
+                </div>
+                <div
+                  className={
+                    errors.firstname
+                      ? "input-fields-wrapper text-danger"
+                      : "input-fields-wrapper"
+                  }
+                >
+                  <h5 className="form-label my-2 font-medium">First Name:</h5>
+                  <input
+                    className="input-style"
+                    type="text"
+                    autoComplete="nope"
+                    value={firstname}
+                    onChange={(e) => {
+                      setErrors({ ...errors, firstname: null });
+                      setFirstName(e.target.value);
+                    }}
+                    name="f_name"
+                    id="firstname"
+                  />
+                  {errors.firstname && (
+                    <span className="error-style">
+                      {errors.firstname ?? "valid"}
                     </span>
                   )}
                 </div>
               </div>
-            )}
-
-            <div className="center">
-              <input
-                className="btn btn-primary w-full max-w-[335px] flex justify-center my-0 mx-auto mt-4"
-                type="submit"
-                value="Create Account"
-              />
-              <p className="mt-3 text-center">
-                By signing up, you agree to our Privacy Policy
-              </p>{" "}
-              <div className="w-full text-center font-semibold">
-                <Link className="Signbn" to="/">
-                  Sign In Instead.
-                </Link>
+              <div className="form-group-one grid grid-cols-2 gap-4">
+                <div
+                  className={
+                    errors.lastname
+                      ? "input-fields-wrapper text-danger"
+                      : "input-fields-wrapper"
+                  }
+                >
+                  <h5 className="form-label my-2 font-medium">Last Name:</h5>
+                  <input
+                    className="input-style"
+                    type="text"
+                    autoComplete="nope"
+                    value={lastname}
+                    onChange={(e) => {
+                      setErrors({ ...errors, lastname: null });
+                      setLastName(e.target.value);
+                    }}
+                    name="l_name"
+                    id="lastname"
+                  />
+                  {errors.lastname && (
+                    <span className="error-style">
+                      {errors.lastname ?? "valid"}
+                    </span>
+                  )}
+                </div>
+                <div
+                  className={
+                    errors.email
+                      ? "input-fields-wrapper text-danger"
+                      : "input-fields-wrapper"
+                  }
+                >
+                  <h5 className="form-label my-2 font-medium">Email Address:</h5>
+                  <input
+                    className="input-style"
+                    type="text"
+                    value={email}
+                    onChange={(e) => {
+                      setErrors({ ...errors, email: null });
+                      setEmail(e.target.value);
+                    }}
+                    name="email"
+                    id="email"
+                  />
+                  {errors.email && (
+                    <span className="error-style">
+                      {errors.email ?? "valid"}
+                    </span>
+                  )}
+                </div>
               </div>
-            </div>
-          </form>
+              <div className="form-group-one grid grid-cols-2 gap-4">
+                <div
+                  className={
+                    errors.password
+                      ? "input-fields-wrapper text-danger"
+                      : "input-fields-wrapper"
+                  }
+                >
+                  <h5 className="form-label my-2 font-medium">
+                    Password: (must be 7 or more)
+                  </h5>
+                  <input
+                    className="input-style"
+                    value={password}
+                    autoComplete="new-password"
+                    onChange={(e) => {
+                      setErrors({ ...errors, password: null });
+                      setPassword(e.target.value);
+                    }}
+                    type="password"
+                    name="password"
+                    id="password"
+                  />
+                  {errors.password && (
+                    <span className="error-style">
+                      {errors.password ?? "valid"}
+                    </span>
+                  )}
+                </div>
+                <div
+                  className={
+                    errors.confirmPassword
+                      ? "input-fields-wrapper text-danger"
+                      : "input-fields-wrapper"
+                  }
+                >
+                  <h5 className="form-label my-2 font-medium">Confirm Password:</h5>
+                  <input
+                    className="input-style"
+                    value={confirm_password}
+                    onChange={(e) => {
+                      setErrors({ ...errors, confirmPassword: null });
+                      setConfirmPassword(e.target.value);
+                    }}
+                    type="password"
+                    name="confirm_password"
+                    // Agency
+                    id="confirm_password"
+                  />
+                  {errors.confirmPassword && (
+                    <span className="error-style">
+                      {errors.confirmPassword ?? "valid"}
+                    </span>
+                  )}
+                </div>
+              </div>
+              {!redirectMyUrl && (
+                <div className="form-group-one grid grid-cols-2 gap-4">
+                  <div
+                    className={
+                      errors.role
+                        ? "input-fields-wrapper text-danger"
+                        : "input-fields-wrapper"
+                    }
+                  >
+                    <h5 className="form-label Role_1 my-2 font-medium">Role: </h5>
+                    <Select
+                      className={`${
+                        role === "" ? "!text-[#939393] hover:border-[#939393] " : "text-[#000]"
+                      }bg-[#f9fbfc] !rounded w-full !text-sm !font-semibold`}
+                      value={role}
+                      open={isOpen}
+                      disabled={redirectMyUrl}
+                      onOpen={() => {
+                        setIsOpen(true);
+                      }}
+                      onClose={() => {
+                        setIsOpen(false);
+                      }}
+                      MenuProps={menuProps}
+                      id="role"
+                      onChange={(e) => {
+                        setRole(e.target.value);
+                        setErrors({ ...errors, role: null });
+                      }}
+                      // disableScrollLock={true}
+                      displayEmpty
+                      inputProps={{ "aria-label": "Without label" }}
+                    >
+                      <MenuItem value=""> Select Role </MenuItem>
+                      <MenuItem value="1">Creator</MenuItem>
+                      <MenuItem value="2">Agency</MenuItem>
+                    </Select>
+                    {errors.role && (
+                      <span className="error-style">
+                        {errors.role ?? "valid"}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              <div className="center">
+                <input
+                  className="btn btn-primary w-full max-w-[335px] flex justify-center my-0 mx-auto mt-4"
+                  type="submit"
+                  value="Create Account"
+                />
+                <p className="mt-3 text-center">
+                  By signing up, you agree to our Privacy Policy
+                </p>{" "}
+                <div className="w-full text-center font-semibold mb-2.5 text-theme">
+                  <Link className="Signbn" to="/">
+                    Sign In Instead.
+                  </Link>
+                </div>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
     </>

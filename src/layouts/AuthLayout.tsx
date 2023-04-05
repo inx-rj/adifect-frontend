@@ -10,9 +10,14 @@ const AuthLayout = () => {
   // else return <Navigate to={`/`} />;
 
   return (
-    <div role="main" className="bg-[#2472fc0f] w-full min-h-screen">
-      <Outlet />
-    </div>
+    // <div role="main" className="bg-[#2472fc0f] w-full min-h-screen">
+    //   <Outlet />
+    // </div>
+    <main role="main" className="min-h-screen bg-[#2472fc0f]">
+      <section className="relative">
+        <Outlet />
+      </section>
+    </main>
   );
 };
 
