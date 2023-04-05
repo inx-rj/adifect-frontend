@@ -6,7 +6,7 @@ import { useAppDispatch, useAppSelector } from "../../redux/store";
 import { emailRequired, passwordRequired } from "helper/validations";
 import { GET_USER_DATA } from "redux/reducers/auth/auth.slice";
 import swal from "sweetalert";
-import { DASHBOARD_ROUTE } from "../../routes/baseRoute";
+import { MAIN_ROUTE } from "../../routes/baseRoute";
 
 const Login = () => {
   const dispatch = useAppDispatch();
@@ -54,7 +54,7 @@ const Login = () => {
 
       setTimeout(() => {
         // navigate(redirect ? redirect : "/home");
-        navigate(DASHBOARD_ROUTE.HOME, { replace: true, state: true });
+        navigate(MAIN_ROUTE.HOME, { replace: true, state: true });
         // navigate("/home");
       }, 1500);
     }

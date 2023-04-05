@@ -1,8 +1,7 @@
 import React from "react";
 import { lazy, Suspense } from "react";
 import {
-  LOGIN_USER_DATA,
-  USER_DATA,
+  GET_USER_DATA,
 } from "../../../redux/reducers/auth/auth.slice";
 import { useAppSelector } from "../../../redux/store";
 import { Navigate } from "react-router-dom";
@@ -14,22 +13,23 @@ import { Roles } from "../../../helper/config";
 // const PageHeading = lazy(() => import("../../components/heading/PageHeading"));
 
 const HomePage = () => {
-  const userData = useAppSelector(LOGIN_USER_DATA);
+  const userData = useAppSelector(GET_USER_DATA);
+
   console.log(
     "userData",
-    userData,
-    userData?.role == Object.values(Roles)[2],
-    userData?.role,
+    userData.data,
+    userData.data.role == Object.values(Roles)[2],
+    userData.data.role,
     Object.values(Roles)
   );
-  return userData?.role == Object.values(Roles)[0] ? (
+  return userData.data.role == Object.values(Roles)[0] ? (
     <AdminDashboard />
-  ) : userData?.role == Object.values(Roles)[1] ? (
+  ) : userData.data.role == Object.values(Roles)[1] ? (
     // <CreatorDashboard />
     <></>
-  ) : userData?.role == 2 ? (
+  ) : userData.data.role == 2 ? (
     <AgencyDashboard />
-  ) : userData?.role == Object.values(Roles)[3] ? (
+  ) : userData.data.role == Object.values(Roles)[3] ? (
     // <AgencyMemberDashboard />
     <></>
   ) : (
