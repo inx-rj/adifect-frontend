@@ -351,7 +351,7 @@ export default function Header(props) {
     }
     return true;
   }
-console.log("userData", userData);
+  console.log("userData", userData);
 
   function restrictUsersOtherThanAgency() {
     if (userData.data.user.role !== 2) {
@@ -557,7 +557,7 @@ console.log("userData", userData);
                     p: 0,
                     "&:hover": {
                       background: "transparent"
-                    }  
+                    }
                   }
                 }}
               >
@@ -715,7 +715,7 @@ console.log("userData", userData);
               )}
             </span>
             <span className="loginName ml-1">
-              {userProfile?.data[0].first_name} {userProfile?.data[0].last_name}
+              {userData.data.user.first_name ?? 'Invalid First Name'} {userData.data.user.last_name ?? 'Invalid Last Name'}
             </span>
             <ArrowDropDownOutlined />
           </Link>
@@ -724,7 +724,7 @@ console.log("userData", userData);
               <div className="loginsigin">
                 <li>
                   <Link to="/profile" className="flex items-center text-dark-400 hover:text-theme py-2">
-                  <Person className="mr-2" />
+                    <Person className="mr-2" />
                     Profile
                   </Link>
                 </li>
@@ -738,10 +738,10 @@ console.log("userData", userData);
                   </>
                 )}
                 <li onClick={handleOpenLogoutPopup}>
-                  <Link to={""} className="flex items-center text-dark-400 hover:text-theme py-2">
+                  <div className="flex items-center text-dark-400 hover:text-theme py-2 cursor-pointer">
                     <PowerSettingsNewOutlined className="mr-2" />
                     Logout
-                  </Link>
+                  </div>
                 </li>
               </div>
             </>

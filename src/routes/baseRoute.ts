@@ -23,6 +23,15 @@ export const AUTH_ROUTE: Readonly<{
   FORGOT_PASSWORD: `${SYSTEM.HOME}/forgot-password`,
 });
 
+// Profile Route
+export const PROFILE_ROUTE: Readonly<{
+  PROFILE: string;
+  INVITE: string;
+}> = Object.freeze({
+  PROFILE: `${SYSTEM.HOME}profile`,
+  INVITE: `${SYSTEM.HOME}invite`,
+});
+
 // Authentication Route
 export const PAGE_ROUTE: Readonly<{
   HOME: string;

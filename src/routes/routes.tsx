@@ -4,17 +4,25 @@ import {
   AUTH_ROUTE,
   COMPANIES_ROUTE,
   PAGE_ROUTE,
+  PROFILE_ROUTE,
 } from "./baseRoute";
 
-// Import lazy load component
+// => Import lazy load component
+
+// Auth pages
 const Login = lazy(() => import("components/auth/Login"));
 const Signup = lazy(() => import("components/auth/Signup"));
 const Thankyou = lazy(() => import("components/auth/Thankyou"));
 const ForgotPassword = lazy(() => import("components/auth/ForgotPassword"));
+
+// Sidebar pages
 const HomePage = lazy(() => import("pages/dashboard/home/HomePage"));
 const AgencyCompanyProjects = lazy(() => import("components/pages/agency/companyProjects/AgencyCompanyProjects"));
 
-// Define Authentication Route
+// Profile dropdown pages
+const InviteUser = lazy(() => import("components/ProfileDropdown/InviteUser"));
+
+// => Define Authentication Route
 export const AUTH_ROUTES: RouteType[] = [
   {
     path: AUTH_ROUTE.LOGIN,
@@ -50,8 +58,7 @@ export const AUTH_ROUTES: RouteType[] = [
   },
 ];
 
-
-// Define Tabs/Pages Wise Route
+// => Define Tabs/Pages Wise Route
 export const PAGES_ROUTES: RouteType[] = [
   {
     path: PAGE_ROUTE.HOME,
@@ -66,6 +73,14 @@ export const PAGES_ROUTES: RouteType[] = [
     component: (
       <Suspense fallback={""}>
         <AgencyCompanyProjects />
+      </Suspense>
+    )
+  },
+  {
+    path: PROFILE_ROUTE.INVITE,
+    component: (
+      <Suspense fallback={""}>
+        <InviteUser />
       </Suspense>
     )
   },
