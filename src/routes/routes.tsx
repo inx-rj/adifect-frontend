@@ -5,15 +5,14 @@ import {
   COMPANIES_ROUTE,
   PAGE_ROUTE,
 } from "./baseRoute";
-import { Roles } from "helper/config";
-import HomePage from "pages/dashboard/home/HomePage";
-import AgencyCompanyProjects from "components/pages/agency/companyProjects/AgencyCompanyProjects";
 
 // Import lazy load component
-const Login = lazy(() => import("../components/auth/Login"));
-const Signup = lazy(() => import("../components/auth/Signup"));
-const Thankyou = lazy(() => import("../components/auth/Thankyou"));
-const ForgotPassword = lazy(() => import("../components/auth/ForgotPassword"));
+const Login = lazy(() => import("components/auth/Login"));
+const Signup = lazy(() => import("components/auth/Signup"));
+const Thankyou = lazy(() => import("components/auth/Thankyou"));
+const ForgotPassword = lazy(() => import("components/auth/ForgotPassword"));
+const HomePage = lazy(() => import("pages/dashboard/home/HomePage"));
+const AgencyCompanyProjects = lazy(() => import("components/pages/agency/companyProjects/AgencyCompanyProjects"));
 
 // Define Authentication Route
 export const AUTH_ROUTES: RouteType[] = [
@@ -23,8 +22,7 @@ export const AUTH_ROUTES: RouteType[] = [
       <Suspense fallback={""}>
         <Login />
       </Suspense>
-    ),
-    permission: [],
+    )
   },
   {
     path: AUTH_ROUTE.SIGNUP,
@@ -32,8 +30,7 @@ export const AUTH_ROUTES: RouteType[] = [
       <Suspense fallback={""}>
         <Signup />
       </Suspense>
-    ),
-    permission: [],
+    )
   },
   {
     path: AUTH_ROUTE.THANK_YOU,
@@ -41,8 +38,7 @@ export const AUTH_ROUTES: RouteType[] = [
       <Suspense fallback={""}>
         <Thankyou />
       </Suspense>
-    ),
-    permission: [],
+    )
   },
   {
     path: AUTH_ROUTE.FORGOT_PASSWORD,
@@ -50,13 +46,12 @@ export const AUTH_ROUTES: RouteType[] = [
       <Suspense fallback={""}>
         <ForgotPassword />
       </Suspense>
-    ),
-    permission: [],
+    )
   },
 ];
 
 
-// Define Authentication Route
+// Define Tabs/Pages Wise Route
 export const PAGES_ROUTES: RouteType[] = [
   {
     path: PAGE_ROUTE.HOME,
@@ -64,13 +59,7 @@ export const PAGES_ROUTES: RouteType[] = [
       <Suspense fallback={""}>
         <HomePage />
       </Suspense>
-    ),
-    permission: [
-      Roles.ADMIN,
-      Roles.AGENCY,
-      Roles.CREATOR,
-      Roles.MEMBER
-    ],
+    )
   },
   {
     path: COMPANIES_ROUTE.COMPANIES_PROJECTS,
@@ -78,10 +67,6 @@ export const PAGES_ROUTES: RouteType[] = [
       <Suspense fallback={""}>
         <AgencyCompanyProjects />
       </Suspense>
-    ),
-    permission: [
-      Roles.ADMIN,
-      Roles.AGENCY,
-    ],
+    )
   },
 ];

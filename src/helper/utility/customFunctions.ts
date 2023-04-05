@@ -1,4 +1,4 @@
-import { RouteType } from "helper/types";
+import { RouteType, SidebarRoutesTypes } from "helper/types";
 import { initialTableConfigInterface } from "helper/types/common/table";
 import { intersection } from "lodash";
 
@@ -26,8 +26,11 @@ export function isArrayWithLength(arr) {
   return Array.isArray(arr) && arr.length;
 }
 
-export function getAllowedRoutes(routes: RouteType[]) {
-  const roles = JSON.parse(localStorage.getItem("roles"));
+export function getAllowedRoutes(
+  routes: SidebarRoutesTypes[],
+  roles: number[]
+) {
+  // const roles = JSON.parse(localStorage.getItem("roles"));
   return routes.filter(({ permission }) => {
     if (!permission) return true;
     else if (!isArrayWithLength(permission)) return true;

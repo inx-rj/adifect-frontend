@@ -7,7 +7,6 @@ export type UseStateType<DataType> = Dispatch<SetStateAction<DataType>>;
 export interface RouteType {
   path: string;
   component: JSX.Element;
-  permission?: number[];
 }
 
 export interface EmailType {
@@ -41,7 +40,8 @@ export interface SidebarRoutesTypes {
   path: string;
   //   icon?: React.ReactComponentElement<JSXElementConstructor<undefined>>;
   icon?: string;
-  children: SidebarRoutesTypes[];
+  children?: SidebarRoutesTypes[];
+  permission?: number[];
 }
 
 export type OnChangeFiledValueType = { target: { value: string } };

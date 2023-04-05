@@ -90,7 +90,7 @@ const SidebarMenuItem = ({ navItem }) => {
                       alt=""
                     />
                   </span>
-                  {navItem.title}
+                  {navItem.name}
                 </Typography>
               </Link>
             </li>
@@ -118,7 +118,7 @@ const SidebarMenuItem = ({ navItem }) => {
                         alt=""
                       />
                     </span> */}
-                    {item.title}
+                    {item.name}
                   </Link>
                 </li>
               ))}
@@ -136,7 +136,7 @@ const SidebarMenuItem = ({ navItem }) => {
                 alt=""
               />
             </span>
-            {navItem.title}
+            {navItem.name}
           </Link>
         </li>
       )}

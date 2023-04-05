@@ -1,3 +1,4 @@
+import { Roles } from "helper/config";
 import { SidebarRoutesTypes } from "helper/types";
 
 export const SYSTEM: Readonly<{ LOGIN: string; HOME: string }> = Object.freeze({
@@ -26,6 +27,7 @@ export const AUTH_ROUTE: Readonly<{
 export const PAGE_ROUTE: Readonly<{
   HOME: string;
   WORKFLOW: string;
+  MY_PROJECTS: string;
   COMPANY: string;
   COMPANIES: string;
   MEDIA: string;
@@ -135,7 +137,7 @@ export const SIDEBAR_ROUTES: SidebarRoutesTypes[] = [
   // Dashboard
   //Agency Sidebar
   {
-    name: "Dashboard",
+    name: "Home",
     path: PAGE_ROUTE.HOME,
     icon: "radix-icons:dashboard",
     children: [],
@@ -144,7 +146,9 @@ export const SIDEBAR_ROUTES: SidebarRoutesTypes[] = [
     name: "Workflow",
     path: DASHBOARD_WORKFLOW_ROUTE.HOME,
     children: [],
+    permission: [Roles.AGENCY],
   },
+  { name: "My Projects", path: PAGE_ROUTE.MY_PROJECTS },
   {
     name: "Companies",
     // imgPath: "/img/Projects.png",
@@ -168,28 +172,43 @@ export const SIDEBAR_ROUTES: SidebarRoutesTypes[] = [
       //   path: "/company-project/stories-options",
       // },
     ],
+    permission: [Roles.ADMIN, Roles.AGENCY],
   },
   {
     name: "Media",
     path: PAGE_ROUTE.MEDIA,
     children: [],
+    permission: [Roles.AGENCY],
   },
-  { name: "My Jobs", path: DASHBOARD_MY_JOBS_ROUTE.HOME, children: [] },
+  {
+    name: "My Jobs",
+    path: DASHBOARD_MY_JOBS_ROUTE.HOME,
+    children: [],
+    permission: [Roles.AGENCY],
+  },
   // { name: "Media", imgPath: "/img/Projects.png", path: "/Media" },
   {
     name: "Draft Jobs",
     path: PAGE_ROUTE.DRAFT_JOBS,
     children: [],
+    permission: [Roles.AGENCY],
   },
   {
     name: "Templates",
     path: DASHBOARD_TEMPLATES_ROUTES.HOME,
     children: [],
+    permission: [Roles.AGENCY],
   },
   {
     name: "Company",
     path: DASHBOARD_COMPANY_ROUTE.HOME,
     children: [],
+    permission: [Roles.AGENCY],
+  },
+  {
+    name: "Available Jobs",
+    path: DASHBOARD_MY_JOBS_ROUTE.HOME,
+    permission: [Roles.CREATOR],
   },
   { name: "Help", path: DASHBOARD_HELP_ROUTE.HOME, children: [] },
 
@@ -199,7 +218,6 @@ export const SIDEBAR_ROUTES: SidebarRoutesTypes[] = [
   //   name: "Workflow",
   //   path: "/workflow",
   // },
-  // { name: "My Projects", path: "/projects" },
   // {
   //   name: "Media",
   //   path: "/member-media",

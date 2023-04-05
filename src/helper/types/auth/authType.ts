@@ -6,7 +6,7 @@ export interface UserDataType {
   email: string;
   first_name: string;
   last_name: string;
-  role: number | string;
+  role: number;
   user_level: number;
 }
 
@@ -44,8 +44,8 @@ export interface AuthInitialType extends LoadingType {
   userProfile: {
     loading: false;
     hasData: boolean;
-    data: UserProfileDetailsType[]
-  }
+    data: UserProfileDetailsType[];
+  };
 }
 
 export interface appInitialType {
