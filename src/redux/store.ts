@@ -1,16 +1,16 @@
-import { configureStore } from '@reduxjs/toolkit';
-import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
-import { RootState, rootReducer } from './rootReducer';
+import { configureStore } from "@reduxjs/toolkit";
+import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
+import { RootState, rootReducer } from "./rootReducer";
 
 export const store = configureStore({
   devTools: true,
   reducer: rootReducer,
-  middleware: getDefaultMiddleware =>
+  middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
-        ignoredActions: ['persist/PERSIST']
-      }
-    })
+        ignoredActions: ["persist/PERSIST"],
+      },
+    }),
 });
 
 export type AppDispatch = typeof store.dispatch;
