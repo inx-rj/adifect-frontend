@@ -11,12 +11,15 @@ import {
   validatePassword,
   confirmPassword,
   validateRole,
-} from "helper/validations";
+} from "../../helper/validations";
 import { MenuItem, Select } from "@mui/material";
-import { Images } from "helper/images";
-import { REGISTER_USER, TRIGGER_LOGIN } from "redux/actions/auth/auth.actions";
+import { Images } from "../../helper/images";
+import {
+  REGISTER_USER,
+  TRIGGER_LOGIN,
+} from "../../redux/actions/auth/auth.actions";
 import swal from "sweetalert";
-import { useAppDispatch } from "redux/store";
+import { useAppDispatch } from "../../redux/store";
 
 export default function Signup() {
   let navigate = useNavigate();
@@ -85,7 +88,7 @@ export default function Signup() {
 
   const validateSubmit = (e) => {
     e.preventDefault();
-    const tempErrors = {
+    const tempErrors: any = {
       username: validateUsername(username),
       firstname: firstName(firstname),
       lastname: lastName(lastname),
@@ -291,7 +294,9 @@ export default function Signup() {
                       : "input-fields-wrapper"
                   }
                 >
-                  <h5 className="form-label my-2 font-medium">Email Address:</h5>
+                  <h5 className="form-label my-2 font-medium">
+                    Email Address:
+                  </h5>
                   <input
                     className="input-style"
                     type="text"
@@ -346,7 +351,9 @@ export default function Signup() {
                       : "input-fields-wrapper"
                   }
                 >
-                  <h5 className="form-label my-2 font-medium">Confirm Password:</h5>
+                  <h5 className="form-label my-2 font-medium">
+                    Confirm Password:
+                  </h5>
                   <input
                     className="input-style"
                     value={confirm_password}
@@ -375,10 +382,14 @@ export default function Signup() {
                         : "input-fields-wrapper"
                     }
                   >
-                    <h5 className="form-label Role_1 my-2 font-medium">Role: </h5>
+                    <h5 className="form-label Role_1 my-2 font-medium">
+                      Role:{" "}
+                    </h5>
                     <Select
                       className={`${
-                        role === "" ? "!text-[#939393] hover:border-[#939393] " : "text-[#000]"
+                        role === ""
+                          ? "!text-[#939393] hover:border-[#939393] "
+                          : "text-[#000]"
                       }bg-[#f9fbfc] !rounded w-full !text-sm !font-semibold`}
                       value={role}
                       open={isOpen}

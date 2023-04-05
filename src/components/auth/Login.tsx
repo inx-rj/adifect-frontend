@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 import { Images } from "../../helper/images";
 import { TRIGGER_LOGIN } from "../../redux/actions/auth/auth.actions";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
-import { emailRequired, passwordRequired } from "helper/validations";
-import { USER_DATA } from "redux/reducers/auth/auth.slice";
+import { emailRequired, passwordRequired } from "../../helper/validations";
+import { USER_DATA } from "../../redux/reducers/auth/auth.slice";
 import swal from "sweetalert";
 
 const Login = () => {
