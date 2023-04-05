@@ -6,9 +6,10 @@ import {
   SET_USER_PROFILE_LOADING,
 } from "../../reducers/auth/auth.slice";
 import { AppDispatch } from "../../store";
-import { EmailPWDType, EmailType } from "../../../helper/types";
-import AuthApiClient from "../../../services/auth/AuthApiClient";
+import { EmailPWDType, EmailType } from "helper/types";
+import AuthApiClient from "services/auth/AuthApiClient";
 import swal from "sweetalert";
+import { TRIGGER_PERSIST_MODE } from "../config/app/app.actions";
 
 // Perform User Registration
 const REGISTER_USER = (data: any) => async (dispatch: AppDispatch) => {
@@ -21,7 +22,17 @@ const TRIGGER_LOGIN = (data: EmailPWDType) => async (dispatch: AppDispatch) => {
   return await AuthApiClient.login(data)
     .then((response) => {
       if (response.status === 200) {
+        console.log(response.data);
+
+        dispatch(TRIGGER_PERSIST_MODE(true)).then((r) => r);
         dispatch(SET_USER_DATA(response?.data));
+        const { refresh, token } = response?.data || {
+          refresh: "",
+          token: "",
+        };
+        localStorage.setItem("refresh_token", refresh);
+        localStorage.setItem("access_token", token);
+
         localStorage.setItem("userData", JSON.stringify(response?.data));
       }
     })

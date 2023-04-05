@@ -25,7 +25,6 @@ export const AUTH_ROUTE: Readonly<{
 // Authentication Route
 export const PAGE_ROUTE: Readonly<{
   HOME: string;
-  DASHBOARD: string;
   WORKFLOW: string;
   COMPANY: string;
   COMPANIES: string;
@@ -36,10 +35,10 @@ export const PAGE_ROUTE: Readonly<{
   HELP: string;
 }> = Object.freeze({
   HOME: `${MAIN_ROUTE.HOME}`,
-  DASHBOARD: `${MAIN_ROUTE.HOME}home`,
-  WORKFLOW: `${MAIN_ROUTE.HOME}`,
-  COMPANY: `${MAIN_ROUTE.HOME}company`,
+  WORKFLOW: `${MAIN_ROUTE.HOME}workflow`,
+  MY_PROJECTS: `${MAIN_ROUTE.HOME}projects`,
   COMPANIES: `${MAIN_ROUTE.HOME}`,
+  COMPANY: `${MAIN_ROUTE.HOME}company`,
   MEDIA: `${MAIN_ROUTE.HOME}media`,
   MY_JOBS: `${MAIN_ROUTE.HOME}jobs`,
   DRAFT_JOBS: `${MAIN_ROUTE.HOME}draft-jobs`,
@@ -48,12 +47,10 @@ export const PAGE_ROUTE: Readonly<{
 });
 
 // Companies Route
-export const DASHBOARD_COMPANIES_ROUTE: Readonly<{
-  HOME: string;
+export const COMPANIES_ROUTE: Readonly<{
   COMPANIES_PROJECTS: string;
   TAGS: string;
 }> = Object.freeze({
-  HOME: `${PAGE_ROUTE.HOME}`,
   COMPANIES_PROJECTS: `${PAGE_ROUTE.HOME}company-projects`,
   TAGS: `${PAGE_ROUTE.HOME}company-project/tags`,
 });
@@ -133,15 +130,13 @@ export const DASHBOARD_HELP_ROUTE: Readonly<{
   CREATE_HELP: `${DASH_HELP.HOME}add`,
 });
 
-
-
 // Define Sidebar Route
 export const SIDEBAR_ROUTES: SidebarRoutesTypes[] = [
   // Dashboard
   //Agency Sidebar
   {
     name: "Dashboard",
-    path: PAGE_ROUTE.DASHBOARD,
+    path: PAGE_ROUTE.HOME,
     icon: "radix-icons:dashboard",
     children: [],
   },
@@ -153,18 +148,18 @@ export const SIDEBAR_ROUTES: SidebarRoutesTypes[] = [
   {
     name: "Companies",
     // imgPath: "/img/Projects.png",
-    path: DASHBOARD_COMPANIES_ROUTE.HOME,
+    path: PAGE_ROUTE.COMPANIES,
     children: [
       {
         name: "Company Projects",
-        path: DASHBOARD_COMPANIES_ROUTE.COMPANIES_PROJECTS,
+        path: COMPANIES_ROUTE.COMPANIES_PROJECTS,
         children: [],
         // imgPath: "/img/tabsicon.png",
       },
       {
         name: "Tags",
         // imgPath: "/img/tabsicon.png",
-        path: DASHBOARD_COMPANIES_ROUTE.TAGS,
+        path: COMPANIES_ROUTE.TAGS,
         children: [],
       },
       // {

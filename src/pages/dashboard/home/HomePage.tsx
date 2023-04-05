@@ -18,18 +18,18 @@ const HomePage = () => {
   console.log(
     "userData",
     userData.data,
-    userData.data.role == Object.values(Roles)[2],
-    userData.data.role,
+    userData.data.user.role == Object.values(Roles)[2],
+    userData.data.user.role,
     Object.values(Roles)
   );
-  return userData.data.role == Object.values(Roles)[0] ? (
+  return userData.data.user.role == Object.values(Roles)[0] ? (
     <AdminDashboard />
-  ) : userData.data.role == Object.values(Roles)[1] ? (
+  ) : userData.data.user.role == Object.values(Roles)[1] ? (
     // <CreatorDashboard />
     <></>
-  ) : userData.data.role == 2 ? (
+  ) : userData.data.user.role == 2 ? (
     <AgencyDashboard />
-  ) : userData.data.role == Object.values(Roles)[3] ? (
+  ) : userData.data.user.role == Object.values(Roles)[3] ? (
     // <AgencyMemberDashboard />
     <></>
   ) : (

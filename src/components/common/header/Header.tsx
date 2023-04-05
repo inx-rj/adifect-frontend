@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 // import useWebSocket, { ReadyState } from 'react-use-websocket';
 
 //import mui components
@@ -33,8 +33,11 @@ import CustomPopup from "../customPopup/CustomPopup";
 import { GET_USER_DETAILS } from "redux/actions/auth/auth.actions";
 import Logo from "../logo/Logo";
 import { ArrowDropDownOutlined, DescriptionOutlined, MailOutline, NotificationsNone, Person, PowerSettingsNewOutlined } from "@mui/icons-material";
+import { MAIN_ROUTE } from "routes/baseRoute";
+import { ActionTypes } from "helper/actions";
 
 export default function Header(props) {
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [count, setcount] = useState("");
   const [notificationId, setNotificationId] = useState("");
@@ -101,7 +104,7 @@ export default function Header(props) {
     const newfileGallery = [...rowadd];
     newfileGallery.splice(newfileGallery.indexOf(file), 1);
     setrowadd(newfileGallery);
-    // dispatch(Deletenotification(file.id, userData?.data?.user_id));
+    // dispatch(Deletenotification(file.id, userData.data.user.user_id));
   };
 
   // ----------------------------action------------------------------------c
@@ -134,14 +137,14 @@ export default function Header(props) {
 
   // useEffect(() => {
   //   // set for Member user
-  //   if (memberAdminCompanyData && userData?.data?.role === 3) {
+  //   if (memberAdminCompanyData && userData.data.user.role === 3) {
   //     props.setHeaderCompany(memberAdminCompanyData[0]?.company_id);
   //     setCompanyName(memberAdminCompanyData[0]?.name);
   //   }
   // }, [memberSuccessCompanyList]);
 
   // useEffect(() => {
-  //   if (companyData?.length > 0 && userData?.data?.role === 2) {
+  //   if (companyData?.length > 0 && userData.data.user.role === 2) {
   //     const findCompanyName = companyData?.find(
   //       (item) => item.id === props.headerCompany
   //     );
@@ -154,17 +157,17 @@ export default function Header(props) {
   // }, [companyData, props.headerCompany, openMenuInProgress]);
 
   // useEffect(() => {
-  //   if (userData?.data?.role === 3 && props.headerCompany) {
+  //   if (userData.data.user.role === 3 && props.headerCompany) {
   //     dispatch(
-  //       listAllAgencycount(userData?.data?.user_id, 0, props.headerCompany)
+  //       listAllAgencycount(userData.data.user.user_id, 0, props.headerCompany)
   //     );
   //   } else {
   //     if (props.headerCompany) {
   //       dispatch(
-  //         listAllAgencycount(userData?.data?.user_id, 0, props.headerCompany)
+  //         listAllAgencycount(userData.data.user.user_id, 0, props.headerCompany)
   //       );
   //     } else {
-  //       dispatch(listAllAgencycount(userData?.data?.user_id, 0));
+  //       dispatch(listAllAgencycount(userData.data.user.user_id, 0));
   //     }
   //   }
   // }, [successupdateCount, props.headerCompany]);
@@ -176,10 +179,10 @@ export default function Header(props) {
 
   const chatSocket = new WebSocket(
     "wss://" +
-      "dev-ws.adifect.com" +
-      "/ws/notifications/" +
-      userData?.data?.user_id +
-      "/"
+    "dev-ws.adifect.com" +
+    "/ws/notifications/" +
+    userData.data.user.user_id +
+    "/"
   );
 
   chatSocket.onmessage = function (e) {
@@ -206,7 +209,7 @@ export default function Header(props) {
 
   // useEffect(() => {
   //   // Set for member user
-  //   if (memberAdminCompanyData && userData?.data?.role === 3) {
+  //   if (memberAdminCompanyData && userData.data.user.role === 3) {
   //     const findCompanyName = memberAdminCompanyData.find(
   //       (item) => item.company_id === props.headerCompany
   //     );
@@ -229,7 +232,7 @@ export default function Header(props) {
 
   // useEffect(() => {
   //   // Set for Admin user
-  //   if (adminCompanies && userData?.data?.role === 0) {
+  //   if (adminCompanies && userData.data.user.role === 0) {
   //     const findCompanyName = adminCompanies.find(
   //       (item) => item.id === props.headerCompany
   //     );
@@ -242,7 +245,7 @@ export default function Header(props) {
   // }, [adminCompanies, props.headerCompany, openMenuInProgress]);
 
   // useEffect(() => {
-  //   if (userData?.data?.role === 0) {
+  //   if (userData.data.user.role === 0) {
   //     dispatch(listAllAdminCompanies());
   //   }
   // }, []);
@@ -251,12 +254,12 @@ export default function Header(props) {
 
   const menuHandleCompany = (event, value, name) => {
     handleCloseCompany();
-    props.setHeaderCompany(value);
+    // props.setHeaderCompany(value);
   };
 
   const menuHandleCompanyMember = (event, value, name) => {
     handleCloseCompany();
-    props.setHeaderCompany(value);
+    // props.setHeaderCompany(value);
   };
 
   const handleClickCompany = (event) => {
@@ -302,7 +305,7 @@ export default function Header(props) {
 
   useEffect(() => {
     const callThis = () => {
-      if (userData?.data?.role === 2) {
+      if (userData.data.user.role === 2) {
         // dispatch(listAllCompanies());
       }
 
@@ -314,8 +317,13 @@ export default function Header(props) {
   //handle logout popup and actinon
   const logoutHandler = () => {
     setOpenLogoutPopup(false);
-    props.setHeaderCompany(null);
+    // props.setHeaderCompany(null);
     // dispatch(logout());
+    localStorage.removeItem('refresh_token');
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('userData')
+    dispatch({ type: ActionTypes.DESTROY_SESSION });
+    // navigate(MAIN_ROUTE.HOME, { replace: true, state: true });
   };
 
   const handleOpenLogoutPopup = () => {
@@ -333,11 +341,11 @@ export default function Header(props) {
   }
 
   function restrictUsers() {
-    if (userData?.data?.role === 1) {
+    if (userData.data.user.role === 1) {
       // Creator
       return false;
     }
-    if (userData?.data?.role === 3 && userData?.data?.user_level !== 1) {
+    if (userData.data.user.role === 3 && userData.data.user.user_level !== 1) {
       // Member Agency other than MEMBER ADMIN
       return false;
     }
@@ -346,14 +354,14 @@ export default function Header(props) {
 console.log("userData", userData);
 
   function restrictUsersOtherThanAgency() {
-    if (userData?.data?.role !== 2) {
+    if (userData.data.user.role !== 2) {
       // Other than agency user
       return false;
     }
     return true;
   }
   function restrictUsersOtherThanMember() {
-    if (userData?.data?.role !== 3) {
+    if (userData.data.user.role !== 3) {
       // Other than agency user
       return false;
     }
@@ -362,7 +370,7 @@ console.log("userData", userData);
   // -----------------------------SUPER ADMIN START----------------------------------------------
 
   function restrictUsersOtherThanSuperAdmin() {
-    if (userData?.data?.role !== 0) {
+    if (userData.data.user.role !== 0) {
       // Other than superadmin user
       return false;
     }
@@ -394,7 +402,7 @@ console.log("userData", userData);
           {/* <Link to=""> */}
           {/* <img src={process.env.PUBLIC_URL + "/img/icon.png"} alt="" /> */}
 
-          {userData?.data?.role !== 1 && (
+          {userData.data.user.role !== 1 && (
             <Business
               sx={{
                 "&.MuiSvgIcon-root ": {

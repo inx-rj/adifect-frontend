@@ -1,14 +1,8 @@
 import React, { lazy, Suspense } from "react";
-import { RouteType, SidebarRoutesTypes } from "../helper/types";
+import { RouteType } from "../helper/types";
 import {
   AUTH_ROUTE,
-  DASHBOARD_COMPANIES_ROUTE,
-  DASHBOARD_COMPANY_ROUTE,
-  DASHBOARD_HELP_ROUTE,
-  DASHBOARD_MY_JOBS_ROUTE,
-  DASHBOARD_TEMPLATES_ROUTES,
-  DASHBOARD_WORKFLOW_ROUTE,
-  MAIN_ROUTE,
+  COMPANIES_ROUTE,
   PAGE_ROUTE,
 } from "./baseRoute";
 import { Roles } from "helper/config";
@@ -65,7 +59,7 @@ export const AUTH_ROUTES: RouteType[] = [
 // Define Authentication Route
 export const PAGES_ROUTES: RouteType[] = [
   {
-    path: PAGE_ROUTE.DASHBOARD,
+    path: PAGE_ROUTE.HOME,
     component: (
       <Suspense fallback={""}>
         <HomePage />
@@ -79,7 +73,7 @@ export const PAGES_ROUTES: RouteType[] = [
     ],
   },
   {
-    path: DASHBOARD_COMPANIES_ROUTE.COMPANIES_PROJECTS,
+    path: COMPANIES_ROUTE.COMPANIES_PROJECTS,
     component: (
       <Suspense fallback={""}>
         <AgencyCompanyProjects />
@@ -88,8 +82,6 @@ export const PAGES_ROUTES: RouteType[] = [
     permission: [
       Roles.ADMIN,
       Roles.AGENCY,
-      Roles.CREATOR,
-      Roles.MEMBER
     ],
   },
 ];

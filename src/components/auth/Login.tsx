@@ -53,7 +53,7 @@ const Login = () => {
 
       setTimeout(() => {
         // navigate(redirect ? redirect : "/home");
-        navigate(PAGE_ROUTE.DASHBOARD, { replace: true, state: true });
+        navigate(PAGE_ROUTE.HOME, { replace: true, state: true });
         // navigate("/home");
       }, 1500);
     }

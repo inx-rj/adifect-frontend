@@ -1,5 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { AuthInitialType, UserProfileDetailsType } from "../../../helper/types/auth/authType";
+import {
+  AuthInitialType,
+  UserProfileDetailsType,
+} from "../../../helper/types/auth/authType";
 import { RootState } from "../../rootReducer";
 
 const userProfileDetails: UserProfileDetailsType = {
@@ -21,7 +24,7 @@ const userProfileDetails: UserProfileDetailsType = {
   Language: null,
   website: null,
   portfolio: [],
-}
+};
 
 const initialState: AuthInitialType = {
   loading: false,
@@ -29,13 +32,18 @@ const initialState: AuthInitialType = {
     loading: false,
     hasData: false,
     data: {
-      user_id: 0,
-      name: "",
-      email: "",
-      first_name: "",
-      last_name: "",
-      role: 2,
-      user_level: 0,
+      message: "",
+      refresh: "",
+      token: "",
+      user: {
+        user_id: 0,
+        name: "",
+        email: "",
+        first_name: "",
+        last_name: "",
+        role: 2,
+        user_level: 0,
+      },
     },
   },
   userProfile: {
@@ -53,7 +61,7 @@ export const authSlice = createSlice({
       state.loading = action.payload;
     },
 
-    // Store login user data 
+    // Store login user data
     SET_USER_DATA_LOADING: (state, action) => ({
       ...state,
       user: {
@@ -70,7 +78,7 @@ export const authSlice = createSlice({
       },
     }),
 
-    // Store user profile data 
+    // Store user profile data
     SET_USER_PROFILE_LOADING: (state, action) => ({
       ...state,
       userProfile: {
@@ -102,4 +110,5 @@ export const {
 } = authSlice.actions;
 
 export const GET_USER_DATA = (state: RootState) => state.auth.user;
-export const GET_USER_PROFILE_DATA = (state: RootState) => state.auth.userProfile;
+export const GET_USER_PROFILE_DATA = (state: RootState) =>
+  state.auth.userProfile;

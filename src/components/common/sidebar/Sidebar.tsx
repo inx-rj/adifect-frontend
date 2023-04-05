@@ -25,7 +25,9 @@ export default function Sidebar() {
   let topData;
   let midData;
   let bottomData;
-  if (userData?.data?.role == Roles.ADMIN) {
+  console.log(userData.data.user.role);
+
+  if (userData.data.user.role == Roles.ADMIN) {
     //Admin Sidebar.
     topData = [
       { title: "Home", imgPath: "/img/homeicon.png", path: "/home" },
@@ -90,7 +92,7 @@ export default function Sidebar() {
       // { title: "Settings", imgPath: "/img/Settings.png", path: "/settings" },
       { title: "Help", imgPath: "/img/help.png", path: "/Admin-help" },
     ];
-  } else if (userData?.data?.role == Roles.CREATOR) {
+  } else if (userData.data.user.role == Roles.CREATOR) {
     //Creator Sidebar
     topData = [
       {
@@ -126,7 +128,7 @@ export default function Sidebar() {
       // { title: "Settings", imgPath: "/img/Settings.png", path: "/settings" },
       { title: "Help", imgPath: "/img/help.png", path: "/help" },
     ];
-  } else if (userData?.data?.role == Roles.AGENCY) {
+  } else if (userData.data.user.role == Roles.AGENCY) {
     //Agency Sidebar
     topData = [
       { title: "Home", imgPath: "/img/homeicon.png", path: "/home" },
@@ -200,8 +202,8 @@ export default function Sidebar() {
       { title: "Help", imgPath: "/img/help.png", path: "/help" },
     ];
   } else if (
-    userData?.data?.role == Roles.MEMBER &&
-    userData?.data?.user_level === 1
+    userData.data.user.role == Roles.MEMBER &&
+    userData.data.user.user_level === 1
   ) {
     //Agency Member - ADMIN Sidebar
     topData = [
@@ -253,8 +255,8 @@ export default function Sidebar() {
       { title: "Help", imgPath: "/img/help.png", path: "/help" },
     ];
   } else if (
-    userData?.data?.role == Roles.MEMBER &&
-    userData?.data?.user_level === 2
+    userData.data.user.role == Roles.MEMBER &&
+    userData.data.user.user_level === 2
   ) {
     //Agency Member - MARKETER Sidebar
     topData = [
@@ -294,8 +296,8 @@ export default function Sidebar() {
       { title: "Help", imgPath: "/img/help.png", path: "/help" },
     ];
   } else if (
-    userData?.data?.role == Roles.MEMBER &&
-    userData?.data?.user_level === 3
+    userData.data.user.role == Roles.MEMBER &&
+    userData.data.user.user_level === 3
   ) {
     //Agency Member - APPROVER Sidebar
     topData = [
@@ -325,8 +327,8 @@ export default function Sidebar() {
       { title: "Help", imgPath: "/img/help.png", path: "/help" },
     ];
   } else if (
-    userData?.data?.role == Roles.MEMBER &&
-    userData?.data?.user_level === 4
+    userData.data.user.role == Roles.MEMBER &&
+    userData.data.user.user_level === 4
   ) {
     //Agency Member - IN-HOUSE DESIGNER Sidebar
     topData = [
@@ -357,7 +359,7 @@ export default function Sidebar() {
       { title: "Help", imgPath: "/img/help.png", path: "/help" },
     ];
   }
-  useEffect(() => {}, []);
+  useEffect(() => { }, []);
   // const windowSize = useRef([window.innerWidth, window.innerHeight]);
 
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -388,9 +390,8 @@ export default function Sidebar() {
     <>
       <div
         id="mySidepanel"
-        className={`sidemenubar sidepanel ${
-          windowWidth < 768 ? "  mobile-device-active" : ""
-        }`}
+        className={`sidemenubar sidepanel ${windowWidth < 768 ? "  mobile-device-active" : ""
+          }`}
         style={{ width: "0%" }}
       >
         <ul className="nav-list p-4">

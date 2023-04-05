@@ -15,7 +15,7 @@ const DashLayout = () => {
   const isPersist = useAppSelector(IS_PERSISTED);
   const isSidebarCollapsed = useAppSelector(IS_SIDEBAR_COLLAPSED);
 
-  return !isPersist ? (
+  return isPersist ? (
     <main role="main" className={`relative ${false ? "mini" : "full"}`}>
       <div className={`main-content`}>
         <Suspense fallback={""}>
