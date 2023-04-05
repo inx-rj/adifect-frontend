@@ -20,7 +20,7 @@
 }
 
 .login-signup-wrapper {
-  @apply flex my-0 mx-auto items-center justify-center w-[90%] h-screen;
+  @apply flex my-0 mx-auto items-center justify-center w-[90%];
 }
 
 /* Error */
@@ -45,4 +45,23 @@
 .successAlert-login .swal-title {
   @apply text-[#59cf65] tracking-[0.5px];
   /* font-family: "Figtree", sans-serif; */
+}
+
+/* Select Menu */
+.MuiMenu-list li {
+  @apply text-base pt-3 px-2.5 pb-3;
+}
+ul.MuiMenu-list {
+  @apply py-0;
+}
+.text-danger .input-style {
+  @apply border-danger;
+}
+
+.tableHead {
+  @apply flex items-center;
+}
+
+.tableHead img {
+  @apply ml-1;
 }

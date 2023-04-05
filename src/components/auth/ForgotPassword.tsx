@@ -76,31 +76,40 @@ const ForgotPassword = () => {
       <>
         <div className="flex my-0 mx-auto max-w-[380px] items-center justify-center w-[90%] h-screen">
           <div className="card">
-            <div className="mt-2.5 mb-4 inline-flex items-center justify-center w-full h-full">
-              <img src={Images.Logo} className="h-auto max-w-[200px]" alt="" />
-            </div>
-            <div className="login-content">
-              <div className="ForgotPgae">
-                <div className="logo-content">
-                  <img src="img/logonew.svg" className="login-logo" alt="" />
-                </div>
-                <form className="forgotpass">
-                  <div
-                    className={errors.email ? "inputCntnr error" : "inputCntnr"}
-                  >
-                    <h5 className="mb-2">Email</h5>
-                    <input
-                      type="text"
-                      name="email"
-                      id="email"
-                      className="input-style h-12 w-full py-px pl-3.5 pr-0.5 border border-dark-400 rounded focus:border-white"
-                      value={email}
-                      onChange={(e) => {
-                        setErrors({ ...errors, email: null });
-                        setEmail(e.target.value);
-                      }}
-                    />
-                    {/* <span
+            <div className="px-5">
+              <div className="mt-2.5 mb-4 inline-flex items-center justify-center w-full h-full">
+                <img
+                  src={Images.Logo}
+                  className="h-auto max-w-[200px]"
+                  alt=""
+                />
+              </div>
+              <div className="login-content">
+                <div className="ForgotPgae">
+                  <div className="logo-content">
+                    <img src="img/logonew.svg" className="login-logo" alt="" />
+                  </div>
+                  <form className="forgotpass">
+                    <div
+                      className={
+                        errors.email
+                          ? "input-fields-wrapper text-danger"
+                          : "input-fields-wrapper"
+                      }
+                    >
+                      <h5 className="mb-2">Email</h5>
+                      <input
+                        type="text"
+                        name="email"
+                        id="email"
+                        className="input-style"
+                        value={email}
+                        onChange={(e) => {
+                          setErrors({ ...errors, email: null });
+                          setEmail(e.target.value);
+                        }}
+                      />
+                      {/* <span
                       style={{
                         color: "#D14F4F",
                         opacity: errors.email ? 1 : 0,
@@ -108,27 +117,28 @@ const ForgotPassword = () => {
                     >
                       {errors.email ?? "valid"}
                     </span> */}
-                    {errors.email && (
-                      <span className="error-style">
-                        {errors.email ?? "valid"}
-                      </span>
-                    )}
-                  </div>
-                  <div className="center mt-3 CancelBtnFP">
-                    <button
-                      type="button"
-                      onClick={validateSubmit}
-                      className="btn btn-primary w-full bg-theme border-solid border-theme text-white disabled:bg-dark-100 disabled:text-title-color"
-                    >
-                      Send
-                    </button>
-                    <button className="w-full">
-                      <a href="/" className="link-btn">
-                        Cancel
-                      </a>
-                    </button>
-                  </div>
-                </form>
+                      {errors.email && (
+                        <span className="error-style">
+                          {errors.email ?? "valid"}
+                        </span>
+                      )}
+                    </div>
+                    <div className="center mt-3 CancelBtnFP">
+                      <button
+                        type="button"
+                        onClick={validateSubmit}
+                        className="btn btn-primary w-full bg-theme border-solid border-theme text-white disabled:bg-dark-100 disabled:text-title-color"
+                      >
+                        Send
+                      </button>
+                      <button className="w-full mb-2.5">
+                        <a href="/" className="link-btn">
+                          Cancel
+                        </a>
+                      </button>
+                    </div>
+                  </form>
+                </div>
               </div>
             </div>
           </div>
