@@ -32,7 +32,7 @@ import { Images } from "helper/images";
 import CustomPopup from "../customPopup/CustomPopup";
 import { GET_USER_DETAILS } from "redux/actions/auth/auth.actions";
 import Logo from "../logo/Logo";
-import { MailOutline, NotificationsNone } from "@mui/icons-material";
+import { ArrowDropDownOutlined, DescriptionOutlined, MailOutline, NotificationsNone, Person, PowerSettingsNewOutlined } from "@mui/icons-material";
 
 export default function Header(props) {
   const dispatch = useAppDispatch();
@@ -343,6 +343,7 @@ export default function Header(props) {
     }
     return true;
   }
+console.log("userData", userData);
 
   function restrictUsersOtherThanAgency() {
     if (userData?.data?.role !== 2) {
@@ -371,7 +372,7 @@ export default function Header(props) {
 
   return (
     <div className="header">
-      <div className="logo h-[50px]">
+      <div className="logo h-[40px]">
         <Logo />
         {/* </Link> */}
         {/* <button
@@ -538,17 +539,25 @@ export default function Header(props) {
             //  to={`/jobs/details/${item.id}`}
             to="#"
           >
-            <div onClick={handleClickNotifications}>
+            <div onClick={handleClickNotifications} className='relative' >
               <IconButton
                 onClick={handleClick}
                 title="notification"
                 className="p-0"
+                sx={{
+                  "&.MuiIconButton-root": {
+                    p: 0,
+                    "&:hover": {
+                      background: "transparent"
+                    }  
+                  }
+                }}
               >
                 <NotificationsNone />
               </IconButton>
               {!open && (
                 // first && count &&
-                <span className="agencyCountDataDes">{count ?? 0}</span>
+                <span className="agencyCountDataDes">{count ?? 0}0</span>
               )}
             </div>
             {rowadd && (
@@ -687,65 +696,42 @@ export default function Header(props) {
               )} */}
         </li>
         <li
-          className="ml-7 johndoe"
+          className="ml-7 relative"
           ref={menuRef}
           onClick={() => setShowDropdown(!showDropdown)}
         >
           <Link className="LoginName dropdown flex items-center" to="#">
             <span className="header-profile-pic max-w-[40px] w-full h-[40px]">
-              {userProfile?.data?.profile_img && (
-                <img
-                  src={userProfile?.data?.profile_img}
-                  alt="Profile Picture"
-                />
+              {!userProfile?.data?.[0].profile_img && (
+                <img src={!userProfile?.data?.[0].profile_img ? Images?.UserAvatar : userProfile?.data?.[0].profile_img} alt="" />
               )}
-              {!userProfile?.data?.profile_img && (
-                <img src={Images?.UserAvatar} alt="" />
-              )}
-              {/* <img
-                    src={process.env.PUBLIC_URL + "/img/loginimg.png"}
-                    alt=""
-                  /> */}
             </span>
             <span className="loginName ml-1">
-              {userData?.data?.first_name} {userData?.data?.last_name}
+              {userProfile?.data[0].first_name} {userProfile?.data[0].last_name}
             </span>
-            <i className="fa fa-caret-down dropdown"></i>
+            <ArrowDropDownOutlined />
           </Link>
           {showDropdown && (
             <>
               <div className="loginsigin">
                 <li>
-                  <Link to="/profile" className="flex items-center">
-                    <img
-                      className="mr-2 logout"
-                      src={Images?.UserProfile}
-                      alt=""
-                    />
+                  <Link to="/profile" className="flex items-center text-dark-400 hover:text-theme py-2">
+                  <Person className="mr-2" />
                     Profile
                   </Link>
                 </li>
                 {restrictUsers() && (
                   <>
                     <li>
-                      <Link to="/invite" className="flex items-center">
-                        <img
-                          className="mr-2 logout"
-                          // src={process.env.PUBLIC_URL + "/img/Projects.png"}
-                          alt=""
-                        />
-                        project image Invite
+                      <Link to="/invite" className="flex items-center text-dark-400 hover:text-theme py-2">
+                        <DescriptionOutlined className="mr-2" /> Invite
                       </Link>
                     </li>
                   </>
                 )}
                 <li onClick={handleOpenLogoutPopup}>
-                  <Link to={""} className="flex items-center">
-                    <img
-                      className="mr-2 logout"
-                      // src={process.env.PUBLIC_URL + "/img/logout.png"}
-                      alt=""
-                    />
+                  <Link to={""} className="flex items-center text-dark-400 hover:text-theme py-2">
+                    <PowerSettingsNewOutlined className="mr-2" />
                     Logout
                   </Link>
                 </li>

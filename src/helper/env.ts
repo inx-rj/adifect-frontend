@@ -4,17 +4,17 @@ export const env = {
 };
 
 export const BASE_URL = {
-  COMPANIES: `${env.API_URL}community/`,
-  COMPANY: `${env.API_URL}company/`,
+  COMPANIES: `https://dev-api.adifect.com/community/`,
+  COMPANY: `https://dev-api.adifect.com/company/`,
 };
 
 export const API_URL = {
   AUTH: {
-    REGISTER: `${env.API_URL}registerview`,
-    LOGIN: `${env.API_URL}loginview`,
-    FORGOT_PASSWORD: `${env.API_URL}forget-password`,
-    CHANGE_PASSWORD: `${env.API_URL}loginview`,
-    EDIT_PROFILE: `${env.API_URL}edit-profile`,
+    REGISTER: `https://dev-api.adifect.com/registerview`,
+    LOGIN: `https://dev-api.adifect.com/loginview`,
+    FORGOT_PASSWORD: `https://dev-api.adifect.com/forget-password`,
+    CHANGE_PASSWORD: `https://dev-api.adifect.com/loginview`,
+    EDIT_PROFILE: `https://dev-api.adifect.com/edit-profile`,
   },
   COMPANIES: {
     COMPANY_PROJECTS: `${BASE_URL.COMPANIES}stories/`,

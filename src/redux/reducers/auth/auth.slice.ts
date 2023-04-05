@@ -41,7 +41,7 @@ const initialState: AuthInitialType = {
   userProfile: {
     loading: false,
     hasData: false,
-    data: userProfileDetails
+    data: [userProfileDetails]
   }
 };
 

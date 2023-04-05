@@ -39,7 +39,7 @@ export interface AuthInitialType extends LoadingType {
   userProfile: {
     loading: false,
     hasData: boolean;
-    data: UserProfileDetailsType
+    data: UserProfileDetailsType[]
   }
 }
 

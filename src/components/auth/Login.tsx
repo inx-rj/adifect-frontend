@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Images } from "../../helper/images";
 import { TRIGGER_LOGIN } from "../../redux/actions/auth/auth.actions";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
@@ -16,7 +16,7 @@ const Login = () => {
     email: null,
     password: null,
   });
-
+  const navigate = useNavigate();
   const userData = useAppSelector(GET_USER_DATA);
   const redirect =
     window.location.search && window.location.search?.split("=")[1];
@@ -51,7 +51,7 @@ const Login = () => {
       });
 
       setTimeout(() => {
-        // navigate(redirect ? redirect : "/home");
+        navigate(redirect ? redirect : "/home");
         // navigate(DASHBOARD_ROUTE.HOME, { replace: true, state: true });
         // navigate("/home");
       }, 1500);
