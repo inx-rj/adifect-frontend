@@ -59,10 +59,12 @@ export const PAGE_ROUTE: Readonly<{
 
 // Companies Route
 export const COMPANIES_ROUTE: Readonly<{
-  COMPANIES_PROJECTS: string;
+  COMPANY_PROJECTS: string;
+  COMPANY_PROJECTS_DETAILS: string;
   TAGS: string;
 }> = Object.freeze({
-  COMPANIES_PROJECTS: `${PAGE_ROUTE.HOME}company-projects`,
+  COMPANY_PROJECTS: `${PAGE_ROUTE.HOME}company-projects`,
+  COMPANY_PROJECTS_DETAILS: `${PAGE_ROUTE.HOME}company-projects/:communityId`,
   TAGS: `${PAGE_ROUTE.HOME}company-project/tags`,
 });
 
@@ -165,7 +167,7 @@ export const SIDEBAR_ROUTES: SidebarRoutesTypes[] = [
     children: [
       {
         name: "Company Projects",
-        path: COMPANIES_ROUTE.COMPANIES_PROJECTS,
+        path: COMPANIES_ROUTE.COMPANY_PROJECTS,
         children: [],
         // imgPath: "/img/tabsicon.png",
       },

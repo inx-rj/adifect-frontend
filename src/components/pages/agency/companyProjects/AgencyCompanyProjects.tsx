@@ -11,6 +11,7 @@ import { COMPANY_PROJECTS } from "redux/reducers/companies/companies.slice";
 import DropdownWithSearch from "components/common/muiCustomAutocomplete/DropdownWithSearch";
 import { TableRowColType } from "helper/types/muiCustomTable/muiCustomTable";
 import { filterUIOptionsListType } from "helper/types/companies/comapniesType";
+import { Images } from "helper/images";
 
 // import SharePostToSocialMedia from "../../Common/ShareToSocialMedia/SharePostToSocialMedia";
 
@@ -37,7 +38,7 @@ const AgencyCompanyProjects = () => {
 
   //fetch filters list
   useEffect(() => {
-    if (!companyProjectsFilters.data)
+    if (!companyProjectsFilters.data.community.length)
       dispatch(GET_COMPANY_PROJECTS_FILTERS_LIST());
   }, []);
 
@@ -84,9 +85,9 @@ const AgencyCompanyProjects = () => {
       {
         id: 1,
         label: (
-          <label className="d-flex align-items-center">
+          <label className="flex items-center">
             Story Title
-            <img className="ml-1" src="/img/sort_arrows.png" alt="Title" />
+            <img className="ml-2" src={Images.SortArrows} alt="Title" />
           </label>
         ),
         field: "name",
@@ -96,9 +97,9 @@ const AgencyCompanyProjects = () => {
       {
         id: 2,
         label: (
-          <label className="d-flex align-items-center">
+          <label className="flex items-center">
             Community
-            <img className="ml-1" src="/img/sort_arrows.png" alt="Title" />
+            <img className="ml-2" src={Images.SortArrows} alt="Title" />
           </label>
         ),
         field: "publication",
@@ -108,9 +109,9 @@ const AgencyCompanyProjects = () => {
       {
         id: 3,
         label: (
-          <label className="d-flex align-items-center">
+          <label className="flex items-center">
             pURL
-            <img className="ml-1" src="/img/sort_arrows.png" alt="Title" />
+            <img className="ml-2" src={Images.SortArrows} alt="Title" />
           </label>
         ),
         field: "pURL",
@@ -120,9 +121,9 @@ const AgencyCompanyProjects = () => {
       {
         id: 4,
         label: (
-          <label className="d-flex align-items-center">
+          <label className="flex items-center">
             Published Date
-            <img className="ml-1" src="/img/sort_arrows.png" />
+            <img className="ml-2" src={Images.SortArrows} />
           </label>
         ),
         field: "publishedDate",
@@ -132,9 +133,9 @@ const AgencyCompanyProjects = () => {
       {
         id: 5,
         label: (
-          <label className="d-flex align-items-center">
+          <label className="flex items-center">
             Updated Date
-            <img className="ml-1" src="/img/sort_arrows.png" />
+            <img className="ml-2" src={Images.SortArrows} />
           </label>
         ),
         field: "updatedDate",
@@ -224,60 +225,54 @@ const AgencyCompanyProjects = () => {
   };
 
   return (
-    <>
-      <div className="Category_p">
-        <div className="CategorylistName">
-          <h1>Company Projects</h1>
-        </div>
-      </div>
+    <div className="p-5 bg-[#F4F8FF]">
+      <h1>Company Projects</h1>
 
-      <div className="Topallpage AllPageHight Custompage">
-        <div className="ContentDiv">
-          {companyProjectsFilters.loading && filterArr?.length > 0 ? (
-            <div className="projectsLoaderCreatorPage">
-              {/* <LoadingSpinner /> */}
-              Loading . . .
-            </div>
-          ) : (
-            <div className="flex flex-wrap mt-2 ml-2 mb-1.5">
-              {filterArr?.map((item, index) => (
-                <FormControl
-                  key={index}
-                  sx={{ m: 1, minWidth: "180px" }}
-                  size="small"
-                >
-                  {(item.filterType === item.name) ? (
-                    <CustomDateRangePicker handleChange={handleChange} />
-                  ) :
-                    (
-                      <DropdownWithSearch
-                        filterList={item}
-                        handleChange={handleChange}
-                      />
-                    )
-                  }
-                </FormControl>
-              ))}
-            </div>
-          )}
+      <div className="bg-white rounded-[5px] mt-[15px]">
+        {companyProjectsFilters.loading && filterArr?.length > 0 ? (
+          <div className="projectsLoaderCreatorPage">
+            {/* <LoadingSpinner /> */}
+            Loading . . .
+          </div>
+        ) : (
+          <div className="flex flex-wrap gap-[15px] p-[15px] pb-5">
+            {filterArr?.map((item, index) => (
+              <FormControl
+                key={index}
+                sx={{minWidth: "180px" }}
+                size="small"
+              >
+                {(item.filterType === item.name) ? (
+                  <CustomDateRangePicker handleChange={handleChange} />
+                ) :
+                  (
+                    <DropdownWithSearch
+                      filterList={item}
+                      handleChange={handleChange}
+                    />
+                  )
+                }
+              </FormControl>
+            ))}
+          </div>
+        )}
 
-          {companyProjectsList.loading ? (
-            <div className="projectsLoaderCreatorPage">
-              {/* <LoadingSpinner /> */}
-              Loading . . .
-            </div>
-          ) : (
-            <MuiCustomTable
-              loader={companyProjectsList.loading}
-              data={data}
-              allData={companyProjectsList.data}
-              paginationData={paginationData}
-              setPaginationData={setPaginationData}
-            />
-          )}
-        </div>
+        {companyProjectsList.loading ? (
+          <div className="projectsLoaderCreatorPage">
+            {/* <LoadingSpinner /> */}
+            Loading . . .
+          </div>
+        ) : (
+          <MuiCustomTable
+            loader={companyProjectsList.loading}
+            data={data}
+            allData={companyProjectsList.data}
+            paginationData={paginationData}
+            setPaginationData={setPaginationData}
+          />
+        )}
       </div>
-    </>
+    </div>
   );
 }
 
