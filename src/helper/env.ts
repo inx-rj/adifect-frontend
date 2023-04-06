@@ -28,4 +28,7 @@ export const API_URL = {
   INVITE: {
     INVITE_USERS: `${BASE_URL.AGENCY}invite-member/`,
   },
+  HOMEPAGE: {
+    IN_PROGRESS_JOBS_LIST: `${env.API_URL}jobs/`,
+  },
 };

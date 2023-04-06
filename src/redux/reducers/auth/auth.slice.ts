@@ -41,7 +41,7 @@ const initialState: AuthInitialType = {
         email: "",
         first_name: "",
         last_name: "",
-        role: 2,
+        role: 0,
         user_level: 0,
       },
     },
