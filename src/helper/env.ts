@@ -11,11 +11,11 @@ export const BASE_URL = {
 
 export const API_URL = {
   AUTH: {
-    REGISTER: `${env.API_URL}registerview`,
-    LOGIN: `${env.API_URL}loginview`,
-    FORGOT_PASSWORD: `${env.API_URL}forget-password`,
-    CHANGE_PASSWORD: `${env.API_URL}loginview`,
-    EDIT_PROFILE: `${env.API_URL}edit-profile`,
+    REGISTER: `${env.API_URL}registerview/`,
+    LOGIN: `${env.API_URL}loginview/`,
+    FORGOT_PASSWORD: `${env.API_URL}forget-password/`,
+    CHANGE_PASSWORD: `${env.API_URL}loginview/`,
+    EDIT_PROFILE: `${env.API_URL}edit-profile/`,
   },
   COMPANIES: {
     COMPANY_PROJECTS: `${BASE_URL.COMPANIES}stories/`,
@@ -23,9 +23,9 @@ export const API_URL = {
     TAGS: `${BASE_URL.COMPANIES}tags/`,
   },
   COMPANY: {
-    COMPANY_LIST: `${BASE_URL.AGENCY}company`,
+    COMPANY_LIST: `${BASE_URL.AGENCY}company/`,
   },
   INVITE: {
-    INVITE_USERS: `${BASE_URL.AGENCY}invite-member`,
+    INVITE_USERS: `${BASE_URL.AGENCY}invite-member/`,
   },
 };

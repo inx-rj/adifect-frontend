@@ -35,6 +35,7 @@ import Logo from "../logo/Logo";
 import { ArrowDropDownOutlined, DescriptionOutlined, MailOutline, NotificationsNone, Person, PowerSettingsNewOutlined } from "@mui/icons-material";
 import { MAIN_ROUTE } from "routes/baseRoute";
 import { ActionTypes } from "helper/actions";
+import { useSingleEffect } from "react-haiku";
 
 export default function Header(props) {
   const navigate = useNavigate();
@@ -303,16 +304,20 @@ export default function Header(props) {
   };
   document.addEventListener("mousedown", toggleCompanyClass);
 
-  useEffect(() => {
-    const callThis = () => {
-      if (userData.data.user.role === 2) {
-        // dispatch(listAllCompanies());
-      }
+  // useEffect(() => {
+  //   const callThis = () => {
+  //     if (userData.data.user.role === 2) {
+  //       // dispatch(listAllCompanies());
+  //     }
 
-      dispatch(GET_USER_DETAILS());
-    };
-    callThis();
-  }, [dispatch]);
+  //     // dispatch(GET_USER_DETAILS());
+  //   };
+  //   callThis();
+  // }, [dispatch]);
+
+  useSingleEffect(() => {
+    dispatch(GET_USER_DETAILS());
+  })
 
   //handle logout popup and actinon
   const logoutHandler = () => {

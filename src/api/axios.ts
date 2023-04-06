@@ -7,7 +7,7 @@ const axiosPrivate = axios.create({
   baseURL: `${env.API_URL}`,
   headers: {
     "Content-Type": "application/json",
-    Authorization: `Bearer ${access_token()}`,
+    // Authorization: `Bearer ${access_token()}`,
   },
   responseType: "json",
   // withCredentials: true

@@ -4,7 +4,13 @@ import { intersection } from "lodash";
 
 // SET API URL Query params
 export const setQueryParams = (config: initialTableConfigInterface) => {
-  let queryParams = `?page=${config.page}&page_size=${config.rowsPerPage}`;
+  let queryParams = `?page=${config.page}&page_size=${
+    config.rowsPerPage
+  }&from_date=${config.from_date ?? ""}&to_date=${
+    config.to_date ?? ""
+  }&community=${config.community ?? ""}&status=${config.status ?? ""}&tag=${
+    config.tag ?? ""
+  }&search=${config.search ?? ""}`;
   return queryParams;
 };
 
