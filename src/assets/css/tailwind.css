@@ -45,4 +45,23 @@ body {
   border: 1px solid rgba(113, 117, 123, 0.3);
 }
 
-.modalContent {}
+.styled-select {
+  @apply w-full pt-3;
+}
+
+.styled-select .MuiInputBase-root {
+  background: #f9fbfc;
+  height: 48px;
+  width: 100%;
+  border-radius: 8px;
+  color: #71757B;
+}
+
+.styled-select .MuiInputBase-root fieldset {
+  border-color: rgba(113, 117, 123, 0.3) !important;
+}
+
+.error-style .styled-select .MuiInputBase-root fieldset {
+  border-color: red !important;
+  top: -11px;
+}
