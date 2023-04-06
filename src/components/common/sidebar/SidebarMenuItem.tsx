@@ -33,8 +33,6 @@ const SidebarMenuItem = ({ navItem }) => {
     setAnchorEl(anchorEl ? null : event.currentTarget);
   };
 
-  console.log("children", children);
-
   return (
     <>
       {children?.length > 0 ? (

@@ -406,7 +406,7 @@ export default function Sidebar() {
   return (
     <ul
       id="mySidepanel"
-      className={`nav-list p-4 max-h-[calc(100%-65px)] h-full overflow-y-auto ${
+      className={`nav-list p-4 max-h-[calc(100vh-65px)] h-full overflow-y-auto ${
         windowWidth < 768 ? "  mobile-device-active" : ""
       }`}
     >

@@ -6,7 +6,7 @@ const userData = () => JSON.parse(localStorage.getItem("userData") ?? '');
 class InviteUserApiClient {
   // get invited users list
   getInviteUsers = ({ rowsPerPage, page }) =>
-    axiosPrivate.get(`${API_URL.INVITE.INVITE_USERS}/`, {
+    axiosPrivate.get(`${API_URL.INVITE.INVITE_USERS}`, {
       headers: {
         Authorization: `Bearer ${userData()?.token}`,
       },
@@ -15,7 +15,7 @@ class InviteUserApiClient {
 
   //get comapnies list
   getCompaniesList = () =>
-    axiosPrivate.get(`${API_URL.COMPANY.COMPANY_LIST}/`, {
+    axiosPrivate.get(`${API_URL.COMPANY.COMPANY_LIST}`, {
       headers: {
         Authorization: `Bearer ${userData()?.token}`,
       },
@@ -26,7 +26,7 @@ class InviteUserApiClient {
       ...postObj,
       agency: userData()?.user.user_id
     }
-    return axiosPrivate.post(`${API_URL.INVITE.INVITE_USERS}/`, payload, {
+    return axiosPrivate.post(`${API_URL.INVITE.INVITE_USERS}`, payload, {
       headers: {
         Authorization: `Bearer ${userData()?.token}`,
       },
