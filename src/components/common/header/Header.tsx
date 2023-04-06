@@ -32,9 +32,17 @@ import { Images } from "helper/images";
 import CustomPopup from "../customPopup/CustomPopup";
 import { GET_USER_DETAILS } from "redux/actions/auth/auth.actions";
 import Logo from "../logo/Logo";
-import { ArrowDropDownOutlined, DescriptionOutlined, MailOutline, NotificationsNone, Person, PowerSettingsNewOutlined } from "@mui/icons-material";
+import {
+  ArrowDropDownOutlined,
+  DescriptionOutlined,
+  MailOutline,
+  NotificationsNone,
+  Person,
+  PowerSettingsNewOutlined,
+} from "@mui/icons-material";
 import { MAIN_ROUTE } from "routes/baseRoute";
 import { ActionTypes } from "helper/actions";
+import SidebarToggle from "./SidebarToggle";
 
 export default function Header(props) {
   const navigate = useNavigate();
@@ -179,10 +187,10 @@ export default function Header(props) {
 
   const chatSocket = new WebSocket(
     "wss://" +
-    "dev-ws.adifect.com" +
-    "/ws/notifications/" +
-    userData.data.user.user_id +
-    "/"
+      "dev-ws.adifect.com" +
+      "/ws/notifications/" +
+      userData.data.user.user_id +
+      "/"
   );
 
   chatSocket.onmessage = function (e) {
@@ -319,9 +327,9 @@ export default function Header(props) {
     setOpenLogoutPopup(false);
     // props.setHeaderCompany(null);
     // dispatch(logout());
-    localStorage.removeItem('refresh_token');
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('userData')
+    localStorage.removeItem("refresh_token");
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("userData");
     dispatch({ type: ActionTypes.DESTROY_SESSION });
     // navigate(MAIN_ROUTE.HOME, { replace: true, state: true });
   };
@@ -380,50 +388,44 @@ export default function Header(props) {
 
   return (
     <div className="header">
-      <div className="logo h-[40px]">
+      <div className="logo h-[40px] max-w-[250px] w-full px-4">
         <Logo />
-        {/* </Link> */}
-        {/* <button
-              className="openbtn"
-              onClick={openNav}
-              style={{ display: "none" }}
-            >
-              ☰{" "}
-            </button> */}
       </div>
-      <ul className="loginRight flex items-center justify-end ml-auto">
-        {/* View company list dropdown  */}
+      <div className="px-4 py-3 flex justify-between items-center w-full border-l">
+        <SidebarToggle />
+        <ul className="loginRight flex items-center justify-end ml-auto">
+          {/* View company list dropdown  */}
 
-        {/* <li style={{ color: "#a0a0a0", marginRight: "5px", fontSize: "15px" }}>
+          {/* <li style={{ color: "#a0a0a0", marginRight: "5px", fontSize: "15px" }}>
           {companyName}
           company name
         </li> */}
-        <li className="icon1" ref={companyRef} onClick={handleClickCompany}>
-          {/* <Link to=""> */}
-          {/* <img src={process.env.PUBLIC_URL + "/img/icon.png"} alt="" /> */}
+          <li className="icon1" ref={companyRef} onClick={handleClickCompany}>
+            {/* <Link to=""> */}
+            {/* <img src={process.env.PUBLIC_URL + "/img/icon.png"} alt="" /> */}
 
-          {userData.data.user.role !== 1 && (
-            <Business
-              sx={{
-                "&.MuiSvgIcon-root ": {
-                  color: "#71757B",
-                },
-              }}
-            />
-          )}
+            {userData.data.user.role !== 1 && (
+              <Business
+                sx={{
+                  "&.MuiSvgIcon-root ": {
+                    color: "#71757B",
+                  },
+                }}
+              />
+            )}
 
-          {/* </Link> */}
-          {restrictUsersOtherThanAgency() && (
-            <>
-              <Menu
-                id="long-menu"
-                MenuListProps={{ variant: "menu" }}
-                anchorEl={anchorElInProgress}
-                keepMounted
-                open={openMenuInProgress}
-                onClose={handleCloseCompany}
-              >
-                {/* <Menu
+            {/* </Link> */}
+            {restrictUsersOtherThanAgency() && (
+              <>
+                <Menu
+                  id="long-menu"
+                  MenuListProps={{ variant: "menu" }}
+                  anchorEl={anchorElInProgress}
+                  keepMounted
+                  open={openMenuInProgress}
+                  onClose={handleCloseCompany}
+                >
+                  {/* <Menu
                           id="long-menu"
                           MenuProps={menuProps}
                           anchorEl={anchorElInProgress}
@@ -431,12 +433,12 @@ export default function Header(props) {
                           open={openMenuInProgress}
                           onClose={handleCloseCompany}
                         > */}
-                <MenuItem
-                  onClick={(e) => menuHandleCompany(e, "value", "name")}
-                >
-                  All Companies
-                </MenuItem>
-                {/* {companyData?.length > 0 &&
+                  <MenuItem
+                    onClick={(e) => menuHandleCompany(e, "value", "name")}
+                  >
+                    All Companies
+                  </MenuItem>
+                  {/* {companyData?.length > 0 &&
                       companyData?.map(
                         (option) =>
                           option.is_active && (
@@ -451,21 +453,21 @@ export default function Header(props) {
                             </MenuItem>
                           )
                       )} */}
-              </Menu>
-            </>
-          )}
+                </Menu>
+              </>
+            )}
 
-          {restrictUsersOtherThanMember() && (
-            <>
-              <Menu
-                id="long-menu"
-                MenuListProps={{ variant: "menu" }}
-                anchorEl={anchorElInProgress}
-                keepMounted
-                open={openMenuInProgress}
-                onClose={handleCloseCompany}
-              >
-                {/* <Menu
+            {restrictUsersOtherThanMember() && (
+              <>
+                <Menu
+                  id="long-menu"
+                  MenuListProps={{ variant: "menu" }}
+                  anchorEl={anchorElInProgress}
+                  keepMounted
+                  open={openMenuInProgress}
+                  onClose={handleCloseCompany}
+                >
+                  {/* <Menu
                           id="long-menu"
                           MenuProps={menuProps}
                           anchorEl={anchorElInProgress}
@@ -473,10 +475,10 @@ export default function Header(props) {
                           open={openMenuInProgress}
                           onClose={handleCloseCompany}
                         > */}
-                {/* <MenuItem onClick={(e) => menuHandleCompany(e, null)}>
+                  {/* <MenuItem onClick={(e) => menuHandleCompany(e, null)}>
                       All Companies
                     </MenuItem> */}
-                {/* {memberAdminCompanyData?.map((option) => (
+                  {/* {memberAdminCompanyData?.map((option) => (
                       <MenuItem
                         key={option.company_id}
                         // onClick={menuHandleCompany}
@@ -491,26 +493,26 @@ export default function Header(props) {
                         {option.name}
                       </MenuItem>
                     ))} */}
-              </Menu>
-            </>
-          )}
+                </Menu>
+              </>
+            )}
 
-          {restrictUsersOtherThanSuperAdmin() && (
-            <>
-              <Menu
-                id="long-menu"
-                MenuListProps={{ variant: "menu" }}
-                anchorEl={anchorElInProgress}
-                keepMounted
-                open={openMenuInProgress}
-                onClose={handleCloseCompany}
-              >
-                <MenuItem
-                  onClick={(e) => menuHandleCompanyMember(e, "value", "name")}
+            {restrictUsersOtherThanSuperAdmin() && (
+              <>
+                <Menu
+                  id="long-menu"
+                  MenuListProps={{ variant: "menu" }}
+                  anchorEl={anchorElInProgress}
+                  keepMounted
+                  open={openMenuInProgress}
+                  onClose={handleCloseCompany}
                 >
-                  All Companies
-                </MenuItem>
-                {/* {adminCompanies?.map(
+                  <MenuItem
+                    onClick={(e) => menuHandleCompanyMember(e, "value", "name")}
+                  >
+                    All Companies
+                  </MenuItem>
+                  {/* {adminCompanies?.map(
                       (option) =>
                         option.is_active && (
                           <MenuItem
@@ -524,54 +526,54 @@ export default function Header(props) {
                           </MenuItem>
                         )
                     )} */}
-              </Menu>
-            </>
-          )}
-        </li>
+                </Menu>
+              </>
+            )}
+          </li>
 
-        {/* View Email  */}
-        <li className="ml-7 icon2">
-          <MailOutline
-            sx={{
-              "&.MuiSvgIcon-root ": {
-                color: "#71757B",
-              },
-            }}
-          />
-        </li>
+          {/* View Email  */}
+          <li className="ml-7 icon2">
+            <MailOutline
+              sx={{
+                "&.MuiSvgIcon-root ": {
+                  color: "#71757B",
+                },
+              }}
+            />
+          </li>
 
-        {/* View Notification dropdown  */}
-        <li className="ml-7 nots">
-          <Link
-            className="agencyCountDataDesDiv"
-            //  to={`/jobs/details/${item.id}`}
-            to="#"
-          >
-            <div onClick={handleClickNotifications} className='relative' >
-              <IconButton
-                onClick={handleClick}
-                title="notification"
-                className="p-0"
-                sx={{
-                  "&.MuiIconButton-root": {
-                    p: 0,
-                    "&:hover": {
-                      background: "transparent"
-                    }
-                  }
-                }}
-              >
-                <NotificationsNone />
-              </IconButton>
-              {!open && (
-                // first && count &&
-                <span className="agencyCountDataDes">{count ?? 0}0</span>
-              )}
-            </div>
-            {rowadd && (
-              <>
-                <div className="topmenunavbar">
-                  {/* {open && (
+          {/* View Notification dropdown  */}
+          <li className="ml-7 nots">
+            <Link
+              className="agencyCountDataDesDiv"
+              //  to={`/jobs/details/${item.id}`}
+              to="#"
+            >
+              <div onClick={handleClickNotifications} className="relative">
+                <IconButton
+                  onClick={handleClick}
+                  title="notification"
+                  className="p-0"
+                  sx={{
+                    "&.MuiIconButton-root": {
+                      p: 0,
+                      "&:hover": {
+                        background: "transparent",
+                      },
+                    },
+                  }}
+                >
+                  <NotificationsNone />
+                </IconButton>
+                {!open && (
+                  // first && count &&
+                  <span className="agencyCountDataDes">{count ?? 0}0</span>
+                )}
+              </div>
+              {rowadd && (
+                <>
+                  <div className="topmenunavbar">
+                    {/* {open && (
                     // first && count &&
                     <span className="agencyiconsec">
                       {" "}
@@ -579,55 +581,55 @@ export default function Header(props) {
                     </span>
                   )} */}
 
-                  <Menu
-                    id="fade-menu"
-                    MenuListProps={{
-                      "aria-labelledby": "fade-button",
-                    }}
-                    anchorEl={anchorEl}
-                    open={open}
-                    onClose={handleClose}
-                    TransitionComponent={Fade}
-                    className="notificationheaddiv"
-                  >
-                    {rowadd?.slice(0, 3).map((item, index) => (
-                      <MenuItem className="notmenutop" key={item?.id}>
-                        {item.notification_type != "invite_accepted" && (
-                          <>
-                            <div className="notdivnew">
-                              <Link
-                                to={
-                                  item.notification_type == "asset_uploaded"
-                                    ? `/media`
-                                    : `/jobs/details/${item.redirect_id}`
-                                }
-                              >
-                                <div className="notdivnew1">
-                                  <img
-                                    className="userimg1"
-                                    src="/img/userimg2.png"
-                                    alt=""
-                                  />
-                                </div>
-                                <div className="notdivnew2">
-                                  <h3>
-                                    {item?.notification} {item?.created}
-                                    {/* {moment(item?.created).format(
+                    <Menu
+                      id="fade-menu"
+                      MenuListProps={{
+                        "aria-labelledby": "fade-button",
+                      }}
+                      anchorEl={anchorEl}
+                      open={open}
+                      onClose={handleClose}
+                      TransitionComponent={Fade}
+                      className="notificationheaddiv"
+                    >
+                      {rowadd?.slice(0, 3).map((item, index) => (
+                        <MenuItem className="notmenutop" key={item?.id}>
+                          {item.notification_type != "invite_accepted" && (
+                            <>
+                              <div className="notdivnew">
+                                <Link
+                                  to={
+                                    item.notification_type == "asset_uploaded"
+                                      ? `/media`
+                                      : `/jobs/details/${item.redirect_id}`
+                                  }
+                                >
+                                  <div className="notdivnew1">
+                                    <img
+                                      className="userimg1"
+                                      src="/img/userimg2.png"
+                                      alt=""
+                                    />
+                                  </div>
+                                  <div className="notdivnew2">
+                                    <h3>
+                                      {item?.notification} {item?.created}
+                                      {/* {moment(item?.created).format(
                                           "DD MMM, YYYY, h:mm"
                                         )} */}
-                                  </h3>
+                                    </h3>
+                                  </div>
+                                </Link>
+                                <div className="notdivnew3">
+                                  <i
+                                    onClick={removesampleFile(item)}
+                                    className="fa fa-times"
+                                    aria-hidden="true"
+                                  ></i>
                                 </div>
-                              </Link>
-                              <div className="notdivnew3">
-                                <i
-                                  onClick={removesampleFile(item)}
-                                  className="fa fa-times"
-                                  aria-hidden="true"
-                                ></i>
                               </div>
-                            </div>
 
-                            {/* <Link to={`/jobs/details/${item.redirect_id}`}>
+                              {/* <Link to={`/jobs/details/${item.redirect_id}`}>
                                   <span className="notificationitme">
                                     <img
                                       className="userimg1"
@@ -647,48 +649,48 @@ export default function Header(props) {
                                     ></i>
                                   </span>
                                 </Link> */}
-                          </>
-                        )}
-                        {item.notification_type == "invite_accepted" && (
-                          <>
-                            <Link to={`/invite}`}>
-                              <span className="notificationitme">
-                                {item?.notification}
-                              </span>
-                            </Link>
+                            </>
+                          )}
+                          {item.notification_type == "invite_accepted" && (
+                            <>
+                              <Link to={`/invite}`}>
+                                <span className="notificationitme">
+                                  {item?.notification}
+                                </span>
+                              </Link>
 
-                            <span className="iconnot">
-                              <i
-                                onClick={removesampleFile(item)}
-                                className="fa fa-times"
-                                aria-hidden="true"
-                              ></i>
-                            </span>
-                          </>
-                        )}
-                      </MenuItem>
-                    ))}
-                    {rowadd.length > 0 ? (
-                      <MenuItem onClick={handleClose}>
-                        {" "}
-                        <Link className="seeallnotbtn" to="/notifications">
-                          See all notifications...
-                        </Link>{" "}
-                      </MenuItem>
-                    ) : (
-                      <MenuItem onClick={handleClose}>
-                        {" "}
-                        <Link className="seeallnotbtn" to="#">
-                          No new notifications...
-                        </Link>{" "}
-                      </MenuItem>
-                    )}
-                  </Menu>
-                </div>
-              </>
-            )}
-          </Link>
-          {/* <span>{count}</span>
+                              <span className="iconnot">
+                                <i
+                                  onClick={removesampleFile(item)}
+                                  className="fa fa-times"
+                                  aria-hidden="true"
+                                ></i>
+                              </span>
+                            </>
+                          )}
+                        </MenuItem>
+                      ))}
+                      {rowadd.length > 0 ? (
+                        <MenuItem onClick={handleClose}>
+                          {" "}
+                          <Link className="seeallnotbtn" to="/notifications">
+                            See all notifications...
+                          </Link>{" "}
+                        </MenuItem>
+                      ) : (
+                        <MenuItem onClick={handleClose}>
+                          {" "}
+                          <Link className="seeallnotbtn" to="#">
+                            No new notifications...
+                          </Link>{" "}
+                        </MenuItem>
+                      )}
+                    </Menu>
+                  </div>
+                </>
+              )}
+            </Link>
+            {/* <span>{count}</span>
               {isActive && (
                 <>
                   <>
@@ -702,90 +704,105 @@ export default function Header(props) {
                   </>
                 </>
               )} */}
-        </li>
-        <li
-          className="ml-7 relative"
-          ref={menuRef}
-          onClick={() => setShowDropdown(!showDropdown)}
-        >
-          <Link className="LoginName dropdown flex items-center" to="#">
-            <span className="header-profile-pic max-w-[40px] w-full h-[40px]">
-              {!userProfile?.data?.[0].profile_img && (
-                <img src={!userProfile?.data?.[0].profile_img ? Images?.UserAvatar : userProfile?.data?.[0].profile_img} alt="" />
-              )}
-            </span>
-            <span className="loginName ml-1">
-              {userData.data.user.first_name ?? 'Invalid First Name'} {userData.data.user.last_name ?? 'Invalid Last Name'}
-            </span>
-            <ArrowDropDownOutlined />
-          </Link>
-          {showDropdown && (
-            <>
-              <div className="loginsigin">
-                <li>
-                  <Link to="/profile" className="flex items-center text-dark-400 hover:text-theme py-2">
-                    <Person className="mr-2" />
-                    Profile
-                  </Link>
-                </li>
-                {restrictUsers() && (
-                  <>
-                    <li>
-                      <Link to="/invite" className="flex items-center text-dark-400 hover:text-theme py-2">
-                        <DescriptionOutlined className="mr-2" /> Invite
-                      </Link>
-                    </li>
-                  </>
+          </li>
+          <li
+            className="ml-7 relative"
+            ref={menuRef}
+            onClick={() => setShowDropdown(!showDropdown)}
+          >
+            <Link className="LoginName dropdown flex items-center" to="#">
+              <span className="header-profile-pic max-w-[40px] w-full h-[40px]">
+                {!userProfile?.data?.[0].profile_img && (
+                  <img
+                    src={
+                      !userProfile?.data?.[0].profile_img
+                        ? Images?.UserAvatar
+                        : userProfile?.data?.[0].profile_img
+                    }
+                    alt=""
+                  />
                 )}
-                <li onClick={handleOpenLogoutPopup}>
-                  <div className="flex items-center text-dark-400 hover:text-theme py-2 cursor-pointer">
-                    <PowerSettingsNewOutlined className="mr-2" />
-                    Logout
-                  </div>
-                </li>
-              </div>
-            </>
-          )}
-        </li>
-        <CustomPopup
-          dialogTitle="Logout"
-          // setShowDropDown={setShowDropdown}
-          dialogContent={
-            <>
-              <img
-                className="py-4 mx-auto"
-                src={Images?.LogoutPopupVector}
-                alt="logout"
-              />
-              <Typography
-                component="div"
-                sx={{
-                  "&.MuiTypography-root h4": {
-                    fontSize: "18px !important",
-                    fontWeight: "500 !important",
-                    lineHeight: "22px",
-                  },
-                  "&.MuiTypography-root p": {
-                    fontSize: "14px !important",
-                    fontWeight: "400 !important",
-                    lineHeight: "17px",
-                  },
-                }}
-              >
-                <h4>Are you Sure?</h4>
-                <p>
-                  Do you really want to logout this account? This process cannot
-                  be undone.
-                </p>
-              </Typography>
-            </>
-          }
-          openPopup={openLogoutPopup}
-          closePopup={handleCloseLogoutPopup}
-          mainActionHandler={logoutHandler}
-          mainActionTitle="Logout"
-        />
-      </ul>
+              </span>
+              <span className="loginName ml-1">
+                {userData.data.user.first_name ?? "Invalid First Name"}{" "}
+                {userData.data.user.last_name ?? "Invalid Last Name"}
+              </span>
+              <ArrowDropDownOutlined />
+            </Link>
+            {showDropdown && (
+              <>
+                <div className="loginsigin">
+                  <li>
+                    <Link
+                      to="/profile"
+                      className="flex items-center text-dark-400 hover:text-theme py-2"
+                    >
+                      <Person className="mr-2" />
+                      Profile
+                    </Link>
+                  </li>
+                  {restrictUsers() && (
+                    <>
+                      <li>
+                        <Link
+                          to="/invite"
+                          className="flex items-center text-dark-400 hover:text-theme py-2"
+                        >
+                          <DescriptionOutlined className="mr-2" /> Invite
+                        </Link>
+                      </li>
+                    </>
+                  )}
+                  <li onClick={handleOpenLogoutPopup}>
+                    <div className="flex items-center text-dark-400 hover:text-theme py-2 cursor-pointer">
+                      <PowerSettingsNewOutlined className="mr-2" />
+                      Logout
+                    </div>
+                  </li>
+                </div>
+              </>
+            )}
+          </li>
+          <CustomPopup
+            dialogTitle="Logout"
+            // setShowDropDown={setShowDropdown}
+            dialogContent={
+              <>
+                <img
+                  className="py-4 mx-auto"
+                  src={Images?.LogoutPopupVector}
+                  alt="logout"
+                />
+                <Typography
+                  component="div"
+                  sx={{
+                    "&.MuiTypography-root h4": {
+                      fontSize: "18px !important",
+                      fontWeight: "500 !important",
+                      lineHeight: "22px",
+                    },
+                    "&.MuiTypography-root p": {
+                      fontSize: "14px !important",
+                      fontWeight: "400 !important",
+                      lineHeight: "17px",
+                    },
+                  }}
+                >
+                  <h4>Are you Sure?</h4>
+                  <p>
+                    Do you really want to logout this account? This process
+                    cannot be undone.
+                  </p>
+                </Typography>
+              </>
+            }
+            openPopup={openLogoutPopup}
+            closePopup={handleCloseLogoutPopup}
+            mainActionHandler={logoutHandler}
+            mainActionTitle="Logout"
+          />
+        </ul>
+      </div>
     </div>
   );
 }

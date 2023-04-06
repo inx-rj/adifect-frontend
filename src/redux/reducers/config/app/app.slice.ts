@@ -3,8 +3,8 @@ import { RootState } from "../../../rootReducer";
 import { appInitialType } from "helper/types/auth/authType";
 
 const initialState: appInitialType = {
-  isMiniSidebar: false,
-  persist: false,
+  isMiniSidebar: true,
+  persist: true,
 };
 
 export const configAppSlice = createSlice({

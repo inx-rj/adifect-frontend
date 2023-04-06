@@ -1,134 +1,59 @@
 .sidebar {
   transition: max-width 0.3s ease-in-out;
-  @apply h-full w-full fixed top-0 left-0 bottom-0 z-10 bg-white border-r;
+  @apply h-full w-full fixed top-0 left-0 bottom-0 z-10 bg-white border-r text-[#71757B];
 }
 
-.sidebar .smw {
-  @apply h-full pt-[65px];
-}
-
-.sidebar .smw .menu {
-  @apply h-full px-2 py-2 overflow-hidden;
-}
-
-.sidebar .menu .m-list {
-  @apply mb-1 last:mb-0;
-}
-
-.sidepanel li a {
+.nav-link {
   @apply flex items-center justify-start rounded p-2 hover:bg-theme/[0.05] hover:text-theme mb-1;
 }
 
 /* Active Menu Link */
-.sidepanel li.active a {
+.sub-menu-wrapper .MuiAccordion-root .MuiButtonBase-root {
+  @apply text-[#71757B];
+}
+.sub-menu-wrapper
+  .MuiAccordion-root
+  .MuiButtonBase-root
+  .MuiAccordionSummary-content {
+  @apply my-2;
+}
+.sidebar li.active > .nav-link {
   @apply bg-theme/10 text-theme;
 }
-
-.sidebar .menu .m-list .m-link .icon {
-  @apply w-[25px] h-[25px] ml-[4px];
-}
-
-.sidebar .menu .m-list .m-link .text {
-  @apply pl-2.5 capitalize;
-}
-
-.sidebar .menu .m-list .m-link .icon,
-.sidebar .menu .m-list .m-link .text {
-  @apply inline-block;
-}
-
-.sidebar .menu .m-list .m-link.active .icon,
-.sidebar .menu .m-list .m-link.active .text {
+.sidebar li.submenu-active > .sub-menu {
   @apply text-theme;
 }
-
-.sidebar .menu .m-list .m-link-wrapper .mantine-Accordion-item {
-  @apply border-b-0 text-inherit;
-}
-
-.sidebar .menu .m-list .m-link-wrapper .mantine-UnstyledButton-root {
-  @apply flex items-center justify-start rounded p-0 m-0 hover:bg-transparent text-inherit;
-}
-
-.sidebar
-  .menu
-  .m-list
-  .m-link-wrapper
-  .mantine-UnstyledButton-root
-  .m-link-inner {
-  @apply p-0 m-0;
-}
-
-.sidebar
-  .menu
-  .m-list
-  .m-link-wrapper
-  .mantine-UnstyledButton-root
-  .m-link-inner
-  .m-inner-wrap {
-  @apply w-full flex items-center justify-start p-2;
-}
-
-.sidebar
-  .menu
-  .m-list
-  .m-link-wrapper
-  .mantine-UnstyledButton-root
-  .m-link-inner
-  .m-inner-wrap
-  .icon {
-  @apply w-[25px] h-[25px] inline-block ml-1;
-}
-
-.sidebar
-  .menu
-  .m-list
-  .m-link-wrapper
-  .mantine-UnstyledButton-root
-  .m-link-inner
-  .m-inner-wrap
-  .text {
-  @apply pl-2.5 capitalize whitespace-nowrap font-sans;
-}
-
-/* Inside menu */
-.sidebar .mantine-Accordion-panel {
-  @apply p-0;
-}
-
-.sidebar
-  .menu
-  .m-list
-  .m-link-wrapper
-  .mantine-UnstyledButton-root.mantine-Accordion-control {
-  @apply hover:bg-theme/[0.05];
-}
-
-.sidebar
-  .menu
-  .m-list
-  .m-link-wrapper
-  .mantine-UnstyledButton-root.mantine-Accordion-control[aria-expanded="true"] {
+.sub-menu-wrapper.active .MuiAccordion-root .MuiButtonBase-root {
   @apply bg-theme/10 text-theme;
 }
-
-.sidebar .mantine-Accordion-panel .mantine-Accordion-content {
-  @apply bg-transparent rounded-b py-1.5 px-0 m-0;
+.sub-menu-wrapper.active
+  .MuiAccordion-root
+  .MuiButtonBase-root
+  .MuiAccordionSummary-expandIconWrapper {
+  @apply text-theme;
+}
+.sub-menu-wrapper .sub-menu {
+  @apply my-1 block text-sm hover:text-theme text-[#71757B];
+}
+.sub-menu-wrapper .MuiAccordion-root {
+  @apply mx-0 shadow-none;
+}
+.sub-menu-wrapper .MuiAccordion-root .MuiButtonBase-root {
+  @apply min-h-[auto] rounded px-2   hover:bg-theme/10 hover:text-theme;
 }
 
-.sidebar .mantine-Accordion-panel .mantine-Accordion-content .m-im {
-  @apply rounded-b;
+.sub-menu-wrapper
+  .MuiAccordion-root
+  .MuiButtonBase-root:hover
+  .MuiAccordionSummary-expandIconWrapper {
+  @apply text-theme;
 }
-
-.sidebar .mantine-Accordion-panel .mantine-Accordion-content .m-im-link {
-  @apply flex px-4 gap-3 capitalize py-1 hover:opacity-[0.6];
+.sub-menu-wrapper .MuiAccordion-root .MuiButtonBase-root.Mui-expanded {
+  @apply bg-theme/10 text-theme;
 }
-
-.sidebar .mantine-Accordion-panel .mantine-Accordion-content .m-im-link.active {
-  @apply text-theme  hover:opacity-[1];
+.sub-menu-wrapper
+  .MuiAccordion-root
+  .MuiButtonBase-root.Mui-expanded
+  .MuiAccordionSummary-expandIconWrapper {
+  @apply text-theme;
 }
-
-/* Mini */
-/*.mini .sidebar .menu .m-list .m-link-wrapper .mantine-UnstyledButton-root.mantine-Accordion-control {*/
-/*    @apply rounded;*/
-/*}*/
