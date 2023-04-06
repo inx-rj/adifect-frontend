@@ -4,7 +4,7 @@ import { filterUIOptionsListType } from "helper/types/companies/comapniesType";
 
 interface DropdownWithSearchPropsType {
   filterList: filterUIOptionsListType;
-  handleChange: (filedName: string, value: string) => void;
+  handleChange: (filedName: string, value: any) => void;
 }
 
 interface OptionsListType {
@@ -13,11 +13,13 @@ interface OptionsListType {
 }
 
 const DropdownWithSearch = ({ filterList, handleChange }: DropdownWithSearchPropsType) => {
-  const [selectedOption, setSelectedOption] = useState<OptionsListType>({ label: "", value: "" });
+  // const [selectedOption, setSelectedOption] = useState<OptionsListType>({ label: "", value: "" });
+  const [selectedOption, setSelectedOption] = useState<string>("");
   const [searchText, setSearchText] = useState<string>("");
 
+
   //modify the options array as per requirement
-  const displayedOptions: OptionsListType[] = useMemo(
+  const displayedOptions = useMemo(
     () =>
       filterList?.options?.map((option: string) => {
         return {
@@ -29,8 +31,9 @@ const DropdownWithSearch = ({ filterList, handleChange }: DropdownWithSearchProp
   );
 
   useEffect(() => {
-    if (selectedOption.value) {
-      handleChange(filterList?.name, selectedOption.value || "");
+    console.log({ filterList, selectedOption }, 'Filters');
+    if (selectedOption) {
+      handleChange(filterList?.name, selectedOption || "");
     }
   }, [selectedOption]);
 
@@ -78,15 +81,16 @@ const DropdownWithSearch = ({ filterList, handleChange }: DropdownWithSearchProp
             <TextField
               {...params}
               label={filterList?.label}
-              value={selectedOption.value ? selectedOption.value : searchText}
+              value={selectedOption ? selectedOption : searchText}
               onChange={(event) => setSearchText(event.target.value)}
               variant="outlined"
             />
           );
         }}
         options={displayedOptions}
+        // @ts-ignore
         value={selectedOption}
-        onChange={(event, value) => setSelectedOption(value)}
+        onChange={(event, value) => { console.log(value); setSelectedOption(value?.value) }}
       />
     )
   );

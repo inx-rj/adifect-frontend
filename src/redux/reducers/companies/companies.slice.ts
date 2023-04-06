@@ -16,9 +16,9 @@ const initialState: CompaniesInitialsType = {
   companyProjectsFilters: {
     loading: false,
     data: {
-      community: [""],
-      status: [""],
-      tag: [""],
+      community: [],
+      status: [],
+      tag: [],
     },
   },
 };

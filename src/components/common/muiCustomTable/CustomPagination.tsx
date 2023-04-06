@@ -5,10 +5,9 @@ interface CustomPaginationPropsType {
     sx: SxProps<Theme>;
     count: number;
     rowsPerPage: number;
-    onPageChange: (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => void;
+    onPageChange: (event: any, newPage: number) => void;
     [restProps: string]: any;
 }
-
 
 // MUI Pagination custom component
 const CustomPagination = (props: CustomPaginationPropsType) => {
@@ -19,7 +18,7 @@ const CustomPagination = (props: CustomPaginationPropsType) => {
         <Pagination
             sx={sx}
             count={Math.ceil(count / rowsPerPage)}
-            onChange={() => onPageChange}
+            onChange={onPageChange}
             {...restProps}
         />
     )

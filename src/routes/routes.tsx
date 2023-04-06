@@ -18,6 +18,7 @@ const ForgotPassword = lazy(() => import("components/auth/ForgotPassword"));
 // Sidebar pages
 const HomePage = lazy(() => import("pages/dashboard/home/HomePage"));
 const AgencyCompanyProjects = lazy(() => import("components/pages/agency/companyProjects/AgencyCompanyProjects"));
+const AgencyCompanyProjectsDetails = lazy(() => import("components/pages/agency/companyProjects/AgencyCompanyProjectsDetails"));
 
 // Profile dropdown pages
 const InviteUser = lazy(() => import("components/ProfileDropdown/InviteUser"));
@@ -69,10 +70,18 @@ export const PAGES_ROUTES: RouteType[] = [
     )
   },
   {
-    path: COMPANIES_ROUTE.COMPANIES_PROJECTS,
+    path: COMPANIES_ROUTE.COMPANY_PROJECTS,
     component: (
       <Suspense fallback={""}>
         <AgencyCompanyProjects />
+      </Suspense>
+    )
+  },
+  {
+    path: COMPANIES_ROUTE.COMPANY_PROJECTS_DETAILS,
+    component: (
+      <Suspense fallback={""}>
+        <AgencyCompanyProjectsDetails />
       </Suspense>
     )
   },

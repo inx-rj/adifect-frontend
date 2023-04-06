@@ -31,7 +31,7 @@ const CustomDateRangePicker = ({ handleChange }: CustomDateRangePickerPropsType)
             separator={"to"}
             useRange={false}
             value={value}
-            onChange={() => handleValueChange}
+            onChange={handleValueChange}
             containerClassName="min-w-[250px]"
             inputClassName="border focus:outline-none pr-3 placeholder:text-black/80 placeholder:text-xs"
             placeholder={"Date Range"}
