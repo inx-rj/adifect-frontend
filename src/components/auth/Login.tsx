@@ -81,7 +81,7 @@ const Login = () => {
             <div
               className={
                 errors.email
-                  ? "input-fields-wrapper text-danger"
+                  ? "input-fields-wrapper error-style"
                   : "input-fields-wrapper"
               }
             >
@@ -98,13 +98,13 @@ const Login = () => {
                 }}
               />
               {errors.email && (
-                <span className="error-style">{errors.email ?? "valid"}</span>
+                <span>{errors.email ?? "valid"}</span>
               )}
             </div>
             <div
               className={
                 errors.password
-                  ? "input-fields-wrapper text-danger"
+                  ? "input-fields-wrapper error-style"
                   : "input-fields-wrapper"
               }
             >
@@ -121,7 +121,7 @@ const Login = () => {
                 }}
               />
               {errors.password && (
-                <span className="error-style">
+                <span>
                   {errors.password ?? "valid"}
                 </span>
               )}

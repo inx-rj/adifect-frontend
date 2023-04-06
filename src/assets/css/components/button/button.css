@@ -6,6 +6,10 @@
   @apply bg-theme border-solid border-theme text-white disabled:bg-dark-100 disabled:text-title-color;
 }
 
+.btn.btn-outline {
+  @apply normal-case font-semibold !border-[#1976d2] ml-0 py-2 px-6 disabled:bg-dark-100 disabled:text-title-color !important;
+}
+
 .link-btn {
   @apply block text-theme border border-theme rounded py-2.5 mt-4 w-full;
 }

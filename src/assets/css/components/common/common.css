@@ -4,18 +4,18 @@
 }
 
 .input-fields-wrapper {
-  @apply h-[100px] w-full;
+  @apply h-[100px] w-full pt-5;
 }
 
 .input-style {
   @apply h-12 w-full py-px pl-3.5 pr-0.5 border border-[#0000001a] rounded outline-none focus:border-theme;
 }
 
-.error-style {
+.error-style span {
   @apply mb-1 text-sm text-danger block text-right;
 }
 
-.text-danger .input-style {
+.error-style .input-style {
   @apply border-danger;
 }
 
@@ -23,8 +23,11 @@
   @apply flex my-0 mx-auto items-center justify-center w-[90%];
 }
 
-/* Error */
+.flex-center {
+  @apply flex justify-between items-center;
+}
 
+/* Error */
 .errorAlert .swal-text,
 .errorAlert-login .swal-text {
   @apply text-[#d14f4f];
@@ -53,9 +56,6 @@
 }
 ul.MuiMenu-list {
   @apply py-0;
-}
-.text-danger .input-style {
-  @apply border-danger;
 }
 
 .tableHead {

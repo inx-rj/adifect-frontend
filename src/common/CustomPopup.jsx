@@ -33,34 +33,40 @@ const CustomPopup = ({
         {dialogTitle}
         <CloseIcon cursor="pointer" onClick={closePopup} />
       </DialogTitle>
-      <div className="modalContent">
-        <DialogContent
-          sx={{
-            padding: "25px 24px",
-          }}
+      <DialogContent
+        sx={{
+          padding: "20px 25px",
+        }}
+      >
+        <Typography component="div" sx={{ textAlign: textAlign }}>
+          {dialogContent}
+        </Typography>
+      </DialogContent>
+      <DialogActions
+        sx={{
+          "&.MuiDialogActions-root": {
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            gap: "15px",
+            padding: "10px 0 20px 0",
+          },
+        }}
+      >
+        <Button
+          onClick={mainActionHandler}
+          className="btn btn-primary max-h-[35px] !normal-case !font-semibold rounded-md !px-8 !py-2 hover:!bg-primary"
         >
-          <Typography component="div" sx={{ textAlign: textAlign }}>
-            {dialogContent}
-          </Typography>
-        </DialogContent>
-        <DialogActions
-          sx={{
-            "&.MuiDialogActions-root": {
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              padding: 0,
-            },
-          }}
+          {mainActionTitle}
+        </Button>
+        <Button
+          className="btn btn-outline max-h-[35px]"
+          onClick={closePopup}
+          variant="outlined"
         >
-          <Button onClick={mainActionHandler} className="shareNewPop">
-            {mainActionTitle}
-          </Button>
-          <button className="canceButtonnewPop" onClick={closePopup}>
-            Cancel
-          </button>
-        </DialogActions>
-      </div>
+          Cancel
+        </Button>
+      </DialogActions>
     </Dialog>
   );
 };
