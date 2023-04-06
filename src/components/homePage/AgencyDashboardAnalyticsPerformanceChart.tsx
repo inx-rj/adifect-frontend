@@ -83,10 +83,10 @@ const AgencyDashboardAnalyticsPerformanceChart = () => {
   }, [data]);
   return (
     <>
-      <div className="max-h-[540px]">
+      <div className=" h-full max-h-[540px]">
         <Title title="Ads Performance" />
-        <div className="chart-container">
-          <canvas id="adsChart" width={200} height={100}></canvas>
+        <div className="chart-container mt-2">
+          <canvas id="adsChart" className="h-full max-h-[250px]"></canvas>
         </div>
       </div>
     </>

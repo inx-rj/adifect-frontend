@@ -61,14 +61,30 @@ const RouteApp = () => {
 
       {/* Not Found Page  */}
       <Route
-        path="*"
         element={
           <Suspense fallback={""}>
-            <div>Not Found</div>
+            <Master />
           </Suspense>
         }
-      />
-    </Routes>
+      >
+        {/* Agency Routes  */}
+        <Route
+          element={
+            <Suspense fallback={""}>
+              <DashLayout />
+            </Suspense>
+          }>
+          <Route
+            path="*"
+            element={
+              <Suspense fallback={""}>
+                <div>Not Found</div>
+              </Suspense>
+            }
+          />
+        </Route>
+      </Route>
+    </Routes >
   );
 };
 export default RouteApp;

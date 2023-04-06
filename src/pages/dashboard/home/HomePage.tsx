@@ -1,8 +1,6 @@
 import React from "react";
 import { lazy, Suspense } from "react";
-import {
-  GET_USER_DATA,
-} from "../../../redux/reducers/auth/auth.slice";
+import { GET_USER_DATA } from "../../../redux/reducers/auth/auth.slice";
 import { useAppSelector } from "../../../redux/store";
 import { Navigate } from "react-router-dom";
 import AdminDashboard from "../../../components/homePage/AdminDashboard";
