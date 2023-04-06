@@ -4,7 +4,7 @@ import { appInitialType } from "helper/types/auth/authType";
 
 const initialState: appInitialType = {
   isMiniSidebar: true,
-  persist: true,
+  persist: false,
 };
 
 export const configAppSlice = createSlice({
@@ -15,17 +15,13 @@ export const configAppSlice = createSlice({
       state.isMiniSidebar = action.payload;
     },
     SET_PERSIST: (state, action) => {
-      state.persist = action.payload
-    }
+      state.persist = action.payload;
+    },
   },
 });
 
-export const {
-  SET_PERSIST,
-  SET_SIDEBAR
-} = configAppSlice.actions;
+export const { SET_PERSIST, SET_SIDEBAR } = configAppSlice.actions;
 
 export const IS_SIDEBAR_COLLAPSED = (state: RootState) =>
   state.config.app.isMiniSidebar;
 export const IS_PERSISTED = (state: RootState) => state.config.app.persist;
-

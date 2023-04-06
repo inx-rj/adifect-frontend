@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import AdminDashboardInProgress from "./adminDashboard/AdminDashboardInProgress";
+import AdminDashboardInReview from "./adminDashboard/AdminDashboardInReview";
 // import LoadingSpinner from "./../../containers/LoadingSpinner";
 
 export default function AdminDashboard() {
@@ -19,18 +21,18 @@ export default function AdminDashboard() {
           </div>
         </div>
         {/* <div className="AllPageHight"></div> */}
-        {/* <div className="Topallpage_sec">
+        <div className="Topallpage_sec">
           <div className="InProgress-4 creatordashbordtab">
             <div className="Work-D">
               <div className="inProgressDashboardComponent">
-                <Admin_Dashboard_In_Progress />
+                <AdminDashboardInProgress />
               </div>
               <div className="inReviewDashboardComponent">
-                <Admin_Dashboard_In_Review />
+                <AdminDashboardInReview />
               </div>{" "}
             </div>
           </div>
-        </div> */}
+        </div>
       </>
     </>
   );

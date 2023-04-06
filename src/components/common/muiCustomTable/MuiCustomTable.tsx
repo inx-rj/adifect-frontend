@@ -59,7 +59,7 @@ const MuiCustomTable = (props: MuiCustomTablePropsType) => {
         boxShadow: "none",
       }}
     >
-      <TableContainer sx={{ maxHeight: "1000px" }}>
+      <TableContainer sx={{ maxHeight: "654px" }}>
         <Table
           stickyHeader
           sx={{
@@ -112,7 +112,7 @@ const MuiCustomTable = (props: MuiCustomTablePropsType) => {
         sx={{
           "&.MuiTablePagination-root": {
             "& .MuiTablePagination-toolbar": {
-              p: 3,
+              p: '34px 25px 30px',
               "& .MuiTablePagination-spacer": {
                 display: "none",
               },
