@@ -12,6 +12,24 @@ class HomePageApiClient {
     axiosPrivate.get(
       `${API_URL.HOMEPAGE.IN_PROGRESS_JOBS_LIST}` + setQueryParams(filters)
     );
+
+  fetchMembersJobListList = () =>
+    axiosPrivate.get(`${API_URL.HOMEPAGE.MEMBERS_LATEST_JOBS}`);
+
+  fetchMembersLatestJobListList = () =>
+    axiosPrivate.get(`${API_URL.HOMEPAGE.LATEST_JOBS}`);
+
+  fetchMembersApprovalJobsList = (currentPage) =>
+    axiosPrivate.get(
+      `${API_URL.HOMEPAGE.MEMBERS_APPROVAL_JOBS_LIST}` +
+        setQueryParams(currentPage)
+    );
+
+  fetchDuplicateMemberAdminJobListInReview = (currentPage) =>
+    axiosPrivate.get(
+      `${API_URL.HOMEPAGE.MEMBERS_JOBS_LIST}` +
+        setQueryParams(currentPage)
+    );
 }
 
 export default new HomePageApiClient();

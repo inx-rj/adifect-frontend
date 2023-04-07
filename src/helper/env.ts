@@ -30,5 +30,9 @@ export const API_URL = {
   },
   HOMEPAGE: {
     IN_PROGRESS_JOBS_LIST: `${env.API_URL}jobs/`,
+    MEMBERS_LATEST_JOBS: `${env.API_URL}members/member-latest-job/`,
+    LATEST_JOBS: `${env.API_URL}latest-job/`,
+    MEMBERS_APPROVAL_JOBS_LIST: `${env.API_URL}members/member-approval-job-list/`,
+    MEMBERS_JOBS_LIST: `${env.API_URL}members/member-job-list/`,
   },
 };
