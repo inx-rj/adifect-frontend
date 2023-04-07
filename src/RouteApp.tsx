@@ -47,7 +47,7 @@ const RouteApp = () => {
             </Suspense>
           }
         >
-          {/* Homepage Route  */}
+          {/* Pages Route  */}
           {PAGES_ROUTES?.map((pageItem: RouteType, pageIndex: number) => {
             return (
               <Route

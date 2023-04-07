@@ -20,6 +20,10 @@
   @apply h-12 w-full py-px pl-3.5 pr-0.5 border border-[#0000001a] rounded outline-none focus:border-theme;
 }
 
+.styled-select textarea {
+  @apply h-40 w-full py-px pt-2 pl-3.5 pr-0.5 border bg-[#f9fbfc] border-[#0000001a] rounded outline-none focus:border-theme;
+}
+
 .error-style span {
   @apply mb-1 text-sm text-danger block text-right;
 }
