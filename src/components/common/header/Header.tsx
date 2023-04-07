@@ -387,7 +387,7 @@ export default function Header(props) {
       <div className="logo h-[40px] max-w-[250px] w-full px-4">
         <Logo />
       </div>
-      <div className="px-4 py-3 flex justify-between items-center w-full border-l">
+      <div className="px-4 py-3 flex justify-between items-center w-full">
         <SidebarToggle />
         <ul className="loginRight flex items-center justify-end ml-auto">
           {/* View company list dropdown  */}
