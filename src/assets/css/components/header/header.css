@@ -2,11 +2,7 @@
   @apply bg-white flex items-center sticky top-0 right-0 z-20 border-b;
 }
 
-.header .h-icon {
-  @apply w-[25px] h-[25px] flex items-center justify-center;
-}
-
-.header .btn-ic {
+.header .toggle-btn {
   @apply w-[22px] h-[22px] cursor-pointer text-[#585858];
 }
 
@@ -14,6 +10,6 @@
   @apply absolute w-[200px] bg-white p-2 right-0 shadow-[-1px_-1px_7px_#ddd] top-[55px] z-[9999] border-t-[3px] border-theme;
 }
 
-.agencyCountDataDes {
+.notification-count {
   @apply bg-danger w-[10px] z-[777] absolute -right-1 bottom-3 rounded-full text-[10px] flex items-center justify-center text-white p-[2px_10px];
 }

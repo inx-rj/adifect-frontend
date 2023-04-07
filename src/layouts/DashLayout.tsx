@@ -30,9 +30,13 @@ const DashLayout = () => {
             <Sidebar />
           </Suspense>
         </div>
-        <div className={`${isSidebarCollapsed ? "pl-[250px]" : "pl-[73px]"}`}>
+        <div
+          className={`transition-all ease-in-out duration-500 ${
+            isSidebarCollapsed ? "pl-[250px]" : "pl-[73px]"
+          }`}
+        >
           <Suspense fallback={""}>
-            <div className="dashboard min-h-[calc(100vh-103px)]">
+            <div className="dashboard min-h-[calc(100vh-103px)] p-4">
               <Outlet />
             </div>
           </Suspense>

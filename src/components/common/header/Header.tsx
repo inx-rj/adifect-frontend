@@ -24,9 +24,7 @@ import Business from "@mui/icons-material/Business";
 //SUPER ADMIN
 // import { listAllAdminCompanies } from "../../redux/actions/company-actions";
 import { useAppDispatch, useAppSelector } from "redux/store";
-import {
-  GET_USER_PROFILE_DATA,
-} from "redux/reducers/auth/auth.slice";
+import { GET_USER_PROFILE_DATA } from "redux/reducers/auth/auth.slice";
 import { Images } from "helper/images";
 import CustomPopup from "../customPopup/CustomPopup";
 import { GET_USER_DETAILS } from "redux/actions/auth/auth.actions";
@@ -100,7 +98,7 @@ export default function Header(props) {
   //   (state) => state.listAllAgencycountReducer
   // );
 
-  const notificationData = useAppSelector(GET_NOTIFICATION_DATA)
+  const notificationData = useAppSelector(GET_NOTIFICATION_DATA);
   // const { memberInviteAdmin, success: successCompanyList } = useAppSelector(
   //   (state) => state.memberAdminInviteListReducer
   // );
@@ -157,14 +155,21 @@ export default function Header(props) {
   //     }
   //   }
   // }, [companyData, props.headerCompany, openMenuInProgress]);
-  useSingleEffect(()=> {
+  useSingleEffect(() => {
     dispatch(GET_USER_DETAILS());
-    dispatch(GET_NOTIFICATIONS_LIST(userProfile?.data?.[0]?.id, 0, props.headerCompany, userProfile?.data?.[0]?.role));
-  })
+    dispatch(
+      GET_NOTIFICATIONS_LIST(
+        userProfile?.data?.[0]?.id,
+        0,
+        props.headerCompany,
+        userProfile?.data?.[0]?.role
+      )
+    );
+  });
   useEffect(() => {
     if (userProfile?.data?.[0]?.role === Roles?.MEMBER && props.headerCompany) {
-    } 
-    
+    }
+
     // else {
     //   if (props.headerCompany) {
     //     dispatch(
@@ -318,8 +323,6 @@ export default function Header(props) {
   //   callThis();
   // }, [dispatch]);
 
-  
-
   //handle logout popup and actinon
   const logoutHandler = () => {
     setOpenLogoutPopup(false);
@@ -351,7 +354,10 @@ export default function Header(props) {
       // Creator
       return false;
     }
-    if (userProfile?.data?.[0]?.role === 3 && userProfile?.data?.[0]?.user_level !== 1) {
+    if (
+      userProfile?.data?.[0]?.role === 3 &&
+      userProfile?.data?.[0]?.user_level !== 1
+    ) {
       // Member Agency other than MEMBER ADMIN
       return false;
     }
@@ -563,7 +569,7 @@ export default function Header(props) {
                 </IconButton>
                 {!open && (
                   // first && count &&
-                  <span className="agencyCountDataDes">{count ?? 0}0</span>
+                  <span className="notification-count">{count ?? 0}0</span>
                 )}
               </div>
               {rowadd && (
@@ -719,7 +725,7 @@ export default function Header(props) {
                   />
                 )}
               </span>
-              {userProfile?.loading && 'Loading'}
+              {userProfile?.loading && "Loading"}
               <span className="loginName ml-1">
                 {userProfile?.data?.[0]?.first_name ?? "Invalid First Name"}{" "}
                 {userProfile?.data?.[0]?.last_name ?? "Invalid Last Name"}

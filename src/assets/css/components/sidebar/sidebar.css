@@ -1,6 +1,6 @@
 .sidebar {
   transition: max-width 0.3s ease-in-out;
-  @apply h-full w-full fixed top-0 left-0 bottom-0 z-10 bg-white border-r text-[#71757B];
+  @apply h-full w-full fixed top-0 left-0 bottom-0 z-10 bg-white border-r text-[#71757B] transition-all ease-in-out duration-500;
 }
 
 .nav-link {

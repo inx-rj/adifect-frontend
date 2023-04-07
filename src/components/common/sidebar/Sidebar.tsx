@@ -1,33 +1,17 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate, useLocation, Navigate } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Navigate } from "react-router-dom";
 import { useAppSelector } from "redux/store";
-import { GET_USER_DATA } from "redux/reducers/auth/auth.slice";
-import { Roles } from "helper/config";
 import SidebarMenuItem from "./SidebarMenuItem";
 import { IS_PERSISTED } from "redux/reducers/config/app/app.slice";
 import { getAllowedRoutes } from "helper/utility/customFunctions";
 import { SIDEBAR_ROUTES } from "routes/baseRoute";
+import { GET_USER_DATA } from "redux/reducers/auth/auth.slice";
 
 export default function Sidebar() {
-  let navigate = useNavigate();
-  const location = useLocation();
-  const { pathname } = location;
-
   // const splitLocation = pathname.split("/");
-
-  function closeNav() {
-    document.getElementById("mySidepanel").style.width = "0";
-  }
 
   const isPersist = useAppSelector(IS_PERSISTED);
   const userData = useAppSelector(GET_USER_DATA);
-
-  useEffect(() => {
-    if (!userData) {
-      navigate("/");
-    }
-  }, []);
 
   // console.log([userData.data.user.role]);
 
