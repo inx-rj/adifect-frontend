@@ -17,10 +17,6 @@
   @apply bg-white rounded-[5px] mt-[15px];
 }
 
-.input-fields-wrapper {
-  @apply h-[100px] w-full;
-}
-
 .input-style {
   @apply h-12 w-full py-px pl-3.5 pr-0.5 border border-[#0000001a] rounded outline-none focus:border-theme;
 }
@@ -30,7 +26,7 @@
 }
 
 .error-style span {
-  @apply mb-1 text-sm text-danger block text-right;
+  @apply text-sm text-danger block text-right;
 }
 
 .error-style .input-style {
@@ -38,7 +34,7 @@
 }
 
 .login-signup-wrapper {
-  @apply flex items-center justify-center min-h-screen w-[90%] p-20 my-0 mx-auto;
+  @apply flex items-center justify-center min-h-screen w-full my-0 mx-auto;
 }
 
 .flex-center {

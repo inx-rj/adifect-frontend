@@ -140,15 +140,7 @@ const SidebarMenuItem = ({ navItem }) => {
         <li className={pathname === navItem.path ? "active" : ""}>
           <Link className="Menu nav-link" to={navItem.path}>
             <MuiIcon icon={navItem?.icon} />
-            {/* {isSidebarCollapsed && ( */}
-            <span
-              className={`ml-2 transition-all ease-in duration-700 ${
-                isSidebarCollapsed ? "block scale-100" : "scale-0 hidden"
-              }`}
-            >
-              {navItem.name}
-            </span>
-            {/* )} */}
+            {isSidebarCollapsed && <span className="ml-2">{navItem.name}</span>}
           </Link>
         </li>
       )}
