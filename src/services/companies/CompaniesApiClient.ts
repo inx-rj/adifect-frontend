@@ -1,7 +1,6 @@
 import { setQueryParams } from "helper/utility/customFunctions";
 import axiosPrivate from "../../api/axios";
 import { API_URL } from "../../helper/env";
-import { EmailPWDType, EmailType } from "../../helper/types";
 
 class CompaniesApiClient {
   // Company projects table data list

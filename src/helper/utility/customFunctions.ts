@@ -1,4 +1,5 @@
 import { RouteType, SidebarRoutesTypes } from "helper/types";
+import { initialNotificationQueryInterface } from "helper/types/common/notification";
 import { initialTableConfigInterface } from "helper/types/common/table";
 import { intersection } from "lodash";
 
@@ -43,3 +44,11 @@ export function getAllowedRoutes(
     else return intersection(permission, roles).length;
   });
 }
+
+// Notification query parameter 
+export const setNotificationQueryParams = (queryParams: initialNotificationQueryInterface) => {
+  console.log("Paramas",queryParams);
+  
+  let notifiQueryParams = `?user=${queryParams?.id ?? 0}&ordering=-created&offset=${queryParams?.offsetid ?? 0}`;
+  return notifiQueryParams;
+};

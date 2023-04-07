@@ -7,6 +7,7 @@ import storage from "redux-persist/lib/storage";
 import { configReducer } from "./reducers/config/config.reducer";
 import { ActionTypes } from "helper/actions";
 import { homePageReducer } from "./reducers/homePage/homePage.reducer";
+import { commonReducer } from "./reducers/common/common.reducer";
 
 const persistAppConfig = {
   key: "app",
@@ -18,6 +19,7 @@ const persistAppConfig = {
 const appReducer = combineReducers({
   config: persistReducer(persistAppConfig, configReducer),
   auth: authSlice.reducer,
+  common: commonReducer,
   companies: companiesSlice.reducer,
   inviteUser: inviteUserSlice.reducer,
   homePage: homePageReducer,

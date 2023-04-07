@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import swal from "sweetalert";
 import { Button, MenuItem, Select, Typography } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
@@ -5,7 +6,7 @@ import { Link } from "react-router-dom";
 
 import { useAppSelector } from "redux/store";
 import { useAppDispatch } from "redux/store";
-import { DELETE_INVITE_USER, FETCH_COMPANIES_LIST, FETCH_INVITE_USERS, POST_INVITE_USER } from "redux/actions/inviteUser/inviteUser.actions";
+import { DELETE_INVITE_USER, FETCH_COMPANIES_LIST, FETCH_INVITE_USERS, POST_INVITE_USER, PUT_INVITE_USER } from "redux/actions/inviteUser/inviteUser.actions";
 import { COMPANIES_LIST, INVITE_USER_LIST } from "redux/reducers/inviteUser/inviteUser.slice";
 
 import Custom_MUI_Table from "common/MuiCustomTable/Custom-MUI-Table";
@@ -25,7 +26,7 @@ const InviteUser = () => {
   const modalRef = useRef(null);
 
   const { inviteUserData, loading: inviteUserLoading } = useAppSelector(INVITE_USER_LIST);
-  const { companiesList, loading: companiesLoading } = useAppSelector(COMPANIES_LIST);
+  const { companiesList } = useAppSelector(COMPANIES_LIST);
 
   const [searchText, setSearchText] = useState("");
   const [currentTooltip, setCurrentTooltip] = useState(null);
@@ -39,32 +40,14 @@ const InviteUser = () => {
     level: ""
   });
   const [errors, setErrors] = useState({
-    email: "",
-    company: "",
-    level: ""
+    email: null,
+    company: null,
+    level: null
   });
   const [paginationData, setPaginationData] = useState({
     page: 1,
     rowsPerPage: 10,
   });
-
-
-  //get user level
-  const getUserLevel = (level) => {
-    if (level == 1) {
-      return "Admin";
-    }
-    if (level == 2) {
-      return "Marketer";
-    }
-    if (level == 3) {
-      return "Approver";
-    }
-    if (level == 4) {
-      return "In-house Designer";
-    }
-    return ""
-  }
 
   useEffect(() => {
     dispatch(FETCH_COMPANIES_LIST());
@@ -75,17 +58,33 @@ const InviteUser = () => {
   }, [paginationData])
 
 
-  //handle the actions modal 
+  // Add event listener to detect clicks outside the modall 
   useEffect(() => {
-    // Add event listener to detect clicks outside the modal
     document.addEventListener('mousedown', handleClickOutside);
 
     return () => {
-      // Remove event listener on cleanup
       document.removeEventListener('mousedown', handleClickOutside);
     };
   });
 
+  //get user level
+  const getUserLevel = (level) => {
+    if (level === 1) {
+      return "Admin";
+    }
+    if (level === 2) {
+      return "Marketer";
+    }
+    if (level === 3) {
+      return "Approver";
+    }
+    if (level === 4) {
+      return "In-house Designer";
+    }
+    return ""
+  }
+
+  //close modal if clicked outside for edit/delete tooltip
   const handleClickOutside = (e) => {
     if (modalRef.current && !modalRef.current.contains(e.target)) {
       setCurrentTooltip(null);
@@ -93,10 +92,34 @@ const InviteUser = () => {
   };
 
   //set the edit mode
-  const handleEditEntry = () => {
-    setCurrentTooltip(null);
+  const handleEditEntry = (itemId, level) => {
+    setCurrentTooltip(itemId);
     setIsEditMode(true)
     setOpenModal(true)
+    setErrors({ ...errors, level: null })
+    setFormData({ ...formData, level });
+  }
+
+  //validate inputs
+  const validateSubmit = (e) => {
+    e.preventDefault();
+    let tempErrors = { email: null, company: null, level: !formData?.level ? "Please select a level" : null, }
+    if (!isEditMode) {
+      tempErrors = {
+        email: !formData?.email ? "Please enter the email address" : !formData?.email?.toLowerCase()
+          .match(
+            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+          ) ? "Email is not valid" : null,
+        company: !formData?.company ? "Please select a company" : null,
+        level: !formData?.level ? "Please select a level" : null,
+      };
+    };
+    setErrors(tempErrors);
+    if (Object.values(tempErrors).filter((value) => value)?.length) {
+      return;
+    }
+    handleFormSubmit();
+    setFormData({ ...formData, email: null });
   }
 
   //handle form data
@@ -104,36 +127,14 @@ const InviteUser = () => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
     setErrors({ ...errors, [name]: null });
-
   }
 
-  //validate inputs
-  const validateSubmit = (e) => {
-    e.preventDefault();
-    const tempErrors = {
-      email: !formData?.email ? "Please enter the email address" : !formData?.email?.toLowerCase()
-        .match(
-          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-        ) ? "Email is not valid" : "",
-      company: !formData?.company ? "Please select a company" : "",
-      level: !formData?.level ? "Please select a level" : "",
-    };
-
-    console.log(tempErrors, "tempErrors")
-    setErrors(tempErrors);
-    if (Object.values(tempErrors).filter((value) => value)?.length) {
-      return;
-    }
-    handleFormSubmit();
-    setFormData({ ...formData, email: "" });
-  };
-
+  //handle add and edit form submit
   const handleFormSubmit = () => {
     if (isEditMode) {
-      console.log("IN the EDIT mode", formData, errors)
-      // dispatch(POST_INVITE_USER(formData);
+      dispatch(PUT_INVITE_USER(currentTooltip, { levels: formData?.level }));
+      setCurrentTooltip(null);
     } else {
-      console.log("IN the ADD mode", formData, errors)
       dispatch(POST_INVITE_USER({
         email: formData?.email,
         company: formData?.company,
@@ -144,6 +145,7 @@ const InviteUser = () => {
     setIsEditMode(false)
   }
 
+  //handle delete action
   const handleDeleteEntry = (itemId) => {
     swal({
       title: "",
@@ -167,7 +169,7 @@ const InviteUser = () => {
       }
     });
   };
-  console.log("inviteUserData", inviteUserData)
+
   const columns = {
     columns: [
       {
@@ -180,7 +182,7 @@ const InviteUser = () => {
         ),
         field: "name",
         sort: "asc",
-        width: 300,
+        width: 180,
       },
       {
         id: 2,
@@ -192,7 +194,7 @@ const InviteUser = () => {
         ),
         field: "email",
         sort: "asc",
-        width: 120,
+        width: 180,
       },
       {
         id: 3,
@@ -211,26 +213,26 @@ const InviteUser = () => {
         label: (
           <label className="tableHead">
             Level
-            <img src={SortArrowIcon} />
+            <img src={SortArrowIcon} alt="Title" />
           </label>
         ),
         field: "level",
         sort: "asc",
-        width: 100,
+        width: 160,
       },
       {
         id: 6,
         label: "Status",
         field: "status",
         sort: "asc",
-        width: 100,
+        width: 160,
       },
       {
         id: 6,
         label: "Action",
         field: "action",
         sort: "asc",
-        width: 100,
+        width: 160,
       },
     ],
 
@@ -289,9 +291,9 @@ const InviteUser = () => {
             action: (
               <div className="relative">
                 <MoreVertIcon cursor="pointer" onClick={() => setCurrentTooltip(item?.id)} />
-                {currentTooltip === item?.id && (
-                  <div ref={modalRef} className="modal-shadow absolute left-3 top-2 z-10 p-[10px] rounded-[4px] max-w-fit text-sm text-disable leading-4">
-                    <div className="flex justify-start items-center gap-2 cursor-pointer" onClick={handleEditEntry} >
+                {currentTooltip === item?.id && !isEditMode && (
+                  <div ref={modalRef} className="shadow-sm absolute left-3 top-[10px] bg-white z-10 p-[10px] rounded-[4px] max-w-fit text-sm text-disable leading-4">
+                    <div className="flex justify-start items-center gap-2 cursor-pointer" onClick={() => handleEditEntry(item?.id, item?.level)} >
                       <BorderColorIcon />
                       <span>Edit</span>
                     </div>
@@ -310,33 +312,27 @@ const InviteUser = () => {
 
 
   return (
-    <>
-      <div className="background">
-        <div className="Category">
-          <div className="flex justify-between items-center">
-            <h1>Invite User</h1>
-            <div className="flex justify-center items-center gap-[10px] font-sm leading-4 font-medium text-primary">
-              <Link to="/"><HomeIcon color="disabled" /></Link>
-              <span className="text-disable opacity-20">|</span>
-              <Link to="/invite-user">Invite User</Link>
-            </div>
-          </div>
+    <div className="page-container">
+      <div className="flex-center">
+        <h1>Invite User</h1>
+        <div className="flex-center gap-[10px] font-sm leading-4 font-medium text-primary">
+          <Link to="/"><HomeIcon color="disabled" /></Link>
+          <span className="text-disable opacity-20">|</span>
+          <Link to="/invite-user">Invite User</Link>
         </div>
       </div>
 
-      <div className="ContentDiv">
-        <div className="min-w-[180px] grid">
-          <div className="flex justify-between items-center my-[15px] mx-[25px]">
-            <SearchBar onChange={setSearchText} />
-            <button
-              type="submit"
-              onClick={() => setOpenModal(true)}
-              className="btn btn-primary btn-label px-[15px] py-[9px] btn-primary max-w-[135px] w-full flex justify-center items-center gap-2"
-            >
-              <PersonAddAltIcon />
-              <span className="btn-label">Invite User</span>
-            </button>
-          </div>
+      <div className="page-card">
+        <div className="flex-center flex flex-wrap p-[15px] pb-5">
+          <SearchBar onChange={setSearchText} />
+          <button
+            type="submit"
+            onClick={() => setOpenModal(true)}
+            className="btn btn-primary btn-label px-[15px] py-[9px] max-w-[135px] w-full flex-center gap-2"
+          >
+            <PersonAddAltIcon />
+            <span className="btn-label">Invite User</span>
+          </button>
         </div>
         {inviteUserLoading ? (
           <h1>Loading...</h1>
@@ -350,48 +346,42 @@ const InviteUser = () => {
               setPaginationData={setPaginationData}
             />
             <CustomPopup
-              dialogTitle="Invite User"
+              dialogTitle={isEditMode ? "Edit Invite User" : "Invite User"}
               textAlign="left"
               dialogContent={
-                <div className="Topallpage-- AllPageHight--">
-                  <div className="invitepage2">
-                    <div className="invite1sec">
+                <div className="mt-5">
+                  {!isEditMode && (
+                    <>
                       <div
                         className={
                           errors.email
-                            ? "inputCntnr error"
-                            : "inputCntnr CategoryinputH"
+                            ? "input-fields-wrapper error-style"
+                            : "input-fields-wrapper"
                         }
                       >
                         <h4>Email Address</h4>
-                        <input
-                          className="category_name validateInput w-100 h-47 border-radius border-1"
-                          type="email"
-                          placeholder="Enter Email Address"
-                          name="email"
-                          value={formData.email}
-                          onChange={handleInputChange}
-                          required
-                        />
-                        <span
-                          style={{
-                            color: "#D14F4F",
-                            opacity: errors.email ? 1 : 0,
-                          }}
-                        >
-                          {errors.email ?? "valid"}
-                        </span>
+                        <div className="styled-select">
+                          <input
+                            className="input-style"
+                            type="email"
+                            placeholder="Enter Email Address"
+                            name="email"
+                            value={formData.email}
+                            onChange={handleInputChange}
+                            required
+                          />
+                          {errors.email && (
+                            <span>{errors.email ?? "valid"}</span>)}
+                        </div>
                       </div>
 
-                      <div
-                        className={
-                          errors.company
-                            ? "text-content error Experiencenew"
-                            : "text-content  Experiencenew"
-                        }
-                      >
-                        <h4 className="Company_nameinvite">Company</h4>{" "}
-                        <div className="styled-select inviteselect">
+                      <div className={
+                        errors.company
+                          ? "input-fields-wrapper error-style"
+                          : "input-fields-wrapper"
+                      }>
+                        <h4>Company</h4>
+                        <div className="styled-select">
                           <Select
                             name="company"
                             open={openCompanyDropdown}
@@ -419,68 +409,68 @@ const InviteUser = () => {
                               ) : null
                             )}
                           </Select>
-                          <span
-                            className="companyclass45"
-                            style={{
-                              color: "#D14F4F",
-                              opacity: errors.company ? 1 : 0,
-                            }}
-                          >
-                            {errors.company ?? "valid"}
-                          </span>
+                          {errors.company && (
+                            <span>{errors.company ?? "valid"}</span>
+                          )}
                         </div>
                       </div>
-
-                      <div className="Levelsec">
-                        <h4>Level</h4>
-                        <Select
-                          name="level"
-                          open={openLevelDropdown}
-                          onOpen={() => {
-                            setOpenLevelDropdown(true);
-                          }}
-                          onClose={() => {
-                            setOpenLevelDropdown(false);
-                          }}
-                          // disabled={DamData?.[0]?.company_id}
-                          MenuProps={{
-                            variant: "menu",
-                            disableScrollLock: true,
-                          }}
-                          value={formData.level}
-                          onChange={handleInputChange}
-                          displayEmpty
-                          inputProps={{ "aria-label": "Without label" }}
-                        >
-                          <MenuItem value=""> Select Level </MenuItem>
-                          <MenuItem value={1}>Admin Level</MenuItem>
-                          <MenuItem value={2}>Marketer Level</MenuItem>
-                          <MenuItem value={3}>Approver Level</MenuItem>
-                          <MenuItem value={4}>In-house Designer</MenuItem>
-                        </Select>
-                        <span
-                          className="companyclass45"
-                          style={{
-                            color: "#D14F4F",
-                            opacity: errors.level ? 1 : 0,
-                          }}
-                        >
-                          {errors.level ?? "valid"}
-                        </span>
-                      </div>
+                    </>
+                  )}
+                  <div className={
+                    errors.level
+                      ? "input-fields-wrapper error-style"
+                      : "input-fields-wrapper"
+                  }>
+                    <h4>Level</h4>
+                    <div className="styled-select">
+                      <Select
+                        name="level"
+                        open={openLevelDropdown}
+                        onOpen={() => {
+                          setOpenLevelDropdown(true);
+                        }}
+                        onClose={() => {
+                          setOpenLevelDropdown(false);
+                        }}
+                        // disabled={DamData?.[0]?.company_id}
+                        MenuProps={{
+                          variant: "menu",
+                          disableScrollLock: true,
+                        }}
+                        value={formData.level}
+                        onChange={handleInputChange}
+                        displayEmpty
+                        inputProps={{ "aria-label": "Without label" }}
+                      >
+                        <MenuItem value=""> Select Level </MenuItem>
+                        <MenuItem value={1}>Admin Level</MenuItem>
+                        <MenuItem value={2}>Marketer Level</MenuItem>
+                        <MenuItem value={3}>Approver Level</MenuItem>
+                        <MenuItem value={4}>In-house Designer</MenuItem>
+                      </Select>
+                      {errors.level && (
+                        <span>{errors.level ?? "valid"}</span>
+                      )}
                     </div>
                   </div>
                 </div>
               }
               openPopup={openModal}
-              closePopup={() => setOpenModal(false)}
+              closePopup={() => {
+                if (isEditMode) {
+                  setOpenModal(false)
+                  setIsEditMode(false)
+                } else {
+                  setOpenModal(false)
+                }
+              }}
               mainActionHandler={validateSubmit}
-              mainActionTitle="Invite"
+              mainActionTitle={isEditMode ? "Save" : "Invite"}
             />
           </>
         )}
       </div >
-    </>
+    </div>
   );
 };
 

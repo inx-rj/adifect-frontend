@@ -20,6 +20,7 @@ const userProfileDetails: UserProfileDetailsType = {
   preferred_communication_id: null,
   availability: null,
   Portfolio_user: [],
+  user_level: null,
   sub_title: null,
   Language: null,
   website: null,
