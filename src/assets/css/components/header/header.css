@@ -1,5 +1,5 @@
 .header {
-  @apply bg-white flex items-center sticky top-0 right-0 z-20 border-b;
+  @apply bg-white flex items-center sticky top-0 right-0 z-20;
 }
 
 .header .toggle-btn {
