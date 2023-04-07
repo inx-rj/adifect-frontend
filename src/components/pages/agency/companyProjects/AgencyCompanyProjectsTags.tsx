@@ -195,11 +195,11 @@ const AgencyCompanyProjectsTags = () => {
     <div className="page-container">
       <div className="flex-center">
         <h1>Tags</h1>
-        <div className="flex-center gap-[10px] font-sm leading-4 font-medium text-primary">
+        {/* <div className="flex-center gap-[10px] font-sm leading-4 font-medium text-primary">
           <Link to="/"><HomeIcon color="disabled" /></Link>
           <span className="text-disable opacity-20">|</span>
           <Link to="/company-projects">Company Projects</Link>
-        </div>
+        </div> */}
       </div>
       <div className="page-card">
         {companyProjectsTagsList?.loading ? (
