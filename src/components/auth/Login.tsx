@@ -61,7 +61,7 @@ const Login = () => {
 
   return (
     <>
-      <div className="login-signup-wrapper  flex items-center p-20 justify-center min-h-screen">
+      <div className="login-signup-wrapper">
         <div className="card max-w-[380px]">
           <div className="mt-2.5 mb-4 inline-flex items-center justify-center w-full h-full">
             <img
@@ -81,7 +81,7 @@ const Login = () => {
             <div
               className={
                 errors.email
-                  ? "input-fields-wrapper text-danger"
+                  ? "input-fields-wrapper error-style"
                   : "input-fields-wrapper"
               }
             >
@@ -98,13 +98,13 @@ const Login = () => {
                 }}
               />
               {errors.email && (
-                <span className="error-style">{errors.email ?? "valid"}</span>
+                <span>{errors.email ?? "valid"}</span>
               )}
             </div>
             <div
               className={
                 errors.password
-                  ? "input-fields-wrapper text-danger"
+                  ? "input-fields-wrapper error-style"
                   : "input-fields-wrapper"
               }
             >
@@ -121,18 +121,18 @@ const Login = () => {
                 }}
               />
               {errors.password && (
-                <span className="error-style">
+                <span>
                   {errors.password ?? "valid"}
                 </span>
               )}
             </div>
-            <div className="mt-2 text-center w-full">
-              <button type="submit" className="btn btn-primary w-full">
+            <div className="mt-2">
+              <button type="submit" className="btn btn-primary w-full text-base">
                 Log In
               </button>
               <Link
                 to={redirect ? `/signup?redirect=${redirect}` : "/signup"}
-                className="link-btn"
+                className="btn btn-outline block w-full mt-4 py-[11px] text-base"
               >
                 Create Account
               </Link>

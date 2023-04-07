@@ -1211,7 +1211,7 @@
 //         {showBlueBox ? (
 //           <>
 //             <div className="Topallpage bak_h">
-//               <div className="ContentDiv TopM fresh_job_section">
+//               <div className="page-card TopM fresh_job_section">
 //                 <div className="FreshTitl">
 //                   <div className="JobsDashborad">
 //                     <h1>
@@ -2272,7 +2272,7 @@
 //         >
 //           <DialogContent>
 //             <div className="Topallpage">
-//               <div className="MarketingDetails-popup ContentDiv border-radius">
+//               <div className="MarketingDetails-popup page-card border-radius">
 //                 <div className="Marketingcamaign">
 //                   <div className="CategorylistName">
 //                     <div className="jobdes">

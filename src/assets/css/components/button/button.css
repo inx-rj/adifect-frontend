@@ -1,15 +1,21 @@
-.btn {
-  @apply h-12 text-center px-3 py-1.5 rounded text-base hover:bg-opacity-90 transition-all;
+/* btn class */
+.btn,
+.btn.MuiButton-root {
+  @apply normal-case text-center px-[30px] py-3 rounded text-sm font-semibold hover:bg-opacity-90 transition-all;
 }
 
-.btn.btn-primary {
-  @apply bg-theme border-solid border-theme text-white disabled:bg-dark-100 disabled:text-title-color;
+/* btn-primary class */
+.btn.btn-primary,
+.btn.btn-primary.MuiButton-root {
+  @apply bg-theme  border-theme text-white disabled:bg-dark-100 disabled:text-title-color;
 }
 
-.link-btn {
-  @apply block text-theme border border-theme rounded py-2.5 mt-4 w-full;
+/* btn-outline class */
+.btn.btn-outline,
+.btn.btn-outline.MuiButton-root {
+  @apply border border-theme text-theme disabled:bg-dark-100 disabled:text-title-color;
 }
 
 .btn-label {
-  @apply font-sans font-semibold text-sm leading-4 text-center text-white;
+  @apply font-figtree font-semibold text-sm leading-4 text-center text-white;
 }

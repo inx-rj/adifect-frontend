@@ -93,7 +93,7 @@ const ForgotPassword = () => {
                     <div
                       className={
                         errors.email
-                          ? "input-fields-wrapper text-danger"
+                          ? "input-fields-wrapper error-style"
                           : "input-fields-wrapper"
                       }
                     >
@@ -118,7 +118,7 @@ const ForgotPassword = () => {
                       {errors.email ?? "valid"}
                     </span> */}
                       {errors.email && (
-                        <span className="error-style">
+                        <span>
                           {errors.email ?? "valid"}
                         </span>
                       )}

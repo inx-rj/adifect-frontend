@@ -8,6 +8,15 @@
   @apply text-[#71757B];
 }
 
+/* sections and div */
+.page-container {
+  @apply bg-[#F4F8FF];
+}
+
+.page-card {
+  @apply bg-white rounded-[5px] mt-[15px];
+}
+
 .input-fields-wrapper {
   @apply h-[100px] w-full;
 }
@@ -16,20 +25,27 @@
   @apply h-12 w-full py-px pl-3.5 pr-0.5 border border-[#0000001a] rounded outline-none focus:border-theme;
 }
 
-.error-style {
+.styled-select textarea {
+  @apply h-40 w-full py-px pt-2 pl-3.5 pr-0.5 border bg-[#f9fbfc] border-[#0000001a] rounded outline-none focus:border-theme;
+}
+
+.error-style span {
   @apply mb-1 text-sm text-danger block text-right;
 }
 
-.text-danger .input-style {
+.error-style .input-style {
   @apply border-danger;
 }
 
 .login-signup-wrapper {
-  @apply flex my-0 mx-auto items-center justify-center w-[90%];
+  @apply flex items-center justify-center min-h-screen w-[90%] p-20 my-0 mx-auto;
+}
+
+.flex-center {
+  @apply flex justify-between items-center;
 }
 
 /* Error */
-
 .errorAlert .swal-text,
 .errorAlert-login .swal-text {
   @apply text-[#d14f4f];
@@ -56,6 +72,7 @@
 /* .MuiMenu-list li {
   @apply text-base pt-3 px-2.5 pb-3;
 }
+
 ul.MuiMenu-list {
   @apply py-0;
 } */
@@ -69,4 +86,26 @@ ul.MuiMenu-list {
 
 .tableHead img {
   @apply ml-1;
+}
+
+/* modal */
+.modalTitle {
+  @apply font-figtree flex justify-between items-center font-medium text-xl leading-6 text-black border border-[#71757b4d];
+}
+
+/* Select input mui */
+.styled-select {
+  @apply w-full pt-3;
+}
+
+.styled-select .MuiInputBase-root {
+  @apply bg-[#f9fbfc] h-12 w-full rounded text-[#71757B];
+}
+
+.styled-select .MuiInputBase-root fieldset {
+  @apply border-[#71757b4d];
+}
+
+.error-style .styled-select .MuiInputBase-root fieldset {
+  @apply border-danger -top-[11px];
 }
