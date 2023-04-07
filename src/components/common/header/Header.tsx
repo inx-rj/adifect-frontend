@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useRef } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useEffect, useState, useRef, lazy, Suspense } from "react";
+import { Link } from "react-router-dom";
 // import useWebSocket, { ReadyState } from 'react-use-websocket';
 
 //import mui components
@@ -28,7 +28,6 @@ import { GET_USER_PROFILE_DATA } from "redux/reducers/auth/auth.slice";
 import { Images } from "helper/images";
 import CustomPopup from "../customPopup/CustomPopup";
 import { GET_USER_DETAILS } from "redux/actions/auth/auth.actions";
-import Logo from "../logo/Logo";
 import {
   ArrowDropDownOutlined,
   DescriptionOutlined,
@@ -38,11 +37,16 @@ import {
   PowerSettingsNewOutlined,
 } from "@mui/icons-material";
 import { ActionTypes } from "helper/actions";
-import SidebarToggle from "./SidebarToggle";
 import { useSingleEffect } from "react-haiku";
 import { GET_NOTIFICATION_DATA } from "redux/reducers/common/notification.slice";
 import { GET_NOTIFICATIONS_LIST } from "redux/actions/common/notification.actions";
 import { Roles } from "helper/config";
+
+// Import lazy load component
+const Logo = lazy(() => import("components/common/logo/Logo"));
+const SidebarToggle = lazy(
+  () => import("components/common/header/SidebarToggle")
+);
 
 export default function Header(props) {
   const dispatch = useAppDispatch();
@@ -390,8 +394,10 @@ export default function Header(props) {
 
   return (
     <div className="header">
-      <div className="logo h-[40px] max-w-[250px] w-full px-4">
-        <Logo />
+      <div className="logo h-[40px] max-w-[200px] lg:max-w-[250px] w-full px-4">
+        <Suspense fallback={""}>
+          <Logo />
+        </Suspense>
       </div>
       <div className="px-4 py-3 flex justify-between items-center w-full">
         <SidebarToggle />
@@ -426,6 +432,14 @@ export default function Header(props) {
                   keepMounted
                   open={openMenuInProgress}
                   onClose={handleCloseCompany}
+                  transformOrigin={{
+                    horizontal: "right",
+                    vertical: "top",
+                  }}
+                  anchorOrigin={{
+                    horizontal: "right",
+                    vertical: "bottom",
+                  }}
                 >
                   {/* <Menu
                           id="long-menu"
@@ -468,6 +482,14 @@ export default function Header(props) {
                   keepMounted
                   open={openMenuInProgress}
                   onClose={handleCloseCompany}
+                  transformOrigin={{
+                    horizontal: "right",
+                    vertical: "top",
+                  }}
+                  anchorOrigin={{
+                    horizontal: "right",
+                    vertical: "bottom",
+                  }}
                 >
                   {/* <Menu
                           id="long-menu"
@@ -508,6 +530,14 @@ export default function Header(props) {
                   keepMounted
                   open={openMenuInProgress}
                   onClose={handleCloseCompany}
+                  transformOrigin={{
+                    horizontal: "right",
+                    vertical: "top",
+                  }}
+                  anchorOrigin={{
+                    horizontal: "right",
+                    vertical: "bottom",
+                  }}
                 >
                   <MenuItem
                     onClick={(e) => menuHandleCompanyMember(e, "value", "name")}
@@ -569,7 +599,7 @@ export default function Header(props) {
                 </IconButton>
                 {!open && (
                   // first && count &&
-                  <span className="notification-count">{count ?? 0}0</span>
+                  <span className="notification-count">{count ?? 0}</span>
                 )}
               </div>
               {rowadd && (
@@ -593,6 +623,14 @@ export default function Header(props) {
                       onClose={handleClose}
                       TransitionComponent={Fade}
                       className="notificationheaddiv"
+                      transformOrigin={{
+                        horizontal: "right",
+                        vertical: "top",
+                      }}
+                      anchorOrigin={{
+                        horizontal: "right",
+                        vertical: "bottom",
+                      }}
                     >
                       {rowadd?.slice(0, 3).map((item, index) => (
                         <MenuItem className="notmenutop" key={item?.id}>
@@ -725,7 +763,6 @@ export default function Header(props) {
                   />
                 )}
               </span>
-              {userProfile?.loading && "Loading"}
               <span className="loginName ml-1">
                 {userProfile?.data?.[0]?.first_name ?? "Invalid First Name"}{" "}
                 {userProfile?.data?.[0]?.last_name ?? "Invalid Last Name"}

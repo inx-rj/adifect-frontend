@@ -1,6 +1,11 @@
-/* Card Css */
 .card {
   @apply w-full shadow-[0_1px_5px_#0d6efd45] bg-white border rounded p-5;
+}
+.page-title {
+  @apply text-lg font-medium;
+}
+.text-info {
+  @apply text-[#71757B];
 }
 
 .input-fields-wrapper {
@@ -48,12 +53,12 @@
 }
 
 /* Select Menu */
-.MuiMenu-list li {
+/* .MuiMenu-list li {
   @apply text-base pt-3 px-2.5 pb-3;
 }
 ul.MuiMenu-list {
   @apply py-0;
-}
+} */
 .text-danger .input-style {
   @apply border-danger;
 }
