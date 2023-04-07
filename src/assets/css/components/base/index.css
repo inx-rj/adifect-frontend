@@ -1,3 +1,3 @@
 body {
-  @apply text-base;
+  @apply text-base bg-[#F4F8FF] font-sans;
 }

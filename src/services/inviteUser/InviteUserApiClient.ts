@@ -7,37 +7,32 @@ class InviteUserApiClient {
   // get invited users list
   getInviteUsers = ({ rowsPerPage, page }) =>
     axiosPrivate.get(`${API_URL.INVITE.INVITE_USERS}`, {
-      headers: {
-        Authorization: `Bearer ${userData()?.token}`,
-      },
       params: { page_size: rowsPerPage, page },
     });
 
   //get comapnies list
   getCompaniesList = () =>
     axiosPrivate.get(`${API_URL.COMPANY.COMPANY_LIST}`, {
-      headers: {
-        Authorization: `Bearer ${userData()?.token}`,
-      },
     });
 
+  //add invite user
   addInviteUser = (postObj) => {
     const payload = {
       ...postObj,
       agency: userData()?.user.user_id
     }
     return axiosPrivate.post(`${API_URL.INVITE.INVITE_USERS}`, payload, {
-      headers: {
-        Authorization: `Bearer ${userData()?.token}`,
-      },
     });
   }
 
+  //update invite user
+  updateInviteUser = (id, payload) => {
+    return axiosPrivate.put(`${API_URL.INVITE.INVITE_USERS}${id}/`, payload)
+  }
+
+  //update invite user
   deleteInviteUser = (id) => {
-    return axiosPrivate.delete(`${API_URL.INVITE.INVITE_USERS}/${id}`, {
-      headers: {
-        Authorization: `Bearer ${userData()?.token}`,
-      },
+    return axiosPrivate.delete(`${API_URL.INVITE.INVITE_USERS}${id}/`, {
     });
   }
 }

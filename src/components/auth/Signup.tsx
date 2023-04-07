@@ -209,7 +209,7 @@ export default function Signup() {
                 <div
                   className={
                     errors.username
-                      ? "input-fields-wrapper text-danger"
+                      ? "input-fields-wrapper error-style"
                       : "input-fields-wrapper"
                   }
                 >
@@ -236,7 +236,7 @@ export default function Signup() {
                 <div
                   className={
                     errors.firstname
-                      ? "input-fields-wrapper text-danger"
+                      ? "input-fields-wrapper error-style"
                       : "input-fields-wrapper"
                   }
                 >
@@ -264,7 +264,7 @@ export default function Signup() {
                 <div
                   className={
                     errors.lastname
-                      ? "input-fields-wrapper text-danger"
+                      ? "input-fields-wrapper error-style"
                       : "input-fields-wrapper"
                   }
                 >
@@ -290,7 +290,7 @@ export default function Signup() {
                 <div
                   className={
                     errors.email
-                      ? "input-fields-wrapper text-danger"
+                      ? "input-fields-wrapper error-style"
                       : "input-fields-wrapper"
                   }
                 >
@@ -319,7 +319,7 @@ export default function Signup() {
                 <div
                   className={
                     errors.password
-                      ? "input-fields-wrapper text-danger"
+                      ? "input-fields-wrapper error-style"
                       : "input-fields-wrapper"
                   }
                 >
@@ -347,7 +347,7 @@ export default function Signup() {
                 <div
                   className={
                     errors.confirmPassword
-                      ? "input-fields-wrapper text-danger"
+                      ? "input-fields-wrapper error-style"
                       : "input-fields-wrapper"
                   }
                 >
@@ -378,7 +378,7 @@ export default function Signup() {
                   <div
                     className={
                       errors.role
-                        ? "input-fields-wrapper text-danger"
+                        ? "input-fields-wrapper error-style"
                         : "input-fields-wrapper"
                     }
                   >
@@ -386,11 +386,10 @@ export default function Signup() {
                       Role:{" "}
                     </h5>
                     <Select
-                      className={`${
-                        role === ""
+                      className={`${role === ""
                           ? "!text-[#939393] hover:border-[#939393] "
                           : "text-[#000]"
-                      }bg-[#f9fbfc] !rounded w-full !text-sm !font-semibold`}
+                        }bg-[#f9fbfc] !rounded w-full !text-sm !font-semibold`}
                       value={role}
                       open={isOpen}
                       disabled={redirectMyUrl}
