@@ -31,10 +31,7 @@ const DropdownWithSearch = ({ filterList, handleChange }: DropdownWithSearchProp
   );
 
   useEffect(() => {
-    console.log({ filterList, selectedOption }, 'Filters');
-    if (selectedOption) {
-      handleChange(filterList?.name, selectedOption || "");
-    }
+    handleChange(filterList?.name, selectedOption || "");
   }, [selectedOption]);
 
   return (
@@ -90,7 +87,7 @@ const DropdownWithSearch = ({ filterList, handleChange }: DropdownWithSearchProp
         options={displayedOptions}
         // @ts-ignore
         value={selectedOption}
-        onChange={(event, value) => { console.log(value); setSelectedOption(value?.value) }}
+        onChange={(event, value) => { value ? setSelectedOption(value?.value) : setSelectedOption("") }}
       />
     )
   );

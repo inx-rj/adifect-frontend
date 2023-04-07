@@ -13,7 +13,7 @@ export default function AdminDashboard() {
       {/* {isLoading && <LoadingSpinner />} */}
       <>
         <div className="Topallpage">
-          <div className="ContentDiv TopM">
+          <div className="page-card TopM">
             <h1 className="WelcomeTitle">
               Welcome Admin
               <br />

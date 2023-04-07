@@ -13,9 +13,9 @@ export default function Sidebar() {
   let navigate = useNavigate();
   const location = useLocation();
   const { pathname } = location;
-  
+
   // const splitLocation = pathname.split("/");
-  
+
   function closeNav() {
     document.getElementById("mySidepanel").style.width = "0";
   }
@@ -394,25 +394,23 @@ export default function Sidebar() {
     };
   });
 
-
   // RBAC - Code
   let allowedRoutes = [];
 
-  if (isPersist) allowedRoutes = getAllowedRoutes(SIDEBAR_ROUTES, [userData.data.user.role]);
+  if (isPersist)
+    allowedRoutes = getAllowedRoutes(SIDEBAR_ROUTES, [userData.data.user.role]);
   else return <Navigate to={`/login`} />;
 
   // console.log(allowedRoutes);
 
   return (
-    <>
-      <div
-        id="mySidepanel"
-        className={`sidemenubar sidepanel ${windowWidth < 768 ? "  mobile-device-active" : ""
-          }`}
-        style={{ width: "0%" }}
-      >
-        <ul className="nav-list p-4">
-          {/* {topData?.map((item, index) => (
+    <ul
+      id="mySidepanel"
+      className={`nav-list p-4 max-h-[calc(100vh-65px)] h-full overflow-y-auto ${
+        windowWidth < 768 ? "  mobile-device-active" : ""
+      }`}
+    >
+      {/* {topData?.map((item, index) => (
             <SidebarMenuItem key={index} navItem={item} />
           ))}
           {midData?.map((item, index) => (
@@ -443,11 +441,9 @@ export default function Sidebar() {
               </Link>
             </li>
           ))} */}
-          {allowedRoutes?.map((item, index) => (
-            <SidebarMenuItem key={index} navItem={item} />
-          ))}
-        </ul>
-      </div>
-    </>
+      {allowedRoutes?.map((item, index) => (
+        <SidebarMenuItem key={index} navItem={item} />
+      ))}
+    </ul>
   );
 }

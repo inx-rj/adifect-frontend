@@ -22,15 +22,15 @@ const DashLayout = () => {
           <Header />
         </Suspense>
         <div
-          className={`sidebar pt-[58px] ${
-            isSidebarCollapsed ? "w-[260px]" : "w-[100px]"
+          className={`sidebar pt-[65px] ${
+            isSidebarCollapsed ? "w-[250px]" : "w-[73px]"
           }`}
         >
           <Suspense fallback={""}>
             <Sidebar />
           </Suspense>
         </div>
-        <div className={`${isSidebarCollapsed ? "pl-[260px]" : "pl-[100px]"}`}>
+        <div className={`${isSidebarCollapsed ? "pl-[250px]" : "pl-[73px]"}`}>
           <Suspense fallback={""}>
             <div className="dashboard min-h-[calc(100vh-103px)]">
               <Outlet />

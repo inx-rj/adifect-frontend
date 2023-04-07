@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { useSingleEffect, useUpdateEffect } from "react-haiku";
 import { Button, FormControl, Typography } from "@mui/material";
 import { formateISODateToLocaleString } from "helper/utility/customFunctions";
 import CustomDateRangePicker from "components/common/customDatePicker/CustomDateRangePicker";
@@ -43,7 +44,12 @@ const AgencyCompanyProjects = () => {
   }, []);
 
   //fetch company projects list and filtered data if passed in params
-  useEffect(() => {
+  useSingleEffect(() => {
+    dispatch(GET_COMPANY_PROJECTS_LIST({ ...paginationData, ...filterData }));
+  });
+
+  //fetch company projects list and filtered data if passed in params
+  useUpdateEffect(() => {
     dispatch(GET_COMPANY_PROJECTS_LIST({ ...paginationData, ...filterData }));
   }, [paginationData, filterData]);
 
@@ -225,12 +231,12 @@ const AgencyCompanyProjects = () => {
   };
 
   return (
-    <div className="p-5 bg-[#F4F8FF]">
+    <div className="page-container">
       <h1>Company Projects</h1>
 
-      <div className="bg-white rounded-[5px] mt-[15px]">
+      <div className="page-card">
         {companyProjectsFilters.loading && filterArr?.length > 0 ? (
-          <div className="projectsLoaderCreatorPage">
+          <div className="projectsLoaderCreatsorPage">
             {/* <LoadingSpinner /> */}
             Loading . . .
           </div>
@@ -239,7 +245,7 @@ const AgencyCompanyProjects = () => {
             {filterArr?.map((item, index) => (
               <FormControl
                 key={index}
-                sx={{minWidth: "180px" }}
+                sx={{ minWidth: "180px" }}
                 size="small"
               >
                 {(item.filterType === item.name) ? (

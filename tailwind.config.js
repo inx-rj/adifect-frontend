@@ -8,7 +8,7 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["Figtree", "sans-serif"],
+        figtree: ["Figtree", "sans-serif"],
       },
       colors: {
         danger: "#d14f4f",
@@ -47,7 +47,7 @@ module.exports = {
         light: "0px 0px 29px rgba(0, 0, 0, 0.09)",
       },
       borderRadius: {
-        DEFAULT: "8px",
+        DEFAULT: "5px",
       },
     },
     container: {
