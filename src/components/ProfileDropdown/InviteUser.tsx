@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 
 import { useAppSelector } from "redux/store";
 import { useAppDispatch } from "redux/store";
-import { DELETE_INVITE_USER, FETCH_COMPANIES_LIST, FETCH_INVITE_USERS, POST_INVITE_USER, PUT_INVITE_USER } from "redux/actions/inviteUser/inviteUser.actions";
+import { DELETE_INVITE_USER, GET_COMPANIES_LIST, GET_INVITE_USERS, POST_INVITE_USER, PUT_INVITE_USER } from "redux/actions/inviteUser/inviteUser.actions";
 import { COMPANIES_LIST, INVITE_USER_LIST } from "redux/reducers/inviteUser/inviteUser.slice";
 
 import Custom_MUI_Table from "common/MuiCustomTable/Custom-MUI-Table";
@@ -19,6 +19,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import BorderColorIcon from '@mui/icons-material/BorderColor';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { validateEmail } from "helper/validations";
 
 
 const InviteUser = () => {
@@ -50,11 +51,11 @@ const InviteUser = () => {
   });
 
   useEffect(() => {
-    dispatch(FETCH_COMPANIES_LIST());
+    dispatch(GET_COMPANIES_LIST());
   }, [])
 
   useEffect(() => {
-    dispatch(FETCH_INVITE_USERS(paginationData));
+    dispatch(GET_INVITE_USERS(paginationData));
   }, [paginationData])
 
 
@@ -106,10 +107,7 @@ const InviteUser = () => {
     let tempErrors = { email: null, company: null, level: !formData?.level ? "Please select a level" : null, }
     if (!isEditMode) {
       tempErrors = {
-        email: !formData?.email ? "Please enter the email address" : !formData?.email?.toLowerCase()
-          .match(
-            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-          ) ? "Email is not valid" : null,
+        email: validateEmail(formData?.email),
         company: !formData?.company ? "Please select a company" : null,
         level: !formData?.level ? "Please select a level" : null,
       };
@@ -119,7 +117,7 @@ const InviteUser = () => {
       return;
     }
     handleFormSubmit();
-    setFormData({ ...formData, email: null });
+    setFormData({ ...formData, email: "" });
   }
 
   //handle form data
@@ -157,7 +155,7 @@ const InviteUser = () => {
     }).then((willDelete) => {
       if (willDelete) {
         dispatch(DELETE_INVITE_USER(itemId));
-        dispatch(FETCH_INVITE_USERS(paginationData));
+        dispatch(GET_INVITE_USERS(paginationData));
         swal({
           title: "Successfully Complete",
           text: "Successfully removed!",
