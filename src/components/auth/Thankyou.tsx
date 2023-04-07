@@ -25,7 +25,11 @@ const Thankyou = () => {
         <div className="flex my-0 mx-auto max-w-[380px] items-center justify-center w-[90%] h-screen">
           <div className="card">
             <div className="mt-2.5 mb-4 inline-flex items-center justify-center w-full h-full">
-              <img src={Images.Logo} className="h-auto max-w-[200px]" alt="" />
+              <img
+                src={Images.Logo}
+                className="h-auto max-w-[170px] md:max-w-[200px]"
+                alt=""
+              />
             </div>
             <div className="thankyoupage">
               <div className="login-content-registering">

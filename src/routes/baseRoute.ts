@@ -188,7 +188,7 @@ export const SIDEBAR_ROUTES: SidebarRoutesTypes[] = [
   {
     name: "Media",
     path: PAGE_ROUTE.MEDIA,
-    icon: "PermMediaOutlined",
+    icon: "MovieOutlined",
     children: [],
     permission: [Roles.AGENCY],
   },

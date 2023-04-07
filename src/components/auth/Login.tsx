@@ -10,7 +10,7 @@ import { PAGE_ROUTE } from "../../routes/baseRoute";
 
 const Login = () => {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -62,22 +62,28 @@ const Login = () => {
   return (
     <>
       <div className="login-signup-wrapper">
-        <div className="card max-w-[380px]">
+        <div className="card max-w-[380px] m-4 md:m-9">
           <div className="mt-2.5 mb-4 inline-flex items-center justify-center w-full h-full">
             <img
               src={Images.Logo}
-              className="h-auto max-w-[200px] mx-auto"
+              className="h-auto max-w-[170px] md:max-w-[200px] mx-auto"
               alt=""
             />
           </div>
-          <div className="text-center">
-            <h2 className="mb-2 font-bold text-2xl">Welcome to Adifect</h2>
+          <div className="text-center mb-5">
+            <h2 className="mb-2 font-bold text-xl md:text-2xl">
+              Welcome to Adifect
+            </h2>
             <p className="text-base font-normal break-words">
               Log into your account by entering your username, email and
               password.
             </p>
           </div>
-          <form id="websiteUserLoginForm" onSubmit={validateSubmit}>
+          <form
+            id="websiteUserLoginForm"
+            onSubmit={validateSubmit}
+            className="form-group-one grid grid-cols-1 gap-y-3"
+          >
             <div
               className={
                 errors.email
@@ -85,7 +91,7 @@ const Login = () => {
                   : "input-fields-wrapper"
               }
             >
-              <h5 className="mt-2 mb-1">Username or Email</h5>
+              <h5>Username or Email</h5>
               <input
                 className="input-style"
                 type="text"
@@ -97,9 +103,7 @@ const Login = () => {
                   setEmail(e.target.value);
                 }}
               />
-              {errors.email && (
-                <span>{errors.email ?? "valid"}</span>
-              )}
+              {errors.email && <span>{errors.email ?? "valid"}</span>}
             </div>
             <div
               className={
@@ -108,7 +112,7 @@ const Login = () => {
                   : "input-fields-wrapper"
               }
             >
-              <h5 className="mb-1">Password</h5>
+              <h5>Password</h5>
               <input
                 className="input-style"
                 type="password"
@@ -120,14 +124,13 @@ const Login = () => {
                   setPassword(e.target.value);
                 }}
               />
-              {errors.password && (
-                <span>
-                  {errors.password ?? "valid"}
-                </span>
-              )}
+              {errors.password && <span>{errors.password ?? "valid"}</span>}
             </div>
-            <div className="mt-2">
-              <button type="submit" className="btn btn-primary w-full text-base">
+            <div className="mt-7">
+              <button
+                type="submit"
+                className="btn btn-primary w-full text-base"
+              >
                 Log In
               </button>
               <Link

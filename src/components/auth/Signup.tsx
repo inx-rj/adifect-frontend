@@ -192,11 +192,15 @@ export default function Signup() {
     <>
       {/* {loading ? <LoadingSpinner /> : isLoading ? <LoadingSpinner /> : <></>} */}
       <div className="login-signup-wrapper">
-        <div className="card max-w-[650px] ">
-          <div className="px-5">
+        <div className="card max-w-[650px] m-4 md:m-9">
+          <div className="px-0 xs:px-5">
             {/* <div className="mt-2 mb-5"> */}
             <div className="mt-2.5 inline-flex items-center justify-center w-full h-full">
-              <img src={Images.Logo} className="h-auto max-w-[200px]" alt="" />
+              <img
+                src={Images.Logo}
+                className="h-auto max-w-[170px] md:max-w-[200px]"
+                alt=""
+              />
             </div>
             <div className="text-center">
               <h2 className="mb-2 mt-3 text-xl font-bold">
@@ -205,7 +209,7 @@ export default function Signup() {
               {/* </div> */}
             </div>
             <form onSubmit={validateSubmit} id="websiteUserRegisterForm">
-              <div className="form-group-one grid grid-cols-2 gap-5">
+              <div className="form-group-one grid grid-cols-1 md:grid-cols-2 gap-x-5 gap-y-2 mb-9">
                 <div
                   className={
                     errors.username
@@ -259,8 +263,7 @@ export default function Signup() {
                     </span>
                   )}
                 </div>
-              </div>
-              <div className="form-group-one grid grid-cols-2 gap-4">
+
                 <div
                   className={
                     errors.lastname
@@ -314,8 +317,7 @@ export default function Signup() {
                     </span>
                   )}
                 </div>
-              </div>
-              <div className="form-group-one grid grid-cols-2 gap-4">
+
                 <div
                   className={
                     errors.password
@@ -372,9 +374,7 @@ export default function Signup() {
                     </span>
                   )}
                 </div>
-              </div>
-              {!redirectMyUrl && (
-                <div className="form-group-one grid grid-cols-2 gap-4">
+                {!redirectMyUrl && (
                   <div
                     className={
                       errors.role
@@ -386,10 +386,11 @@ export default function Signup() {
                       Role:{" "}
                     </h5>
                     <Select
-                      className={`${role === ""
+                      className={`${
+                        role === ""
                           ? "!text-[#939393] hover:border-[#939393] "
                           : "text-[#000]"
-                        }bg-[#f9fbfc] !rounded w-full !text-sm !font-semibold`}
+                      }bg-[#f9fbfc] !rounded w-full !text-sm !font-semibold`}
                       value={role}
                       open={isOpen}
                       disabled={redirectMyUrl}
@@ -419,12 +420,12 @@ export default function Signup() {
                       </span>
                     )}
                   </div>
-                </div>
-              )}
+                )}
+              </div>
 
               <div className="center">
                 <input
-                  className="btn btn-primary w-full max-w-[335px] flex justify-center my-0 mx-auto mt-4"
+                  className="btn btn-primary w-full max-w-[335px] flex justify-center my-0 mx-auto"
                   type="submit"
                   value="Create Account"
                 />
