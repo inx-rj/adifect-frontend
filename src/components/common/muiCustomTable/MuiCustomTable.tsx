@@ -59,7 +59,7 @@ const MuiCustomTable = (props: MuiCustomTablePropsType) => {
         boxShadow: "none",
       }}
     >
-      <TableContainer sx={{ maxHeight: "654px" }}>
+      <TableContainer sx={{ maxHeight: "668px" }}>
         <Table
           stickyHeader
           sx={{

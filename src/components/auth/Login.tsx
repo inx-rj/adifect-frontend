@@ -61,7 +61,7 @@ const Login = () => {
 
   return (
     <>
-      <div className="login-signup-wrapper  flex items-center p-20 justify-center min-h-screen">
+      <div className="login-signup-wrapper">
         <div className="card max-w-[380px]">
           <div className="mt-2.5 mb-4 inline-flex items-center justify-center w-full h-full">
             <img
@@ -132,7 +132,7 @@ const Login = () => {
               </button>
               <Link
                 to={redirect ? `/signup?redirect=${redirect}` : "/signup"}
-                className="link-btn"
+                className="btn btn-outline flex justify-center items-center w-full mt-4"
               >
                 Create Account
               </Link>

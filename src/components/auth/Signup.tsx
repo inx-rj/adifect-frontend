@@ -191,7 +191,7 @@ export default function Signup() {
   return (
     <>
       {/* {loading ? <LoadingSpinner /> : isLoading ? <LoadingSpinner /> : <></>} */}
-      <div className="login-signup-wrapper flex items-center p-20 justify-center min-h-screen">
+      <div className="login-signup-wrapper">
         <div className="card max-w-[650px] ">
           <div className="px-5">
             {/* <div className="mt-2 mb-5"> */}

@@ -100,7 +100,7 @@
 //             showBlueBox ? (
 //               <>
 //                 <div className="Topallpage bak_h">
-//                   <div className="ContentDiv TopM fresh_job_section">
+//                   <div className="page-card TopM fresh_job_section">
 //                     <div className="FreshTitl">
 //                       <div className="JobsDashborad">
 //                         <h1>
@@ -246,7 +246,7 @@
 //             ) : null
 //           ) : (
 //             <div className="Topallpage Memberdasboardtitle">
-//               <div className="ContentDiv TopM">
+//               <div className="page-card TopM">
 //                 <h1 className="WelcomeTitle">
 //                   Welcome {userFirstName} {userLastName}
 //                   <br />

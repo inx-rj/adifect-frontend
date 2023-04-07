@@ -312,7 +312,7 @@ const InviteUser = () => {
 
 
   return (
-    <div className="rightSection">
+    <div className="page-container">
       <div className="flex-center">
         <h1>Invite User</h1>
         <div className="flex-center gap-[10px] font-sm leading-4 font-medium text-primary">
@@ -322,7 +322,7 @@ const InviteUser = () => {
         </div>
       </div>
 
-      <div className="contentDiv">
+      <div className="page-card">
         <div className="flex-center flex flex-wrap p-[15px] pb-5">
           <SearchBar onChange={setSearchText} />
           <button
@@ -349,7 +349,7 @@ const InviteUser = () => {
               dialogTitle={isEditMode ? "Edit Invite User" : "Invite User"}
               textAlign="left"
               dialogContent={
-                <>
+                <div className="mt-5">
                   {!isEditMode && (
                     <>
                       <div
@@ -453,7 +453,7 @@ const InviteUser = () => {
                       )}
                     </div>
                   </div>
-                </>
+                </div>
               }
               openPopup={openModal}
               closePopup={() => {

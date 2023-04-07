@@ -231,10 +231,10 @@ const AgencyCompanyProjects = () => {
   };
 
   return (
-    <div className="rightSection">
+    <div className="page-container">
       <h1>Company Projects</h1>
 
-      <div className="contentDiv">
+      <div className="page-card">
         {companyProjectsFilters.loading && filterArr?.length > 0 ? (
           <div className="projectsLoaderCreatsorPage">
             {/* <LoadingSpinner /> */}

@@ -4,16 +4,16 @@
 }
 
 /* sections and div */
-.rightSection {
+.page-container {
   @apply p-5 bg-[#F4F8FF];
 }
 
-.contentDiv {
+.page-card {
   @apply bg-white rounded-[5px] mt-[15px];
 }
 
 .input-fields-wrapper {
-  @apply h-[100px] w-full pt-5;
+  @apply h-[100px] w-full;
 }
 
 .input-style {
@@ -29,7 +29,7 @@
 }
 
 .login-signup-wrapper {
-  @apply flex my-0 mx-auto items-center justify-center w-[90%];
+  @apply flex items-center justify-center min-h-screen w-[90%] p-20 my-0 mx-auto;
 }
 
 .flex-center {
@@ -78,7 +78,7 @@ ul.MuiMenu-list {
 
 /* modal */
 .modalTitle {
-  @apply font-sans flex justify-between items-center font-medium text-xl leading-6 text-black border border-[#71757b4d];
+  @apply font-figtree flex justify-between items-center font-medium text-xl leading-6 text-black border border-[#71757b4d];
 }
 
 /* Select input mui */
@@ -87,7 +87,7 @@ ul.MuiMenu-list {
 }
 
 .styled-select .MuiInputBase-root {
-  @apply bg-[#f9fbfc] h-12 w-full rounded text-[#71757B]
+  @apply bg-[#f9fbfc] h-12 w-full rounded text-[#71757B];
 }
 
 .styled-select .MuiInputBase-root fieldset {
@@ -95,5 +95,5 @@ ul.MuiMenu-list {
 }
 
 .error-style .styled-select .MuiInputBase-root fieldset {
-  @apply border-danger -top-[11px]
+  @apply border-danger -top-[11px];
 }
