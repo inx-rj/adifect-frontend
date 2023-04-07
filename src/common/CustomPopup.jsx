@@ -29,7 +29,17 @@ const CustomPopup = ({
       open={openPopup}
       onClose={closePopup}
     >
-      <DialogTitle className="modalTitle">
+      <DialogTitle
+        className="modalTitle"
+        sx={{
+          "&.MuiTypography-root": {
+            fontFamily: "Figtree, sans-serif",
+            fontSize: "20px",
+            fontWeight: 500,
+            lineHeight: "24px",
+          },
+        }}
+      >
         {dialogTitle}
         <CloseIcon cursor="pointer" onClick={closePopup} />
       </DialogTitle>

@@ -58,7 +58,7 @@ const InviteUser = () => {
   }, [paginationData])
 
 
-      // Add event listener to detect clicks outside the modall 
+  // Add event listener to detect clicks outside the modall 
   useEffect(() => {
     document.addEventListener('mousedown', handleClickOutside);
 
@@ -292,7 +292,7 @@ const InviteUser = () => {
               <div className="relative">
                 <MoreVertIcon cursor="pointer" onClick={() => setCurrentTooltip(item?.id)} />
                 {currentTooltip === item?.id && !isEditMode && (
-                  <div ref={modalRef} className="modal-shadow absolute left-3 top-[10px] bg-white z-10 p-[10px] rounded-[4px] max-w-fit text-sm text-disable leading-4">
+                  <div ref={modalRef} className="shadow-sm absolute left-3 top-[10px] bg-white z-10 p-[10px] rounded-[4px] max-w-fit text-sm text-disable leading-4">
                     <div className="flex justify-start items-center gap-2 cursor-pointer" onClick={() => handleEditEntry(item?.id, item?.level)} >
                       <BorderColorIcon />
                       <span>Edit</span>
@@ -312,31 +312,27 @@ const InviteUser = () => {
 
 
   return (
-    <>
-      <div className="Category">
-        <div className="flex-center">
-          <h1>Invite User</h1>
-          <div className="flex-center gap-[10px] font-sm leading-4 font-medium text-primary">
-            <Link to="/"><HomeIcon color="disabled" /></Link>
-            <span className="text-disable opacity-20">|</span>
-            <Link to="/invite-user">Invite User</Link>
-          </div>
+    <div className="rightSection">
+      <div className="flex-center">
+        <h1>Invite User</h1>
+        <div className="flex-center gap-[10px] font-sm leading-4 font-medium text-primary">
+          <Link to="/"><HomeIcon color="disabled" /></Link>
+          <span className="text-disable opacity-20">|</span>
+          <Link to="/invite-user">Invite User</Link>
         </div>
       </div>
 
-      <div className="ContentDiv">
-        <div className="min-w-[180px] grid">
-          <div className="flex-center my-[15px] mx-[25px]">
-            <SearchBar onChange={setSearchText} />
-            <button
-              type="submit"
-              onClick={() => setOpenModal(true)}
-              className="btn btn-primary btn-label px-[15px] py-[9px] max-w-[135px] w-full flex-center gap-2"
-            >
-              <PersonAddAltIcon />
-              <span className="btn-label">Invite User</span>
-            </button>
-          </div>
+      <div className="contentDiv">
+        <div className="flex-center flex flex-wrap p-[15px] pb-5">
+          <SearchBar onChange={setSearchText} />
+          <button
+            type="submit"
+            onClick={() => setOpenModal(true)}
+            className="btn btn-primary btn-label px-[15px] py-[9px] max-w-[135px] w-full flex-center gap-2"
+          >
+            <PersonAddAltIcon />
+            <span className="btn-label">Invite User</span>
+          </button>
         </div>
         {inviteUserLoading ? (
           <h1>Loading...</h1>
@@ -474,7 +470,7 @@ const InviteUser = () => {
           </>
         )}
       </div >
-    </>
+    </div>
   );
 };
 
