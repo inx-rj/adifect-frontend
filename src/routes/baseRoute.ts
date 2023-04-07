@@ -150,30 +150,30 @@ export const SIDEBAR_ROUTES: SidebarRoutesTypes[] = [
   {
     name: "Home",
     path: PAGE_ROUTE.HOME,
-    icon: "radix-icons:dashboard",
+    icon: "HomeOutlined",
     children: [],
   },
   {
     name: "Workflow",
     path: DASHBOARD_WORKFLOW_ROUTE.HOME,
+    icon: "GridViewOutlined",
     children: [],
     permission: [Roles.AGENCY],
   },
-  { name: "My Projects", path: PAGE_ROUTE.MY_PROJECTS },
+  { name: "My Projects", path: PAGE_ROUTE.MY_PROJECTS, icon: "StickyNote2Outlined" },
   {
     name: "Companies",
     // imgPath: "/img/Projects.png",
     path: PAGE_ROUTE.COMPANIES,
+    icon: "DescriptionOutlined",
     children: [
       {
         name: "Company Projects",
         path: COMPANIES_ROUTE.COMPANY_PROJECTS,
         children: [],
-        // imgPath: "/img/tabsicon.png",
       },
       {
         name: "Tags",
-        // imgPath: "/img/tabsicon.png",
         path: COMPANIES_ROUTE.TAGS,
         children: [],
       },
@@ -188,12 +188,14 @@ export const SIDEBAR_ROUTES: SidebarRoutesTypes[] = [
   {
     name: "Media",
     path: PAGE_ROUTE.MEDIA,
+    icon: "PermMediaOutlined",
     children: [],
     permission: [Roles.AGENCY],
   },
   {
     name: "My Jobs",
     path: DASHBOARD_MY_JOBS_ROUTE.HOME,
+    icon: "BusinessCenterOutlined",
     children: [],
     permission: [Roles.AGENCY],
   },
@@ -201,27 +203,35 @@ export const SIDEBAR_ROUTES: SidebarRoutesTypes[] = [
   {
     name: "Draft Jobs",
     path: PAGE_ROUTE.DRAFT_JOBS,
+    icon: "CardTravelOutlined",
     children: [],
     permission: [Roles.AGENCY],
   },
   {
     name: "Templates",
     path: DASHBOARD_TEMPLATES_ROUTES.HOME,
+    icon: "ReceiptLongOutlined",
     children: [],
     permission: [Roles.AGENCY],
   },
   {
     name: "Company",
     path: DASHBOARD_COMPANY_ROUTE.HOME,
+    icon: "ApartmentOutlined",
     children: [],
     permission: [Roles.AGENCY],
   },
   {
     name: "Available Jobs",
     path: DASHBOARD_MY_JOBS_ROUTE.HOME,
+    icon: "CardTravelOutlined",
     permission: [Roles.CREATOR],
   },
-  { name: "Help", path: DASHBOARD_HELP_ROUTE.HOME, children: [] },
+  {
+    name: "Help", path: DASHBOARD_HELP_ROUTE.HOME,
+    icon: "HelpOutlineOutlined",
+    children: []
+  },
 
   //Agency Member - ADMIN Sidebar
   // { name: "Home", path: "/home" },

@@ -13,13 +13,6 @@ import { Roles } from "../../../helper/config";
 const HomePage = () => {
   const userData = useAppSelector(GET_USER_DATA);
 
-  console.log(
-    "userData",
-    userData.data,
-    userData.data.user.role == Object.values(Roles)[2],
-    userData.data.user.role,
-    Object.values(Roles)
-  );
   return userData.data.user.role == Object.values(Roles)[0] ? (
     <AdminDashboard />
   ) : userData.data.user.role == Object.values(Roles)[1] ? (
