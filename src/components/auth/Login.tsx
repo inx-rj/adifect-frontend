@@ -126,13 +126,13 @@ const Login = () => {
                 </span>
               )}
             </div>
-            <div className="mt-2 text-center w-full">
-              <button type="submit" className="btn btn-primary w-full">
+            <div className="mt-2">
+              <button type="submit" className="btn btn-primary w-full text-base">
                 Log In
               </button>
               <Link
                 to={redirect ? `/signup?redirect=${redirect}` : "/signup"}
-                className="btn btn-outline flex justify-center items-center w-full mt-4"
+                className="btn btn-outline block w-full mt-4 py-[11px] text-base"
               >
                 Create Account
               </Link>
