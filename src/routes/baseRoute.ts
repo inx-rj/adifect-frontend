@@ -19,8 +19,8 @@ export const AUTH_ROUTE: Readonly<{
 }> = Object.freeze({
   LOGIN: `${SYSTEM.LOGIN}`,
   SIGNUP: `${SYSTEM.HOME}signup`,
-  THANK_YOU: `${SYSTEM.HOME}/thank-you`,
-  FORGOT_PASSWORD: `${SYSTEM.HOME}/forgot-password`,
+  THANK_YOU: `${SYSTEM.HOME}thank-you`,
+  FORGOT_PASSWORD: `${SYSTEM.HOME}forgot-password`,
 });
 
 // Profile Route

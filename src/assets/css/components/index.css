@@ -2,6 +2,7 @@
 @import "./button/button.css";
 @import "./header/header.css";
 @import "./badge/badge.css";
+@import "./tabbing/tabbing.css";
 
 /* All CSS will import above this  */
 @import "./common/rightSidepages.css";

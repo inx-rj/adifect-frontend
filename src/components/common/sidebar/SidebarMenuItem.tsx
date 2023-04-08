@@ -6,7 +6,7 @@ import Typography from "@mui/material/Typography";
 import { Link, useLocation } from "react-router-dom";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import RemoveIcon from "@mui/icons-material/Remove";
-import MuiIcon from "common/MuiIcon";
+import MuiIcon from "components/common/MuiIcon";
 import { IS_SIDEBAR_COLLAPSED } from "redux/reducers/config/app/app.slice";
 import { useAppSelector } from "redux/store";
 import { Button, Divider, Menu, MenuItem, Tooltip } from "@mui/material";

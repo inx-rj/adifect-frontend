@@ -394,7 +394,7 @@ export default function Sidebar() {
         </li>
       ))} */}
       {allowedRoutes?.map((item, index) => (
-        <Suspense fallback={""}>
+        <Suspense fallback={""} key={item.id}>
           <SidebarMenuItem key={index} navItem={item} />
         </Suspense>
       ))}

@@ -49,6 +49,12 @@ export function getAllowedRoutes(
 export const setNotificationQueryParams = (queryParams: initialNotificationQueryInterface) => {
   console.log("Paramas",queryParams);
   
-  let notifiQueryParams = `?user=${queryParams?.id ?? 0}&ordering=-created&offset=${queryParams?.offsetid ?? 0}`;
+  let notifiQueryParams: any;
+
+  if(queryParams?.companyId) {
+    notifiQueryParams = `?user=${queryParams?.id ?? 0}&company=${queryParams?.companyId ?? 0}&ordering=-created&offset=${queryParams?.offsetid ?? 0}`;
+  } else {
+    notifiQueryParams = `?user=${queryParams?.id ?? 0}&ordering=-created&offset=${queryParams?.offsetid ?? 0}`;
+  }
   return notifiQueryParams;
 };
