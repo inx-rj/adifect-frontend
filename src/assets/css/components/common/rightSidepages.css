@@ -1,0 +1,9 @@
+/* Right section stylings after login */
+.page-container {
+  @apply bg-[#F4F8FF];
+}
+
+.page-card {
+  @apply bg-white rounded-[5px] mt-[15px];
+}
+/* Right section stylings after login */

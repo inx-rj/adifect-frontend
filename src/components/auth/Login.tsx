@@ -62,7 +62,7 @@ const Login = () => {
   return (
     <>
       <div className="login-signup-wrapper">
-        <div className="card max-w-[380px] m-4 md:m-9">
+        <div className="card max-w-[380px]">
           <div className="mt-2.5 mb-4 inline-flex items-center justify-center w-full h-full">
             <img
               src={Images.Logo}
@@ -70,11 +70,11 @@ const Login = () => {
               alt=""
             />
           </div>
-          <div className="text-center mb-5">
-            <h2 className="mb-2 font-bold text-xl md:text-2xl">
+          <div className="text-center">
+            <h2 className="card-page-title">
               Welcome to Adifect
             </h2>
-            <p className="text-base font-normal break-words">
+            <p className="card-page-info">
               Log into your account by entering your username, email and
               password.
             </p>
@@ -82,18 +82,12 @@ const Login = () => {
           <form
             id="websiteUserLoginForm"
             onSubmit={validateSubmit}
-            className="form-group-one grid grid-cols-1 gap-y-3"
+            className="group grid grid-cols-1"
           >
-            <div
-              className={
-                errors.email
-                  ? "input-fields-wrapper error-style"
-                  : "input-fields-wrapper"
-              }
-            >
-              <h5>Username or Email</h5>
+            <div className="input-fields-wrapper">
+              <label>Username or Email</label>
               <input
-                className="input-style"
+                className={errors.email ? "input-style input-err-style" : "input-style"}
                 type="text"
                 name="email"
                 id="email"
@@ -103,18 +97,12 @@ const Login = () => {
                   setEmail(e.target.value);
                 }}
               />
-              {errors.email && <span>{errors.email ?? "valid"}</span>}
+              <span className="err-tag">{errors.email ?? " "}</span>
             </div>
-            <div
-              className={
-                errors.password
-                  ? "input-fields-wrapper error-style"
-                  : "input-fields-wrapper"
-              }
-            >
-              <h5>Password</h5>
+            <div className="input-fields-wrapper">
+              <label>Password</label>
               <input
-                className="input-style"
+                className={errors.password ? "input-style input-err-style" : "input-style"}
                 type="password"
                 name="password"
                 id="password"
@@ -124,9 +112,9 @@ const Login = () => {
                   setPassword(e.target.value);
                 }}
               />
-              {errors.password && <span>{errors.password ?? "valid"}</span>}
+              <span className="err-tag">{errors.password ?? ""}</span>
             </div>
-            <div className="mt-7">
+            <div className="mt-uni-gap">
               <button
                 type="submit"
                 className="btn btn-primary w-full text-base"
@@ -135,16 +123,12 @@ const Login = () => {
               </button>
               <Link
                 to={redirect ? `/signup?redirect=${redirect}` : "/signup"}
-                className="btn btn-outline block w-full mt-4 py-[11px] text-base"
+                className="btn btn-outline block w-full mt-uni-gap text-base"
               >
                 Create Account
               </Link>
             </div>
-            <div className="text-center mt-4 text-theme">
-              <h5 className="text-base font-medium">
-                <Link to="/forgot-password">Forgot Password ?</Link>
-              </h5>
-            </div>
+            <Link to="/forgot-password" className="btn-link mt-uni-gap">Forgot Password ?</Link>
           </form>
         </div>
       </div>

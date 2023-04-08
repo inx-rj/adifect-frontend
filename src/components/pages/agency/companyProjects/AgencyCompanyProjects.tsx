@@ -245,7 +245,7 @@ const AgencyCompanyProjects = () => {
 
   return (
     <div className="page-container">
-      <h2 className="page-title">Company Projects</h2>
+      <h2 className="card-page-title">Company Projects</h2>
 
       <div className="page-card">
         {companyProjectsFilters.loading && filterArr?.length > 0 ? (

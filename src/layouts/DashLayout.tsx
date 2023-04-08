@@ -37,7 +37,7 @@ const DashLayout = () => {
           }`}
         >
           <Suspense fallback={""}>
-            <div className="dashboard min-h-[calc(100vh-115px)] p-4">
+            <div className="dashboard min-h-[calc(100vh-115px)] p-5">
               <Outlet />
             </div>
           </Suspense>

@@ -4,4 +4,5 @@
 @import "./badge/badge.css";
 
 /* All CSS will import above this  */
+@import "./common/rightSidepages.css";
 @import "./common/common.css";

@@ -1,40 +1,54 @@
+/* Better to follow the sequence of property*/
+/* Ex: @apply <display> <alignments> <position> <h/w/> <bg> <border> <font - size, weight, color, align, ...so on> 
+<p/m/spacing> <shadow> <animation> */
+
+.login-signup-wrapper {
+  @apply flex items-center justify-center min-h-screen p-5 my-0 mx-auto;
+}
+
+/* Card general styling class */
 .card {
-  @apply w-full shadow-[0_1px_5px_#0d6efd45] bg-white border rounded p-5;
-}
-.page-title {
-  @apply text-lg font-medium;
-}
-.text-info {
-  @apply text-[#71757B];
+  @apply w-full bg-white border border-solid border-[#0d6efd00] rounded p-5 shadow-[0_1px_5px_#0d6efd45];
 }
 
-/* sections and div */
-.page-container {
-  @apply bg-[#F4F8FF];
+/* Title header text style for both card and page */
+.card-page-title {
+  @apply text-lg sm:text-2xl font-semibold mb-2 sm:mb-4;
 }
 
-.page-card {
-  @apply bg-white rounded-[5px] mt-[15px];
+.card-page-info {
+  @apply text-sm sm:text-base font-normal break-words mb-2 sm:mb-4;
+}
+
+/* To add unique(uni) gap between any of 2 element */
+.mt-uni-gap {
+  @apply mt-2 sm:mt-4;
+}
+
+.input-fields-wrapper {
+  @apply w-full;
+}
+
+.input-fields-wrapper label {
+  @apply block text-base font-medium mb-0.5;
 }
 
 .input-style {
-  @apply h-12 w-full py-px pl-3.5 pr-0.5 border border-[#0000001a] rounded outline-none focus:border-theme;
+  @apply h-12 w-full border border-[#0000001a] rounded outline-none focus:border-theme py-px pl-3.5 pr-0.5;
 }
 
-.styled-select textarea {
-  @apply h-40 w-full py-px pt-2 pl-3.5 pr-0.5 border bg-[#f9fbfc] border-[#0000001a] rounded outline-none focus:border-theme;
-}
-
-.error-style span {
-  @apply text-sm text-danger block text-right;
-}
-
-.error-style .input-style {
+.input-err-style {
   @apply border-danger;
 }
 
-.login-signup-wrapper {
-  @apply flex items-center justify-center min-h-screen w-full my-0 mx-auto;
+.err-tag {
+  @apply block h-5 text-sm text-danger text-right;
+}
+
+/* ===================== Need to refactor below classes if possible ===================== */
+
+.styled-select textarea {
+  @apply h-40 w-full py-px pt-2 pl-3.5 pr-0.5 border bg-[#f9fbfc] border-[#0000001a] rounded outline-none focus:border-theme;
 }
 
 .flex-center {
