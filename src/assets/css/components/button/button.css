@@ -19,3 +19,7 @@
 .btn-label {
   @apply font-figtree font-semibold text-sm leading-4 text-center text-white;
 }
+
+.btn-link {
+  @apply block text-base font-medium text-theme text-center;
+}

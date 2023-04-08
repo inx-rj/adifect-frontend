@@ -1,33 +1,21 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate, useLocation, Navigate } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { Suspense, lazy } from "react";
+import { Navigate } from "react-router-dom";
 import { useAppSelector } from "redux/store";
-import { GET_USER_DATA } from "redux/reducers/auth/auth.slice";
-import { Roles } from "helper/config";
-import SidebarMenuItem from "./SidebarMenuItem";
 import { IS_PERSISTED } from "redux/reducers/config/app/app.slice";
 import { getAllowedRoutes } from "helper/utility/customFunctions";
 import { SIDEBAR_ROUTES } from "routes/baseRoute";
+import { GET_USER_DATA } from "redux/reducers/auth/auth.slice";
+
+// Import lazy load component
+const SidebarMenuItem = lazy(
+  () => import("components/common/sidebar/SidebarMenuItem")
+);
 
 export default function Sidebar() {
-  let navigate = useNavigate();
-  const location = useLocation();
-  const { pathname } = location;
-
   // const splitLocation = pathname.split("/");
-
-  function closeNav() {
-    document.getElementById("mySidepanel").style.width = "0";
-  }
 
   const isPersist = useAppSelector(IS_PERSISTED);
   const userData = useAppSelector(GET_USER_DATA);
-
-  useEffect(() => {
-    if (!userData) {
-      navigate("/");
-    }
-  }, []);
 
   // console.log([userData.data.user.role]);
 
@@ -370,30 +358,6 @@ export default function Sidebar() {
   // useEffect(() => { }, []);
   // const windowSize = useRef([window.innerWidth, window.innerHeight]);
 
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-
-  useEffect(() => {
-    const handleWindowResize = () => {
-      setWindowWidth(window.innerWidth);
-      if (window.innerWidth < 768) {
-        document.getElementById("mySidepanel").style.width = "0px";
-      } else {
-        // document.getElementById("mySidepanel").style.width = "250px";
-      }
-    };
-    window.addEventListener("resize", handleWindowResize);
-
-    if (window.innerWidth < 768) {
-      document.getElementById("mySidepanel").style.width = "0px";
-    }
-    if (window.innerWidth > 767) {
-      document.getElementById("mySidepanel").style.width = "100%";
-    }
-    return () => {
-      window.removeEventListener("resize", handleWindowResize);
-    };
-  });
-
   // RBAC - Code
   let allowedRoutes = [];
 
@@ -401,48 +365,38 @@ export default function Sidebar() {
     allowedRoutes = getAllowedRoutes(SIDEBAR_ROUTES, [userData.data.user.role]);
   else return <Navigate to={`/login`} />;
 
-  // console.log(allowedRoutes);
-
   return (
     <ul
       id="mySidepanel"
-      className={`nav-list p-4 max-h-[calc(100vh-65px)] h-full overflow-y-auto ${
-        windowWidth < 768 ? "  mobile-device-active" : ""
-      }`}
+      className={`nav-list py-2 px-4 max-h-[calc(100vh-65px)] h-full overflow-y-auto `}
     >
       {/* {topData?.map((item, index) => (
-            <SidebarMenuItem key={index} navItem={item} />
-          ))}
-          {midData?.map((item, index) => (
-            <li className={pathname == item.path ? "active" : ""} key={index}>
-              <Link className="Menu" to={item.path}>
-                <span className="menu_img">
-                  <img
-                    className="mr-2"
-                    src={"/assest/images/logo.png"}
-                    alt=""
-                  />
-                </span>
-                {item.title}
-              </Link>
-            </li>
-          ))}
-          {bottomData?.map((item, index) => (
-            <li className={pathname == item.path ? "active" : ""} key={index}>
-              <Link className="Menu" to={item.path}>
-                <span className="menu_img">
-                  <img
-                    className="mr-2"
-                    src={"/assest/images/logo.png"}
-                    alt=""
-                  />
-                </span>
-                {item.title}
-              </Link>
-            </li>
-          ))} */}
-      {allowedRoutes?.map((item, index) => (
         <SidebarMenuItem key={index} navItem={item} />
+      ))}
+      {midData?.map((item, index) => (
+        <li className={pathname == item.path ? "active" : ""} key={index}>
+          <Link className="Menu" to={item.path}>
+            <span className="menu_img">
+              <img className="mr-2" src={"/assest/images/logo.png"} alt="" />
+            </span>
+            {item.title}
+          </Link>
+        </li>
+      ))}
+      {bottomData?.map((item, index) => (
+        <li className={pathname == item.path ? "active" : ""} key={index}>
+          <Link className="Menu" to={item.path}>
+            <span className="menu_img">
+              <img className="mr-2" src={"/assest/images/logo.png"} alt="" />
+            </span>
+            {item.title}
+          </Link>
+        </li>
+      ))} */}
+      {allowedRoutes?.map((item, index) => (
+        <Suspense fallback={""}>
+          <SidebarMenuItem key={index} navItem={item} />
+        </Suspense>
       ))}
     </ul>
   );
