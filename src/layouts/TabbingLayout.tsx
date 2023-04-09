@@ -32,7 +32,7 @@ const TabbingLayout = (props) => {
       <Suspense fallback="">
         <Title title={navType === 'user' ? 'Profile' : 'Company Info'} />
       </Suspense>
-      <section className="flex gap-5 pt-0 flex-wrap md:flex-nowrap">
+      <section className="flex gap-5 pt-0 flex-wrap md:flex-nowrap mt-4">
         <div className="card tab-head-content custom-scrollbar">
           {tabHeadArr.filter(item => item.permission.includes(userProfile.data[0].role)).map((nav, empIndex) => {
             return (

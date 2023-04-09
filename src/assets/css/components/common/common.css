@@ -19,7 +19,7 @@
 
 /* Card general styling class */
 .card {
-  @apply w-full bg-white rounded p-5 shadow-[0_1px_5px_#0d6efd45];
+  @apply w-full bg-white rounded p-5 drop-shadow;
 }
 
 /* Title header text style for both card and page */
@@ -70,8 +70,13 @@
 }
 
 .flex-center {
+  @apply flex justify-center items-center;
+}
+
+.flex-between {
   @apply flex justify-between items-center;
 }
+
 
 /* Error */
 .errorAlert .swal-text,

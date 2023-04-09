@@ -399,7 +399,7 @@ export default function Header(props) {
           <Logo />
         </Suspense>
       </div>
-      <div className="px-4 py-3 flex justify-between items-center w-full">
+      <div className="px-4 py-3 flex justify-between items-center w-full shadow-[0px_4px_10px_-9px_#d6d6d6]">
         <SidebarToggle />
         <ul className="loginRight flex items-center justify-end ml-auto gap-5 [&>:not(:last-child)]:hidden [&>:not(:last-child)]:md:block">
           {/* View company list dropdown  */}

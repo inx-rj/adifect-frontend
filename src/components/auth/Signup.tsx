@@ -100,10 +100,6 @@ export default function Signup() {
     setErrors(tempErrors);
 
     if (Object.values(tempErrors).filter((value) => value).length) {
-      console.log(
-        "..values",
-        Object.values(tempErrors).filter((value) => value)
-      );
       return;
     }
     submitHandler(e);

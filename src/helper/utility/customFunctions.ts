@@ -47,7 +47,6 @@ export function getAllowedRoutes(
 
 // Notification query parameter 
 export const setNotificationQueryParams = (queryParams: initialNotificationQueryInterface) => {
-  console.log("Paramas",queryParams);
   
   let notifiQueryParams: any;
 
