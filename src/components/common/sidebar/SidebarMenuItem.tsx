@@ -21,9 +21,15 @@ const SidebarMenuItem = ({ navItem }) => {
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
     null
   );
+  const [isMobile, setIsMobile] = useState(window.innerWidth);
   const open = Boolean(anchorEl);
 
   const isSidebarCollapsed = useAppSelector(IS_SIDEBAR_COLLAPSED);
+
+  const handleWindowResize = () => {
+    setIsMobile(window.innerWidth);
+  };
+  window.addEventListener("resize", handleWindowResize);
 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : null);
@@ -38,11 +44,10 @@ const SidebarMenuItem = ({ navItem }) => {
       {children?.length > 0 ? (
         <li
           className={`sub-menu-wrapper
-          ${
-            children.find((item) => pathname.includes(item.path))
+          ${children.find((item) => pathname.includes(item.path))
               ? "active"
               : ""
-          }
+            }
         `}
         >
           {/* Minisidebar menu with tooltip  */}
@@ -106,9 +111,8 @@ const SidebarMenuItem = ({ navItem }) => {
               >
                 <Typography>
                   <MuiIcon icon={navItem?.icon} />
-                  {isSidebarCollapsed && (
-                    <span className="ml-2">{navItem.name}</span>
-                  )}
+                  {isSidebarCollapsed && isMobile > 768 && <span className="ml-2">{navItem.name}</span>}
+                  {isMobile < 768 && <span className="ml-2">{navItem.name}</span>}
                 </Typography>
               </AccordionSummary>
               <AccordionDetails>
@@ -140,7 +144,8 @@ const SidebarMenuItem = ({ navItem }) => {
         <li className={pathname === navItem.path ? "active" : ""}>
           <Link className="Menu nav-link" to={navItem.path}>
             <MuiIcon icon={navItem?.icon} />
-            {isSidebarCollapsed && <span className="ml-2">{navItem.name}</span>}
+            {isSidebarCollapsed && isMobile > 768 && <span className="ml-2">{navItem.name}</span>}
+            {isMobile < 768 && <span className="ml-2">{navItem.name}</span>}
           </Link>
         </li>
       )}

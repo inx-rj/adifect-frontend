@@ -1,48 +1,63 @@
 import Roles from "./Roles";
 
-export const profileNavTitle = {
+type ProfileTabTitleTYpe = {
+  [key: string]: string
+}
+
+interface ProfileTabHeadersType {
+  id: number,
+  icon: string,
+  name: string,
+  info: string,
+  permission: number[]
+}
+
+export interface TabbingInitialType {
+  tabbing: {
+    user_profile: {
+      active: string
+    },
+    company_profile: {
+      active: string
+    }
+  }
+}
+
+export const profileTabTitle: ProfileTabTitleTYpe = {
   ABOUT: 'About',
   COMMUNICATION: 'Communication',
   COMPANIES: 'Companies',
   ACCOUNT_SETTINGS: 'Account Settings',
 };
 
-export const profileNavigation = [
+export const profileTabHeaders:ProfileTabHeadersType[] = [
   {
     id:0,
     icon: 'InfoOutlined',
-    iconSize: 28,
-    name: profileNavTitle.ABOUT,
+    name: profileTabTitle.ABOUT,
     info: 'It is a long established fact that a reader will be distracted.',
-    url: "/",
-    permission: Roles.AGENCY
+    permission: [Roles.AGENCY]
   },
   {
     id:1,
     icon: 'CallOutlined',
-    iconSize: 28,
-    name: profileNavTitle.COMMUNICATION,
+    name: profileTabTitle.COMMUNICATION,
     info: 'It is a long established fact that a reader will be distracted.',
-    url: "/",
-    permission: Roles.AGENCY
+    permission: [Roles.AGENCY]
   },
   {
     id:2,
     icon: 'BusinessOutlined',
-    iconSize: 20,
-    name: profileNavTitle.COMPANIES,
+    name: profileTabTitle.COMPANIES,
     info: 'It is a long established fact that a reader will be distracted.',
-    url: "/",
-    permission: Roles.AGENCY
+    permission: [Roles.AGENCY]
   },
   {
     id:2,
     icon: 'SettingsOutlined',
-    iconSize: 20,
-    name: profileNavTitle.ACCOUNT_SETTINGS,
+    name: profileTabTitle.ACCOUNT_SETTINGS,
     info: 'It is a long established fact that a reader will be distracted.',
-    url: "/",
-    permission: Roles.AGENCY
+    permission: [Roles.AGENCY]
   }
 ];
 

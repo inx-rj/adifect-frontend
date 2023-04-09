@@ -394,14 +394,14 @@ export default function Header(props) {
 
   return (
     <div className="header">
-      <div className="logo h-[40px] max-w-[200px] lg:max-w-[250px] w-full px-4">
+      <div className="logo h-[40px] max-w-[70px] md:max-w-[150px] lg:max-w-[250px] w-full pl-3 pr-0 md:px-4">
         <Suspense fallback={""}>
           <Logo />
         </Suspense>
       </div>
       <div className="px-4 py-3 flex justify-between items-center w-full">
         <SidebarToggle />
-        <ul className="loginRight flex items-center justify-end ml-auto">
+        <ul className="loginRight flex items-center justify-end ml-auto gap-5 [&>:not(:last-child)]:hidden [&>:not(:last-child)]:md:block">
           {/* View company list dropdown  */}
 
           {/* <li style={{ color: "#a0a0a0", marginRight: "5px", fontSize: "15px" }}>
@@ -409,9 +409,6 @@ export default function Header(props) {
           company name
         </li> */}
           <li className="icon1" ref={companyRef} onClick={handleClickCompany}>
-            {/* <Link to=""> */}
-            {/* <img src={process.env.PUBLIC_URL + "/img/icon.png"} alt="" /> */}
-
             {userProfile?.data?.[0]?.role !== 1 && (
               <Business
                 sx={{
@@ -421,8 +418,6 @@ export default function Header(props) {
                 }}
               />
             )}
-
-            {/* </Link> */}
             {restrictUsersOtherThanAgency() && (
               <>
                 <Menu
@@ -564,7 +559,7 @@ export default function Header(props) {
           </li>
 
           {/* View Email  */}
-          <li className="ml-7 icon2">
+          <li className="icon2">
             <MailOutline
               sx={{
                 "&.MuiSvgIcon-root ": {
@@ -575,7 +570,7 @@ export default function Header(props) {
           </li>
 
           {/* View Notification dropdown  */}
-          <li className="ml-7 nots">
+          <li className="nots">
             <Link
               className="agencyCountDataDesDiv"
               //  to={`/jobs/details/${item.id}`}
@@ -746,7 +741,7 @@ export default function Header(props) {
               )} */}
           </li>
           <li
-            className="ml-7 relative"
+            className="relative"
             ref={menuRef}
             onClick={() => setShowDropdown(!showDropdown)}
           >

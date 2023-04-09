@@ -19,7 +19,7 @@
 
 /* Card general styling class */
 .card {
-  @apply w-full bg-white rounded p-5 shadow-[0_1px_5px_#0d6efd45] relative;
+  @apply w-full bg-white rounded p-5 shadow-[0_1px_5px_#0d6efd45];
 }
 
 /* Title header text style for both card and page */
@@ -56,6 +56,13 @@
   @apply block h-5 text-sm text-danger text-right;
 }
 
+/* Custom scrollbar design css */
+.custom-scrollbar::-webkit-scrollbar{
+  @apply w-2 h-2 bg-slate-200
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  @apply bg-[#659cff]
+}
 /* ===================== Need to refactor below classes if possible ===================== */
 
 .styled-select textarea {

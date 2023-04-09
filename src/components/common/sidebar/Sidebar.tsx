@@ -368,7 +368,7 @@ export default function Sidebar() {
   return (
     <ul
       id="mySidepanel"
-      className={`nav-list py-2 px-4 max-h-[calc(100vh-65px)] h-full overflow-y-auto `}
+      className={`nav-list py-2 px-4 `}
     >
       {/* {topData?.map((item, index) => (
         <SidebarMenuItem key={index} navItem={item} />
