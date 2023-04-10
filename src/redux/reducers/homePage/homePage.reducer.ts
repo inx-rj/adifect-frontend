@@ -1,3 +1,4 @@
+import { creatorJobsListSlice } from "./creatorJobsList.slice";
 import { combineReducers } from "redux";
 import { jobsListSlice } from "./jobsList.slice";
 import { inReviewJobsListSlice } from "./inReviewJobsList.slice";
@@ -13,4 +14,5 @@ export const homePageReducer = combineReducers({
   membersApprovalJobsList: membersApprovalJobsListSlice.reducer,
   membersJobListInReview: membersAdminJobsListInReviewSlice.reducer,
   membersAdminJobsListInProgress: membersAdminJobsListInProgressSlice.reducer,
+  creatorJobsList: creatorJobsListSlice.reducer,
 });

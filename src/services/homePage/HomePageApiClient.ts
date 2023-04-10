@@ -27,8 +27,12 @@ class HomePageApiClient {
 
   fetchDuplicateMemberAdminJobListInReview = (currentPage) =>
     axiosPrivate.get(
-      `${API_URL.HOMEPAGE.MEMBERS_JOBS_LIST}` +
-        setQueryParams(currentPage)
+      `${API_URL.HOMEPAGE.MEMBERS_JOBS_LIST}` + setQueryParams(currentPage)
+    );
+
+  fetchCreatorJobsList = (filters: any) =>
+    axiosPrivate.get(
+      `${API_URL.HOMEPAGE.CREATOR_JOBS_LIST}` + setQueryParams(filters)
     );
 }
 

@@ -35,9 +35,11 @@ export const API_URL = {
     LATEST_JOBS: `${env.API_URL}latest-job/`,
     MEMBERS_APPROVAL_JOBS_LIST: `${env.API_URL}members/member-approval-job-list/`,
     MEMBERS_JOBS_LIST: `${env.API_URL}members/member-job-list/`,
+    CREATOR_JOBS_LIST: `${env.API_URL}creator/my-jobs/`,
+    JOB_APPLIED: `${env.API_URL}job-applied/`,
   },
   NOTIFICATION: {
     AGENCY_NOTIFICATION: `${BASE_URL.AGENCY}agency-notification/`,
     MEMBER_NOTIFICATION: `${BASE_URL.MEMBER}member-notification/`,
-  }
+  },
 };
