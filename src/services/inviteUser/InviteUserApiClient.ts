@@ -5,7 +5,7 @@ const userData = () => JSON.parse(localStorage.getItem("userData") ?? '');
 
 class InviteUserApiClient {
   // get invited users list
-  getInviteUsers = ({ rowsPerPage, page }) =>
+  fetchInviteUsers = ({ rowsPerPage, page }) =>
     axiosPrivate.get(`${API_URL.INVITE.INVITE_USERS}`, {
       params: { page_size: rowsPerPage, page },
     });
@@ -16,22 +16,21 @@ class InviteUserApiClient {
     });
 
   //add invite user
-  addInviteUser = (postObj) => {
+  addInviteUser = (postObj: any) => {
     const payload = {
       ...postObj,
       agency: userData()?.user.user_id
     }
-    return axiosPrivate.post(`${API_URL.INVITE.INVITE_USERS}`, payload, {
-    });
+    return axiosPrivate.post(`${API_URL.INVITE.INVITE_USERS}`, payload);
   }
 
   //update invite user
-  updateInviteUser = (id, payload) => {
+  updateInviteUser = (id: number, payload: any) => {
     return axiosPrivate.put(`${API_URL.INVITE.INVITE_USERS}${id}/`, payload)
   }
 
   //update invite user
-  deleteInviteUser = (id) => {
+  deleteInviteUser = (id: number) => {
     return axiosPrivate.delete(`${API_URL.INVITE.INVITE_USERS}${id}/`, {
     });
   }

@@ -1,6 +1,7 @@
 import { combineReducers } from "@reduxjs/toolkit";
 import { authSlice } from "./reducers/auth/auth.slice";
 import { companiesSlice } from "./reducers/companies/companies.slice";
+import { companiesTagsSlice } from "./reducers/companies/companiesTags.slice";
 import { inviteUserSlice } from "./reducers/inviteUser/inviteUser.slice";
 import { persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
@@ -21,6 +22,7 @@ const appReducer = combineReducers({
   auth: authSlice.reducer,
   common: commonReducer,
   companies: companiesSlice.reducer,
+  companiesTags: companiesTagsSlice.reducer,
   inviteUser: inviteUserSlice.reducer,
   homePage: homePageReducer,
 });

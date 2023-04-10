@@ -9,7 +9,7 @@ import RemoveIcon from "@mui/icons-material/Remove";
 import MuiIcon from "common/MuiIcon";
 import { IS_SIDEBAR_COLLAPSED } from "redux/reducers/config/app/app.slice";
 import { useAppSelector } from "redux/store";
-import { Button, Fade, Popper } from "@mui/material";
+import { Button, Divider, Menu, MenuItem, Tooltip } from "@mui/material";
 
 const SidebarMenuItem = ({ navItem }) => {
   const { children } = navItem;
@@ -45,18 +45,73 @@ const SidebarMenuItem = ({ navItem }) => {
           }
         `}
         >
-          {/* <Button aria-describedby={navItem?.id} onClick={handleClick}>
-            <MuiIcon icon={navItem?.icon} />
-          </Button>
-          <Popper
-            id={navItem?.id}
-            open={open}
-            anchorEl={anchorEl}
-            placement="right-start"
-            transition
-          >
-            {({ TransitionProps }) => (
-              <Fade {...TransitionProps} timeout={350}>
+          {/* Minisidebar menu with tooltip  */}
+          {!isSidebarCollapsed && (
+            <>
+              <Tooltip title={navItem.name} placement="right-start">
+                <Button
+                  onClick={handleClick}
+                  aria-controls={open ? navItem.name : undefined}
+                  aria-haspopup="true"
+                  aria-expanded={open ? "true" : undefined}
+                  className={`tooltip-btn ${open ? "tooltip-open" : ""} `}
+                >
+                  <MuiIcon icon={navItem?.icon} />
+                </Button>
+              </Tooltip>
+              <Menu
+                anchorEl={anchorEl}
+                id={navItem.name}
+                open={open}
+                onClose={() => setAnchorEl(null)}
+                // onClick={handleClose}
+
+                transformOrigin={{ horizontal: "left", vertical: "top" }}
+                anchorOrigin={{ horizontal: "right", vertical: "top" }}
+                className="sidebar-mini-menu"
+              >
+                <MenuItem>{navItem.name}</MenuItem>
+                <Divider />
+                {children.map((item, index) => (
+                  <MenuItem
+                    key={index}
+                    className={
+                      pathname.includes(item.path) ? "submenu-active" : ""
+                    }
+                    onClick={() => setAnchorEl(null)}
+                  >
+                    <Link className="sub-menu" to={item.path}>
+                      <RemoveIcon
+                        sx={{
+                          width: "16px",
+                          margin: "0 10px 0 -9px",
+                        }}
+                      />
+                      {item.name}
+                    </Link>
+                  </MenuItem>
+                ))}
+              </Menu>{" "}
+            </>
+          )}
+          {isSidebarCollapsed && (
+            <Accordion
+              expanded={expanded === navItem.id}
+              onChange={handleChange(navItem.id)}
+            >
+              <AccordionSummary
+                expandIcon={isSidebarCollapsed && <ExpandMoreIcon />}
+                aria-controls="panel1bh-content"
+                id="panel1bh-header"
+              >
+                <Typography>
+                  <MuiIcon icon={navItem?.icon} />
+                  {isSidebarCollapsed && (
+                    <span className="ml-2">{navItem.name}</span>
+                  )}
+                </Typography>
+              </AccordionSummary>
+              <AccordionDetails>
                 <ul>
                   {children.map((item, index) => (
                     <li
@@ -77,48 +132,9 @@ const SidebarMenuItem = ({ navItem }) => {
                     </li>
                   ))}
                 </ul>
-              </Fade>
-            )}
-          </Popper> */}
-          <Accordion
-            expanded={expanded === navItem.id}
-            onChange={handleChange(navItem.id)}
-          >
-            <AccordionSummary
-              expandIcon={isSidebarCollapsed && <ExpandMoreIcon />}
-              aria-controls="panel1bh-content"
-              id="panel1bh-header"
-            >
-              <Typography>
-                <MuiIcon icon={navItem?.icon} />
-                {isSidebarCollapsed && (
-                  <span className="ml-2">{navItem.name}</span>
-                )}
-              </Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <ul>
-                {children.map((item, index) => (
-                  <li
-                    key={index}
-                    className={
-                      pathname.includes(item.path) ? "submenu-active" : ""
-                    }
-                  >
-                    <Link className="sub-menu" to={item.path}>
-                      <RemoveIcon
-                        sx={{
-                          width: "16px",
-                          margin: "0 10px 0 -9px",
-                        }}
-                      />
-                      {item.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </AccordionDetails>
-          </Accordion>
+              </AccordionDetails>
+            </Accordion>
+          )}
         </li>
       ) : (
         <li className={pathname === navItem.path ? "active" : ""}>

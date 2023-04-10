@@ -23,7 +23,7 @@ const AuthLayout = () => {
     // <div role="main" className="bg-[#2472fc0f] w-full min-h-screen">
     //   <Outlet />
     // </div>
-    <main role="main" className="min-h-screen bg-[#2472fc0f]">
+    <main role="main" className="min-h-screen">
       <section className="relative">
         <Outlet />
       </section>

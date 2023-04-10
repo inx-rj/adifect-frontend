@@ -10,7 +10,7 @@ import { PAGE_ROUTE } from "../../routes/baseRoute";
 
 const Login = () => {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -66,28 +66,28 @@ const Login = () => {
           <div className="mt-2.5 mb-4 inline-flex items-center justify-center w-full h-full">
             <img
               src={Images.Logo}
-              className="h-auto max-w-[200px] mx-auto"
+              className="h-auto max-w-[170px] md:max-w-[200px] mx-auto"
               alt=""
             />
           </div>
           <div className="text-center">
-            <h2 className="mb-2 font-bold text-2xl">Welcome to Adifect</h2>
-            <p className="text-base font-normal break-words">
+            <h2 className="card-page-title">
+              Welcome to Adifect
+            </h2>
+            <p className="card-page-info">
               Log into your account by entering your username, email and
               password.
             </p>
           </div>
-          <form id="websiteUserLoginForm" onSubmit={validateSubmit}>
-            <div
-              className={
-                errors.email
-                  ? "input-fields-wrapper error-style"
-                  : "input-fields-wrapper"
-              }
-            >
-              <h5 className="mt-2 mb-1">Username or Email</h5>
+          <form
+            id="websiteUserLoginForm"
+            onSubmit={validateSubmit}
+            className="group grid grid-cols-1"
+          >
+            <div className="input-fields-wrapper">
+              <label>Username or Email</label>
               <input
-                className="input-style"
+                className={errors.email ? "input-style input-err-style" : "input-style"}
                 type="text"
                 name="email"
                 id="email"
@@ -97,20 +97,12 @@ const Login = () => {
                   setEmail(e.target.value);
                 }}
               />
-              {errors.email && (
-                <span>{errors.email ?? "valid"}</span>
-              )}
+              <span className="err-tag">{errors.email ?? " "}</span>
             </div>
-            <div
-              className={
-                errors.password
-                  ? "input-fields-wrapper error-style"
-                  : "input-fields-wrapper"
-              }
-            >
-              <h5 className="mb-1">Password</h5>
+            <div className="input-fields-wrapper">
+              <label>Password</label>
               <input
-                className="input-style"
+                className={errors.password ? "input-style input-err-style" : "input-style"}
                 type="password"
                 name="password"
                 id="password"
@@ -120,28 +112,23 @@ const Login = () => {
                   setPassword(e.target.value);
                 }}
               />
-              {errors.password && (
-                <span>
-                  {errors.password ?? "valid"}
-                </span>
-              )}
+              <span className="err-tag">{errors.password ?? ""}</span>
             </div>
-            <div className="mt-2 text-center w-full">
-              <button type="submit" className="btn btn-primary w-full">
+            <div className="mt-uni-gap">
+              <button
+                type="submit"
+                className="btn btn-primary w-full text-base"
+              >
                 Log In
               </button>
               <Link
                 to={redirect ? `/signup?redirect=${redirect}` : "/signup"}
-                className="btn btn-outline flex justify-center items-center w-full mt-4"
+                className="btn btn-outline block w-full mt-uni-gap text-base"
               >
                 Create Account
               </Link>
             </div>
-            <div className="text-center mt-4 text-theme">
-              <h5 className="text-base font-medium">
-                <Link to="/forgot-password">Forgot Password ?</Link>
-              </h5>
-            </div>
+            <Link to="/forgot-password" className="btn-link mt-uni-gap">Forgot Password ?</Link>
           </form>
         </div>
       </div>

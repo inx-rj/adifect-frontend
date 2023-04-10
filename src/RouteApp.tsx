@@ -7,6 +7,7 @@ import DashLayout from "layouts/DashLayout";
 // Import lazy load component
 const AuthLayout = lazy(() => import("layouts/AuthLayout"));
 const Master = lazy(() => import("layouts/Master"));
+const NotFound = lazy(() => import("pages/error/NotFound"));
 
 const RouteApp = () => {
   return (
@@ -46,7 +47,7 @@ const RouteApp = () => {
             </Suspense>
           }
         >
-          {/* Homepage Route  */}
+          {/* Pages Route  */}
           {PAGES_ROUTES?.map((pageItem: RouteType, pageIndex: number) => {
             return (
               <Route
@@ -61,29 +62,13 @@ const RouteApp = () => {
 
       {/* Not Found Page  */}
       <Route
+        path="*"
         element={
           <Suspense fallback={""}>
-            <Master />
+            <NotFound />
           </Suspense>
         }
-      >
-        {/* Agency Routes  */}
-        <Route
-          element={
-            <Suspense fallback={""}>
-              <DashLayout />
-            </Suspense>
-          }>
-          <Route
-            path="*"
-            element={
-              <Suspense fallback={""}>
-                <div>Not Found</div>
-              </Suspense>
-            }
-          />
-        </Route>
-      </Route>
+      />
     </Routes >
   );
 };

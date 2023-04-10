@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import swal from "sweetalert";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Images } from "../../helper/images";
 import { TRIGGER_FORGOT_PASSWORD } from "../../redux/actions/auth/auth.actions";
 import { useAppDispatch } from "../../redux/store";
@@ -76,11 +76,11 @@ const ForgotPassword = () => {
       <>
         <div className="flex my-0 mx-auto max-w-[380px] items-center justify-center w-[90%] h-screen">
           <div className="card">
-            <div className="px-5">
+            <div className="px-0 xs:px-5">
               <div className="mt-2.5 mb-4 inline-flex items-center justify-center w-full h-full">
                 <img
                   src={Images.Logo}
-                  className="h-auto max-w-[200px]"
+                  className="h-auto max-w-[170px] md:max-w-[200px]"
                   alt=""
                 />
               </div>
@@ -89,7 +89,7 @@ const ForgotPassword = () => {
                   <div className="logo-content">
                     <img src="img/logonew.svg" className="login-logo" alt="" />
                   </div>
-                  <form className="forgotpass">
+                  <form className="forgotpass mb-5">
                     <div
                       className={
                         errors.email
@@ -117,25 +117,22 @@ const ForgotPassword = () => {
                     >
                       {errors.email ?? "valid"}
                     </span> */}
-                      {errors.email && (
-                        <span>
-                          {errors.email ?? "valid"}
-                        </span>
-                      )}
+                      {errors.email && <span>{errors.email ?? "valid"}</span>}
                     </div>
-                    <div className="center mt-3 CancelBtnFP">
+                    <div className="center mt-7 CancelBtnFP">
                       <button
                         type="button"
                         onClick={validateSubmit}
-                        className="btn btn-primary w-full bg-theme border-solid border-theme text-white disabled:bg-dark-100 disabled:text-title-color"
+                        className="btn btn-primary w-full text-base"
                       >
                         Send
                       </button>
-                      <button className="w-full mb-2.5">
-                        <a href="/" className="link-btn">
-                          Cancel
-                        </a>
-                      </button>
+                      <Link
+                        to={"/"}
+                        className="btn btn-outline block w-full mt-4 py-[11px] text-base"
+                      >
+                        Cancel
+                      </Link>
                     </div>
                   </form>
                 </div>

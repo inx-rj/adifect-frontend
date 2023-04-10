@@ -1,7 +1,7 @@
 /* btn class */
 .btn,
 .btn.MuiButton-root {
-  @apply normal-case h-12 text-center px-[30px] py-[9px] rounded text-sm font-semibold hover:bg-opacity-90 transition-all;
+  @apply normal-case text-center px-[30px] py-3 rounded text-sm font-semibold hover:bg-opacity-90 transition-all;
 }
 
 /* btn-primary class */
@@ -15,11 +15,11 @@
 .btn.btn-outline.MuiButton-root {
   @apply border border-theme text-theme disabled:bg-dark-100 disabled:text-title-color;
 }
-/* 
-.link-btn {
-  @apply block text-theme border border-theme rounded py-2.5 mt-4 w-full;
-} */
 
 .btn-label {
   @apply font-figtree font-semibold text-sm leading-4 text-center text-white;
+}
+
+.btn-link {
+  @apply block text-base font-medium text-theme text-center;
 }
