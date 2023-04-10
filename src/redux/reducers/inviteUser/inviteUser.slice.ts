@@ -27,7 +27,7 @@ export const inviteUserSlice = createSlice({
       state.loading = action.payload;
     },
 
-    INVITE_USER_LIST_LOADING: (state, action) => ({
+    SET_INVITE_USER_LIST_LOADING: (state, action) => ({
       ...state,
       inviteUser: {
         ...state.inviteUser,
@@ -35,7 +35,7 @@ export const inviteUserSlice = createSlice({
       },
     }),
 
-    INVITE_USER_LIST_DATA: (state, action) => ({
+    SET_INVITE_USER_LIST_DATA: (state, action) => ({
       ...state,
       inviteUser: {
         ...state.inviteUser,
@@ -45,7 +45,7 @@ export const inviteUserSlice = createSlice({
     }),
 
 
-    COMPANIES_LIST_LOADING: (state, action) => ({
+    SET_COMPANIES_LIST_LOADING: (state, action) => ({
       ...state,
       companies: {
         ...state.companies,
@@ -53,7 +53,7 @@ export const inviteUserSlice = createSlice({
       },
     }),
 
-    COMPANIES_LIST_DATA: (state, action) => ({
+    SET_COMPANIES_LIST_DATA: (state, action) => ({
       ...state,
       companies: {
         ...state.companies,
@@ -65,7 +65,7 @@ export const inviteUserSlice = createSlice({
 });
 
 export const {
-  SET_INVITE_USER_LOADING, INVITE_USER_LIST_LOADING, INVITE_USER_LIST_DATA, COMPANIES_LIST_LOADING, COMPANIES_LIST_DATA } = inviteUserSlice.actions;
+  SET_INVITE_USER_LOADING, SET_INVITE_USER_LIST_LOADING, SET_INVITE_USER_LIST_DATA, SET_COMPANIES_LIST_LOADING, SET_COMPANIES_LIST_DATA } = inviteUserSlice.actions;
 
 export const INVITE_USER_LIST = (state: RootState) => state.inviteUser.inviteUser;
 export const COMPANIES_LIST = (state: RootState) => state.inviteUser.companies;

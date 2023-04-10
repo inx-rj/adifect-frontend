@@ -9,6 +9,7 @@ import { configReducer } from "redux/reducers/config/config.reducer";
 import { ActionTypes } from "helper/actions";
 import { commonReducer } from "redux/reducers/common/common.reducer";
 import { profileReducer } from "redux/reducers/profile/profile.reducer";
+import { companyTabSlice } from "./reducers/companyTab/companyTab.slice";
 
 const persistAppConfig = {
   key: "app",
@@ -21,6 +22,7 @@ const appReducer = combineReducers({
   config: persistReducer(persistAppConfig, configReducer),
   auth: authSlice.reducer,
   common: commonReducer,
+  companyTab: companyTabSlice.reducer,
   companies: companiesSlice.reducer,
   companiesTags: companiesTagsSlice.reducer,
   inviteUser: inviteUserSlice.reducer,

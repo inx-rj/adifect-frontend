@@ -30,8 +30,8 @@ const InviteUser = () => {
   const { companiesList } = useAppSelector(COMPANIES_LIST);
 
   const [searchText, setSearchText] = useState("");
-  const [currentTooltip, setCurrentTooltip] = useState(null);
   const [openModal, setOpenModal] = useState(false);
+  const [currentTooltip, setCurrentTooltip] = useState(null);
   const [openCompanyDropdown, setOpenCompanyDropdown] = useState(false);
   const [openLevelDropdown, setOpenLevelDropdown] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
