@@ -1,6 +1,40 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../../rootReducer";
+import { jobsListInitialStateType } from "helper/types/jobs/jobsType";
 
+const jobsListInitialState: jobsListInitialStateType = {
+  assigned_to: 0,
+  company: 0,
+  created: "",
+  created_by: 0,
+  description: "",
+  due_date_index: 0,
+  expected_delivery_date: "",
+  house_member: [],
+  id: 0,
+  image_url: "",
+  images: [],
+  industry: 0,
+  is_active: false,
+  is_blocked: false,
+  is_house_member: false,
+  is_trashed: false,
+  job_due_date: "",
+  job_type: "",
+  jobtasks_job: [],
+  level: null,
+  modified: "",
+  price: null,
+  related_jobs: null,
+  sample_work_url: "",
+  skills: [],
+  status: 0,
+  tags: "",
+  template_name: null,
+  title: "",
+  user: 0,
+  workflow: 0,
+};
 const initialState = {
   loading: false,
   JobsListsList: {
@@ -9,7 +43,7 @@ const initialState = {
       count: 0,
       prev: null,
       next: null,
-      results: [],
+      results: [jobsListInitialState],
     },
   },
   JobsDetails: {

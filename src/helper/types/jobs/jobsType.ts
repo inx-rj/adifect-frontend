@@ -1,0 +1,33 @@
+export interface jobsListInitialStateType {
+  assigned_to: number;
+  company: number;
+  created: string;
+  created_by: number;
+  description: string;
+  due_date_index: number;
+  expected_delivery_date: string;
+  house_member: any[];
+  id: number | string;
+  image_url: string;
+  images: any[];
+  industry: number;
+  is_active: boolean;
+  is_blocked: boolean;
+  is_house_member: boolean;
+  is_trashed: boolean;
+  job_due_date: string;
+  job_type: string;
+  jobtasks_job: any[];
+  level: null;
+  modified: string;
+  price: null;
+  related_jobs: null;
+  sample_work_url: string;
+  skills: any[];
+  status: number;
+  tags: string;
+  template_name: null;
+  title: string;
+  user: number;
+  workflow: number;
+}
