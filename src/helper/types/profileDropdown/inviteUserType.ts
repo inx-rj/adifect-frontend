@@ -1,4 +1,5 @@
 import { LoadingType } from "../../types";
+import { TableRowsType } from "../muiCustomTable/muiCustomTable";
 
 export interface paginationData {
   page: number,
@@ -65,15 +66,14 @@ export interface CompaniesListDataType {
 }
 
 export interface InviteUserInitialType extends LoadingType {
-  inviteUser: {
+  inviteUserList: {
     loading: boolean;
-    hasData: boolean;
-    inviteUserData: InvitedUserDataType;
+    data: {
+      count: number;
+      prev: null | string;
+      next: null | string;
+      results: TableRowsType[];
+    };
   };
-  companies: {
-    loading: boolean,
-    hasData: boolean,
-    companiesList: CompaniesListDataType[],
-  },
 }
 

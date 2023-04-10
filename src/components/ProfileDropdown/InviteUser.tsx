@@ -1,24 +1,22 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import { useEffect, useRef, useState } from "react";
 import swal from "sweetalert";
 import { Button, MenuItem, Select, Typography } from "@mui/material";
-import { useEffect, useRef, useState } from "react";
+import { useSingleEffect } from "react-haiku";
 import { Link } from "react-router-dom";
 
 import { useAppSelector } from "redux/store";
 import { useAppDispatch } from "redux/store";
 import {
   DELETE_INVITE_USER,
-  GET_COMPANIES_LIST,
   GET_INVITE_USERS,
   POST_INVITE_USER,
   PUT_INVITE_USER,
 } from "redux/actions/inviteUser/inviteUser.actions";
-import {
-  COMPANIES_LIST,
-  INVITE_USER_LIST,
-} from "redux/reducers/inviteUser/inviteUser.slice";
+import { INVITE_USER_LIST } from "redux/reducers/inviteUser/inviteUser.slice";
+import { COMPANY_LIST } from "redux/reducers/companyTab/companyTab.slice";
+import { GET_COMPANY_LIST } from "redux/actions/companyTab/companyTab.actions";
 
-import Custom_MUI_Table from "common/MuiCustomTable/Custom-MUI-Table";
 import SearchBar from "common/MuiCustomTable/CustomSearchBar";
 import CustomPopup from "common/CustomPopup";
 
@@ -29,14 +27,15 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { validateEmail } from "helper/validations";
+import MuiCustomTable from "components/common/muiCustomTable/MuiCustomTable";
+import { TableRowColType } from "helper/types/muiCustomTable/muiCustomTable";
 
 const InviteUser = () => {
   const dispatch = useAppDispatch();
   const modalRef = useRef(null);
 
-  const { inviteUserData, loading: inviteUserLoading } =
-    useAppSelector(INVITE_USER_LIST);
-  const { companiesList } = useAppSelector(COMPANIES_LIST);
+  const { inviteUserList } = useAppSelector(INVITE_USER_LIST);
+  const { companyList } = useAppSelector(COMPANY_LIST);
 
   const [searchText, setSearchText] = useState("");
   const [openModal, setOpenModal] = useState(false);
@@ -63,13 +62,16 @@ const InviteUser = () => {
     rowsPerPage: 10,
   });
 
-  useEffect(() => {
-    dispatch(GET_COMPANIES_LIST());
-  }, []);
+  //fetch inital companies data list
+  useSingleEffect(() => {
+    dispatch(GET_COMPANY_LIST(paginationData));
+  });
 
   useEffect(() => {
     dispatch(GET_INVITE_USERS(paginationData));
   }, [paginationData]);
+
+  console.log("inviteUserList", inviteUserList);
 
   // Add event listener to detect clicks outside the modall
   useEffect(() => {
@@ -186,7 +188,7 @@ const InviteUser = () => {
     });
   };
 
-  const columns = {
+  const data: TableRowColType = {
     columns: [
       {
         id: 1,
@@ -253,8 +255,8 @@ const InviteUser = () => {
     ],
 
     rows:
-      inviteUserData?.results?.length > 0
-        ? inviteUserData?.results?.map((item, index) => {
+      inviteUserList?.data?.results?.length > 0
+        ? inviteUserList?.data?.results?.map((item, index) => {
             return {
               name: (
                 <div key={index}>
@@ -361,14 +363,14 @@ const InviteUser = () => {
             <span className="btn-label">Invite User</span>
           </button>
         </div>
-        {inviteUserLoading ? (
+        {inviteUserList?.loading ? (
           <h1>Loading...</h1>
         ) : (
           <>
-            <Custom_MUI_Table
-              loader={inviteUserLoading}
-              data={columns}
-              allData={inviteUserData}
+            <MuiCustomTable
+              loader={inviteUserList?.loading}
+              data={data}
+              allData={inviteUserList?.data}
               paginationData={paginationData}
               setPaginationData={setPaginationData}
             />
@@ -433,7 +435,7 @@ const InviteUser = () => {
                             inputProps={{ "aria-label": "Without label" }}
                           >
                             <MenuItem value="">Select Company</MenuItem>
-                            {companiesList?.map((item) =>
+                            {companyList?.data.results?.map((item) =>
                               item.is_active ? (
                                 <MenuItem key={item?.id} value={item?.id}>
                                   {item?.name}

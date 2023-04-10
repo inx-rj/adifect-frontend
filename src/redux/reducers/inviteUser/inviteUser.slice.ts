@@ -4,18 +4,14 @@ import { RootState } from 'redux/rootReducer';
 
 const initialState: InviteUserInitialType = {
   loading: false,
-  inviteUser: {
+  inviteUserList: {
     loading: false,
-    hasData: false,
-    inviteUserData: {
+    data: {
       count: 0,
-      results: []
+      prev: null,
+      next: null,
+      results: [],
     },
-  },
-  companies: {
-    loading: false,
-    hasData: false,
-    companiesList: [],
   },
 };
 
@@ -29,43 +25,24 @@ export const inviteUserSlice = createSlice({
 
     SET_INVITE_USER_LIST_LOADING: (state, action) => ({
       ...state,
-      inviteUser: {
-        ...state.inviteUser,
+      inviteUserList: {
+        ...state.inviteUserList,
         loading: action.payload,
       },
     }),
 
     SET_INVITE_USER_LIST_DATA: (state, action) => ({
       ...state,
-      inviteUser: {
-        ...state.inviteUser,
+      inviteUserList: {
+        ...state.inviteUserList,
         hasData: true,
-        inviteUserData: action.payload,
-      },
-    }),
-
-
-    SET_COMPANIES_LIST_LOADING: (state, action) => ({
-      ...state,
-      companies: {
-        ...state.companies,
-        loading: action.payload,
-      },
-    }),
-
-    SET_COMPANIES_LIST_DATA: (state, action) => ({
-      ...state,
-      companies: {
-        ...state.companies,
-        hasData: true,
-        companiesList: action.payload,
+        data: action.payload,
       },
     }),
   },
 });
 
 export const {
-  SET_INVITE_USER_LOADING, SET_INVITE_USER_LIST_LOADING, SET_INVITE_USER_LIST_DATA, SET_COMPANIES_LIST_LOADING, SET_COMPANIES_LIST_DATA } = inviteUserSlice.actions;
+  SET_INVITE_USER_LOADING, SET_INVITE_USER_LIST_LOADING, SET_INVITE_USER_LIST_DATA } = inviteUserSlice.actions;
 
-export const INVITE_USER_LIST = (state: RootState) => state.inviteUser.inviteUser;
-export const COMPANIES_LIST = (state: RootState) => state.inviteUser.companies;
+export const INVITE_USER_LIST = (state: RootState) => state.inviteUser;
