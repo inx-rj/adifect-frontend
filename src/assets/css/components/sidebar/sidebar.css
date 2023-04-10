@@ -1,6 +1,5 @@
 .sidebar {
-  transition: max-width 0.3s ease-in-out;
-  @apply h-full w-full fixed top-0 left-0 bottom-0 z-10 bg-white text-[#71757B];
+  @apply h-full w-full fixed top-0 left-0 bottom-0 z-10 bg-white text-[#71757B] transition-all ease-in-out duration-500;
 }
 
 .nav-link {
@@ -17,21 +16,29 @@
   .MuiAccordionSummary-content {
   @apply my-2;
 }
-.sidebar li.active > .nav-link {
+.sidebar li.active > .nav-link,
+.sub-menu-wrapper.active .MuiAccordion-root .MuiButtonBase-root,
+.sub-menu-wrapper .MuiAccordion-root .MuiButtonBase-root.Mui-expanded {
   @apply bg-theme/10 text-theme;
 }
-.sidebar li.submenu-active > .sub-menu {
-  @apply text-theme;
-}
-.sub-menu-wrapper.active .MuiAccordion-root .MuiButtonBase-root {
-  @apply bg-theme/10 text-theme;
-}
+/* Active Sub Menu Link */
+.sidebar li.submenu-active > .sub-menu,
 .sub-menu-wrapper.active
   .MuiAccordion-root
   .MuiButtonBase-root
-  .MuiAccordionSummary-expandIconWrapper {
+  .MuiAccordionSummary-expandIconWrapper,
+.sub-menu-wrapper
+  .MuiAccordion-root
+  .MuiButtonBase-root:hover
+  .MuiAccordionSummary-expandIconWrapper,
+.sub-menu-wrapper
+  .MuiAccordion-root
+  .MuiButtonBase-root.Mui-expanded
+  .MuiAccordionSummary-expandIconWrapper,
+.sidebar-mini-menu .MuiMenu-list .MuiMenuItem-root.submenu-active {
   @apply text-theme;
 }
+
 .sub-menu-wrapper .sub-menu {
   @apply my-1 block text-sm hover:text-theme text-[#71757B];
 }
@@ -42,18 +49,17 @@
   @apply min-h-[auto] rounded px-2   hover:bg-theme/10 hover:text-theme;
 }
 
-.sub-menu-wrapper
-  .MuiAccordion-root
-  .MuiButtonBase-root:hover
-  .MuiAccordionSummary-expandIconWrapper {
-  @apply text-theme;
+/* Submenu for mini sidebar  */
+.sub-menu-wrapper .tooltip-btn {
+  @apply min-w-[auto] rounded mb-1 text-[#71757B] hover:bg-theme/10 hover:text-theme;
 }
-.sub-menu-wrapper .MuiAccordion-root .MuiButtonBase-root.Mui-expanded {
+
+.sub-menu-wrapper .tooltip-btn.tooltip-open {
   @apply bg-theme/10 text-theme;
 }
-.sub-menu-wrapper
-  .MuiAccordion-root
-  .MuiButtonBase-root.Mui-expanded
-  .MuiAccordionSummary-expandIconWrapper {
-  @apply text-theme;
+.sidebar-mini-menu .MuiMenu-list {
+  @apply p-2 [&>.MuiMenuItem-root:first-child]:pl-0 [&>.MuiMenuItem-root:first-child]:pb-0;
+}
+.sidebar-mini-menu .MuiMenu-list .MuiMenuItem-root {
+  @apply hover:bg-transparent hover:text-theme;
 }

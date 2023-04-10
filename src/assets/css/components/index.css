@@ -1,6 +1,8 @@
-/* All CSS will import above this  */
-@import "./common/common.css";
+@import "./sidebar/sidebar.css";
 @import "./button/button.css";
 @import "./header/header.css";
-@import "./sidebar/sidebar.css";
 @import "./badge/badge.css";
+
+/* All CSS will import above this  */
+@import "./common/rightSidepages.css";
+@import "./common/common.css";
