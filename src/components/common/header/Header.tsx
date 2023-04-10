@@ -113,7 +113,7 @@ export default function Header(props) {
     const newfileGallery = [...rowadd];
     newfileGallery.splice(newfileGallery.indexOf(file), 1);
     setrowadd(newfileGallery);
-    // dispatch(Deletenotification(file.id, userProfile?.data?.[0]?.id));
+    // dispatch(Deletenotification(file.id, userProfile?.data?.id));
   };
 
   // ----------------------------action------------------------------------c
@@ -141,14 +141,14 @@ export default function Header(props) {
 
   // useEffect(() => {
   //   // set for Member user
-  //   if (memberAdminCompanyData && userProfile?.data?.[0]?.role === 3) {
+  //   if (memberAdminCompanyData && userProfile?.data?.role === 3) {
   //     props.setHeaderCompany(memberAdminCompanyData[0]?.company_id);
   //     setCompanyName(memberAdminCompanyData[0]?.name);
   //   }
   // }, [memberSuccessCompanyList]);
 
   // useEffect(() => {
-  //   if (companyData?.length > 0 && userProfile?.data?.[0]?.role === 2) {
+  //   if (companyData?.length > 0 && userProfile?.data?.role === 2) {
   //     const findCompanyName = companyData?.find(
   //       (item) => item.id === props.headerCompany
   //     );
@@ -163,24 +163,24 @@ export default function Header(props) {
     dispatch(GET_USER_DETAILS());
     dispatch(
       GET_NOTIFICATIONS_LIST(
-        userProfile?.data?.[0]?.id,
+        userProfile?.data?.id,
         0,
         props.headerCompany,
-        userProfile?.data?.[0]?.role
+        userProfile?.data?.role
       )
     );
   });
   useEffect(() => {
-    if (userProfile?.data?.[0]?.role === Roles?.MEMBER && props.headerCompany) {
+    if (userProfile?.data?.role === Roles?.MEMBER && props.headerCompany) {
     }
 
     // else {
     //   if (props.headerCompany) {
     //     dispatch(
-    //       GET_NOTIFICATIONS_LIST(userProfile?.data?.[0]?.id, 0, props.headerCompany)
+    //       GET_NOTIFICATIONS_LIST(userProfile?.data?.id, 0, props.headerCompany)
     //     );
     //   } else {
-    //     dispatch(GET_NOTIFICATIONS_LIST(userProfile?.data?.[0]?.id, 0));
+    //     dispatch(GET_NOTIFICATIONS_LIST(userProfile?.data?.id, 0));
     //   }
     // }
   }, [props.headerCompany]);
@@ -194,7 +194,7 @@ export default function Header(props) {
     "wss://" +
       "dev-ws.adifect.com" +
       "/ws/notifications/" +
-      userProfile?.data?.[0]?.id +
+      userProfile?.data?.id +
       "/"
   );
 
@@ -222,7 +222,7 @@ export default function Header(props) {
 
   // useEffect(() => {
   //   // Set for member user
-  //   if (memberAdminCompanyData && userProfile?.data?.[0]?.role === 3) {
+  //   if (memberAdminCompanyData && userProfile?.data?.role === 3) {
   //     const findCompanyName = memberAdminCompanyData.find(
   //       (item) => item.company_id === props.headerCompany
   //     );
@@ -245,7 +245,7 @@ export default function Header(props) {
 
   // useEffect(() => {
   //   // Set for Admin user
-  //   if (adminCompanies && userProfile?.data?.[0]?.role === 0) {
+  //   if (adminCompanies && userProfile?.data?.role === 0) {
   //     const findCompanyName = adminCompanies.find(
   //       (item) => item.id === props.headerCompany
   //     );
@@ -258,7 +258,7 @@ export default function Header(props) {
   // }, [adminCompanies, props.headerCompany, openMenuInProgress]);
 
   // useEffect(() => {
-  //   if (userProfile?.data?.[0]?.role === 0) {
+  //   if (userProfile?.data?.role === 0) {
   //     dispatch(listAllAdminCompanies());
   //   }
   // }, []);
@@ -318,7 +318,7 @@ export default function Header(props) {
 
   // useEffect(() => {
   //   const callThis = () => {
-  //     if (userProfile?.data?.[0]?.role === 2) {
+  //     if (userProfile?.data?.role === 2) {
   //       // dispatch(listAllCompanies());
   //     }
 
@@ -354,28 +354,25 @@ export default function Header(props) {
   }
 
   function restrictUsers() {
-    if (userProfile?.data?.[0]?.role === 1) {
+    if (userProfile?.data?.role === 1) {
       // Creator
       return false;
     }
-    if (
-      userProfile?.data?.[0]?.role === 3 &&
-      userProfile?.data?.[0]?.user_level !== 1
-    ) {
+    if (userProfile?.data?.role === 3 && userProfile?.data?.user_level !== 1) {
       // Member Agency other than MEMBER ADMIN
       return false;
     }
     return true;
   }
   function restrictUsersOtherThanAgency() {
-    if (userProfile?.data?.[0]?.role !== 2) {
+    if (userProfile?.data?.role !== 2) {
       // Other than agency user
       return false;
     }
     return true;
   }
   function restrictUsersOtherThanMember() {
-    if (userProfile?.data?.[0]?.role !== 3) {
+    if (userProfile?.data?.role !== 3) {
       // Other than agency user
       return false;
     }
@@ -384,7 +381,7 @@ export default function Header(props) {
   // -----------------------------SUPER ADMIN START----------------------------------------------
 
   function restrictUsersOtherThanSuperAdmin() {
-    if (userProfile?.data?.[0]?.role !== 0) {
+    if (userProfile?.data?.role !== 0) {
       // Other than superadmin user
       return false;
     }
@@ -409,7 +406,7 @@ export default function Header(props) {
           company name
         </li> */}
           <li className="icon1" ref={companyRef} onClick={handleClickCompany}>
-            {userProfile?.data?.[0]?.role !== 1 && (
+            {userProfile?.data?.role !== 1 && (
               <Business
                 sx={{
                   "&.MuiSvgIcon-root ": {
@@ -747,20 +744,20 @@ export default function Header(props) {
           >
             <Link className="LoginName dropdown flex items-center" to="#">
               <span className="header-profile-pic max-w-[40px] w-full h-[40px]">
-                {!userProfile?.data?.[0].profile_img && (
+                {!userProfile?.data?.profile_img && (
                   <img
                     src={
-                      !userProfile?.data?.[0].profile_img
+                      !userProfile?.data?.profile_img
                         ? Images?.UserAvatar
-                        : userProfile?.data?.[0].profile_img
+                        : userProfile?.data?.profile_img
                     }
                     alt=""
                   />
                 )}
               </span>
               <span className="loginName ml-1">
-                {userProfile?.data?.[0]?.first_name ?? "Invalid First Name"}{" "}
-                {userProfile?.data?.[0]?.last_name ?? "Invalid Last Name"}
+                {userProfile?.data?.first_name ?? "Invalid First Name"}{" "}
+                {userProfile?.data?.last_name ?? "Invalid Last Name"}
               </span>
               <ArrowDropDownOutlined />
             </Link>

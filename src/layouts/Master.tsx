@@ -17,13 +17,11 @@ const Master = () => {
   // To retrive user profile data on refresh
   useSingleEffect(() => {
     if (isPersist) {
-      axiosPrivate
-        .get(`${API_URL.AUTH.EDIT_PROFILE}`)
-        .then((response) => {
-          if (response.status === 200) {
-            dispatch(SET_USER_PROFILE_DATA(response?.data));
-          }
-        })
+      axiosPrivate.get(`${API_URL.AUTH.EDIT_PROFILE}`).then((response) => {
+        if (response.status === 200) {
+          dispatch(SET_USER_PROFILE_DATA(response?.data?.[0]));
+        }
+      });
     }
   });
 
