@@ -9,6 +9,7 @@ import SortArrows from "assets/images/sort_arrows.webp";
 import NotFoundImg from "assets/images/new.svg";
 import ProfileBG from "assets/images/profile-bg.webp";
 
+import Loader from "assets/images/loader.svg";
 
 export const Images = {
   Logo,
@@ -20,5 +21,6 @@ export const Images = {
   SortArrows,
   NotFoundImg,
   ProfileBG,
-  ErrorLogo
+  ErrorLogo,
+  Loader,
 };
