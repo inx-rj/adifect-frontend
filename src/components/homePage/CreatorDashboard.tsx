@@ -378,248 +378,244 @@ const CreatorDashboard = () => {
     <div>
       {showBlueBox ? (
         <>
-          <div className="Topallpage bak_h">
-            <div className="bg-white m-8 rounded-lg fresh_job_section">
-              <div className="flex justify-between">
-                <div className="flex gap-2 ml-8 mt-8">
-                  <Title title="Fresh Job" />
-                  <span>
-                    <Link className="seeMore" to="/jobs/list">
-                      See More
-                    </Link>
-                  </span>
-                </div>
-                <div className=" mr-8 mt-8 cursor-pointer">
-                  <img
-                    // disabled={!showBlueBox}
-                    onClick={() => handleClick()}
-                    src={Images.Close}
-                  />
-                </div>
-              </div>
-
-              <>
-                {freshJob?.data?.data?.message == "No jobs to show" ? (
-                  <h2 className="nojob"> No Latest Job Found</h2>
-                ) : (
-                  <div
-                    className=""
-                    // onClick={() => openPopup(`${freshJob?.data?.data?.id}`)}
+          <div className="bg-white rounded-lg fresh_job_section">
+            <div className="flex justify-between">
+              <div className="flex gap-2 ml-5 mt-5 items-center">
+                <Title title="Fresh Job" />
+                <span>
+                  <Link
+                    className="hover:text-theme text-base text-[#A0A0A0] font-medium"
+                    to="/jobs/list"
                   >
-                    <div className="p-8 grid grid-cols-1 gap-4">
-                      <div className="border border-1 rounded-lg p-4">
-                        <div className="bt-Title">
-                          <div className="flex justify-between items-center">
-                            <Link
-                              to={`/jobs/details/${freshJob?.data?.data?.id}`}
-                            >
-                              <Title title={freshJob?.data?.data?.title} />
-                            </Link>
-                            <button
-                              onClick={() =>
-                                handleClickOpen(`${freshJob?.data?.data?.id}`)
-                              }
-                              type="button"
-                              className="btn btn-primary Small border-radius"
-                            >
-                              {" "}
-                              Apply Now
-                            </button>
-                          </div>
-                          <div className="">
-                            <>
-                              <button
-                                onClick={handleClickOpen2}
-                                type="button"
-                                className="btn btn-primary Small border-radius Negotiate"
-                              >
-                                Negotiate
-                              </button>
-                              <Dialog
-                                className="CDashboard  "
-                                open={open2}
-                                onClose={handleClose2}
-                              >
-                                <DialogTitle className="CDashboarddiv1">
-                                  <Title title="Negotiate Job" />{" "}
-                                  <span onClick={handleClose}>
-                                    <i className="fa-solid fa-circle-xmark">
-                                      h
-                                    </i>
-                                  </span>
-                                </DialogTitle>
-                                <DialogContent className="applytojb">
-                                  <div className="input-fields-wrapper">
-                                    <h4 className="text-base font-normal">
-                                      Write Your Message for Negotiation
-                                    </h4>
-                                    <textarea className="input-style"></textarea>
-                                  </div>
+                    See More
+                  </Link>
+                </span>
+              </div>
+              <div className="mr-5 mt-5 cursor-pointer">
+                <img
+                  // disabled={!showBlueBox}
+                  onClick={() => handleClick()}
+                  src={Images.Close}
+                />
+              </div>
+            </div>
 
-                                  <div className="input-fields-wrapper">
-                                    <h4 className="Pricetitle">
-                                      Client’s Price
-                                    </h4>
-                                    <div className="flex gap-2 items-center">
-                                      <input
-                                        className="input-style"
-                                        type="number"
-                                        placeholder="Price"
-                                      />
-                                      <span className="text-2xl">$</span>
-                                    </div>
-                                  </div>
+            <>
+              {freshJob?.data?.data?.message == "No jobs to show" ? (
+                <h2 className="text-center text-2xl font-bold">
+                  {" "}
+                  No Latest Job Found
+                </h2>
+              ) : (
+                <div
+                  className=""
+                  // onClick={() => openPopup(`${freshJob?.data?.data?.id}`)}
+                >
+                  <div className="p-5 grid grid-cols-1 gap-4">
+                    <div className="border border-1 rounded-lg p-4">
+                      <div className="flex justify-between items-center">
+                        <Link to={`/jobs/details/${freshJob?.data?.data?.id}`}>
+                          <Title title={freshJob?.data?.data?.title} />
+                        </Link>
+                        <button
+                          onClick={() =>
+                            handleClickOpen(`${freshJob?.data?.data?.id}`)
+                          }
+                          type="button"
+                          className="btn btn-primary Small border-radius"
+                        >
+                          {" "}
+                          Apply Now
+                        </button>
+                      </div>
+                      <div className="">
+                        <>
+                          <button
+                            onClick={handleClickOpen2}
+                            type="button"
+                            className="btn btn-primary Small border-radius Negotiate"
+                          >
+                            Negotiate
+                          </button>
+                          <Dialog
+                            className="CDashboard  "
+                            open={open2}
+                            onClose={handleClose2}
+                          >
+                            <DialogTitle className="CDashboarddiv1">
+                              <Title title="Negotiate Job" />{" "}
+                              <span onClick={handleClose}>
+                                <i className="fa-solid fa-circle-xmark">h</i>
+                              </span>
+                            </DialogTitle>
+                            <DialogContent className="applytojb">
+                              <div className="input-fields-wrapper">
+                                <h4 className="text-base font-normal">
+                                  Write Your Message for Negotiation
+                                </h4>
+                                <textarea className="input-style"></textarea>
+                              </div>
 
-                                  <div className="input-fields-wrapper">
-                                    <h4 className="Pricetitle">
-                                      Negotiated Price
-                                    </h4>
-                                    <div className="flex gap-2 items-center">
-                                      <input
-                                        type="number"
-                                        placeholder="Price"
-                                        className="input-style"
-                                      />
-                                      <span className="text-2xl">$</span>
-                                    </div>
-                                  </div>
+                              <div className="input-fields-wrapper">
+                                <h4 className="Pricetitle">Client’s Price</h4>
+                                <div className="flex gap-2 items-center">
+                                  <input
+                                    className="input-style"
+                                    type="number"
+                                    placeholder="Price"
+                                  />
+                                  <span className="text-2xl">$</span>
+                                </div>
+                              </div>
 
-                                  <div className="input-fields-wrapper">
-                                    <h4 className="Pricetitle">
-                                      Expected Delivery Date
-                                    </h4>
-                                    <span>
-                                      <div className="MuiFormControl-root MuiTextField-root css-1u3bzj6-MuiFormControl-root-MuiTextField-root">
-                                        <div className="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary Mui-error MuiInputBase-formControl MuiInputBase-adornedEnd css-1ptx2yq-MuiInputBase-root-MuiInput-root"></div>
+                              <div className="input-fields-wrapper">
+                                <h4 className="Pricetitle">Negotiated Price</h4>
+                                <div className="flex gap-2 items-center">
+                                  <input
+                                    type="number"
+                                    placeholder="Price"
+                                    className="input-style"
+                                  />
+                                  <span className="text-2xl">$</span>
+                                </div>
+                              </div>
+
+                              <div className="input-fields-wrapper">
+                                <h4 className="Pricetitle">
+                                  Expected Delivery Date
+                                </h4>
+                                <span>
+                                  <div className="MuiFormControl-root MuiTextField-root css-1u3bzj6-MuiFormControl-root-MuiTextField-root">
+                                    <div className="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary Mui-error MuiInputBase-formControl MuiInputBase-adornedEnd css-1ptx2yq-MuiInputBase-root-MuiInput-root"></div>
+                                  </div>
+                                </span>
+                              </div>
+                              <div className="input-fields-wrapper">
+                                <h4 className="Pricetitle">
+                                  Negotiated Delivery Date
+                                </h4>
+                                <span>
+                                  <div className="MuiFormControl-root MuiTextField-root css-1u3bzj6-MuiFormControl-root-MuiTextField-root">
+                                    <div className="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary Mui-error MuiInputBase-formControl MuiInputBase-adornedEnd css-1ptx2yq-MuiInputBase-root-MuiInput-root"></div>
+                                  </div>
+                                </span>
+                              </div>
+                              <div className="text-content Portfolioupload">
+                                <button
+                                  type="submit"
+                                  className="btn btn-primary w-full"
+                                >
+                                  Submit
+                                </button>
+                              </div>
+                            </DialogContent>
+                          </Dialog>
+
+                          <button
+                            onClick={() =>
+                              handleClickOpen(`${freshJob?.data?.data?.id}`)
+                            }
+                            type="button"
+                            className="btn btn-primary Small border-radius"
+                          >
+                            {" "}
+                            Apply Now
+                          </button>
+                          <Dialog
+                            className="CDashboard CDashboard1"
+                            open={open1}
+                            onClose={handleClose}
+                          >
+                            <DialogTitle className="CDashboarddiv1">
+                              <div className="ApplyTitledashboardnewdiv">
+                                <h1 className="ApplyTitledashboard1">
+                                  Apply to Job
+                                </h1>{" "}
+                                <span
+                                  className="closebtnjoblist"
+                                  onClick={handleClose}
+                                >
+                                  <i className="fa-solid fa-xmark"></i>
+                                </span>
+                              </div>
+                            </DialogTitle>
+                            <DialogContent className="applytojb">
+                              <div className="jobapplyform jobapplyformn">
+                                {!isPopupLoading ? (
+                                  // <LoadingSpinner />
+                                  <></>
+                                ) : (
+                                  <>
+                                    <div className="amzingBannerAdMain">
+                                      <div className="amzingBannerText">
+                                        <h4>{title}</h4>
+                                        <Title title="title" />
+                                        <p className="amzingBannerParagraph">
+                                          {jobDescription}
+                                          {freshJob?.data?.data?.description?.substring(
+                                            0,
+                                            300
+                                          )}
+                                        </p>
                                       </div>
-                                    </span>
-                                  </div>
-                                  <div className="input-fields-wrapper">
-                                    <h4 className="Pricetitle">
-                                      Negotiated Delivery Date
-                                    </h4>
-                                    <span>
-                                      <div className="MuiFormControl-root MuiTextField-root css-1u3bzj6-MuiFormControl-root-MuiTextField-root">
-                                        <div className="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary Mui-error MuiInputBase-formControl MuiInputBase-adornedEnd css-1ptx2yq-MuiInputBase-root-MuiInput-root"></div>
-                                      </div>
-                                    </span>
-                                  </div>
-                                  <div className="text-content Portfolioupload">
-                                    <button
-                                      type="submit"
-                                      className="btn btn-primary w-full"
-                                    >
-                                      Submit
-                                    </button>
-                                  </div>
-                                </DialogContent>
-                              </Dialog>
-
-                              <button
-                                onClick={() =>
-                                  handleClickOpen(`${freshJob?.data?.data?.id}`)
-                                }
-                                type="button"
-                                className="btn btn-primary Small border-radius"
-                              >
-                                {" "}
-                                Apply Now
-                              </button>
-                              <Dialog
-                                className="CDashboard CDashboard1"
-                                open={open1}
-                                onClose={handleClose}
-                              >
-                                <DialogTitle className="CDashboarddiv1">
-                                  <div className="ApplyTitledashboardnewdiv">
-                                    <h1 className="ApplyTitledashboard1">
-                                      Apply to Job
-                                    </h1>{" "}
-                                    <span
-                                      className="closebtnjoblist"
-                                      onClick={handleClose}
-                                    >
-                                      <i className="fa-solid fa-xmark"></i>
-                                    </span>
-                                  </div>
-                                </DialogTitle>
-                                <DialogContent className="applytojb">
-                                  <div className="jobapplyform jobapplyformn">
-                                    {!isPopupLoading ? (
-                                      // <LoadingSpinner />
-                                      <></>
-                                    ) : (
-                                      <>
-                                        <div className="amzingBannerAdMain">
-                                          <div className="amzingBannerText">
-                                            <h4>{title}</h4>
-                                            <Title title="title" />
-                                            <p className="amzingBannerParagraph">
-                                              {jobDescription}
-                                              {freshJob?.data?.data?.description?.substring(
-                                                0,
-                                                300
-                                              )}
+                                      <div className="createrBoxAmazingBanner">
+                                        <div className="createrBoxContent">
+                                          <div className="flex gap-2">
+                                            <p className="text-base font-semibold text-[#A0A0A0]">
+                                              Created:{" "}
+                                            </p>
+                                            <p className="johnDeoCreator">
+                                              {/* {createddate} */}
+                                              createddate
                                             </p>
                                           </div>
-                                          <div className="createrBoxAmazingBanner">
-                                            <div className="createrBoxContent">
-                                              <div className="flex gap-2">
-                                                <p className="text-base font-semibold text-[#A0A0A0]">
-                                                  Created:{" "}
-                                                </p>
-                                                <p className="johnDeoCreator">
-                                                  {/* {createddate} */}
-                                                  createddate
-                                                </p>
-                                              </div>
-                                              <div className="flex gap-2">
-                                                <p className="text-base font-semibold text-[#A0A0A0]">
-                                                  Created by:
-                                                </p>
-                                                <p className="johnDeoCreator">
-                                                  {userdata}
-                                                </p>
-                                              </div>
-                                              <div className="flex gap-2">
-                                                <p className="text-base font-semibold text-[#A0A0A0]">
-                                                  Company:
-                                                </p>
-                                                <p className="starkIndusties">
-                                                  {company}
-                                                </p>
-                                              </div>
-                                            </div>
+                                          <div className="flex gap-2">
+                                            <p className="text-base font-semibold text-[#A0A0A0]">
+                                              Created by:
+                                            </p>
+                                            <p className="johnDeoCreator">
+                                              {userdata}
+                                            </p>
+                                          </div>
+                                          <div className="flex gap-2">
+                                            <p className="text-base font-semibold text-[#A0A0A0]">
+                                              Company:
+                                            </p>
+                                            <p className="starkIndusties">
+                                              {company}
+                                            </p>
                                           </div>
                                         </div>
+                                      </div>
+                                    </div>
 
-                                        <div className="NegotiateMainDiv NegotiateMainDiv2">
-                                          <div className="negOfferPriceSec">
-                                            <div
-                                              className={
-                                                errors1.number
-                                                  ? "Offer_A_P Offer_A_P1 error flex gap-2 text-danger"
-                                                  : "Offer_A_P Offer_A_P1 flex gap-2 "
-                                              }
-                                            >
-                                              <h4 className="text-base font-semibold text-[#A0A0A0]">
-                                                Offer Price:{" "}
-                                              </h4>
-                                              <p className="offerp">
-                                                ${offerPrice}
-                                              </p>
-                                            </div>
-                                          </div>
-                                          <div className="negDueDateSec">
-                                            <div className="flex gap-2">
-                                              <h4 className="text-base font-semibold text-[#A0A0A0]">
-                                                Due Date:
-                                              </h4>
-                                              <p className="offerp">
-                                                {deliveryDate}
-                                              </p>
+                                    <div className="NegotiateMainDiv NegotiateMainDiv2">
+                                      <div className="negOfferPriceSec">
+                                        <div
+                                          className={
+                                            errors1.number
+                                              ? "Offer_A_P Offer_A_P1 error flex gap-2 text-danger"
+                                              : "Offer_A_P Offer_A_P1 flex gap-2 "
+                                          }
+                                        >
+                                          <h4 className="text-base font-semibold text-[#A0A0A0]">
+                                            Offer Price:{" "}
+                                          </h4>
+                                          <p className="offerp">
+                                            ${offerPrice}
+                                          </p>
+                                        </div>
+                                      </div>
+                                      <div className="negDueDateSec">
+                                        <div className="flex gap-2">
+                                          <h4 className="text-base font-semibold text-[#A0A0A0]">
+                                            Due Date:
+                                          </h4>
+                                          <p className="offerp">
+                                            {deliveryDate}
+                                          </p>
 
-                                              {/* {deliveryhours && (
+                                          {/* {deliveryhours && (
                                           <p className="colorsec">
                                             {deliveryhoursvalue} hours away
                                           </p>
@@ -636,128 +632,128 @@ const CreatorDashboard = () => {
                                             {deliverydata} days away
                                           </p>
                                         )} */}
-                                            </div>
+                                        </div>
+                                      </div>
+                                      <div className="my-2">
+                                        <button
+                                          className="btn btn-primary"
+                                          // onClick={mainNegotiate}
+                                          type="button"
+                                        >
+                                          Negotiate
+                                        </button>
+                                      </div>
+                                    </div>
+
+                                    {proposedPrice && !show && (
+                                      <>
+                                        <div className="NegotiateMainDiv NegotiateMainDiv_sec proposed_section proposedPriceDueDate">
+                                          <div className="flex gap-2">
+                                            <h4 className="text-base font-semibold text-[#A0A0A0]">
+                                              Proposed Price{" "}
+                                            </h4>
+                                            <p>${proposedPrice}</p>
                                           </div>
-                                          <div className="my-2">
+                                          <div className="flex gap-2">
+                                            <h4 className="text-base font-semibold text-[#A0A0A0]">
+                                              Proposed Due Date
+                                            </h4>
+                                            <p>
+                                              {formateISODateToLocaleString(
+                                                proposedDate
+                                              )}
+                                            </p>
+                                          </div>
+                                          <div className="NegotiateButtonOne">
                                             <button
-                                              className="btn btn-primary"
-                                              // onClick={mainNegotiate}
+                                              className="btn btn-primary clear"
+                                              // onClick={clearMainNegotiate}
                                               type="button"
                                             >
-                                              Negotiate
+                                              Clear
                                             </button>
                                           </div>
                                         </div>
+                                      </>
+                                    )}
 
-                                        {proposedPrice && !show && (
+                                    <div className="proposedPriceDueDateMainDiv">
+                                      <div className="proposedPriceContent2">
+                                        {!show ? (
                                           <>
-                                            <div className="NegotiateMainDiv NegotiateMainDiv_sec proposed_section proposedPriceDueDate">
-                                              <div className="flex gap-2">
-                                                <h4 className="text-base font-semibold text-[#A0A0A0]">
-                                                  Proposed Price{" "}
-                                                </h4>
-                                                <p>${proposedPrice}</p>
-                                              </div>
-                                              <div className="flex gap-2">
-                                                <h4 className="text-base font-semibold text-[#A0A0A0]">
-                                                  Proposed Due Date
-                                                </h4>
-                                                <p>
-                                                  {formateISODateToLocaleString(
-                                                    proposedDate
-                                                  )}
-                                                </p>
-                                              </div>
-                                              <div className="NegotiateButtonOne">
-                                                <button
-                                                  className="btn btn-primary clear"
-                                                  // onClick={clearMainNegotiate}
-                                                  type="button"
-                                                >
-                                                  Clear
-                                                </button>
-                                              </div>
-                                            </div>
-                                          </>
-                                        )}
+                                            <div className="proposedPriceDueDate">
+                                              <div className="creatorhomepage creatorhomepageH">
+                                                <div className="negOfferPriceSec negOffer21">
+                                                  <div
+                                                    className={
+                                                      errors1.number
+                                                        ? "Offer_A_P error flex gap-2"
+                                                        : "flex gap-2"
+                                                    }
+                                                  >
+                                                    <h4 className="text-base font-semibold text-[#A0A0A0]">
+                                                      Offer Price:{" "}
+                                                    </h4>
+                                                    <p>${offerPrice}</p>
+                                                  </div>
+                                                </div>
 
-                                        <div className="proposedPriceDueDateMainDiv">
-                                          <div className="proposedPriceContent2">
-                                            {!show ? (
-                                              <>
-                                                <div className="proposedPriceDueDate">
-                                                  <div className="creatorhomepage creatorhomepageH">
-                                                    <div className="negOfferPriceSec negOffer21">
-                                                      <div
-                                                        className={
-                                                          errors1.number
-                                                            ? "Offer_A_P error flex gap-2"
-                                                            : "flex gap-2"
-                                                        }
-                                                      >
-                                                        <h4 className="text-base font-semibold text-[#A0A0A0]">
-                                                          Offer Price:{" "}
-                                                        </h4>
-                                                        <p>${offerPrice}</p>
-                                                      </div>
-                                                    </div>
+                                                <div className="">
+                                                  <h4 className="text-base font-semibold text-[#A0A0A0]">
+                                                    Proposed Price:
+                                                  </h4>
+                                                  <div className="flex gap-2">
+                                                    <div
+                                                      className={
+                                                        errors1.number
+                                                          ? "flex gap-2   error"
+                                                          : "flex gap-2"
+                                                      }
+                                                    >
+                                                      <input
+                                                        className="input-style"
+                                                        type="number"
+                                                        placeholder="0.00"
+                                                        id=""
+                                                        // value={number}
+                                                        onInput={(e) => {
+                                                          setErrors({
+                                                            ...errors1,
+                                                            number: null,
+                                                          });
+                                                          // if (
+                                                          //   e.target.value
+                                                          //     .length >
+                                                          //   e.target.maxLength
+                                                          // )
+                                                          //   e.target.value =
+                                                          //     e.target.value?.slice(
+                                                          //       0,
+                                                          //       e.target
+                                                          //         .maxLength
+                                                          //     );
+                                                        }}
+                                                        maxLength={8}
+                                                        // onKeyDown={
+                                                        //   blockInvalidChar
+                                                        // }
+                                                        // onChange={handleChange1}
+                                                      />
+                                                      {errors1.number && (
+                                                        <span>
+                                                          {errors1.number ??
+                                                            "valid"}
+                                                        </span>
+                                                      )}
 
-                                                    <div className="">
-                                                      <h4 className="text-base font-semibold text-[#A0A0A0]">
-                                                        Proposed Price:
-                                                      </h4>
-                                                      <div className="flex gap-2">
-                                                        <div
-                                                          className={
-                                                            errors1.number
-                                                              ? "flex gap-2   error"
-                                                              : "flex gap-2"
-                                                          }
-                                                        >
-                                                          <input
-                                                            className="input-style"
-                                                            type="number"
-                                                            placeholder="0.00"
-                                                            id=""
-                                                            // value={number}
-                                                            onInput={(e) => {
-                                                              setErrors({
-                                                                ...errors1,
-                                                                number: null,
-                                                              });
-                                                              // if (
-                                                              //   e.target.value
-                                                              //     .length >
-                                                              //   e.target.maxLength
-                                                              // )
-                                                              //   e.target.value =
-                                                              //     e.target.value?.slice(
-                                                              //       0,
-                                                              //       e.target
-                                                              //         .maxLength
-                                                              //     );
-                                                            }}
-                                                            maxLength={8}
-                                                            // onKeyDown={
-                                                            //   blockInvalidChar
-                                                            // }
-                                                            // onChange={handleChange1}
-                                                          />
-                                                          {errors1.number && (
-                                                            <span>
-                                                              {errors1.number ??
-                                                                "valid"}
-                                                            </span>
-                                                          )}
-
-                                                          <span className="text-2xl">
-                                                            $
-                                                          </span>
-                                                        </div>
-                                                      </div>
+                                                      <span className="text-2xl">
+                                                        $
+                                                      </span>
                                                     </div>
                                                   </div>
-                                                  {/* {per25 && (
+                                                </div>
+                                              </div>
+                                              {/* {per25 && (
                                                 <>
                                                   {" "}
                                                   <p className="proposingtext proposingtext1">
@@ -767,7 +763,7 @@ const CreatorDashboard = () => {
                                                   </p>
                                                 </>
                                               )} */}
-                                                  {/* {per50 && (
+                                              {/* {per50 && (
                                                 <>
                                                   {" "}
                                                   <p className="proposingtext colorsec proposingtext50 ">
@@ -790,7 +786,7 @@ const CreatorDashboard = () => {
                                                 </>
                                               )} */}
 
-                                                  {/* <div className="Negotiatestates">
+                                              {/* <div className="Negotiatestates">
                                               <li
                                                 onClick={() => handleDiv("1")}
                                                 className="Negotiatestates1"
@@ -828,15 +824,15 @@ const CreatorDashboard = () => {
                                               </li>
                                             </div> */}
 
-                                                  <div className="creatordashbord">
-                                                    <div className="creatorjoblistdate creatorjoblistdateH">
-                                                      <div className="duejoblist5">
-                                                        <div className="flex gap-2">
-                                                          <h4 className="text-base font-semibold">
-                                                            Due Date:
-                                                          </h4>
-                                                          <p>{deliveryDate}</p>
-                                                          {/* {deliveryhours && (
+                                              <div className="creatordashbord">
+                                                <div className="creatorjoblistdate creatorjoblistdateH">
+                                                  <div className="duejoblist5">
+                                                    <div className="flex gap-2">
+                                                      <h4 className="text-base font-semibold">
+                                                        Due Date:
+                                                      </h4>
+                                                      <p>{deliveryDate}</p>
+                                                      {/* {deliveryhours && (
                                                         <p className="colorsec">
                                                           {deliveryhoursvalue}{" "}
                                                           hours away
@@ -855,159 +851,159 @@ const CreatorDashboard = () => {
                                                           away
                                                         </p>
                                                       )} */}
-                                                        </div>
-                                                      </div>
-                                                      <div
-                                                        className={
-                                                          errors1.date
-                                                            ? "ProposedDueDateContent ProposedDueDateContent1 error"
-                                                            : "ProposedDueDateContent ProposedDueDateContent1"
-                                                        }
-                                                      >
-                                                        <h4 className="text-base font-semibold">
-                                                          Proposed Due Date:
-                                                        </h4>
-                                                        {errors1.date && (
-                                                          <span>
-                                                            {errors1.date ??
-                                                              "valid"}
-                                                          </span>
-                                                        )}
-
-                                                        {/* <div>{showData ? <h1>{daysData} days</h1> : null}</div> */}
-                                                      </div>
                                                     </div>
                                                   </div>
+                                                  <div
+                                                    className={
+                                                      errors1.date
+                                                        ? "ProposedDueDateContent ProposedDueDateContent1 error"
+                                                        : "ProposedDueDateContent ProposedDueDateContent1"
+                                                    }
+                                                  >
+                                                    <h4 className="text-base font-semibold">
+                                                      Proposed Due Date:
+                                                    </h4>
+                                                    {errors1.date && (
+                                                      <span>
+                                                        {errors1.date ??
+                                                          "valid"}
+                                                      </span>
+                                                    )}
+
+                                                    {/* <div>{showData ? <h1>{daysData} days</h1> : null}</div> */}
+                                                  </div>
                                                 </div>
-                                              </>
-                                            ) : null}
-                                          </div>
-                                        </div>
-
-                                        <div className="applyJobImgAttach">
-                                          <h4 className="text-lg font-semibold">
-                                            Attach Files{" "}
-                                            <span className="text-base">
-                                              (Optional)
-                                            </span>
-                                          </h4>
-                                          <p className="attachfilesCreatorText">
-                                            You may attach up to 10 files under
-                                            the size of 10MB each. Include work
-                                            samples or other documents to
-                                            support your application.
-                                          </p>
-
-                                          <div className="container containermargin1">
-                                            <div
-                                              className="uploadimgcreator"
-                                              {...getRootProps()}
-                                            >
-                                              <input {...getInputProps()} />
-                                              <p>
-                                                <img
-                                                  className="uploadImageProfile uploadImageProfile2"
-                                                  src={
-                                                    process.env.PUBLIC_URL +
-                                                    "/img/uploadimg.png"
-                                                  }
-                                                  alt=""
-                                                />
-                                                Attach Files
-                                              </p>
+                                              </div>
                                             </div>
-                                            {/* <aside style={thumbsContainer}>
+                                          </>
+                                        ) : null}
+                                      </div>
+                                    </div>
+
+                                    <div className="applyJobImgAttach">
+                                      <h4 className="text-lg font-semibold">
+                                        Attach Files{" "}
+                                        <span className="text-base">
+                                          (Optional)
+                                        </span>
+                                      </h4>
+                                      <p className="attachfilesCreatorText">
+                                        You may attach up to 10 files under the
+                                        size of 10MB each. Include work samples
+                                        or other documents to support your
+                                        application.
+                                      </p>
+
+                                      <div className="container containermargin1">
+                                        <div
+                                          className="uploadimgcreator"
+                                          {...getRootProps()}
+                                        >
+                                          <input {...getInputProps()} />
+                                          <p>
+                                            <img
+                                              className="uploadImageProfile uploadImageProfile2"
+                                              src={
+                                                process.env.PUBLIC_URL +
+                                                "/img/uploadimg.png"
+                                              }
+                                              alt=""
+                                            />
+                                            Attach Files
+                                          </p>
+                                        </div>
+                                        {/* <aside style={thumbsContainer}>
                                           {thumbs}
                                         </aside> */}
-                                          </div>
-                                        </div>
+                                      </div>
+                                    </div>
 
-                                        {/* Images */}
+                                    {/* Images */}
 
-                                        <div className="quesOptionalMain">
-                                          <h4 className="text-lg font-semibold">
-                                            Comments
-                                            <span className="OptionalHaveQuest"></span>
-                                          </h4>
-                                        </div>
+                                    <div className="quesOptionalMain">
+                                      <h4 className="text-lg font-semibold">
+                                        Comments
+                                        <span className="OptionalHaveQuest"></span>
+                                      </h4>
+                                    </div>
 
-                                        <div className="quesOptionalMain">
-                                          <h4 className="text-lg font-semibold">
-                                            Have a question?{" "}
-                                            <span className="text-base">
-                                              (Optional)
-                                            </span>
-                                          </h4>
-                                          <p className="text-sm font-medium">
-                                            Questions will be public on the Job
-                                            Detail page.
-                                          </p>
-                                        </div>
-                                        <div className="askYourQuestionInput">
-                                          <textarea
-                                            // onChange={(e) => {
-                                            //   setquestion(e.target.value);
-                                            // }}
-                                            className="input-style"
-                                            // type="text"
-                                            placeholder="Ask your question"
-                                          />
-                                        </div>
+                                    <div className="quesOptionalMain">
+                                      <h4 className="text-lg font-semibold">
+                                        Have a question?{" "}
+                                        <span className="text-base">
+                                          (Optional)
+                                        </span>
+                                      </h4>
+                                      <p className="text-sm font-medium">
+                                        Questions will be public on the Job
+                                        Detail page.
+                                      </p>
+                                    </div>
+                                    <div className="askYourQuestionInput">
+                                      <textarea
+                                        // onChange={(e) => {
+                                        //   setquestion(e.target.value);
+                                        // }}
+                                        className="input-style"
+                                        // type="text"
+                                        placeholder="Ask your question"
+                                      />
+                                    </div>
 
-                                        <div className="">
-                                          <div className="mt-2 flex gap-4">
-                                            <button
-                                              className="btn btn-primary"
-                                              onClick={handleClose}
-                                            >
-                                              Cancel
-                                            </button>
-                                            {/* <Link
+                                    <div className="">
+                                      <div className="mt-2 flex gap-4">
+                                        <button
+                                          className="btn btn-primary"
+                                          onClick={handleClose}
+                                        >
+                                          Cancel
+                                        </button>
+                                        {/* <Link
                                         className="create-account-btn border-radius"
                                         to="/jobs/list"
                                       >
                                         Cancel
                                       </Link> */}
-                                            <button
-                                              className="btn btn-primary "
-                                              // value="Send message"
-                                              onClick={(e) => validateSubmit(e)}
-                                              type="submit"
-                                            >
-                                              Apply Now
-                                            </button>
-                                          </div>
-                                        </div>
-                                      </>
-                                    )}
-                                  </div>
-                                </DialogContent>
-                              </Dialog>
-                              {/* NEW APPLY JOB DIALOG BOX END SEP 13 */}
-                              {freshJob?.data?.data?.job_applied_status ==
-                              "True" ? (
-                                <span className="jobappied">Job Applied</span>
-                              ) : (
-                                <Link
-                                  to={`/jobs/apply/${freshJob?.data?.data?.id}`}
-                                >
-                                  <button
-                                    type="button"
-                                    className="btn btn-primary Small border-radius"
-                                  >
-                                    Apply Now
-                                  </button>
-                                </Link>
-                              )}
-                              {/* <Link
+                                        <button
+                                          className="btn btn-primary "
+                                          // value="Send message"
+                                          onClick={(e) => validateSubmit(e)}
+                                          type="submit"
+                                        >
+                                          Apply Now
+                                        </button>
+                                      </div>
+                                    </div>
+                                  </>
+                                )}
+                              </div>
+                            </DialogContent>
+                          </Dialog>
+                          {/* NEW APPLY JOB DIALOG BOX END SEP 13 */}
+                          {freshJob?.data?.data?.job_applied_status ==
+                          "True" ? (
+                            <span className="jobappied">Job Applied</span>
+                          ) : (
+                            <Link
+                              to={`/jobs/apply/${freshJob?.data?.data?.id}`}
+                            >
+                              <button
+                                type="button"
+                                className="btn btn-primary Small border-radius"
+                              >
+                                Apply Now
+                              </button>
+                            </Link>
+                          )}
+                          {/* <Link
                             className="MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButtonBase-root  css-1o8ezb2-MuiButtonBase-root-MuiButton-root"
                             to={`/jobs/apply/${jobId}`}
                           >
                             {" "}
                             Submit a Proposal{" "}
                           </Link> */}
-                            </>
-                            {/* <h3 className="jobalready">job already applied !</h3>
+                        </>
+                        {/* <h3 className="jobalready">job already applied !</h3>
               <Link to={`/jobs/apply/${freshJob?.id}`}>
               <button
                   type="button"
@@ -1021,96 +1017,131 @@ const CreatorDashboard = () => {
                  Submit a Proposal 
                 </button>
              </Link> */}
+                      </div>
+                      {/* {JSON.stringify(freshJob)} */}
+                      <div className="jobListDetailsAreaAndTaskbox">
+                        <div className="RemoteText RemoteTextEightyWidth">
+                          <p
+                            className="text-base font-semibold text-[#A0A0A0] gap-2 my-4"
+                            onClick={() =>
+                              openPopup(`${freshJob?.data?.data?.id}`)
+                            }
+                          >
+                            Posted on:{" "}
+                            {formateISODateToLocaleString(
+                              freshJob?.data?.data?.created
+                            )}
+                          </p>
+                          <p
+                            className="text-base font-normal cursor-pointer"
+                            onClick={() =>
+                              openPopup(`${freshJob?.data?.data?.id}`)
+                            }
+                          >
+                            {freshJob?.data?.data?.description?.substring(
+                              0,
+                              300
+                            )}
+                            .....
+                          </p>
+                          <div
+                            className="my-2"
+                            onClick={() =>
+                              openPopup(`${freshJob?.data?.data?.id}`)
+                            }
+                          >
+                            <span className="text-[#A0A0A0] text-base font-semibold flex gap-2">
+                              Budget:{" "}
+                              {freshJob?.data?.data?.price && (
+                                <>
+                                  <h5>${freshJob?.data?.data?.price}</h5>
+                                </>
+                              )}
+                              {!freshJob?.data?.data?.price && (
+                                <>
+                                  <h3 className="colorOnNA">N/A</h3>
+                                </>
+                              )}
+                            </span>
                           </div>
-                        </div>
-                        {/* {JSON.stringify(freshJob)} */}
-                        <div className="jobListDetailsAreaAndTaskbox">
-                          <div className="RemoteText RemoteTextEightyWidth">
-                            <p
-                              className="text-base font-semibold text-[#A0A0A0] gap-2 my-4"
-                              onClick={() =>
-                                openPopup(`${freshJob?.data?.data?.id}`)
-                              }
-                            >
-                              Posted on:{" "}
-                              {formateISODateToLocaleString(
-                                freshJob?.data?.data?.created
+                          <div
+                            className="Budget-Title  Skilldashbordnew"
+                            onClick={() =>
+                              openPopup(`${freshJob?.data?.data?.id}`)
+                            }
+                          >
+                            <span className="text-[#A0A0A0] text-base font-semibold flex gap-2">
+                              Level:{" "}
+                              {freshJob?.data?.data?.level?.level_name && (
+                                <>
+                                  <h5>
+                                    {freshJob?.data?.data?.level?.level_name}
+                                  </h5>
+                                </>
                               )}
-                            </p>
-                            <p
-                              className="text-base font-normal cursor-pointer"
-                              onClick={() =>
-                                openPopup(`${freshJob?.data?.data?.id}`)
-                              }
-                            >
-                              {freshJob?.data?.data?.description?.substring(
-                                0,
-                                300
+                              {!freshJob?.data?.data?.level?.level_name && (
+                                <>
+                                  <h3 className="colorOnNA">N/A</h3>
+                                </>
                               )}
-                              .....
-                            </p>
-                            <div
-                              className="my-2"
-                              onClick={() =>
-                                openPopup(`${freshJob?.data?.data?.id}`)
-                              }
-                            >
-                              <span className="text-[#A0A0A0] text-base font-semibold flex gap-2">
-                                Budget:{" "}
-                                {freshJob?.data?.data?.price && (
+                            </span>
+                          </div>
+                          {freshJob?.data?.data?.skills?.length > 0 && (
+                            <>
+                              <h5 className="text-[#A0A0A0] text-base font-semibold">
+                                Skills:{" "}
+                              </h5>
+                              <div className="Skill mt-2 flex flex-wrap gap-2">
+                                {freshJob?.data?.data?.skills?.map(
+                                  (freshJob, index) => (
+                                    <div key={index}>
+                                      <BadgeUI
+                                        variant="primary"
+                                        customClass="max-w-max text-sm font-semibold"
+                                      >
+                                        {freshJob.skill_name}
+                                        {/* <Link to="#">{freshJob.skill_name}</Link> */}
+                                      </BadgeUI>
+                                    </div>
+                                  )
+                                )}
+                                {freshJob?.data?.data?.skills?.length < 1 && (
                                   <>
-                                    <h5>${freshJob?.data?.data?.price}</h5>
+                                    <h3 className="text-[#A0A0A0] text-base font-semibold">
+                                      N/A
+                                    </h3>
                                   </>
                                 )}
-                                {!freshJob?.data?.data?.price && (
-                                  <>
-                                    <h3 className="colorOnNA">N/A</h3>
-                                  </>
-                                )}
-                              </span>
-                            </div>
-                            <div
-                              className="Budget-Title  Skilldashbordnew"
-                              onClick={() =>
-                                openPopup(`${freshJob?.data?.data?.id}`)
-                              }
-                            >
-                              <span className="text-[#A0A0A0] text-base font-semibold flex gap-2">
-                                Level:{" "}
-                                {freshJob?.data?.data?.level?.level_name && (
-                                  <>
-                                    <h5>
-                                      {freshJob?.data?.data?.level?.level_name}
-                                    </h5>
-                                  </>
-                                )}
-                                {!freshJob?.data?.data?.level?.level_name && (
-                                  <>
-                                    <h3 className="colorOnNA">N/A</h3>
-                                  </>
-                                )}
-                              </span>
-                            </div>
-                            {freshJob?.data?.data?.skills?.length > 0 && (
+                              </div>
+                            </>
+                          )}
+
+                          <div
+                            className="Skill mt-2 Skilldashbordnew"
+                            onClick={() =>
+                              openPopup(`${freshJob?.data?.data?.id}`)
+                            }
+                          >
+                            {freshJob?.data?.data?.tags?.length > 0 && (
                               <>
                                 <h5 className="text-[#A0A0A0] text-base font-semibold">
-                                  Skills:{" "}
+                                  Tags:{" "}
                                 </h5>
                                 <div className="Skill mt-2 flex flex-wrap gap-2">
-                                  {freshJob?.data?.data?.skills?.map(
-                                    (freshJob, index) => (
+                                  {freshJob?.data?.data?.tags
+                                    ?.split(",")
+                                    ?.map((tag, index) => (
                                       <div key={index}>
                                         <BadgeUI
                                           variant="primary"
                                           customClass="max-w-max text-sm font-semibold"
                                         >
-                                          {freshJob.skill_name}
+                                          {tag}
                                           {/* <Link to="#">{freshJob.skill_name}</Link> */}
                                         </BadgeUI>
                                       </div>
-                                    )
-                                  )}
-                                  {freshJob?.data?.data?.skills?.length < 1 && (
+                                    ))}
+                                  {freshJob?.data?.data?.tags?.length < 1 && (
                                     <>
                                       <h3 className="text-[#A0A0A0] text-base font-semibold">
                                         N/A
@@ -1118,60 +1149,24 @@ const CreatorDashboard = () => {
                                     </>
                                   )}
                                 </div>
-                              </>
-                            )}
-
-                            <div
-                              className="Skill mt-2 Skilldashbordnew"
-                              onClick={() =>
-                                openPopup(`${freshJob?.data?.data?.id}`)
-                              }
-                            >
-                              {freshJob?.data?.data?.tags?.length > 0 && (
-                                <>
-                                  <h5 className="text-[#A0A0A0] text-base font-semibold">
-                                    Tags:{" "}
-                                  </h5>
-                                  <div className="Skill mt-2 flex flex-wrap gap-2">
-                                    {freshJob?.data?.data?.tags
-                                      ?.split(",")
-                                      ?.map((tag, index) => (
-                                        <div key={index}>
-                                          <BadgeUI
-                                            variant="primary"
-                                            customClass="max-w-max text-sm font-semibold"
-                                          >
-                                            {tag}
-                                            {/* <Link to="#">{freshJob.skill_name}</Link> */}
-                                          </BadgeUI>
-                                        </div>
-                                      ))}
-                                    {freshJob?.data?.data?.tags?.length < 1 && (
-                                      <>
-                                        <h3 className="text-[#A0A0A0] text-base font-semibold">
-                                          N/A
-                                        </h3>
-                                      </>
-                                    )}
-                                  </div>
-                                  {/* {freshJob?.data?.data?.tags
+                                {/* {freshJob?.data?.data?.tags
                                   ?.split(",")
                                   .map((tag, index) => (
                                     <li key={index}>
                                       <Link to="#">{tag}</Link>
                                     </li>
                                   ))} */}
-                                  {/* {freshJob?.tags?.length < 1 && (
+                                {/* {freshJob?.tags?.length < 1 && (
                               <>
                                 <li>
                                   <h3 className="colorOnNA">N/A</h3>
                                 </li>
                               </>
                             )} */}
-                                </>
-                              )}
-                            </div>
-                            {/* <div className="ApplyButton_2">
+                              </>
+                            )}
+                          </div>
+                          {/* <div className="ApplyButton_2">
                             <button
                               type="button"
                               className="btn btn-primary Small border-radius"
@@ -1179,42 +1174,41 @@ const CreatorDashboard = () => {
                               Apply Now
                             </button>
                           </div> */}
-                          </div>
-                          {freshJob?.data?.data?.jobtasks_job?.length > 0 && (
-                            <div className="taskBoxJobListCard1">
-                              <div className="taskBoxJobListCardFirstHead">
-                                <div className="taskBoxJobListCardFirstNoBg">
-                                  <h3 className="taskMember1">Task</h3>
-                                  <h3 className="taskMemberd2">Date</h3>
-                                </div>
-                                <div className="taskBoxJobListCardDetailsDate1">
-                                  {freshJob?.data?.data?.jobtasks_job?.map(
-                                    (item) => {
-                                      return (
-                                        <>
-                                          <div className="tasksecdiv1">
-                                            <div className="tasktitlesec1">
-                                              {item?.title}
-                                            </div>
-                                            <div className="tasktitlesec2">
-                                              {item?.due_date}
-                                            </div>
+                        </div>
+                        {freshJob?.data?.data?.jobtasks_job?.length > 0 && (
+                          <div className="taskBoxJobListCard1">
+                            <div className="taskBoxJobListCardFirstHead">
+                              <div className="taskBoxJobListCardFirstNoBg">
+                                <h3 className="taskMember1">Task</h3>
+                                <h3 className="taskMemberd2">Date</h3>
+                              </div>
+                              <div className="taskBoxJobListCardDetailsDate1">
+                                {freshJob?.data?.data?.jobtasks_job?.map(
+                                  (item) => {
+                                    return (
+                                      <>
+                                        <div className="tasksecdiv1">
+                                          <div className="tasktitlesec1">
+                                            {item?.title}
                                           </div>
-                                        </>
-                                      );
-                                    }
-                                  )}
-                                </div>
+                                          <div className="tasktitlesec2">
+                                            {item?.due_date}
+                                          </div>
+                                        </div>
+                                      </>
+                                    );
+                                  }
+                                )}
                               </div>
                             </div>
-                          )}
-                        </div>
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>
-                )}
-              </>
-            </div>
+                </div>
+              )}
+            </>
           </div>
         </>
       ) : null}
@@ -1471,17 +1465,13 @@ const CreatorDashboard = () => {
         </DialogActions>
       </Dialog>
 
-      <div className="Topallpage_sec">
-        <div className="InProgress-4 creatordashbordtab">
-          <div className="Work-D grid md:grid-cols-2 sm:grid-cols-1 gap-4">
-            <div className="inProgressDashboardComponent">
-              <CreatorDashboardInProgress />
-            </div>
-            <div className="inReviewDashboardComponent">
-              <CreatorDashboardInReview />
-            </div>{" "}
-          </div>
+      <div className=" grid md:grid-cols-2 sm:grid-cols-1 gap-4">
+        <div className="">
+          <CreatorDashboardInProgress />
         </div>
+        <div className="">
+          <CreatorDashboardInReview />
+        </div>{" "}
       </div>
     </div>
   );

@@ -11,24 +11,20 @@ export default function AdminDashboard() {
   return (
     <>
       {/* {isLoading && <LoadingSpinner />} */}
-      <div className="p-10">
-        <div className="bg-white rounded-xl mb-5">
-          <h1 className="p-5 text-center font-bold text-2xl">
-            Welcome Admin
-            <br />
-          </h1>
+      <div className="bg-white rounded-xl mb-5">
+        <h1 className="p-5 text-center font-bold text-2xl">
+          Welcome Admin
+          <br />
+        </h1>
+      </div>
+      {/* <div className="AllPageHight"></div> */}
+      <div className="grid md:grid-cols-2 sm:grid-cols-1 gap-4">
+        <div className="inProgressDashboardComponent">
+          <AdminDashboardInProgress />
         </div>
-        {/* <div className="AllPageHight"></div> */}
-        <div className="Topallpage_sec">
-          <div className="Work-D grid md:grid-cols-2 sm:grid-cols-1 gap-4">
-            <div className="inProgressDashboardComponent">
-              <AdminDashboardInProgress />
-            </div>
-            <div className="inReviewDashboardComponent">
-              <AdminDashboardInReview />
-            </div>{" "}
-          </div>
-        </div>
+        <div className="inReviewDashboardComponent">
+          <AdminDashboardInReview />
+        </div>{" "}
       </div>
     </>
   );

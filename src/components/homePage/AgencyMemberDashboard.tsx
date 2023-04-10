@@ -77,87 +77,84 @@ const AgencyMemberDashboard = () => {
         {userData?.data?.user?.user_level ? (
           // !showBlueBox ? (
           <>
-            <div className="Topallpage bak_h">
-              <div className="ContentDiv TopM fresh_job_section">
-                <div className="FreshTitl">
-                  <div className="p-5 text-center font-bold text-2xl">
-                    <h1>
-                      Newly Assign Job{" "}
-                      <span>
-                        <Link className="seeMore" to="/jobs/list">
-                          See More
-                        </Link>
-                      </span>
-                    </h1>
-                  </div>
-                  <div className="closeBtndasboard">
-                    <img
-                      // disabled={!showBlueBox}
-                      onClick={handleClick}
-                      src="img/close.png"
-                    />
-                  </div>
+            <div className="">
+              <div className="">
+                <div className="p-5 text-center font-bold text-2xl">
+                  <h1>
+                    Newly Assign Job{" "}
+                    <span>
+                      <Link className="seeMore" to="/jobs/list">
+                        See More
+                      </Link>
+                    </span>
+                  </h1>
                 </div>
-                <>
-                  {freshJob?.freshJobMessage == "No jobs to show" ? (
-                    <h2 className="nojob"> No Latest Job Found</h2>
-                  ) : (
-                    <div
-                      className="FreshJobTop ss"
-                      onClick={() => openPopup(`${freshJob?.data?.data?.id}`)}
-                    >
-                      <div className="p-5">
-                        <div className="">
-                          <Link
-                            to={`/jobs/details/${freshJob?.data?.data?.id}`}
+                <div className="closeBtndasboard">
+                  <img
+                    // disabled={!showBlueBox}
+                    onClick={handleClick}
+                    src="img/close.png"
+                  />
+                </div>
+              </div>
+              <>
+                {freshJob?.freshJobMessage == "No jobs to show" ? (
+                  <h2 className="nojob"> No Latest Job Found</h2>
+                ) : (
+                  <div
+                    className="FreshJobTop ss"
+                    onClick={() => openPopup(`${freshJob?.data?.data?.id}`)}
+                  >
+                    <div className="p-5">
+                      <div className="">
+                        <Link to={`/jobs/details/${freshJob?.data?.data?.id}`}>
+                          <h2 className="text-base font-semibold">
+                            {freshJob?.data?.data?.title}
+                          </h2>
+                        </Link>
+                      </div>
+                      <div className="jobListDetailsAreaAndTaskbox">
+                        <div className="RemoteText RemoteTextEightyWidth">
+                          <p
+                            className="text-base font-semibold"
+                            onClick={() =>
+                              openPopup(`${freshJob?.data?.data?.id}`)
+                            }
                           >
-                            <h2 className="text-base font-semibold">
-                              {freshJob?.data?.data?.title}
-                            </h2>
-                          </Link>
-                        </div>
-                        <div className="jobListDetailsAreaAndTaskbox">
-                          <div className="RemoteText RemoteTextEightyWidth">
-                            <p
-                              className="text-base font-semibold"
-                              onClick={() =>
-                                openPopup(`${freshJob?.data?.data?.id}`)
-                              }
-                            >
-                              Posted on:{" "}
-                              {formateISODateToLocaleString(
-                                freshJob?.data?.data?.created
-                              )}
-                            </p>
-                            <p
-                              className="jobdescr"
-                              onClick={() =>
-                                openPopup(`${freshJob?.data?.data?.id}`)
-                              }
-                            >
-                              {freshJob?.data?.data?.description?.substring(
-                                0,
-                                300
-                              )}
-                              .....
-                            </p>
-                            {freshJob?.data?.data?.price && (
-                              <>
-                                <div
-                                  className="Budget-Title Skilldashbordnew"
-                                  onClick={() =>
-                                    openPopup(`${freshJob?.data?.id}`)
-                                  }
-                                >
-                                  <li>
-                                    <span className="flex gap-2 text-base font-semibold">
-                                      Budget:{" "}
-                                      <h5 className="text-base font-medium">
-                                        ${freshJob?.data?.data?.price}
-                                      </h5>
-                                    </span>
-                                  </li>
-                                  {/* <li>
+                            Posted on:{" "}
+                            {formateISODateToLocaleString(
+                              freshJob?.data?.data?.created
+                            )}
+                          </p>
+                          <p
+                            className="jobdescr"
+                            onClick={() =>
+                              openPopup(`${freshJob?.data?.data?.id}`)
+                            }
+                          >
+                            {freshJob?.data?.data?.description?.substring(
+                              0,
+                              300
+                            )}
+                            .....
+                          </p>
+                          {freshJob?.data?.data?.price && (
+                            <>
+                              <div
+                                className="Budget-Title Skilldashbordnew"
+                                onClick={() =>
+                                  openPopup(`${freshJob?.data?.id}`)
+                                }
+                              >
+                                <li>
+                                  <span className="flex gap-2 text-base font-semibold">
+                                    Budget:{" "}
+                                    <h5 className="text-base font-medium">
+                                      ${freshJob?.data?.data?.price}
+                                    </h5>
+                                  </span>
+                                </li>
+                                {/* <li>
                                 <h5>${freshJob?.data?.data?.price}</h5>
 
                                 {!freshJob[0]?.price && (
@@ -166,86 +163,82 @@ const AgencyMemberDashboard = () => {
                                   </>
                                 )}
                               </li> */}
-                                </div>
-                              </>
-                            )}
-                            {freshJob?.data?.data?.level?.level_name && (
-                              <>
-                                <div
-                                  className="Budget-Title  Skilldashbordnew"
-                                  onClick={() =>
-                                    openPopup(`${freshJob?.data?.data?.id}`)
-                                  }
-                                >
-                                  <li>
-                                    <span className="flex gap-2 text-base font-semibold">
-                                      Level:{" "}
-                                      <h5 className="text-base font-medium">
-                                        {
-                                          freshJob?.data?.data?.level
-                                            ?.level_name
-                                        }
-                                      </h5>
-                                    </span>
-                                  </li>
-                                </div>
-                              </>
-                            )}
-                            {freshJob?.data?.data?.skills?.length > 0 && (
-                              <>
-                                <div className="Skill mt-2 Skilldashbordnew">
-                                  <li>
-                                    <span className="text-base font-semibold">
-                                      Skills:{" "}
-                                      {freshJob?.data?.data?.skills?.map(
-                                        (freshJob, index) => (
-                                          <li
-                                            key={index}
-                                            className="font-medium pl-10"
-                                          >
-                                            <Link to="#">
-                                              {freshJob?.skill_name}
-                                            </Link>
-                                          </li>
-                                        )
-                                      )}
-                                    </span>
-                                  </li>
-                                </div>
-                              </>
-                            )}
+                              </div>
+                            </>
+                          )}
+                          {freshJob?.data?.data?.level?.level_name && (
+                            <>
+                              <div
+                                className="Budget-Title  Skilldashbordnew"
+                                onClick={() =>
+                                  openPopup(`${freshJob?.data?.data?.id}`)
+                                }
+                              >
+                                <li>
+                                  <span className="flex gap-2 text-base font-semibold">
+                                    Level:{" "}
+                                    <h5 className="text-base font-medium">
+                                      {freshJob?.data?.data?.level?.level_name}
+                                    </h5>
+                                  </span>
+                                </li>
+                              </div>
+                            </>
+                          )}
+                          {freshJob?.data?.data?.skills?.length > 0 && (
+                            <>
+                              <div className="Skill mt-2 Skilldashbordnew">
+                                <li>
+                                  <span className="text-base font-semibold">
+                                    Skills:{" "}
+                                    {freshJob?.data?.data?.skills?.map(
+                                      (freshJob, index) => (
+                                        <li
+                                          key={index}
+                                          className="font-medium pl-10"
+                                        >
+                                          <Link to="#">
+                                            {freshJob?.skill_name}
+                                          </Link>
+                                        </li>
+                                      )
+                                    )}
+                                  </span>
+                                </li>
+                              </div>
+                            </>
+                          )}
 
-                            <div
-                              className="Skill mt-2 Skilldashbordnew"
-                              onClick={() => openPopup(`${freshJob?.data?.id}`)}
-                            >
-                              {freshJob?.data?.data?.tags?.length > 0 && (
-                                <>
-                                  <li>
-                                    <span className="text-base font-semibold">
-                                      Tags:{" "}
-                                      {freshJob?.data?.data?.tags
-                                        ?.split(",")
-                                        .map((tag, index) => (
-                                          <li
-                                            key={index}
-                                            className="font-medium pl-10"
-                                          >
-                                            <Link to="#">{tag}</Link>
-                                          </li>
-                                        ))}
-                                    </span>
-                                  </li>
-                                </>
-                              )}
-                            </div>
+                          <div
+                            className="Skill mt-2 Skilldashbordnew"
+                            onClick={() => openPopup(`${freshJob?.data?.id}`)}
+                          >
+                            {freshJob?.data?.data?.tags?.length > 0 && (
+                              <>
+                                <li>
+                                  <span className="text-base font-semibold">
+                                    Tags:{" "}
+                                    {freshJob?.data?.data?.tags
+                                      ?.split(",")
+                                      .map((tag, index) => (
+                                        <li
+                                          key={index}
+                                          className="font-medium pl-10"
+                                        >
+                                          <Link to="#">{tag}</Link>
+                                        </li>
+                                      ))}
+                                  </span>
+                                </li>
+                              </>
+                            )}
                           </div>
                         </div>
                       </div>
                     </div>
-                  )}
-                </>
-              </div>
+                  </div>
+                )}
+              </>
             </div>
           </>
         ) : (

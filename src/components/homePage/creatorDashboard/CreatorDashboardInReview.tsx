@@ -86,8 +86,8 @@ const CreatorDashboardInReview = () => {
   };
   return (
     <div>
-      <div className="Work-In">
-        <div className="pb-4 flex justify-between items-center">
+      <div className="">
+        <div className="py-5 flex justify-between items-center">
           <Title title="In Review" />
           <div className="Sort">
             <h6
@@ -178,14 +178,16 @@ const CreatorDashboardInReview = () => {
           ))}
         {SuperAdminInReview?.inReviewJobsList?.data?.results?.length > 5 && (
           <Link to={`/projects`} onClick={setLocalVarRedirect}>
-            <span className="spanDashboardViewMore">View More...</span>
+            <span className="hover:text-theme text-base font-medium">
+              View More...
+            </span>
           </Link>
         )}
         {SuperAdminInReview?.inReviewJobsList?.data?.results?.length < 1 && (
-          <div className="jobnotfound">
-            <div className="mb-5">
-              <div className="border-l-8 rounded border-[#D99836] bg-white p-6 h-full max-h-[580px] shadow-[0_4px_40px_#2472fc0f]">
-                <div className="text-lg font-semibold">No jobs in progress</div>
+          <div className="mb-5">
+            <div className="border-l-8 rounded border-[#D99836] bg-white p-6 h-full max-h-[580px] shadow-[0_4px_40px_#2472fc0f]">
+              <div className="text-lg font-semibold text-center">
+                No jobs in review
               </div>
             </div>
           </div>

@@ -4,7 +4,10 @@ import React, { useState } from "react";
 import { useSingleEffect, useUpdateEffect } from "react-haiku";
 import { Link } from "react-router-dom";
 import { GET_ADMIN_DASHBOARD_IN_PROGRESS_JOBLIST } from "../../../redux/actions/homePage/adminHomePage.actions";
-import { CLEAR_JOBS, JOBS_DATA } from "../../../redux/reducers/homePage/jobsList.slice";
+import {
+  CLEAR_JOBS,
+  JOBS_DATA,
+} from "../../../redux/reducers/homePage/jobsList.slice";
 import { useAppDispatch, useAppSelector } from "../../../redux/store";
 import { Images } from "../../../helper/images";
 import BadgeUI from "../../../components/common/badge/BadgeUI";
@@ -176,9 +179,10 @@ const AdminDashboardInProgress = () => {
           </Link>
         )}
         {SuperAdminJobList?.JobsListsList?.data?.results?.length < 1 && (
-          <div className="jobnotfound">
-            <div className="notfountboder_in_progress"></div>
-            <div className="notfounttext">No jobs in progress</div>
+          <div className="border-l-8 rounded border-[#2472FC] bg-white p-6 h-full max-h-[580px] shadow-[0_4px_40px_#2472fc0f]">
+            <div className="text-lg font-semibold text-center">
+              No jobs in progress
+            </div>
           </div>
         )}
       </div>
