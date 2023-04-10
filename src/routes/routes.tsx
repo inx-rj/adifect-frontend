@@ -3,6 +3,7 @@ import { RouteType } from "../helper/types";
 import {
   AUTH_ROUTE,
   COMPANIES_ROUTE,
+  DASHBOARD_COMPANY_ROUTE,
   PAGE_ROUTE,
   PROFILE_ROUTE,
 } from "./baseRoute";
@@ -14,15 +15,32 @@ const Login = lazy(() => import("components/auth/Login"));
 const Signup = lazy(() => import("components/auth/Signup"));
 const Thankyou = lazy(() => import("components/auth/Thankyou"));
 const ForgotPassword = lazy(() => import("components/auth/ForgotPassword"));
+const ResetPassword = lazy(() => import("components/auth/ResetPassword"));
 
 // Sidebar pages
 const HomePage = lazy(() => import("pages/dashboard/home/HomePage"));
-const AgencyCompanyProjects = lazy(() => import("components/pages/agency/companyProjects/AgencyCompanyProjects"));
-const AgencyCompanyProjectsDetails = lazy(() => import("components/pages/agency/companyProjects/AgencyCompanyProjectsDetails"));
-const AgencyCompanyProjectsTags = lazy(() => import("components/pages/agency/companyProjects/AgencyCompanyProjectsTags"));
+const AgencyCompanyProjects = lazy(
+  () => import("components/pages/agency/companyProjects/AgencyCompanyProjects")
+);
+const AgencyCompanyProjectsDetails = lazy(
+  () =>
+    import(
+      "components/pages/agency/companyProjects/AgencyCompanyProjectsDetails"
+    )
+);
+const AgencyCompanyProjectsTags = lazy(
+  () =>
+    import("components/pages/agency/companyProjects/AgencyCompanyProjectsTags")
+);
+const AgencyCompanyList = lazy(
+  () => import("components/pages/agency/companyTab/AgencyCompanyList")
+);
 
 // Profile dropdown pages
 const InviteUser = lazy(() => import("components/ProfileDropdown/InviteUser"));
+const Profile = lazy(
+  () => import("components/ProfileDropdown/profile/Profile")
+);
 
 // => Define Authentication Route
 export const AUTH_ROUTES: RouteType[] = [
@@ -32,7 +50,7 @@ export const AUTH_ROUTES: RouteType[] = [
       <Suspense fallback={""}>
         <Login />
       </Suspense>
-    )
+    ),
   },
   {
     path: AUTH_ROUTE.SIGNUP,
@@ -40,7 +58,7 @@ export const AUTH_ROUTES: RouteType[] = [
       <Suspense fallback={""}>
         <Signup />
       </Suspense>
-    )
+    ),
   },
   {
     path: AUTH_ROUTE.THANK_YOU,
@@ -48,7 +66,7 @@ export const AUTH_ROUTES: RouteType[] = [
       <Suspense fallback={""}>
         <Thankyou />
       </Suspense>
-    )
+    ),
   },
   {
     path: AUTH_ROUTE.FORGOT_PASSWORD,
@@ -56,7 +74,15 @@ export const AUTH_ROUTES: RouteType[] = [
       <Suspense fallback={""}>
         <ForgotPassword />
       </Suspense>
-    )
+    ),
+  },
+  {
+    path: AUTH_ROUTE.RESET_PASSWORD,
+    component: (
+      <Suspense fallback={""}>
+        <ResetPassword />
+      </Suspense>
+    ),
   },
 ];
 
@@ -68,7 +94,7 @@ export const PAGES_ROUTES: RouteType[] = [
       <Suspense fallback={""}>
         <HomePage />
       </Suspense>
-    )
+    ),
   },
   {
     path: COMPANIES_ROUTE.COMPANY_PROJECTS,
@@ -76,7 +102,7 @@ export const PAGES_ROUTES: RouteType[] = [
       <Suspense fallback={""}>
         <AgencyCompanyProjects />
       </Suspense>
-    )
+    ),
   },
   {
     path: COMPANIES_ROUTE.COMPANY_PROJECTS_DETAILS,
@@ -84,7 +110,7 @@ export const PAGES_ROUTES: RouteType[] = [
       <Suspense fallback={""}>
         <AgencyCompanyProjectsDetails />
       </Suspense>
-    )
+    ),
   },
   {
     path: COMPANIES_ROUTE.TAGS,
@@ -92,7 +118,15 @@ export const PAGES_ROUTES: RouteType[] = [
       <Suspense fallback={""}>
         <AgencyCompanyProjectsTags />
       </Suspense>
-    )
+    ),
+  },
+  {
+    path: DASHBOARD_COMPANY_ROUTE.HOME,
+    component: (
+      <Suspense fallback={""}>
+        <AgencyCompanyList />
+      </Suspense>
+    ),
   },
   {
     path: PROFILE_ROUTE.INVITE,
@@ -100,6 +134,14 @@ export const PAGES_ROUTES: RouteType[] = [
       <Suspense fallback={""}>
         <InviteUser />
       </Suspense>
-    )
+    ),
+  },
+  {
+    path: PROFILE_ROUTE.PROFILE,
+    component: (
+      <Suspense fallback={""}>
+        <Profile />
+      </Suspense>
+    ),
   },
 ];

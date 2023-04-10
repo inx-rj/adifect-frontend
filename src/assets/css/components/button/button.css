@@ -1,7 +1,7 @@
 /* btn class */
 .btn,
 .btn.MuiButton-root {
-  @apply normal-case text-center px-[30px] py-3 rounded text-sm font-semibold hover:bg-opacity-90 transition-all;
+  @apply normal-case text-center px-[30px] py-3 rounded text-sm font-semibold hover:bg-opacity-90 inline-block;
 }
 
 /* btn-primary class */

@@ -1,13 +1,15 @@
 import { combineReducers } from "@reduxjs/toolkit";
-import { authSlice } from "./reducers/auth/auth.slice";
-import { companiesSlice } from "./reducers/companies/companies.slice";
-import { companiesTagsSlice } from "./reducers/companies/companiesTags.slice";
-import { inviteUserSlice } from "./reducers/inviteUser/inviteUser.slice";
+import { authSlice } from "redux/reducers/auth/auth.slice";
+import { companiesSlice } from "redux/reducers/companies/companies.slice";
+import { companiesTagsSlice } from "redux/reducers/companies/companiesTags.slice";
+import { inviteUserSlice } from "redux/reducers/inviteUser/inviteUser.slice";
 import { persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
-import { configReducer } from "./reducers/config/config.reducer";
+import { configReducer } from "redux/reducers/config/config.reducer";
 import { ActionTypes } from "helper/actions";
-import { commonReducer } from "./reducers/common/common.reducer";
+import { commonReducer } from "redux/reducers/common/common.reducer";
+import { profileReducer } from "redux/reducers/profile/profile.reducer";
+import { companyTabSlice } from "./reducers/companyTab/companyTab.slice";
 
 const persistAppConfig = {
   key: "app",
@@ -20,9 +22,11 @@ const appReducer = combineReducers({
   config: persistReducer(persistAppConfig, configReducer),
   auth: authSlice.reducer,
   common: commonReducer,
+  companyTab: companyTabSlice.reducer,
   companies: companiesSlice.reducer,
   companiesTags: companiesTagsSlice.reducer,
   inviteUser: inviteUserSlice.reducer,
+  profile: profileReducer
 });
 
 export const rootReducer = (state, action) => {

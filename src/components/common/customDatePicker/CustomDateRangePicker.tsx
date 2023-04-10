@@ -10,7 +10,6 @@ const CustomDateRangePicker = ({ handleChange }: CustomDateRangePickerPropsType)
     const [value, setValue] = useState<StartEndDataType | null>({ startDate: null, endDate: null });
 
     const handleValueChange = (newValue: StartEndDataType | null) => {
-        // console.log("newValue:", newValue);
         const { startDate, endDate } = newValue;
         setValue(newValue);
         if (!startDate || !endDate) {
@@ -20,7 +19,6 @@ const CustomDateRangePicker = ({ handleChange }: CustomDateRangePickerPropsType)
     }
 
     useEffect(() => {
-        // console.log(value);
         if (value.startDate) handleChange("from_date", value.startDate);
         if (value.endDate) handleChange("to_date", value.endDate);
     }, [value])
