@@ -6,9 +6,7 @@ interface TitleType {
 const Title = (props: TitleType) => {
   const { title } = props;
   return (
-    <div className="">
-      <span className="font-bold text-xl">{title}</span>
-    </div>
+      <h4 className="font-bold text-xl">{title}</h4>
   );
 };
 

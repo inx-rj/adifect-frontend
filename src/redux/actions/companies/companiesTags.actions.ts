@@ -37,8 +37,6 @@ const POST_COMPANY_PROJECTS_TAG =
       dispatch(SET_COMPANIES_PROJECTS_TAGS_LOADING(true));
       await CompaniesTagsApiClient.addCompanyProjectsTag(tagData)
         .then((response) => {
-          console.log("POST_COMPANY_PROJECTS_TAG response", response)
-
           if (response.status === 201 || response.status === 200) {
             swal({
               title: "Successfully Complete",
@@ -53,7 +51,6 @@ const POST_COMPANY_PROJECTS_TAG =
           }));
           dispatch(SET_COMPANIES_PROJECTS_TAGS_LOADING(false));
         }).catch((error) => {
-          console.log("POST_COMPANY_PROJECTS_TAG", error)
           let errMsg = ""
           if (error?.response?.data?.message?.non_field_errors) {
             errMsg = error?.response?.data?.message?.non_field_errors?.[0]

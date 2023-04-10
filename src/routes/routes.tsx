@@ -23,6 +23,7 @@ const AgencyCompanyProjectsTags = lazy(() => import("components/pages/agency/com
 
 // Profile dropdown pages
 const InviteUser = lazy(() => import("components/ProfileDropdown/InviteUser"));
+const Profile = lazy(() => import("components/ProfileDropdown/profile/Profile"));
 
 // => Define Authentication Route
 export const AUTH_ROUTES: RouteType[] = [
@@ -99,6 +100,14 @@ export const PAGES_ROUTES: RouteType[] = [
     component: (
       <Suspense fallback={""}>
         <InviteUser />
+      </Suspense>
+    )
+  },
+  {
+    path: PROFILE_ROUTE.PROFILE,
+    component: (
+      <Suspense fallback={""}>
+        <Profile />
       </Suspense>
     )
   },

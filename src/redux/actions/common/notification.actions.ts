@@ -8,12 +8,9 @@ import { SET_NOTIFICATION_DATA } from "redux/reducers/common/notification.slice"
 const GET_NOTIFICATIONS_LIST =
   (id, offsetid, companyId, userRole) =>
   async (dispatch: AppDispatch) => {
-    const filters = {id, offsetid}
-    console.log("filters", companyId);
+    const filters = {id, offsetid, companyId}
     await CommonApiClient.fetchAllNotifications(filters, userRole).then(
       (response) => {
-        console.log("Notification data", response?.data);
-        
         dispatch(SET_NOTIFICATION_DATA(response?.data));
       }
     );

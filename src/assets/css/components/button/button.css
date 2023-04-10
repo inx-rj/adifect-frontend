@@ -1,18 +1,18 @@
 /* btn class */
 .btn,
 .btn.MuiButton-root {
-  @apply normal-case text-center px-[30px] py-3 rounded text-sm font-semibold hover:bg-opacity-90 transition-all;
+  @apply normal-case text-center px-[30px] py-3 rounded text-sm font-semibold hover:bg-opacity-90 inline-block;
 }
 
 /* btn-primary class */
-.btn.btn-primary,
-.btn.btn-primary.MuiButton-root {
+.btn-primary,
+.btn-primary.MuiButton-root {
   @apply bg-theme  border-theme text-white disabled:bg-dark-100 disabled:text-title-color;
 }
 
 /* btn-outline class */
-.btn.btn-outline,
-.btn.btn-outline.MuiButton-root {
+.btn-outline,
+.btn-outline.MuiButton-root {
   @apply border border-theme text-theme disabled:bg-dark-100 disabled:text-title-color;
 }
 

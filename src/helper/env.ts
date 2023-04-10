@@ -32,5 +32,8 @@ export const API_URL = {
   NOTIFICATION: {
     AGENCY_NOTIFICATION: `${BASE_URL.AGENCY}agency-notification/`,
     MEMBER_NOTIFICATION: `${BASE_URL.MEMBER}member-notification/`,
+  },
+  PROFILE: {
+    USER_COMMUNICATION: `https://dev-api.adifect.com/user-communication/`
   }
 };

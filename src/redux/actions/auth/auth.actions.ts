@@ -22,8 +22,6 @@ const TRIGGER_LOGIN = (data: EmailPWDType) => async (dispatch: AppDispatch) => {
   return await AuthApiClient.login(data)
     .then((response) => {
       if (response.status === 200) {
-        console.log(response.data);
-
         dispatch(TRIGGER_PERSIST_MODE(true)).then((r) => r);
         dispatch(SET_USER_DATA(response?.data));
         const { refresh, token } = response?.data || {
