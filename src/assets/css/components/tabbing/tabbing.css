@@ -6,8 +6,10 @@
   @apply cursor-not-allowed bg-[#f3f3f3];
 }
 
-.tab-head-wrapper.disabled .nav-card, .tab-head-wrapper.disabled .nav-card .info,.tab-head-wrapper.disabled .nav-card .title {
-  @apply text-dark-400 ;
+.tab-head-wrapper.disabled .nav-card,
+.tab-head-wrapper.disabled .nav-card .info,
+.tab-head-wrapper.disabled .nav-card .title {
+  @apply text-dark-400;
 }
 
 .tab-head-wrapper:last-child .nav-card {
@@ -19,19 +21,19 @@
 }
 
 .nav-card .title {
-  @apply text-sm text-black font-semibold md:mb-2 whitespace-nowrap;
+  @apply text-base text-black font-semibold md:mb-2 whitespace-nowrap;
 }
 
 .nav-card .info {
-  @apply hidden md:block text-xs text-[#71757B];
+  @apply hidden md:block text-sm text-[#71757B];
 }
 
 .tab-head-wrapper.active .nav-card,
 .nav-card.active {
   @apply bg-theme/10 text-theme border-b-theme/10;
 }
-.tab-head-wrapper.active .nav-card  .title,
-.nav-card.active  .title{
+.tab-head-wrapper.active .nav-card .title,
+.nav-card.active .title {
   @apply text-theme;
 }
 .tab-head-content {
@@ -39,7 +41,7 @@
 }
 .tab-head-wrapper.active .nav-card::before,
 .nav-card.active::before {
-  content: '';
+  content: "";
   @apply absolute top-0 left-0 bottom-0 border-l-[3px] border-l-theme;
 }
 .tab-head-wrapper.active .nav-card .info,

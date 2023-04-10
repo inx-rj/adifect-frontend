@@ -28,8 +28,15 @@ class AuthApiClient {
     });
 
   // Reset Password
-  resetPassword = (data: any) =>
-    axiosPrivate.post(`${API_URL.AUTH.CHANGE_PASSWORD}`, data, {
+  resetPassword = (data: any, ResetpasswordId: string, userId: string) =>
+    axiosPrivate.put(`${API_URL.AUTH.RESET_PASSWORD}${ResetpasswordId}/${userId}/`, data, {
+      headers: {
+        Authorization: "",
+      },
+    });
+
+  getResetPassword = (ResetpasswordId: string, userId: string) =>
+    axiosPrivate.get(`${API_URL.AUTH.RESET_PASSWORD}${ResetpasswordId}/${userId}/`, {
       headers: {
         Authorization: "",
       },

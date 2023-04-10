@@ -4,19 +4,19 @@ export const env = {
 };
 
 export const BASE_URL = {
-  COMPANIES: `https://dev-api.adifect.com/community/`,
-  AGENCY: `https://dev-api.adifect.com/agency/`,
-  COMPANY: `https://dev-api.adifect.com/company/`,
-  MEMBER: `https://dev-api.adifect.com/member/`,
+  COMPANIES: `${env.API_URL}community/`,
+  AGENCY: `${env.API_URL}agency/`,
+  COMPANY: `${env.API_URL}company/`,
+  MEMBER: `${env.API_URL}member/`,
 };
 
 export const API_URL = {
   AUTH: {
-    REGISTER: `https://dev-api.adifect.com/registerview/`,
-    LOGIN: `https://dev-api.adifect.com/loginview/`,
-    FORGOT_PASSWORD: `https://dev-api.adifect.com/forget-password/`,
-    CHANGE_PASSWORD: `https://dev-api.adifect.com/loginview/`,
-    EDIT_PROFILE: `https://dev-api.adifect.com/edit-profile/`,
+    REGISTER: `${env.API_URL}registerview/`,
+    LOGIN: `${env.API_URL}loginview/`,
+    FORGOT_PASSWORD: `${env.API_URL}forget-password/`,
+    RESET_PASSWORD: `${env.API_URL}reset-password/`,
+    EDIT_PROFILE: `${env.API_URL}edit-profile/`,
   },
   COMPANIES: {
     COMPANY_PROJECTS: `${BASE_URL.COMPANIES}stories/`,
@@ -34,6 +34,6 @@ export const API_URL = {
     MEMBER_NOTIFICATION: `${BASE_URL.MEMBER}member-notification/`,
   },
   PROFILE: {
-    USER_COMMUNICATION: `https://dev-api.adifect.com/user-communication/`
+    USER_COMMUNICATION: `${env.API_URL}user-communication/`
   }
 };

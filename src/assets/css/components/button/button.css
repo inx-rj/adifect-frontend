@@ -5,14 +5,14 @@
 }
 
 /* btn-primary class */
-.btn-primary,
-.btn-primary.MuiButton-root {
+.btn.btn-primary,
+.btn.btn-primary.MuiButton-root {
   @apply bg-theme  border-theme text-white disabled:bg-dark-100 disabled:text-title-color;
 }
 
 /* btn-outline class */
-.btn-outline,
-.btn-outline.MuiButton-root {
+.btn.btn-outline,
+.btn.btn-outline.MuiButton-root {
   @apply border border-theme text-theme disabled:bg-dark-100 disabled:text-title-color;
 }
 

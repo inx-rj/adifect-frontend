@@ -16,11 +16,13 @@ export const AUTH_ROUTE: Readonly<{
   SIGNUP: string;
   THANK_YOU: string;
   FORGOT_PASSWORD: string;
+  RESET_PASSWORD: string;
 }> = Object.freeze({
   LOGIN: `${SYSTEM.LOGIN}`,
   SIGNUP: `${SYSTEM.HOME}signup`,
   THANK_YOU: `${SYSTEM.HOME}thank-you`,
   FORGOT_PASSWORD: `${SYSTEM.HOME}forgot-password`,
+  RESET_PASSWORD: `${SYSTEM.HOME}reset-password/:ResetpasswordId/:userId/`,
 });
 
 // Profile Route
@@ -46,7 +48,7 @@ export const PAGE_ROUTE: Readonly<{
   HELP: string;
 }> = Object.freeze({
   HOME: `${MAIN_ROUTE.HOME}`,
-  WORKFLOW: `${MAIN_ROUTE.HOME}workflow`,
+  WORKFLOW: `${MAIN_ROUTE.HOME}`,
   MY_PROJECTS: `${MAIN_ROUTE.HOME}projects`,
   COMPANIES: `${MAIN_ROUTE.HOME}`,
   COMPANY: `${MAIN_ROUTE.HOME}company`,
@@ -115,7 +117,7 @@ export const DASHBOARD_TEMPLATES_ROUTES: Readonly<{
 export const DASH_COMPANY: Readonly<{
   HOME: string;
 }> = Object.freeze({
-  HOME: `${PAGE_ROUTE.COMPANY}agency/company`,
+  HOME: `${PAGE_ROUTE.HOME}agency/company`,
 });
 
 // Company Route

@@ -9,8 +9,8 @@ const Logo: React.FC = () => {
       className="brand inline-flex items-center text-theme w-full h-full img img-contain"
       to={SYSTEM.HOME}
     >
-      <img src={Images.Logo} alt="Rails" className="hidden md:block" />
-      <img src={Images.MiniLogo} alt="Rails" className="block md:hidden" />
+      <img src={Images.Logo} alt="Rails" />
+      {/* <img src={Images.MiniLogo} alt="Rails" className="block md:hidden" /> */}
     </Link>
   );
 };

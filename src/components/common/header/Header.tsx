@@ -394,7 +394,7 @@ export default function Header(props) {
 
   return (
     <div className="header">
-      <div className="logo h-[40px] max-w-[70px] md:max-w-[150px] lg:max-w-[250px] w-full pl-3 pr-0 md:px-4">
+      <div className="logo h-[40px] max-w-[100px] xs:max-w-[200px] lg:max-w-[250px] w-full pl-3 pr-0 md:px-4">
         <Suspense fallback={""}>
           <Logo />
         </Suspense>
@@ -804,31 +804,17 @@ export default function Header(props) {
             dialogContent={
               <>
                 <img
-                  className="py-4 mx-auto"
+                  className="mx-auto mb-5"
                   src={Images?.LogoutPopupVector}
                   alt="logout"
                 />
-                <Typography
-                  component="div"
-                  sx={{
-                    "&.MuiTypography-root h4": {
-                      fontSize: "18px !important",
-                      fontWeight: "500 !important",
-                      lineHeight: "22px",
-                    },
-                    "&.MuiTypography-root p": {
-                      fontSize: "14px !important",
-                      fontWeight: "400 !important",
-                      lineHeight: "17px",
-                    },
-                  }}
-                >
-                  <h4>Are you Sure?</h4>
-                  <p>
+                <div>
+                  <h4 className="mb-3 font-semibold text-lg">Are you Sure?</h4>
+                  <p className="max-w-[350px] w-full mx-auto text-base">
                     Do you really want to logout this account? This process
                     cannot be undone.
                   </p>
-                </Typography>
+                </div>
               </>
             }
             openPopup={openLogoutPopup}

@@ -21,6 +21,12 @@ const CustomPopup = ({
       className="profileImgDialogagency popupclass logoutPopup"
       open={openPopup}
       onClose={closePopup}
+      maxWidth="xs"
+      sx={{
+        "& .MuiDialog-container .MuiDialog-paper": {
+          width: "100%",
+        },
+      }}
     >
       <DialogTitle
         className="profileImgfolder imgsizefixer"
@@ -58,10 +64,10 @@ const CustomPopup = ({
             },
           }}
         >
-          <Button onClick={mainActionHandler} className="shareNewPop">
+          <Button onClick={mainActionHandler} className="btn btn-primary">
             {mainActionTitle}
           </Button>
-          <button className="canceButtonnewPop" onClick={closePopup}>
+          <button className="btn btn-outline" onClick={closePopup}>
             Cancel
           </button>
         </DialogActions>

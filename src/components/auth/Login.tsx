@@ -7,6 +7,7 @@ import { emailRequired, passwordRequired } from "helper/validations";
 import { GET_USER_DATA } from "redux/reducers/auth/auth.slice";
 import swal from "sweetalert";
 import { AUTH_ROUTE, PAGE_ROUTE } from "routes/baseRoute";
+import Logo from "components/common/logo/Logo";
 
 const Login = () => {
   const dispatch = useAppDispatch();
@@ -51,29 +52,23 @@ const Login = () => {
         timer: 1500,
       });
 
-      setTimeout(() => {
-        // navigate(redirect ? redirect : "/home");
-        navigate(PAGE_ROUTE.HOME, { replace: true, state: true });
-        // navigate("/home");
-      }, 1500);
+      //   setTimeout(() => {
+      //     // navigate(redirect ? redirect : "/home");
+      //     navigate(PAGE_ROUTE.HOME, { replace: true, state: true });
+      //     // navigate("/home");
+      //   }, 1500);
     }
   }, [dispatch, userData]);
 
   return (
     <>
       <div className="login-signup-wrapper">
-        <div className="card max-w-[380px]">
-          <div className="mt-2.5 mb-4 inline-flex items-center justify-center w-full h-full">
-            <img
-              src={Images.Logo}
-              className="h-auto max-w-[170px] md:max-w-[200px] mx-auto"
-              alt=""
-            />
+        <div className="card max-w-[380px] w-full">
+          <div className="max-w-[150px] md:max-w-[200px] w-full mx-auto my-3 h-[65px]">
+            <Logo />
           </div>
           <div className="text-center">
-            <h2 className="card-page-title">
-              Welcome to Adifect
-            </h2>
+            <h2 className="card-page-title">Welcome to Adifect</h2>
             <p className="card-page-info">
               Log into your account by entering your username, email and
               password.
@@ -87,7 +82,9 @@ const Login = () => {
             <div className="input-fields-wrapper">
               <label>Username or Email</label>
               <input
-                className={errors.email ? "input-style input-err-style" : "input-style"}
+                className={
+                  errors.email ? "input-style input-err-style" : "input-style"
+                }
                 type="text"
                 name="email"
                 id="email"
@@ -102,7 +99,11 @@ const Login = () => {
             <div className="input-fields-wrapper">
               <label>Password</label>
               <input
-                className={errors.password ? "input-style input-err-style" : "input-style"}
+                className={
+                  errors.password
+                    ? "input-style input-err-style"
+                    : "input-style"
+                }
                 type="password"
                 name="password"
                 id="password"
@@ -128,7 +129,12 @@ const Login = () => {
                 Create Account
               </Link>
             </div>
-            <Link to={AUTH_ROUTE.FORGOT_PASSWORD} className="btn-link mt-uni-gap">Forgot Password ?</Link>
+            <Link
+              to={AUTH_ROUTE.FORGOT_PASSWORD}
+              className="btn-link mt-uni-gap"
+            >
+              Forgot Password ?
+            </Link>
           </form>
         </div>
       </div>

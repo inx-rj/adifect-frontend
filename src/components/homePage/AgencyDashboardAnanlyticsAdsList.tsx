@@ -59,12 +59,17 @@ function AgencyDashboardAnalyticsAdsList() {
             <h5 className="font-bold">Reach</h5>
           </div>
           {dummyData?.map((i, index) => (
-            <div className="flex justify-between items-center gap-2" key={index}>
+            <div
+              className="flex justify-between items-center gap-2"
+              key={index}
+            >
               <div className="flex gap-5 items-center">
-                <span className={`!border border-${i?.color}-500 h-4 w-4 rounded-full`}></span>
-                <h5 className="text-lg font-normal break-all">{i.name}</h5>
+                <span
+                  className={`!border border-${i?.color}-500 h-4 w-4 rounded-full`}
+                ></span>
+                <h5 className="text-base font-normal break-all">{i.name}</h5>
               </div>
-              <h5 className="text-lg font-normal">{i.reach}</h5>
+              <h5 className="text-base font-normal">{i.reach}</h5>
             </div>
           ))}
         </div>

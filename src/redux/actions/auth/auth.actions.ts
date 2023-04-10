@@ -85,8 +85,13 @@ const TRIGGER_FORGOT_PASSWORD = (data: EmailType) => async () => {
 };
 
 // Reset Password
-const TRIGGER_RESET_PASSWORD = (data: any) => async () => {
-  return await AuthApiClient.resetPassword(data);
+const TRIGGER_RESET_PASSWORD = (data: any,ResetpasswordId: string, userId: string) => async () => {
+  return await AuthApiClient.resetPassword(data,ResetpasswordId, userId);
+};
+
+// Reset Password
+const TRIGGER_GET_RESET_PASSWORD = (ResetpasswordId: string, userId: string) => async () => {
+  return await AuthApiClient.getResetPassword(ResetpasswordId, userId);
 };
 
 // Common auth Config
@@ -96,4 +101,5 @@ export {
   GET_USER_DETAILS,
   TRIGGER_FORGOT_PASSWORD,
   TRIGGER_RESET_PASSWORD,
+  TRIGGER_GET_RESET_PASSWORD
 };
