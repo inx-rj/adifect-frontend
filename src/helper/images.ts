@@ -6,6 +6,7 @@ import LogoutPopupVector from "assets/images/logoutPopupImage.png";
 import Sort from "assets/images/Sort.png";
 import SortArrows from "assets/images/sort_arrows.webp";
 import NotFoundImg from "assets/images/new.svg";
+import Loader from "assets/images/loader.svg";
 
 export const Images = {
   Logo,
@@ -16,4 +17,5 @@ export const Images = {
   Sort,
   SortArrows,
   NotFoundImg,
+  Loader,
 };

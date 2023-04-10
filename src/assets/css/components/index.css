@@ -6,3 +6,4 @@
 /* All CSS will import above this  */
 @import "./common/rightSidepages.css";
 @import "./common/common.css";
+@import "./loadingSpinner/loader.css";
