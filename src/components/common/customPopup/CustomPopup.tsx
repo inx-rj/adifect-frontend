@@ -61,6 +61,7 @@ const CustomPopup = ({
               justifyContent: "center",
               alignItems: "center",
               padding: 0,
+              gap: "15px",
             },
           }}
         >
