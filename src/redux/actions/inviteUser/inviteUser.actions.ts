@@ -1,6 +1,6 @@
 import swal from "sweetalert";
 import {
-  SET_INVITE_USER_LIST_LOADING, SET_INVITE_USER_LIST_DATA, SET_COMPANIES_LIST_LOADING, SET_COMPANIES_LIST_DATA
+  SET_INVITE_USER_LIST_LOADING, SET_INVITE_USER_LIST_DATA,
 } from "../../reducers/inviteUser/inviteUser.slice";
 import { AppDispatch } from "../../store";
 import InviteUserApiClient from "services/inviteUser/InviteUserApiClient";
@@ -19,27 +19,6 @@ const GET_INVITE_USERS = (paginationData: paginationData) => async (dispatch: Ap
       }
     }).catch((error) => {
       dispatch(SET_INVITE_USER_LIST_LOADING(false));
-      swal({
-        title: "Error",
-        text: error?.response?.data?.message,
-        className: "errorAlert-login",
-        icon: Images.Logo,
-        timer: 5000,
-      });
-    });
-};
-
-// Fetch companies list
-const GET_COMPANIES_LIST = () => async (dispatch: AppDispatch) => {
-  dispatch(SET_COMPANIES_LIST_LOADING(true));
-  await InviteUserApiClient.getCompaniesList()
-    .then((response) => {
-      if (response.status === 201 || response.status === 200) {
-        dispatch(SET_COMPANIES_LIST_DATA(response?.data?.results));
-        dispatch(SET_COMPANIES_LIST_LOADING(false));
-      }
-    }).catch((error) => {
-      dispatch(SET_COMPANIES_LIST_LOADING(false));
       swal({
         title: "Error",
         text: error?.response?.data?.message,
@@ -143,7 +122,6 @@ const DELETE_INVITE_USER = (itemId: number) => async (dispatch: AppDispatch) => 
 // Common auth Config
 export {
   GET_INVITE_USERS,
-  GET_COMPANIES_LIST,
   POST_INVITE_USER,
   PUT_INVITE_USER,
   DELETE_INVITE_USER

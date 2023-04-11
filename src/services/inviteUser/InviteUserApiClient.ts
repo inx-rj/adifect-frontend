@@ -10,11 +10,6 @@ class InviteUserApiClient {
       params: { page_size: rowsPerPage, page },
     });
 
-  //get comapnies list
-  getCompaniesList = () =>
-    axiosPrivate.get(`${API_URL.COMPANY.COMPANY_LIST}`, {
-    });
-
   //add invite user
   addInviteUser = (postObj: any) => {
     const payload = {
@@ -29,10 +24,9 @@ class InviteUserApiClient {
     return axiosPrivate.put(`${API_URL.INVITE.INVITE_USERS}${id}/`, payload)
   }
 
-  //update invite user
+  //delete invite user
   deleteInviteUser = (id: number) => {
-    return axiosPrivate.delete(`${API_URL.INVITE.INVITE_USERS}${id}/`, {
-    });
+    return axiosPrivate.delete(`${API_URL.INVITE.INVITE_USERS}${id}/`);
   }
 }
 

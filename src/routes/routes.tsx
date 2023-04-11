@@ -129,6 +129,14 @@ export const PAGES_ROUTES: RouteType[] = [
     ),
   },
   {
+    path: DASHBOARD_COMPANY_ROUTE.HOME,
+    component: (
+      <Suspense fallback={""}>
+        <AgencyCompanyList />
+      </Suspense>
+    ),
+  },
+  {
     path: PROFILE_ROUTE.INVITE,
     component: (
       <Suspense fallback={""}>
