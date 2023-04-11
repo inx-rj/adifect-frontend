@@ -26,8 +26,7 @@ class InviteUserApiClient {
 
   //delete invite user
   deleteInviteUser = (id: number) => {
-    return axiosPrivate.delete(`${API_URL.INVITE.INVITE_USERS}${id}/`, {
-    });
+    return axiosPrivate.delete(`${API_URL.INVITE.INVITE_USERS}${id}/`);
   }
 }
 

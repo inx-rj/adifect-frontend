@@ -5,38 +5,44 @@ import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import RemoveRedEyeOutlinedIcon from "@mui/icons-material/RemoveRedEyeOutlined";
 import DeleteIcon from "@mui/icons-material/Delete";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
 export interface propsType {
   anchorEl: null | HTMLElement;
-  setAnchorEl: (newValue: null | HTMLElement | EventTarget) => void;
-  handleDelete?: () => void;
-  handleEdit?: () => void;
-  handleView?: () => void;
-  setCurrentTooltip?: (id: number) => void;
-  handleInactive?: () => void;
-  currentTooltip: number | null;
+  selectedItem: any;
   showDelete?: boolean;
   showView?: boolean;
   showEdit?: boolean;
   showInActive?: boolean;
   isEditMode?: boolean;
-  id?: number;
+  item?: {
+    id: number;
+    isActive: boolean;
+  };
+  setAnchorEl: (newValue: null | HTMLElement | EventTarget) => void;
+  handleDelete?: () => void;
+  handleEdit?: () => void;
+  handleView?: () => void;
+  setSelectedItem?: React.Dispatch<React.SetStateAction<any>>;
+  handleInactive?: () => void;
+  handleActive?: () => void;
 }
 
 const CustomActionComponent = ({
   anchorEl,
   setAnchorEl,
-  currentTooltip,
-  setCurrentTooltip,
+  selectedItem,
+  setSelectedItem,
   handleDelete,
   handleEdit,
   handleView,
   handleInactive,
+  handleActive,
   showDelete = false,
   showView = false,
   showEdit = false,
   showInActive = false,
   isEditMode = false,
-  id,
+  item,
 }: propsType) => {
   return (
     <div className="relative">
@@ -44,15 +50,21 @@ const CustomActionComponent = ({
         cursor="pointer"
         onClick={(e) => {
           setAnchorEl(anchorEl ? null : e.currentTarget);
-          setCurrentTooltip(id);
+          setSelectedItem({ currentId: item?.id, currentTooltip: item?.id });
         }}
       />
       <Menu
         anchorEl={anchorEl}
-        id={`account-menu-${id}`}
-        open={currentTooltip === id && !isEditMode}
-        onClose={() => setAnchorEl(null)}
-        onClick={() => setAnchorEl(null)}
+        id={`account-menu-${item?.id}`}
+        open={selectedItem?.currentTooltip === item?.id}
+        onClose={() => {
+          setAnchorEl(null);
+          setSelectedItem({ ...selectedItem, currentTooltip: null });
+        }}
+        onClick={() => {
+          setAnchorEl(null);
+          setSelectedItem({ ...selectedItem, currentTooltip: null });
+        }}
         PaperProps={{
           elevation: 0,
           sx: {
@@ -97,11 +109,15 @@ const CustomActionComponent = ({
           </MenuItem>
         )}
         {showInActive && (
-          <MenuItem onClick={handleInactive}>
+          <MenuItem onClick={item?.isActive ? handleInactive : handleActive}>
             <ListItemIcon>
-              <RemoveCircleOutlineIcon fontSize="small" />
+              {item?.isActive ? (
+                <RemoveCircleOutlineIcon fontSize="small" />
+              ) : (
+                <AddCircleOutlineOutlinedIcon fontSize="small" />
+              )}
             </ListItemIcon>
-            Inactive
+            {item?.isActive ? "Inactive" : "Active"}
           </MenuItem>
         )}
         {showDelete && (

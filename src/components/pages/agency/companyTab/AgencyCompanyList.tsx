@@ -2,10 +2,13 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useSingleEffect, useUpdateEffect } from "react-haiku";
+import swal from "sweetalert";
 
 //import custom component
 import MuiCustomTable from "components/common/muiCustomTable/MuiCustomTable";
-import SearchBar from "common/MuiCustomTable/CustomSearchBar";
+import SearchBar from "common/CustomSearchBar";
+import CustomActionComponent from "common/CustomActionComponent";
+import CustomPopup from "common/CustomPopup";
 
 //import MUI components and icons
 import { Button, Checkbox, FormControlLabel, Typography } from "@mui/material";
@@ -20,12 +23,12 @@ import { formateISODateToLocaleString } from "helper/utility/customFunctions";
 //import redux
 import { useAppDispatch, useAppSelector } from "redux/store";
 import {
+  DELETE_SINGLE_COMPANY,
   GET_COMPANY_LIST,
+  POST_SINGLE_COMPANY,
   PUT_SINGLE_COMPANY,
 } from "redux/actions/companyTab/companyTab.actions";
 import { COMPANY_LIST } from "redux/reducers/companyTab/companyTab.slice";
-import CustomActionComponent from "common/CustomActionComponent";
-import CustomPopup from "common/CustomPopup";
 
 const AgencyCompanyList = () => {
   const dispatch = useAppDispatch();
@@ -37,7 +40,10 @@ const AgencyCompanyList = () => {
   const [openModal, setOpenModal] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [anchorEl, setAnchorEl] = useState(null);
-  const [currentTooltip, setCurrentTooltip] = useState(null);
+  const [selectedItem, setSelectedItem] = useState({
+    currentTooltip: null,
+    currentId: null,
+  });
   const [isEditMode, setIsEditMode] = useState(false);
   const [formData, setFormData] = useState<{
     company: string;
@@ -74,11 +80,24 @@ const AgencyCompanyList = () => {
     setErrors({ ...errors, [name]: null });
   };
 
+  useUpdateEffect(() => {
+    console.log("useUpdateEffect", searchText);
+    // const search = async () => {
+    //   const response = await fetch(
+    //     `YOUR_API_ENDPOINT?searchText=${searchText}`
+    //   );
+    //   const data = await response.json();
+    //   setSearchResults(data);
+    // };
+    // search();
+  }, [searchText]);
+
   //handle edit action
   const handleEdit = (item) => {
     setOpenModal(true);
     setIsEditMode(true);
     setErrors({ company: "", description: "" });
+    setSelectedItem({ ...selectedItem, currentId: item?.id });
     setFormData({
       company: item?.name,
       description: item?.description,
@@ -102,19 +121,18 @@ const AgencyCompanyList = () => {
 
   //handle add and edit form submit
   const handleFormSubmit = () => {
+    const payload = {
+      name: formData?.company,
+      description: formData?.description,
+      is_active: formData?.isActive,
+    };
     if (isEditMode) {
-      const payload = {
-        name: formData?.company,
-        description: formData?.description,
-        is_active: formData?.isActive,
-      };
-      dispatch(PUT_SINGLE_COMPANY(currentTooltip, payload));
+      dispatch(PUT_SINGLE_COMPANY(selectedItem.currentId, payload));
     } else {
-      //   dispatch(POST_SINGLE_COMPANY({
-      //     company: formData?.company,
-      //   }));
+      dispatch(POST_SINGLE_COMPANY(payload));
     }
-    setCurrentTooltip(null);
+    setAnchorEl(null);
+    setSelectedItem({ currentId: null, currentTooltip: null });
     setOpenModal(false);
     setIsEditMode(false);
     setFormData({
@@ -122,12 +140,6 @@ const AgencyCompanyList = () => {
       description: "",
       isActive: false,
     });
-  };
-
-  //handle delete action
-  const handleDelete = () => {
-    console.log("handleDelete");
-    setAnchorEl(null);
   };
 
   //handle view action
@@ -138,8 +150,40 @@ const AgencyCompanyList = () => {
 
   //handle inactive action
   const handleInactive = () => {
-    console.log("handleInactive");
+    swal({
+      title: "",
+      text: "Are you sure you want to inActive this company?",
+      className: "errorAlert",
+      icon: Images.Logo,
+      dangerMode: true,
+    }).then((willDelete) => {
+      if (willDelete) {
+        dispatch(DELETE_SINGLE_COMPANY(selectedItem.currentId));
+      }
+    });
     setAnchorEl(null);
+    setSelectedItem({ currentId: null, currentTooltip: null });
+  };
+
+  //handle active action
+  const handleActive = () => {
+    swal({
+      title: "",
+      text: "Are you sure you want to active this company?",
+      className: "errorAlert",
+      icon: Images.Logo,
+      dangerMode: true,
+    }).then((willDelete) => {
+      if (willDelete) {
+        dispatch(
+          PUT_SINGLE_COMPANY(selectedItem.currentId, {
+            is_active: true,
+          })
+        );
+      }
+    });
+    setAnchorEl(null);
+    setSelectedItem({ currentId: null, currentTooltip: null });
   };
 
   const data: TableRowColType = {
@@ -189,23 +233,20 @@ const AgencyCompanyList = () => {
             return {
               title: (
                 <div key={index}>
-                  <Link to={`${item.id}`}>
-                    <Typography
-                      sx={{
-                        "&.MuiTypography-root": {
-                          display: "inline-block",
-                          cursor: "pointer",
-                          color: "rgba(39, 90, 208, 1)",
-                          fontFamily: '"Figtree", sans-serif',
-                          fontSize: "14px",
-                          fontWeight: 400,
-                          p: 0,
-                        },
-                      }}
-                    >
-                      {item?.name}
-                    </Typography>
-                  </Link>
+                  <Typography
+                    sx={{
+                      "&.MuiTypography-root": {
+                        display: "inline-block",
+                        color: "rgba(39, 90, 208, 1)",
+                        fontFamily: '"Figtree", sans-serif',
+                        fontSize: "14px",
+                        fontWeight: 400,
+                        p: 0,
+                      },
+                    }}
+                  >
+                    {item?.name}
+                  </Typography>
                 </div>
               ),
               createdAt: formateISODateToLocaleString(item?.created ?? ""),
@@ -231,19 +272,19 @@ const AgencyCompanyList = () => {
               ),
               action: (
                 <CustomActionComponent
-                  currentTooltip={currentTooltip}
-                  setCurrentTooltip={setCurrentTooltip}
+                  selectedItem={selectedItem}
+                  setSelectedItem={setSelectedItem}
                   setAnchorEl={setAnchorEl}
                   anchorEl={anchorEl}
-                  handleDelete={handleDelete}
                   handleEdit={() => handleEdit(item)}
                   handleView={handleView}
                   handleInactive={handleInactive}
+                  handleActive={handleActive}
                   showView={true}
                   showEdit={true}
                   showInActive={true}
                   isEditMode={isEditMode}
-                  id={item?.id}
+                  item={{ id: item?.id, isActive: item?.is_active }}
                 />
               ),
             };

@@ -12,3 +12,9 @@ export interface CompanyListInitialsType extends LoadingType {
     };
   };
 }
+
+export interface singleCompanyPayloadData {
+  name: string,
+  description: string,
+  is_active: boolean,
+}

@@ -17,8 +17,9 @@ import { INVITE_USER_LIST } from "redux/reducers/inviteUser/inviteUser.slice";
 import { COMPANY_LIST } from "redux/reducers/companyTab/companyTab.slice";
 import { GET_COMPANY_LIST } from "redux/actions/companyTab/companyTab.actions";
 
-import SearchBar from "common/MuiCustomTable/CustomSearchBar";
+import SearchBar from "common/CustomSearchBar";
 import CustomPopup from "common/CustomPopup";
+import MuiCustomTable from "components/common/muiCustomTable/MuiCustomTable";
 
 import SortArrowIcon from "../../assets/images/sort_arrows.png";
 import PersonAddAltIcon from "@mui/icons-material/PersonAddAlt";
@@ -27,8 +28,9 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { validateEmail } from "helper/validations";
-import MuiCustomTable from "components/common/muiCustomTable/MuiCustomTable";
+
 import { TableRowColType } from "helper/types/muiCustomTable/muiCustomTable";
+import { Images } from "helper/images";
 
 const InviteUser = () => {
   const dispatch = useAppDispatch();
@@ -70,8 +72,6 @@ const InviteUser = () => {
   useEffect(() => {
     dispatch(GET_INVITE_USERS(paginationData));
   }, [paginationData]);
-
-  console.log("inviteUserList", inviteUserList);
 
   // Add event listener to detect clicks outside the modall
   useEffect(() => {
@@ -169,21 +169,11 @@ const InviteUser = () => {
       title: "",
       text: "Are you sure you want to remove this user?",
       className: "errorAlert",
-      icon: "/img/logonew-red.svg",
-      // buttons: true,
+      icon: Images.Logo,
       dangerMode: true,
     }).then((willDelete) => {
       if (willDelete) {
         dispatch(DELETE_INVITE_USER(itemId));
-        dispatch(GET_INVITE_USERS(paginationData));
-        swal({
-          title: "Successfully Complete",
-          text: "Successfully removed!",
-          className: "successAlert",
-          icon: "/img/logonew.svg",
-          // buttons: false,
-          timer: 1500,
-        });
       }
     });
   };
