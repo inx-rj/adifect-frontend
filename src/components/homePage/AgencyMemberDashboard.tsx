@@ -6,17 +6,18 @@ import { Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "redux/store";
 import { GET_USER_DATA } from "redux/reducers/auth/auth.slice";
 import { useSingleEffect, useUpdateEffect } from "react-haiku";
-import {
-  GET_MEMEBERS_APPROVAL_JOBLIST,
-  GET_MEMEBERS_FRESHERS_JOBLIST,
-  GET_MEMEBERS_FRESHERS_LATEST_JOBLIST,
-} from "redux/actions/homePage/adminHomePage.actions";
+
 import { FRESHERS_JOBS_DATA } from "redux/reducers/homePage/fresherJobsList.slice";
 import {
   CLEAR_MEMBERS_APPROVAL_JOBS,
   MEMBERS_APPROVAL_JOBS_DATA,
 } from "redux/reducers/homePage/membersApprovalJobsList.slice";
 import { formateISODateToLocaleString } from "helper/utility/customFunctions";
+import {
+  GET_MEMEBERS_APPROVAL_JOBLIST,
+  GET_MEMEBERS_FRESHERS_JOBLIST,
+  GET_MEMEBERS_FRESHERS_LATEST_JOBLIST,
+} from "redux/actions/jobs/jobs.actions";
 
 const AgencyMemberDashboard = () => {
   const dispatch = useAppDispatch();
@@ -24,8 +25,9 @@ const AgencyMemberDashboard = () => {
   const freshJob = useAppSelector(FRESHERS_JOBS_DATA);
   const memberApprovalJobList = useAppSelector(MEMBERS_APPROVAL_JOBS_DATA);
 
-  const [userFirstName, setUserFirstName] = useState();
-  const [userLastName, setUserLastName] = useState();
+  const [userFirstName, setUserFirstName] = useState("");
+  const [userLastName, setUserLastName] = useState("");
+  const [userLevel, setUserLevel] = useState("");
 
   const [currentPage, setCurrentPage] = useState(1);
   const [pages, setPages] = useState(0);
@@ -51,7 +53,7 @@ const AgencyMemberDashboard = () => {
     };
     dispatch(GET_MEMEBERS_APPROVAL_JOBLIST(data));
     if (userData?.data?.user?.user_level === 4) {
-      dispatch(GET_MEMEBERS_FRESHERS_JOBLIST());
+      dispatch(GET_MEMEBERS_FRESHERS_LATEST_JOBLIST());
     } else {
       dispatch(GET_MEMEBERS_FRESHERS_LATEST_JOBLIST());
     }
@@ -63,13 +65,34 @@ const AgencyMemberDashboard = () => {
       dispatch(GET_MEMEBERS_APPROVAL_JOBLIST(currentPage));
     }
   }, [currentPage]);
+
   useUpdateEffect(() => {
-    if (userData?.data?.user?.user_level === 4) {
-      dispatch(GET_MEMEBERS_FRESHERS_JOBLIST());
-    } else {
-      dispatch(GET_MEMEBERS_FRESHERS_LATEST_JOBLIST());
+    window.scrollTo(0, 0);
+    if (userData?.data?.user?.user_level === 1) {
+      setUserLevel("Admin");
+    } else if (userData?.data?.user?.user_level === 2) {
+      setUserLevel("Marketer");
+    } else if (userData?.data?.user?.user_level === 3) {
+      setUserLevel("Approver");
     }
+    setUserFirstName(userData?.data?.user?.first_name);
+    setUserLastName(userData?.data?.user?.last_name);
   }, []);
+
+  useUpdateEffect(() => {
+    // if (memberApprovalJobList) {
+    //   let numberPages = Math.ceil(memberApprovalJobList?.count / 6);
+    //   setPages(numberPages);
+    // }
+  }, [memberApprovalJobList?.data?.count]);
+
+  // useUpdateEffect(() => {
+  //   if (userData?.data?.user?.user_level === 4) {
+  //     dispatch(GET_MEMEBERS_FRESHERS_JOBLIST());
+  //   } else {
+  //     dispatch(GET_MEMEBERS_FRESHERS_LATEST_JOBLIST());
+  //   }
+  // }, []);
   console.log("freshJob", freshJob?.data?.data);
   return (
     <div>
@@ -259,9 +282,9 @@ const AgencyMemberDashboard = () => {
           </div>
         )}
         <div className=" FreshJobTop">
-          {memberApprovalJobList?.data?.length > 0 &&
+          {memberApprovalJobList?.data?.results?.length > 0 &&
             userData?.data?.user?.user_level === 3 &&
-            memberApprovalJobList?.data?.map((item, index) => (
+            memberApprovalJobList?.data?.results?.map((item, index) => (
               <div className="Remotemarkeitng" key={index}>
                 <div className="bt-Title">
                   <div className="joblistTop">
@@ -395,7 +418,7 @@ const AgencyMemberDashboard = () => {
               </Stack>
             </div>
           )}
-          {memberApprovalJobList?.data?.length < 0 &&
+          {memberApprovalJobList?.data?.results?.length < 0 &&
             userData?.data?.user?.user_level === 3 && (
               <div className="Topallpage Custompage">
                 <h2 className="nonew">NO MORE APPROVALS TO DISPLAY</h2>

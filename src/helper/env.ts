@@ -44,5 +44,8 @@ export const API_URL = {
   },
   PROFILE: {
     USER_COMMUNICATION: `${env.API_URL}user-communication/`
+  },
+  MY_JOBS: {
+    AGENCY_JOBS_LIST: `${BASE_URL.AGENCY}agency-jobs/`,
   }
 };

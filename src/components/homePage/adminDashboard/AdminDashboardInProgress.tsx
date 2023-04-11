@@ -3,7 +3,6 @@ import Title from "../../../components/common/PageTitle/Title";
 import React, { useState } from "react";
 import { useSingleEffect, useUpdateEffect } from "react-haiku";
 import { Link } from "react-router-dom";
-import { GET_ADMIN_DASHBOARD_IN_PROGRESS_JOBLIST } from "../../../redux/actions/homePage/adminHomePage.actions";
 import {
   CLEAR_JOBS,
   JOBS_DATA,
@@ -11,6 +10,7 @@ import {
 import { useAppDispatch, useAppSelector } from "../../../redux/store";
 import { Images } from "../../../helper/images";
 import BadgeUI from "../../../components/common/badge/BadgeUI";
+import { GET_ADMIN_DASHBOARD_IN_PROGRESS_JOBLIST } from "redux/actions/jobs/jobs.actions";
 
 const AdminDashboardInProgress = () => {
   const dispatch = useAppDispatch();

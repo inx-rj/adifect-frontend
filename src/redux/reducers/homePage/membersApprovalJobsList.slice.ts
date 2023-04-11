@@ -5,8 +5,13 @@ const initialState = {
   loading: false,
   membersApprovalJobsList: {
     loading: false,
-    data: [],
-    freshJobMessage: ""
+    data: {
+      count: 0,
+      next: null,
+      prev: null,
+      results: [],
+    },
+    freshJobMessage: "",
   },
 };
 

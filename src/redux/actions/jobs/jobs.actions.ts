@@ -126,7 +126,7 @@ const LIST_ALL_JOBS = (formData) => async (dispatch: AppDispatch) => {
     filter = "";
   }
 
-  await HomePageApiClient.fetchAdminDashboardInProgressJobsList(formData);
+  await JobsApiClient.fetchAllJobsList(formData);
 };
 
 //Delete Job based on id
@@ -146,5 +146,5 @@ export {
   GET_CREATORS_JOBLIST,
   APPLY_FOR_JOB,
   LIST_ALL_JOBS,
-  DELETE_JOB
+  DELETE_JOB,
 };

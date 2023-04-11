@@ -26,8 +26,11 @@ import { GET_USER_PROFILE_DATA } from "redux/reducers/auth/auth.slice";
 import { formateISODateToLocaleString } from "helper/utility/customFunctions";
 import Title from "components/common/PageTitle/Title";
 import { useSingleEffect, useUpdateEffect } from "react-haiku";
-import { DELETE_JOB, LIST_ALL_JOBS } from "redux/actions/jobs/jobs.actions";
-import { GET_ADMIN_DASHBOARD_IN_PROGRESS_JOBLIST } from "redux/actions/homePage/adminHomePage.actions";
+import {
+  DELETE_JOB,
+  GET_ADMIN_DASHBOARD_IN_PROGRESS_JOBLIST,
+  LIST_ALL_JOBS,
+} from "redux/actions/jobs/jobs.actions";
 import BadgeUI from "components/common/badge/BadgeUI";
 
 // const Transition = React.forwardRef(function Transition(props, ref) {
@@ -121,7 +124,7 @@ const AdminJobsList = () => {
   const [newJobDetails, setNewJobDetails] = useState(false);
   const [searchfeedback, setSearchfeedback] = useState("");
 
-  const [currentPage, setCurrentPage] = useState<number | string>(1);
+  const [currentPage, setCurrentPage] = useState<number>(1);
   const [pages, setPages] = useState(0);
   // const [page, setPage] = useState(1);
 
@@ -150,6 +153,7 @@ const AdminJobsList = () => {
     setIsOpen(false);
   };
 
+  //Open Job openup based on Id
   const openPopup = (item_id) => {
     dispatch(GET_JOBS_DETAILS(item_id));
 
@@ -158,6 +162,7 @@ const AdminJobsList = () => {
     setIsOpen(!isOpen);
   };
 
+  // Delete Job
   const deleteHandler = (id) => {
     swal({
       title: "Warning",
@@ -289,10 +294,11 @@ const AdminJobsList = () => {
 
   return (
     <>
-      <Title title="Jobs" />
-
-      <div className="bg-white p-5 bak_h">
-        <div className="">
+      <div className="pb-5">
+        <Title title="Jobs" />
+      </div>
+      <div className="bg-white p-5 rounded-xl">
+        <div className="w-full ">
           {/* <div className="Fresh">
                 <h1>
                   Hello {userData.user.first_name} {userData.user.last_name}
@@ -337,10 +343,7 @@ const AdminJobsList = () => {
                 </div>
               </div>
               <div>
-                <Link
-                  className="MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButtonBase-root  css-1o8ezb2-MuiButtonBase-root-MuiButton-root"
-                  to={`/jobs/add`}
-                >
+                <Link className="btn btn-primary" to={`/jobs/add`}>
                   {" "}
                   {/* Create a Job{" "} */}
                   Add Jobs
@@ -357,7 +360,7 @@ const AdminJobsList = () => {
             <LoadingSpinner />
           ) : ( */}
           <>
-            <div className="AllPageHight FreshJobTop adminjoblistpage">
+            <div className="w-full flex gap-4">
               {/* <input type="button" value="Click to Open Popup" onClick={togglePopup} /> */}
               <Dialog
                 className="job-custom_popup"
@@ -658,79 +661,175 @@ const AdminJobsList = () => {
                     </div>
                   </>
                 )} */}
-              <div className="grid grid-cols-1 gap-4">
-                {jobData?.JobsListsList?.data?.results?.map((item, index) => {
-                  return (
-                    <div className="border border-1 rounded-xl">
-                      <div className="flex">
-                        <div>img</div>
-                        <>
-                          <div className="flex">
-                            <Title
-                              title={
-                                item.title.length > 15
-                                  ? item.title.substring(0, 15) + "..."
-                                  : item.title
-                              }
+              <div className="">
+                <div className="grid grid-cols-1 gap-4">
+                  {jobData?.JobsListsList?.data?.results?.map((item, index) => {
+                    return (
+                      <div className="border border-1 rounded-xl">
+                        <div className="w-full  flex">
+                          <div className="p-5 ">
+                            <img
+                              className="h-[75px] w-[75px] border border-none rounded-xl"
+                              src={item?.image_url}
+                              alt=""
                             />
-                            <BadgeUI variant="primary">
-                              {item?.level?.level_name}
-                            </BadgeUI>
                           </div>
-                        </>
-                      </div>
-                      <div className="text-base font-medium text-[#A0A0A0]">
-                        {item?.description?.length > 300
-                          ? item?.description?.substring(0, 300) + "..."
-                          : item?.description}
-                      </div>
-                      <div className="flex gap-2 my-1">
-                        {item.skills?.length > 0 &&
-                          item.skills?.map((item, index) => (
-                            <BadgeUI variant="primary" key={index}>
-                              {item?.skill_name}
-                            </BadgeUI>
-                          ))}
-                      </div>
-                      <div className="flex gap-2 my-1">
-                        {item.tags?.length > 0 &&
-                          item.tags?.split(",")?.map((item, index) => (
-                            <BadgeUI variant="primary" key={index}>
-                              {item}
-                            </BadgeUI>
-                          ))}
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
+                          <div className="w-full max-w-[calc(100% - 72px)] py-5 pr-5">
+                            <div className="flex gap-4">
+                              <Title
+                                title={
+                                  item.title.length > 15
+                                    ? item.title.substring(0, 15) + "..."
+                                    : item.title
+                                }
+                              />
+                              {item?.level?.level_name && (
+                                <BadgeUI variant="primary">
+                                  {item?.level?.level_name}
+                                </BadgeUI>
+                              )}
+                            </div>
+                            <div className="text-base font-medium text-[#A0A0A0]">
+                              {item?.description?.length > 300
+                                ? item?.description?.substring(0, 300) + "..."
+                                : item?.description}
+                            </div>
+                            <div className="flex gap-2 my-1">
+                              <span className="text-base font-medium text-[#A0A0A0]">
+                                Skills:{" "}
+                              </span>
+                              {item.skills?.length > 0 ? (
+                                item.skills?.map((item, index) => (
+                                  <BadgeUI variant="primary" key={index}>
+                                    {item?.skill_name}
+                                  </BadgeUI>
+                                ))
+                              ) : (
+                                <>N/A</>
+                              )}
+                            </div>
+                            <div className="flex gap-2 my-1">
+                              <span className="text-base font-medium text-[#A0A0A0]">
+                                Tags:{" "}
+                              </span>
 
+                              {item.tags?.length > 0 ? (
+                                item.tags?.split(",")?.map((item, index) => (
+                                  <BadgeUI variant="primary" key={index}>
+                                    {item}
+                                  </BadgeUI>
+                                ))
+                              ) : (
+                                <>N/A</>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
               {!jobData?.JobsListsList?.data?.results?.length && (
-                <div className="Topallpage Custompage ">
-                  <h2 className="nonew">NO DATA FOUND</h2>
+                <div className=" ">
+                  <h2 className="text-lg font-bold text-center p-5">
+                    NO DATA FOUND
+                  </h2>
                 </div>
               )}
+
+              <div className="w-full max-w-[308px]">
+                <div className="grid grid-cols-1 gap-4">
+                  <div className="border border-1 rounded-xl p-5">
+                    <h5 className="text-base font-semibold pb-2">Sort by </h5>
+                    <div>
+                      <div className="flex gap-2 items-center">
+                        <input type="checkbox" value="All Jobs" />
+                        <label>All Jobs</label>
+                      </div>
+                      <div className="flex gap-2 items-center">
+                        <input type="checkbox" value="In Progress" />
+                        <label>In Progress</label>
+                      </div>
+                      <div className="flex gap-2 items-center">
+                        <input type="checkbox" value="Expired" />
+                        <label>Expired</label>
+                      </div>
+                      <div className="flex gap-2 items-center">
+                        <input type="checkbox" value="Complete" />
+                        <label>Complete</label>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="border border-1 rounded-xl p-5">
+                    <h5 className="text-lg font-semibold pb-2">Filters </h5>
+                    <h5 className="text-base font-semibold pb-2">Salary</h5>
+                    <div>
+                      <div className="flex gap-2 items-center">
+                        <input type="checkbox" value="Any" />
+                        <label>Any</label>
+                      </div>
+                      <div className="flex gap-2 items-center">
+                        <input type="checkbox" value="3000k" />
+                        <label>{">"}3000k</label>
+                      </div>
+                      <div className="flex gap-2 items-center">
+                        <input type="checkbox" value="1000k" />
+                        <label>{">"}1000k</label>
+                      </div>
+                      <div className="flex gap-2 items-center">
+                        <input type="checkbox" value="500k" />
+                        <label>{">"}500k</label>
+                      </div>
+                      <div className="flex gap-2 items-center">
+                        <input type="checkbox" value="100k" />
+                        <label>{">"}100k</label>
+                      </div>
+                    </div>
+                    <h5 className="text-base font-semibold pb-2">
+                      Work Experience:
+                    </h5>
+                    <div>
+                      <div className="flex gap-2 items-center">
+                        <input type="checkbox" value="Any Experience" />
+                        <label>Any Experience</label>
+                      </div>
+                      <div className="flex gap-2 items-center">
+                        <input type="checkbox" value="Beginner Level" />
+                        <label>Beginner Level</label>
+                      </div>
+                      <div className="flex gap-2 items-center">
+                        <input type="checkbox" value="Intermediate level" />
+                        <label>Intermediate level</label>
+                      </div>
+                      <div className="flex gap-2 items-center">
+                        <input type="checkbox" value="Expert Level" />
+                        <label>Expert Level</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </>
-          {/* //   )} */}
         </div>
       </div>
-      {pages > 1 && (
+      {/* {pages > 1 && (
         <div className="adminjobpagination adminpagintionpage">
           <Stack spacing={2}>
             <Pagination
-              //   page={currentPage}
+              page={currentPage}
               shape="rounded"
               size="large"
               count={pages}
-              // onChange={(e, page) => {
-              //   pageHandler(page);
-              // }}
+              onChange={(e, page) => {
+                pageHandler(page);
+              }}
               color="primary"
             />
           </Stack>
         </div>
-      )}
+      )} */}
       {/* {pages > 1 && (
             <div className="adminjobpagination">
               <Pagination>

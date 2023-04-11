@@ -5,12 +5,12 @@ import { Images } from "../../../helper/images";
 import React, { useState } from "react";
 import { useSingleEffect, useUpdateEffect } from "react-haiku";
 import { Link } from "react-router-dom";
-import { GET_ADMIN_DASHBOARD_IN_REVIEW_JOBLIST } from "../../../redux/actions/homePage/adminHomePage.actions";
 import {
   CLEAR_IN_REVIEW_JOBS,
   IN_REVIEW_JOBS_DATA,
 } from "../../../redux/reducers/homePage/inReviewJobsList.slice";
 import { useAppDispatch, useAppSelector } from "./../../../redux/store";
+import { GET_ADMIN_DASHBOARD_IN_REVIEW_JOBLIST } from "redux/actions/jobs/jobs.actions";
 
 const AdminDashboardInReview = () => {
   const dispatch = useAppDispatch();

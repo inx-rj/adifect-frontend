@@ -5,7 +5,7 @@ import { Images } from "helper/images";
 import React, { useState } from "react";
 import { useSingleEffect, useUpdateEffect } from "react-haiku";
 import { Link } from "react-router-dom";
-import { GET_DUPLICATE_MEMBER_ADMIN_JOB_LIST_IN_REVIEW } from "redux/actions/homePage/adminHomePage.actions";
+import { GET_DUPLICATE_MEMBER_ADMIN_JOB_LIST_IN_REVIEW } from "redux/actions/jobs/jobs.actions";
 import {
   CLEAR_MEMBERS_ADMIN_JOBS,
   MEMBERS_ADMIN_JOBS_DATA,

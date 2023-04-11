@@ -11,11 +11,7 @@ import { formateISODateToLocaleString } from "helper/utility/customFunctions";
 import React, { useCallback, useState } from "react";
 import { useSingleEffect, useUpdateEffect } from "react-haiku";
 import { Link, useNavigate } from "react-router-dom";
-import {
-  APPLY_FOR_JOB,
-  GET_MEMEBERS_FRESHERS_JOBLIST,
-  GET_MEMEBERS_FRESHERS_LATEST_JOBLIST,
-} from "redux/actions/homePage/adminHomePage.actions";
+
 import { GET_USER_DATA } from "redux/reducers/auth/auth.slice";
 import { FRESHERS_JOBS_DATA } from "redux/reducers/homePage/fresherJobsList.slice";
 import { GET_JOBS_DETAILS } from "redux/reducers/homePage/jobsList.slice";
@@ -25,7 +21,7 @@ import CreatorDashboardInReview from "./creatorDashboard/CreatorDashboardInRevie
 import { useDropzone } from "react-dropzone";
 import swal from "sweetalert";
 import { Images } from "helper/images";
-import { GET_JOB_DETAILS } from "redux/actions/homePage/adminHomePage.actions";
+import { APPLY_FOR_JOB, GET_JOB_DETAILS, GET_MEMEBERS_FRESHERS_JOBLIST, GET_MEMEBERS_FRESHERS_LATEST_JOBLIST } from "redux/actions/jobs/jobs.actions";
 
 const CreatorDashboard = () => {
   const dispatch = useAppDispatch();
@@ -312,7 +308,7 @@ const CreatorDashboard = () => {
         .then((res) => {
           setIsPopupLoading(false);
           setIsLoading(true);
-          dispatch(GET_MEMEBERS_FRESHERS_JOBLIST());
+          dispatch(GET_MEMEBERS_FRESHERS_LATEST_JOBLIST());
           swal({
             title: "Successfully Complete",
             // text: res.data?.message,
