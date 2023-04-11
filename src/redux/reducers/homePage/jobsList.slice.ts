@@ -1,6 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../../rootReducer";
-import { jobsListInitialStateType } from "helper/types/jobs/jobsType";
+import {
+  jobsDetailsInitialStateType,
+  jobsListInitialStateType,
+} from "helper/types/jobs/jobsType";
 
 const jobsListInitialState: jobsListInitialStateType = {
   assigned_to: 0,
@@ -35,6 +38,84 @@ const jobsListInitialState: jobsListInitialStateType = {
   user: 0,
   workflow: 0,
 };
+
+const jobsDetailsInitialState: jobsDetailsInitialStateType = {
+  id: 0,
+  images: [],
+  jobtasks_job: [],
+  level: {
+    id: 0,
+    created: "",
+    modified: "",
+    is_trashed: false,
+    level_name: "",
+    slug: "",
+    description: "",
+    is_active: false,
+  },
+  skills: [
+    {
+      id: 0,
+      created: "",
+      modified: "",
+      is_trashed: false,
+      skill_name: "",
+      slug: "",
+      is_active: false,
+    },
+  ],
+  get_jobType_details: "",
+  job_applied_status: "",
+  workflow_name: "",
+  company_name: "",
+  industry_name: "",
+  username: "",
+  job_applied_id: "",
+  is_edit: false,
+  hired_users: [
+    {
+      user__username: "",
+      user_id: 0,
+    },
+  ],
+  job_applied_modified: false,
+  is_expire: false,
+  flag: false,
+  users_applied_status: [
+    {
+      user__username: "",
+      user_id: 0,
+      status: 0,
+    },
+  ],
+  created: "",
+  modified: "",
+  is_trashed: false,
+  title: "",
+  description: "",
+  job_type: "",
+  expected_delivery_date: "",
+  price: "",
+  tags: "",
+  image_url: "",
+  sample_work_url: "",
+  job_due_date: "",
+  due_date_index: 0,
+  template_name: null,
+  status: 0,
+  is_active: false,
+  is_blocked: false,
+  is_house_member: false,
+  related_jobs: null,
+  company: 0,
+  industry: 0,
+  workflow: 0,
+  user: null,
+  created_by: null,
+  assigned_to: null,
+  house_member: [],
+};
+
 const initialState = {
   loading: false,
   JobsListsList: {
@@ -43,13 +124,13 @@ const initialState = {
       count: 0,
       prev: null,
       next: null,
-      results: [jobsListInitialState],
+      // results: [jobsListInitialState],
+      results: null,
     },
   },
   JobsDetails: {
     loading: false,
     details: null,
-    successMessage: "",
   },
 };
 

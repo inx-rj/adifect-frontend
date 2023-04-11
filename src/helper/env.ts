@@ -30,7 +30,7 @@ export const API_URL = {
     INVITE_USERS: `${BASE_URL.AGENCY}invite-member/`,
   },
   HOMEPAGE: {
-    IN_PROGRESS_JOBS_LIST: `${env.API_URL}jobs/`,
+    JOBS_LIST: `${env.API_URL}jobs/`,
     MEMBERS_LATEST_JOBS: `${env.API_URL}members/member-latest-job/`,
     LATEST_JOBS: `${env.API_URL}latest-job/`,
     MEMBERS_APPROVAL_JOBS_LIST: `${env.API_URL}members/member-approval-job-list/`,

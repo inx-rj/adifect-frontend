@@ -372,7 +372,7 @@ const CreatorDashboard = () => {
       dispatch(GET_MEMEBERS_FRESHERS_LATEST_JOBLIST());
     }
     // dispatch(FreshJobs());
-  }, [jobDetails?.successMessage]);
+  }, [jobDetails]);
   console.log("jobDetails", jobDetails, freshJob);
   return (
     <div>

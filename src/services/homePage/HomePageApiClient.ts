@@ -5,12 +5,12 @@ import { API_URL } from "../../helper/env";
 class HomePageApiClient {
   fetchAdminDashboardInProgressJobsList = (filters: any) =>
     axiosPrivate.get(
-      `${API_URL.HOMEPAGE.IN_PROGRESS_JOBS_LIST}` + setQueryParams(filters)
+      `${API_URL.HOMEPAGE.JOBS_LIST}` + setQueryParams(filters)
     );
 
   fetchSuperAdminJobListInReviewList = (filters: any) =>
     axiosPrivate.get(
-      `${API_URL.HOMEPAGE.IN_PROGRESS_JOBS_LIST}` + setQueryParams(filters)
+      `${API_URL.HOMEPAGE.JOBS_LIST}` + setQueryParams(filters)
     );
 
   fetchMembersJobListList = () =>
