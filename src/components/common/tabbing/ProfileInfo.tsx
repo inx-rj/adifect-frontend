@@ -30,7 +30,7 @@ const ProfileInfo = () => {
               alt="profile logo"
             />
           </div>
-          <div className="w-[calc(100%-65px)] xl:w-[calc(100%-75px)]">
+          <div className="w-[calc(100%-80px)] xl:w-[calc(100%-90px)]">
             <h3 className="text-lg  font-bold inline-flex items-center gap-2 text-white  capitalize">
               {userProfile?.data?.first_name} {userProfile?.data?.last_name}
               <span className="bg-theme/[.4] py-1 px-3 text-white text-sm rounded-3xl ml-4 flex items-center gap-1">
