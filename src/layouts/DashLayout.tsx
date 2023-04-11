@@ -23,8 +23,8 @@ const DashLayout = () => {
           <Header />
         </Suspense>
         <div
-          className={`sidebar pt-[65px] ${
-            isSidebarCollapsed ? "w-[200px] lg:w-[250px]" : "w-[73px]"
+          className={`sidebar custom-scrollbar ${
+            isSidebarCollapsed ? "w-[220px] xlg:w-[250px]" : "w-0 lg:w-[73px]"
           }`}
         >
           <Suspense fallback={"Loading"}>
@@ -33,7 +33,7 @@ const DashLayout = () => {
         </div>
         <div
           className={`transition-all ease-in-out duration-500 ${
-            isSidebarCollapsed ? "pl-[200px] lg:pl-[250px]" : "pl-[73px]"
+            isSidebarCollapsed ? "ml-0 lg:ml-[220px] xlg:ml-[250px]" : "ml-0 lg:ml-[73px]"
           }`}
         >
           <Suspense fallback={""}>

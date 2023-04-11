@@ -2,12 +2,12 @@ import React, { lazy, Suspense } from "react";
 import { Route, Routes } from "react-router-dom";
 import { RouteType } from "./helper/types";
 import { AUTH_ROUTES, PAGES_ROUTES } from "./routes/routes";
-import DashLayout from "layouts/DashLayout";
 
 // Import lazy load component
 const AuthLayout = lazy(() => import("layouts/AuthLayout"));
 const Master = lazy(() => import("layouts/Master"));
 const NotFound = lazy(() => import("pages/error/NotFound"));
+const DashLayout = lazy(() => import("layouts/DashLayout"));
 
 const RouteApp = () => {
   return (

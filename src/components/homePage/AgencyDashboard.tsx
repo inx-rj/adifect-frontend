@@ -9,8 +9,6 @@ import Title from "../../components/common/PageTitle/Title";
 
 // Chart.register(...registerables);
 const AgencyDashboard = () => {
-  console.log("AgencyDashboard");
-
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);

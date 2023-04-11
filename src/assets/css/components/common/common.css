@@ -6,9 +6,20 @@
   @apply flex items-center justify-center min-h-screen p-5 my-0 mx-auto;
 }
 
+/* Image Css  */
+.img img {
+  @apply w-full h-full;
+}
+.img-cover img {
+  @apply object-cover;
+}
+.img-contain img {
+  @apply object-contain;
+}
+
 /* Card general styling class */
 .card {
-  @apply w-full bg-white border border-solid border-[#0d6efd00] rounded p-5 shadow-[0_1px_5px_#0d6efd45];
+  @apply w-full bg-white rounded p-5 drop-shadow;
 }
 
 /* Title header text style for both card and page */
@@ -45,6 +56,17 @@
   @apply block h-5 text-sm text-danger text-right;
 }
 
+/* Custom scrollbar design css */
+.custom-scrollbar::-webkit-scrollbar {
+  @apply w-2 h-2 bg-slate-200;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  @apply bg-[#9abfff];
+}
+
+.page-title {
+  @apply text-xl font-semibold;
+}
 /* ===================== Need to refactor below classes if possible ===================== */
 
 .styled-select textarea {
@@ -52,30 +74,14 @@
 }
 
 .flex-center {
+  @apply flex justify-center items-center;
+}
+
+.flex-between {
   @apply flex justify-between items-center;
 }
-
-/* Error */
-.errorAlert .swal-text,
-.errorAlert-login .swal-text {
-  @apply text-[#d14f4f];
-}
-
-.successAlert .swal-text,
-.successAlert-login .swal-text {
-  @apply text-[#59cf65];
-}
-
-.errorAlert .swal-title,
-.errorAlert-login .swal-title {
-  @apply text-[#d14f4f] tracking-[0.5px];
-  /* font-family: "Figtree", sans-serif; */
-}
-
-.successAl1ert .swal-title,
-.successAlert-login .swal-title {
-  @apply text-[#59cf65] tracking-[0.5px];
-  /* font-family: "Figtree", sans-serif; */
+body .MuiTypography-root {
+  font-family: Figtree, sans-serif;
 }
 
 /* Select Menu */
@@ -105,7 +111,7 @@ ul.MuiMenu-list {
 
 /* Select input mui */
 .styled-select {
-  @apply w-full pt-3;
+  @apply w-full pt-1;
 }
 
 .styled-select .MuiInputBase-root {
