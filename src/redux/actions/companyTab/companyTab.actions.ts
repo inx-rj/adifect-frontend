@@ -92,7 +92,6 @@ const DELETE_SINGLE_COMPANY = (itemId: number) => async (dispatch: AppDispatch) 
   dispatch(SET_COMPANY_LIST_LOADING(true));
   await CompanyTabApiClient.deleteSingleCompany(itemId)
     .then((response) => {
-      console.log("DELETE_SINGLE_COMPANY", response, itemId)
       if (response.status === 201 || response.status === 200) {
         swal({
           title: "Successfully Complete",

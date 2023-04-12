@@ -1,3 +1,4 @@
+import { setQueryParams } from "helper/utility/customFunctions";
 import axiosPrivate from "../../api/axios";
 import { API_URL } from "../../helper/env";
 
@@ -5,10 +6,8 @@ const userData = () => JSON.parse(localStorage.getItem("userData") ?? '');
 
 class InviteUserApiClient {
   // get invited users list
-  fetchInviteUsers = ({ rowsPerPage, page }) =>
-    axiosPrivate.get(`${API_URL.INVITE.INVITE_USERS}`, {
-      params: { page_size: rowsPerPage, page },
-    });
+  fetchInviteUsers = (filters: any) =>
+    axiosPrivate.get(`${API_URL.INVITE.INVITE_USERS}` + setQueryParams(filters));
 
   //add invite user
   addInviteUser = (postObj: any) => {
