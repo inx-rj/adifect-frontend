@@ -26,8 +26,8 @@ const Profile = () => {
         {profileTabHeaders
           ?.filter(
             (item) =>
-              item?.name === activeUserTab.user_profile.active &&
-              item?.permission.includes(userProfile.data.role)
+              item?.name === activeUserTab?.user_profile?.active &&
+              item?.permission.includes(userProfile?.data?.role)
           )
           ?.map((item) => {
             if (

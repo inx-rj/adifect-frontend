@@ -743,17 +743,15 @@ export default function Header(props) {
             onClick={() => setShowDropdown(!showDropdown)}
           >
             <Link className="LoginName dropdown flex items-center" to="#">
-              <span className="header-profile-pic max-w-[40px] w-full h-[40px]">
-                {!userProfile?.data?.profile_img && (
-                  <img
-                    src={
-                      !userProfile?.data?.profile_img
-                        ? Images?.UserAvatar
-                        : userProfile?.data?.profile_img
-                    }
-                    alt=""
-                  />
-                )}
+              <span className="header-profile-pic max-w-[40px] w-full h-[40px] img img-cover rounded-full overflow-hidden drop-shadow-md border-2 border-white">
+                <img
+                  src={
+                    !userProfile?.data?.profile_img
+                      ? Images?.UserAvatar
+                      : userProfile?.data?.profile_img
+                  }
+                  alt=""
+                />
               </span>
               <span className="loginName ml-1">
                 {userProfile?.data?.first_name ?? "Invalid First Name"}{" "}
