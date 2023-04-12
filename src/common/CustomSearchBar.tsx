@@ -1,7 +1,17 @@
 import { InputAdornment, TextField } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
+import { TablePaginationType } from "helper/types/muiCustomTable/muiCustomTable";
 
-const SearchBar = ({ onChange }) => {
+interface searchBarPropTypes {
+  paginationData: TablePaginationType;
+  setPaginationData: React.Dispatch<React.SetStateAction<TablePaginationType>>
+  [restProps: string]: any;
+}
+
+const SearchBar = ({
+  setPaginationData,
+  paginationData,
+}: searchBarPropTypes) => {
   return (
     <TextField
       type="search"
@@ -21,7 +31,12 @@ const SearchBar = ({ onChange }) => {
           </InputAdornment>
         ),
       }}
-      onChange={(e) => onChange(e.target.value)}
+      onChange={(e) =>
+        setPaginationData({
+          ...paginationData,
+          search: e.target.value,
+        })
+      }
     />
   );
 };

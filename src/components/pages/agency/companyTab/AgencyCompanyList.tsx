@@ -16,7 +16,10 @@ import HomeIcon from "@mui/icons-material/Home";
 import AddIcon from "@mui/icons-material/Add";
 
 //import helper files
-import { TableRowColType } from "helper/types/muiCustomTable/muiCustomTable";
+import {
+  TableRowColType,
+  TablePaginationType,
+} from "helper/types/muiCustomTable/muiCustomTable";
 import { Images } from "helper/images";
 import { formateISODateToLocaleString } from "helper/utility/customFunctions";
 
@@ -59,9 +62,10 @@ const AgencyCompanyList = () => {
     company: "",
     description: "",
   });
-  const [paginationData, setPaginationData] = useState({
+  const [paginationData, setPaginationData] = useState<TablePaginationType>({
     page: 1,
     rowsPerPage: 10,
+    search: "",
   });
 
   //fetch inital companies data list
@@ -80,17 +84,6 @@ const AgencyCompanyList = () => {
     setFormData({ ...formData, [name]: name === "isActive" ? checked : value });
     setErrors({ ...errors, [name]: null });
   };
-
-  useUpdateEffect(() => {
-    // const search = async () => {
-    //   const response = await fetch(
-    //     `YOUR_API_ENDPOINT?searchText=${searchText}`
-    //   );
-    //   const data = await response.json();
-    //   setSearchResults(data);
-    // };
-    // search();
-  }, [searchText]);
 
   //handle edit action
   const handleEdit = (item) => {
@@ -306,7 +299,10 @@ const AgencyCompanyList = () => {
       </div>
       <div className="page-card">
         <div className="flex-between flex-wrap p-[15px] pb-5">
-          <SearchBar onChange={setSearchText} />
+          <SearchBar
+            setPaginationData={setPaginationData}
+            paginationData={paginationData}
+          />
           <button
             type="submit"
             onClick={() => setOpenModal(true)}
