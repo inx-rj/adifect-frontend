@@ -37,7 +37,7 @@ const TabbingLayout = (props) => {
       <section className="flex gap-5 pt-0 flex-wrap md:flex-nowrap mt-4">
         <div className="card tab-head-content custom-scrollbar">
           {tabHeadArr
-            .filter((item) => item.permission.includes(userProfile.data.role))
+            .filter((item) => item.permission.includes(userProfile?.data?.role))
             .map((nav, empIndex) => {
               return (
                 <div
