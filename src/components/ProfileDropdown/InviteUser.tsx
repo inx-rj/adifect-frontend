@@ -31,7 +31,10 @@ import HomeIcon from "@mui/icons-material/Home";
 
 // import helpers
 import { validateEmail } from "helper/validations";
-import { TableRowColType } from "helper/types/muiCustomTable/muiCustomTable";
+import {
+  TablePaginationType,
+  TableRowColType,
+} from "helper/types/muiCustomTable/muiCustomTable";
 import { Images } from "helper/images";
 
 const InviteUser = () => {
@@ -64,9 +67,10 @@ const InviteUser = () => {
     company: "",
     level: "",
   });
-  const [paginationData, setPaginationData] = useState({
+  const [paginationData, setPaginationData] = useState<TablePaginationType>({
     page: 1,
     rowsPerPage: 10,
+    search: "",
   });
 
   //fetch inital invite users and companies data list
@@ -350,7 +354,10 @@ const InviteUser = () => {
 
       <div className="page-card">
         <div className="flex-between flex flex-wrap p-[15px] pb-5">
-          <SearchBar onChange={setSearchText} />
+          <SearchBar
+            setPaginationData={setPaginationData}
+            paginationData={paginationData}
+          />
           <button
             type="submit"
             onClick={() => setOpenModal(true)}
