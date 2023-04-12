@@ -58,7 +58,7 @@ const GET_USER_DETAILS = () => async (dispatch: AppDispatch) => {
   return await AuthApiClient.editProfile()
     .then((response) => {
       if (response.status === 200) {
-        dispatch(SET_USER_PROFILE_DATA(response?.data));
+        dispatch(SET_USER_PROFILE_DATA(response?.data?.[0]));
       }
     })
     .catch((error) => {
@@ -85,8 +85,8 @@ const TRIGGER_FORGOT_PASSWORD = (data: EmailType) => async () => {
 };
 
 // Reset Password
-const TRIGGER_RESET_PASSWORD = (data: any,ResetpasswordId: string, userId: string) => async () => {
-  return await AuthApiClient.resetPassword(data,ResetpasswordId, userId);
+const TRIGGER_RESET_PASSWORD = (data: any, ResetpasswordId: string, userId: string) => async () => {
+  return await AuthApiClient.resetPassword(data, ResetpasswordId, userId);
 };
 
 // Reset Password

@@ -58,7 +58,7 @@
 
 /* Custom scrollbar design css */
 .custom-scrollbar::-webkit-scrollbar {
-  @apply w-2 h-2 bg-slate-200;
+  @apply w-[5px] h-[5px] bg-slate-200;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb {
   @apply bg-[#9abfff];
