@@ -29,11 +29,23 @@ export const API_URL = {
   INVITE: {
     INVITE_USERS: `${BASE_URL.AGENCY}invite-member/`,
   },
+  HOMEPAGE: {
+    JOBS_LIST: `${env.API_URL}jobs/`,
+    MEMBERS_LATEST_JOBS: `${env.API_URL}members/member-latest-job/`,
+    LATEST_JOBS: `${env.API_URL}latest-job/`,
+    MEMBERS_APPROVAL_JOBS_LIST: `${env.API_URL}members/member-approval-job-list/`,
+    MEMBERS_JOBS_LIST: `${env.API_URL}members/member-job-list/`,
+    CREATOR_JOBS_LIST: `${env.API_URL}creator/my-jobs/`,
+    JOB_APPLIED: `${env.API_URL}job-applied/`,
+  },
   NOTIFICATION: {
     AGENCY_NOTIFICATION: `${BASE_URL.AGENCY}agency-notification/`,
     MEMBER_NOTIFICATION: `${BASE_URL.MEMBER}member-notification/`,
   },
   PROFILE: {
     USER_COMMUNICATION: `${env.API_URL}user-communication/`
+  },
+  MY_JOBS: {
+    AGENCY_JOBS_LIST: `${BASE_URL.AGENCY}agency-jobs/`,
   }
 };

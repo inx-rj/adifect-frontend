@@ -1,75 +1,77 @@
 import { Menu, MenuItem } from "@mui/material";
 import Title from "../../../components/common/PageTitle/Title";
+import BadgeUI from "../../../components/common/badge/BadgeUI";
+import { Images } from "../../../helper/images";
 import React, { useState } from "react";
 import { useSingleEffect, useUpdateEffect } from "react-haiku";
 import { Link } from "react-router-dom";
+
 import {
-  CLEAR_JOBS,
-  JOBS_DATA,
-} from "../../../redux/reducers/homePage/jobsList.slice";
-import { useAppDispatch, useAppSelector } from "../../../redux/store";
-import { Images } from "../../../helper/images";
-import BadgeUI from "../../../components/common/badge/BadgeUI";
-import { GET_ADMIN_DASHBOARD_IN_PROGRESS_JOBLIST } from "redux/actions/jobs/jobs.actions";
+  CLEAR_IN_REVIEW_JOBS,
+  IN_REVIEW_JOBS_DATA,
+} from "../../../redux/reducers/homePage/inReviewJobsList.slice";
+import { useAppDispatch, useAppSelector } from "./../../../redux/store";
+import { GET_CREATORS_JOBLIST } from "redux/actions/jobs/jobs.actions";
 
-const AdminDashboardInProgress = () => {
+const CreatorDashboardInReview = () => {
   const dispatch = useAppDispatch();
-  const SuperAdminJobList = useAppSelector(JOBS_DATA);
-  const [orderingInProgress, setOrderingInProgress] = useState("-created");
-  const [orderingName, setOrderingName] = useState("Sort by newest");
-  const [anchorElInProgress, setAnchorElInProgress] = React.useState(null);
-  // const [headerCompany, setHeaderCompany] = useOutletContext<any>();
-  const openMenuInProgress = Boolean(anchorElInProgress);
 
-  console.log("SuperAdminJobList", SuperAdminJobList);
+  const [orderingInReview, setOrderingInReview] = useState("-created");
+  const [orderingName, setOrderingName] = useState("Sort by newest");
+  const [anchorElInReview, setAnchorElInReview] = React.useState(null);
+  const openMenuInReview = Boolean(anchorElInReview);
+
+  const SuperAdminInReview = useAppSelector(IN_REVIEW_JOBS_DATA);
+
+  useSingleEffect(() => {
+    const data: any = {
+      page: 1,
+      // id: headerCompany ?? "",
+      status: 3,
+      ordering: orderingInReview,
+    };
+    dispatch(GET_CREATORS_JOBLIST(data));
+  });
+
+  useUpdateEffect(() => {
+    dispatch(CLEAR_IN_REVIEW_JOBS);
+    const data: any = {
+      page: 1,
+      // id: headerCompany ?? "",
+      status: 3,
+      ordering: orderingInReview,
+    };
+    dispatch(GET_CREATORS_JOBLIST(data));
+  }, [orderingInReview]);
+
   const menuOptions = [
     { id: 1, name: "Sort by newest", value: "-created" },
     { id: 2, name: "Sort by oldest", value: "created" },
     { id: 3, name: "Sort by due date", value: "job_due_date" },
   ];
 
-  const handleCloseInProgressSort = () => {
-    setAnchorElInProgress(null);
+  const handleCloseInReviewSort = () => {
+    setAnchorElInReview(null);
   };
 
-  const handleClickInProgressSort = (event) => {
-    setAnchorElInProgress(event.currentTarget);
+  const handleClickInReviewSort = (event) => {
+    setAnchorElInReview(event.currentTarget);
   };
 
   const menuHandleSort = (event, value, name) => {
-    handleCloseInProgressSort();
-    setOrderingInProgress(value);
+    handleCloseInReviewSort();
+    setOrderingInReview(value);
     setOrderingName(name);
   };
 
-  useSingleEffect(() => {
-    const data = {
-      // id: headerCompany ?? "",
-      status: "2",
-      page: 1,
-      ordering: orderingInProgress,
-    };
-    dispatch(GET_ADMIN_DASHBOARD_IN_PROGRESS_JOBLIST(data));
-  });
-  useUpdateEffect(() => {
-    dispatch(CLEAR_JOBS);
-    const data = {
-      // id: headerCompany ?? "",
-      status: "2",
-      page: 1,
-      ordering: orderingInProgress,
-    };
-    dispatch(GET_ADMIN_DASHBOARD_IN_PROGRESS_JOBLIST(data));
-  }, [orderingInProgress]);
-
-  const menuProps: any = {
+  const menuProps = {
     variant: "menu",
     disableScrollLock: true,
   };
 
   useUpdateEffect(() => {
     const handler = () => {
-      setAnchorElInProgress("");
+      setAnchorElInReview("");
     };
     window.addEventListener("scroll", handler);
     return () => {
@@ -78,19 +80,18 @@ const AdminDashboardInProgress = () => {
   }, []);
 
   const setLocalVarRedirect = () => {
-    localStorage.setItem("projectsTab", "In Progress");
+    localStorage.setItem("projectsTab", "In Review");
   };
   return (
     <div>
-      {" "}
-      <div className="Work-In">
-        <div className="pb-4 flex justify-between items-center">
-          <Title title="Work in Progress" />
+      <div className="">
+        <div className="py-5 flex justify-between items-center">
+          <Title title="In Review" />
           <div className="Sort">
             <h6
               className="flex gap-2 items-center"
               style={{ cursor: "pointer" }}
-              onClick={handleClickInProgressSort}
+              onClick={handleClickInReviewSort}
             >
               <img src={Images.Sort} alt="" />
               <h5 className="text-sm font-semibold inline-block align-middle text-[#A0A0A0]">
@@ -99,11 +100,11 @@ const AdminDashboardInProgress = () => {
             </h6>{" "}
             <Menu
               id="long-menu"
-              MenuListProps={menuProps}
-              anchorEl={anchorElInProgress}
+              // MenuListProps={menuProps}
+              anchorEl={anchorElInReview}
               keepMounted
-              open={openMenuInProgress}
-              onClose={handleCloseInProgressSort}
+              open={openMenuInReview}
+              onClose={handleCloseInReviewSort}
             >
               {menuOptions.map((option) => (
                 <MenuItem
@@ -116,13 +117,13 @@ const AdminDashboardInProgress = () => {
             </Menu>
           </div>
         </div>
-        {SuperAdminJobList?.JobsListsList?.data?.results
+        {SuperAdminInReview?.inReviewJobsList?.data?.results
           ?.slice(0, 5)
           ?.map((item) => (
             <>
               <Link to={`/jobs/details/${item.id}`}>
                 <div className="mb-5">
-                  <div className="border-l-8 rounded border-[#2472FC] bg-white p-6 h-full max-h-[580px] shadow-[0_4px_40px_#2472fc0f]">
+                  <div className="border-l-8 rounded border-[#D99836] bg-white p-6 h-full max-h-[580px] shadow-[0_4px_40px_#2472fc0f]">
                     <div className="pb-3">
                       <Title
                         title={
@@ -142,7 +143,7 @@ const AdminDashboardInProgress = () => {
                         variant="progress"
                         customClass="max-w-max text-sm font-semibold"
                       >
-                        In Progress
+                        In Review
                       </BadgeUI>
                     </div>
                     <div className="mb-2 text-base font-semibold">
@@ -173,15 +174,19 @@ const AdminDashboardInProgress = () => {
               </Link>
             </>
           ))}
-        {SuperAdminJobList?.JobsListsList?.data?.results?.length > 5 && (
+        {SuperAdminInReview?.inReviewJobsList?.data?.results?.length > 5 && (
           <Link to={`/projects`} onClick={setLocalVarRedirect}>
-            <span className="spanDashboardViewMore">View More...</span>
+            <span className="hover:text-theme text-base font-medium">
+              View More...
+            </span>
           </Link>
         )}
-        {SuperAdminJobList?.JobsListsList?.data?.results?.length < 1 && (
-          <div className="border-l-8 rounded border-[#2472FC] bg-white p-6 h-full max-h-[580px] shadow-[0_4px_40px_#2472fc0f]">
-            <div className="text-lg font-semibold text-center">
-              No jobs in progress
+        {SuperAdminInReview?.inReviewJobsList?.data?.results?.length < 1 && (
+          <div className="mb-5">
+            <div className="border-l-8 rounded border-[#D99836] bg-white p-6 h-full max-h-[580px] shadow-[0_4px_40px_#2472fc0f]">
+              <div className="text-lg font-semibold text-center">
+                No jobs in review
+              </div>
             </div>
           </div>
         )}
@@ -190,4 +195,4 @@ const AdminDashboardInProgress = () => {
   );
 };
 
-export default AdminDashboardInProgress;
+export default CreatorDashboardInReview;

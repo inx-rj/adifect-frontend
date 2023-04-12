@@ -3,6 +3,7 @@ import Title from "../../../components/common/PageTitle/Title";
 import React, { useState } from "react";
 import { useSingleEffect, useUpdateEffect } from "react-haiku";
 import { Link } from "react-router-dom";
+
 import {
   CLEAR_JOBS,
   JOBS_DATA,
@@ -10,9 +11,9 @@ import {
 import { useAppDispatch, useAppSelector } from "../../../redux/store";
 import { Images } from "../../../helper/images";
 import BadgeUI from "../../../components/common/badge/BadgeUI";
-import { GET_ADMIN_DASHBOARD_IN_PROGRESS_JOBLIST } from "redux/actions/jobs/jobs.actions";
+import { GET_CREATORS_JOBLIST } from "redux/actions/jobs/jobs.actions";
 
-const AdminDashboardInProgress = () => {
+const CreatorDashboardInProgress = () => {
   const dispatch = useAppDispatch();
   const SuperAdminJobList = useAppSelector(JOBS_DATA);
   const [orderingInProgress, setOrderingInProgress] = useState("-created");
@@ -49,7 +50,7 @@ const AdminDashboardInProgress = () => {
       page: 1,
       ordering: orderingInProgress,
     };
-    dispatch(GET_ADMIN_DASHBOARD_IN_PROGRESS_JOBLIST(data));
+    dispatch(GET_CREATORS_JOBLIST(data));
   });
   useUpdateEffect(() => {
     dispatch(CLEAR_JOBS);
@@ -59,7 +60,7 @@ const AdminDashboardInProgress = () => {
       page: 1,
       ordering: orderingInProgress,
     };
-    dispatch(GET_ADMIN_DASHBOARD_IN_PROGRESS_JOBLIST(data));
+    dispatch(GET_CREATORS_JOBLIST(data));
   }, [orderingInProgress]);
 
   const menuProps: any = {
@@ -83,8 +84,8 @@ const AdminDashboardInProgress = () => {
   return (
     <div>
       {" "}
-      <div className="Work-In">
-        <div className="pb-4 flex justify-between items-center">
+      <div className="">
+        <div className="py-5 flex justify-between items-center">
           <Title title="Work in Progress" />
           <div className="Sort">
             <h6
@@ -175,7 +176,9 @@ const AdminDashboardInProgress = () => {
           ))}
         {SuperAdminJobList?.JobsListsList?.data?.results?.length > 5 && (
           <Link to={`/projects`} onClick={setLocalVarRedirect}>
-            <span className="spanDashboardViewMore">View More...</span>
+            <span className="hover:text-theme text-base font-medium">
+              View More...
+            </span>
           </Link>
         )}
         {SuperAdminJobList?.JobsListsList?.data?.results?.length < 1 && (
@@ -190,4 +193,4 @@ const AdminDashboardInProgress = () => {
   );
 };
 
-export default AdminDashboardInProgress;
+export default CreatorDashboardInProgress;

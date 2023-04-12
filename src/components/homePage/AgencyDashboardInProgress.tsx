@@ -57,7 +57,7 @@ function AgencyDashboardInProgress() {
 
   const menuProps: any = {
     variant: "menu",
-    disableScrollLock: true,
+    // disableScrollLock: true,
   };
   return (
     <>

@@ -10,6 +10,7 @@ import { ActionTypes } from "helper/actions";
 import { commonReducer } from "redux/reducers/common/common.reducer";
 import { profileReducer } from "redux/reducers/profile/profile.reducer";
 import { companyTabSlice } from "./reducers/companyTab/companyTab.slice";
+import { homePageReducer } from "./reducers/homePage/homePage.reducer";
 
 const persistAppConfig = {
   key: "app",
@@ -26,6 +27,7 @@ const appReducer = combineReducers({
   companies: companiesSlice.reducer,
   companiesTags: companiesTagsSlice.reducer,
   inviteUser: inviteUserSlice.reducer,
+  homePage: homePageReducer,
   profile: profileReducer
 });
 
