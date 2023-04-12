@@ -4,7 +4,7 @@ import { useAppSelector } from "redux/store";
 import { IS_PERSISTED } from "redux/reducers/config/app/app.slice";
 import { getAllowedRoutes } from "helper/utility/customFunctions";
 import { SIDEBAR_ROUTES } from "routes/baseRoute";
-import { GET_USER_DATA } from "redux/reducers/auth/auth.slice";
+import { GET_USER_PROFILE_DATA } from "redux/reducers/auth/auth.slice";
 
 // Import lazy load component
 const SidebarMenuItem = lazy(
@@ -15,7 +15,7 @@ export default function Sidebar() {
   // const splitLocation = pathname.split("/");
 
   const isPersist = useAppSelector(IS_PERSISTED);
-  const userData = useAppSelector(GET_USER_DATA);
+  const userData = useAppSelector(GET_USER_PROFILE_DATA);
 
   // console.log([userData.data.user.role]);
 
@@ -362,14 +362,11 @@ export default function Sidebar() {
   let allowedRoutes = [];
 
   if (isPersist)
-    allowedRoutes = getAllowedRoutes(SIDEBAR_ROUTES, [userData.data.user.role]);
+    allowedRoutes = getAllowedRoutes(SIDEBAR_ROUTES, [userData?.data?.role]);
   else return <Navigate to={`/login`} />;
 
   return (
-    <ul
-      id="mySidepanel"
-      className={`nav-list py-2 px-4 `}
-    >
+    <ul id="mySidepanel" className={`nav-list py-2 px-4 `}>
       {/* {topData?.map((item, index) => (
         <SidebarMenuItem key={index} navItem={item} />
       ))}

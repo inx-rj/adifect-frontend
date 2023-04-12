@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../../../rootReducer";
-import { profileTabTitle, TabbingInitialType } from "helper/config/tabbing";
+import { companyProfileTabTitle, profileTabTitle, TabbingInitialType } from "helper/config/tabbing";
 
 
 const initialState: TabbingInitialType = {
@@ -9,7 +9,7 @@ const initialState: TabbingInitialType = {
       active: profileTabTitle.ABOUT
     },
     company_profile: {
-      active: profileTabTitle.ABOUT
+      active: companyProfileTabTitle.COMPANY_INFO
     }
   },
 };

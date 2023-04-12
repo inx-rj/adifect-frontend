@@ -337,7 +337,7 @@ const InviteUser = () => {
             <HomeIcon color="disabled" />
           </Link>
           <span className="text-disable opacity-20">|</span>
-          <Link to="/invite-user">Invite User</Link>
+          <Link to="/invite">Invite User</Link>
         </div>
       </div>
 

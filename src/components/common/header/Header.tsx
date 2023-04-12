@@ -37,7 +37,7 @@ import {
   PowerSettingsNewOutlined,
 } from "@mui/icons-material";
 import { ActionTypes } from "helper/actions";
-import { useSingleEffect } from "react-haiku";
+import { useSingleEffect, useUpdateEffect } from "react-haiku";
 import { GET_NOTIFICATION_DATA } from "redux/reducers/common/notification.slice";
 import { GET_NOTIFICATIONS_LIST } from "redux/actions/common/notification.actions";
 import { Roles } from "helper/config";
@@ -160,16 +160,24 @@ export default function Header(props) {
   //   }
   // }, [companyData, props.headerCompany, openMenuInProgress]);
   useSingleEffect(() => {
-    dispatch(GET_USER_DETAILS());
-    dispatch(
-      GET_NOTIFICATIONS_LIST(
-        userProfile?.data?.id,
-        0,
-        props.headerCompany,
-        userProfile?.data?.role
-      )
-    );
+    if (!userProfile?.data?.id) {
+      dispatch(GET_USER_DETAILS());
+    }
   });
+
+  useUpdateEffect(() => {
+    if (userProfile?.data?.id) {
+      dispatch(
+        GET_NOTIFICATIONS_LIST(
+          userProfile?.data?.id,
+          0,
+          props.headerCompany,
+          userProfile?.data?.role
+        )
+      );
+    }
+  }, [userProfile?.data?.id]);
+
   useEffect(() => {
     if (userProfile?.data?.role === Roles?.MEMBER && props.headerCompany) {
     }

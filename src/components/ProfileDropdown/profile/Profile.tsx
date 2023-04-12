@@ -61,7 +61,7 @@ const Profile = () => {
             }
             return (
               <Suspense fallback="">
-                <UserAbout />
+                <UserAbout data={userProfile?.data} />
               </Suspense>
             );
           })}
