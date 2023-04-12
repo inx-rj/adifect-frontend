@@ -3,6 +3,7 @@ import { RouteType } from "../helper/types";
 import {
   AUTH_ROUTE,
   COMPANIES_ROUTE,
+  DASH_COMPANY,
   DASHBOARD_COMPANY_ROUTE,
   PAGE_ROUTE,
   PROFILE_ROUTE,
@@ -34,6 +35,10 @@ const AgencyCompanyProjectsTags = lazy(
 );
 const AgencyCompanyList = lazy(
   () => import("components/pages/agency/companyTab/AgencyCompanyList")
+);
+
+const AgencyCompanyProfile = lazy(
+  () => import("components/pages/companyProfile/AgencyCompanyProfile")
 );
 
 // Profile dropdown pages
@@ -129,10 +134,10 @@ export const PAGES_ROUTES: RouteType[] = [
     ),
   },
   {
-    path: DASHBOARD_COMPANY_ROUTE.HOME,
+    path: DASH_COMPANY.COMPANY_LIST_DETAILS,
     component: (
       <Suspense fallback={""}>
-        <AgencyCompanyList />
+        <AgencyCompanyProfile />
       </Suspense>
     ),
   },
