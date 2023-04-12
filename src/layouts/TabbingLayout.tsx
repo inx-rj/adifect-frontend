@@ -13,13 +13,14 @@ const TabbingHeadTitle = lazy(
 
 interface TabbingLayoutType {
   children: JSX.Element;
+  tabBodySection: JSX.Element;
   tabHeadArrL: any;
   navType: string;
   tabBodyTitle: string;
 }
 
 const TabbingLayout = (props) => {
-  const { children, tabHeadArr, navType, tabBodyTitle } = props;
+  const { children, tabHeadArr, tabBodySection, navType, tabBodyTitle } = props;
   const dispatch = useAppDispatch();
   const userProfile = useAppSelector(GET_USER_PROFILE_DATA);
 
@@ -64,8 +65,9 @@ const TabbingLayout = (props) => {
             </div>
             <ProfileInfo />
           </div>
-          <div className="p-5 pt-0 -mt-5 ">
+          <div className="p-5 pt-0 -mt-5">
             <div className="card border p-4 z-[1] relative">{children}</div>
+            {tabBodySection}
           </div>
         </div>
       </section>

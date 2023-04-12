@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useSingleEffect, useUpdateEffect } from "react-haiku";
 import swal from "sweetalert";
 
@@ -32,6 +32,7 @@ import { COMPANY_LIST } from "redux/reducers/companyTab/companyTab.slice";
 
 const AgencyCompanyList = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   // Redux states
   const { companyList } = useAppSelector(COMPANY_LIST);
@@ -81,7 +82,6 @@ const AgencyCompanyList = () => {
   };
 
   useUpdateEffect(() => {
-    console.log("useUpdateEffect", searchText);
     // const search = async () => {
     //   const response = await fetch(
     //     `YOUR_API_ENDPOINT?searchText=${searchText}`
@@ -143,9 +143,9 @@ const AgencyCompanyList = () => {
   };
 
   //handle view action
-  const handleView = () => {
-    console.log("handleView");
+  const handleView = (item) => {
     setAnchorEl(null);
+    navigate(`/companydata/${item.id}`);
   };
 
   //handle inactive action
@@ -277,7 +277,7 @@ const AgencyCompanyList = () => {
                   setAnchorEl={setAnchorEl}
                   anchorEl={anchorEl}
                   handleEdit={() => handleEdit(item)}
-                  handleView={handleView}
+                  handleView={() => handleView(item)}
                   handleInactive={handleInactive}
                   handleActive={handleActive}
                   showView={true}
