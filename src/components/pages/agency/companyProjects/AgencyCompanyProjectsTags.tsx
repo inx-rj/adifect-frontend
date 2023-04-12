@@ -7,14 +7,17 @@ import MuiCustomTable from "components/common/muiCustomTable/MuiCustomTable";
 import CustomPopup from "common/CustomPopup";
 
 import { Button, Typography } from "@mui/material";
-import HomeIcon from '@mui/icons-material/Home';
+import HomeIcon from "@mui/icons-material/Home";
 
 import { TableRowColType } from "helper/types/muiCustomTable/muiCustomTable";
 import { Images } from "helper/images";
 
 import { useAppDispatch, useAppSelector } from "redux/store";
 import { COMPANY_PROJECTS_TAGS } from "redux/reducers/companies/companiesTags.slice";
-import { GET_COMPANY_PROJECTS_TAGS_LIST, POST_COMPANY_PROJECTS_TAG } from "redux/actions/companies/companiesTags.actions";
+import {
+  GET_COMPANY_PROJECTS_TAGS_LIST,
+  POST_COMPANY_PROJECTS_TAG,
+} from "redux/actions/companies/companiesTags.actions";
 
 const AgencyCompanyProjectsTags = () => {
   const dispatch = useAppDispatch();
@@ -27,7 +30,7 @@ const AgencyCompanyProjectsTags = () => {
   const [currentCommunity, setCurrentCommunity] = useState();
   const [formData, setFormData] = useState({
     tagName: "",
-    tagDescription: ""
+    tagDescription: "",
   });
 
   const [errors, setErrors] = useState({
@@ -49,7 +52,6 @@ const AgencyCompanyProjectsTags = () => {
     dispatch(GET_COMPANY_PROJECTS_TAGS_LIST(paginationData));
   }, [paginationData]);
 
-
   //open tag modal
   const openTagModal = (communityId) => {
     setCurrentCommunity(communityId);
@@ -61,7 +63,7 @@ const AgencyCompanyProjectsTags = () => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
     setErrors({ ...errors, [name]: null });
-  }
+  };
 
   //validate inputs
   const validateSubmit = () => {
@@ -112,89 +114,89 @@ const AgencyCompanyProjectsTags = () => {
     rows:
       companyProjectsTagsList?.data?.results?.length > 0
         ? companyProjectsTagsList?.data?.results?.map((data, index) => {
-          return {
-            community: (
-              <div key={index}>
-                <Link to={`${data.id}`}>
-                  <Typography
-                    sx={{
-                      "&.MuiTypography-root": {
-                        display: "inline-block",
-                        cursor: "pointer",
-                        color: "rgba(39, 90, 208, 1)",
-                        fontSize: "14px",
-                        fontWeight: 400,
-                        p: 0,
-                        fontFamily: '"Figtree", sans-serif',
-                      },
-                    }}
-                  >
-                    {data.name}
-                  </Typography>
-                </Link>
-              </div>
-            ),
-            tags: (
-              <Typography
-                component="div"
-                sx={{
-                  maxWidth: "450px",
-                }}
-              >
-                {data?.tags?.map((item) => (
-                  <Button
-                    key={item?.id}
-                    variant="contained"
-                    disableRipple
-                    disableFocusRipple
-                    disableElevation
-                    sx={{
-                      padding: "7px 5px",
-                      background: "rgba(36,114,252,0.08)",
-                      color: "#2472FC",
-                      "&:hover": {
-                        background: "rgba(36,114,252,0.08)",
-                      },
-                      fontSize: "12px",
-                      textTransform: "none",
-                      marginTop: data?.tags?.length > 5 ? "10px" : "",
-                      marginRight: data?.tags?.length > 1 ? "10px" : "",
-                    }}
-                  >
-                    {item?.title}
-                  </Button>
-                ))}
-                <Button
-                  variant="contained"
+            return {
+              community: (
+                <div key={index}>
+                  <Link to={`${data.id}`}>
+                    <Typography
+                      sx={{
+                        "&.MuiTypography-root": {
+                          display: "inline-block",
+                          cursor: "pointer",
+                          color: "rgba(39, 90, 208, 1)",
+                          fontSize: "14px",
+                          fontWeight: 400,
+                          p: 0,
+                          fontFamily: '"Figtree", sans-serif',
+                        },
+                      }}
+                    >
+                      {data.name}
+                    </Typography>
+                  </Link>
+                </div>
+              ),
+              tags: (
+                <Typography
+                  component="div"
                   sx={{
-                    width: "35px",
-                    height: "35px",
-                    minWidth: "35px",
-                    padding: 0,
-                    background: "#2472FC",
-                    fontSize: "16px",
-                    boxShadow: "none",
-                    marginTop: data?.tags?.length > 4 ? "10px" : "",
-                    marginLeft: data?.tags?.length > 1 ? "" : "10px",
-                    "&:hover": {
-                      boxShadow: "none",
-                    },
+                    maxWidth: "450px",
                   }}
-                  onClick={() => openTagModal(data?.id)}
                 >
-                  +
-                </Button>
-              </Typography>
-            ),
-          };
-        })
+                  {data?.tags?.map((item) => (
+                    <Button
+                      key={item?.id}
+                      variant="contained"
+                      disableRipple
+                      disableFocusRipple
+                      disableElevation
+                      sx={{
+                        padding: "7px 5px",
+                        background: "rgba(36,114,252,0.08)",
+                        color: "#2472FC",
+                        "&:hover": {
+                          background: "rgba(36,114,252,0.08)",
+                        },
+                        fontSize: "12px",
+                        textTransform: "none",
+                        marginTop: data?.tags?.length > 5 ? "10px" : "",
+                        marginRight: data?.tags?.length > 1 ? "10px" : "",
+                      }}
+                    >
+                      {item?.title}
+                    </Button>
+                  ))}
+                  <Button
+                    variant="contained"
+                    sx={{
+                      width: "35px",
+                      height: "35px",
+                      minWidth: "35px",
+                      padding: 0,
+                      background: "#2472FC",
+                      fontSize: "16px",
+                      boxShadow: "none",
+                      marginTop: data?.tags?.length > 4 ? "10px" : "",
+                      marginLeft: data?.tags?.length > 1 ? "" : "10px",
+                      "&:hover": {
+                        boxShadow: "none",
+                      },
+                    }}
+                    onClick={() => openTagModal(data?.id)}
+                  >
+                    +
+                  </Button>
+                </Typography>
+              ),
+            };
+          })
         : [],
   };
 
   return (
     <div className="page-container">
-      <div className="flex-center">
-        <h1>Tags</h1>
+      <div className="flex-between">
+        <h2 className="page-title">Tags</h2>
         {/* <div className="flex-center gap-[10px] font-sm leading-4 font-medium text-primary">
           <Link to="/"><HomeIcon color="disabled" /></Link>
           <span className="text-disable opacity-20">|</span>
@@ -255,7 +257,7 @@ const AgencyCompanyProjectsTags = () => {
                           : "input-fields-wrapper"
                       }
                     >
-                      <h4 >Description</h4>
+                      <h4>Description</h4>
                       <div className="styled-select">
                         <textarea
                           name="tagDescription"
@@ -281,9 +283,9 @@ const AgencyCompanyProjectsTags = () => {
             )}
           </>
         ))}
-      </div >
+      </div>
     </div>
   );
-}
+};
 
 export default AgencyCompanyProjectsTags;

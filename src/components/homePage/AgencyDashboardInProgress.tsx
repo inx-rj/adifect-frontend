@@ -57,7 +57,7 @@ function AgencyDashboardInProgress() {
 
   const menuProps: any = {
     variant: "menu",
-    disableScrollLock: true,
+    // disableScrollLock: true,
   };
   return (
     <>
@@ -95,20 +95,12 @@ function AgencyDashboardInProgress() {
           </div>
         </div>
         {/* <div className="border-l-8 rounded border-[#2472FC] bg-white p-8 h-full max-h-[580px]"> */}
-        <div className="border-l-8 rounded border-[#2472FC] bg-white p-6 h-full max-h-[580px] shadow-[0_4px_40px_#2472fc0f]">
-          <div className="pb-3">
-            <Title title="Marketing Campaign Job for stark..............." />
+        <div className="card py-7 border-l-8 border-[#2472FC] max-h-[580px] h-full">
+          <div className="[&>div]:truncate">
+            <Title title="Marketing Campaign Job for stark " />
           </div>
           <h5 className="h-full max-h-[80px] overflow-y-auto">
-            Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry. Lorem Ipsum has been the industry's standard dummy text
-            ever since the 1500s, when an unknown printer took a galley of type
-            and scrambled it to make a type specimen book. It has survived not
-            only five centuries, but also the leap into electronic typesetting,
-            remaining essentially unchanged. It was popularised in the 1960s
-            with the release of Letraset sheets containing Lorem Ipsum passages,
-            and more recently with desktop publishing software like Aldus
-            PageMaker including versions of Lorem Ipsum.
+          In vehicula orci maecenas egestas sodales at. Senectus nec dolor id pulvinar. Vitae fringilla phasellus amet semper sagittis, neque. Sed a sed diam senectus diam. Arcu tellus ullamcorper volutpat id 
           </h5>
           <div className="mt-4 mb-2">
             <BadgeUI

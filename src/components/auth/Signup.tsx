@@ -1,7 +1,5 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import axios from "axios";
 import { Link } from "react-router-dom";
 import {
   validateUsername,
@@ -19,11 +17,19 @@ import {
   TRIGGER_LOGIN,
 } from "../../redux/actions/auth/auth.actions";
 import swal from "sweetalert";
-import { useAppDispatch } from "../../redux/store";
+import Logo from "components/common/logo/Logo";
+import { useAppDispatch, useAppSelector } from "../../redux/store";
+import LoadingSpinner from "components/common/loadingSpinner/Loader";
+import {
+  SET_USER_DATA_LOADING,
+  USER_DATA_LOADER,
+} from "redux/reducers/auth/auth.slice";
 
 export default function Signup() {
   let navigate = useNavigate();
   const dispatch = useAppDispatch();
+
+  const userLoader = useAppSelector(USER_DATA_LOADER);
 
   const [username, setUsername] = useState("");
   const [firstname, setFirstName] = useState("");
@@ -43,7 +49,7 @@ export default function Signup() {
   });
   const [isOpen, setIsOpen] = useState(false);
 
-  const [isLoading, setIsLoading] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
 
   const [decryptedJobId, setDecryptedJobId] = useState("");
   const [redirectMyUrl, setRedirectMyUrl] = useState(false);
@@ -100,17 +106,13 @@ export default function Signup() {
     setErrors(tempErrors);
 
     if (Object.values(tempErrors).filter((value) => value).length) {
-      console.log(
-        "..values",
-        Object.values(tempErrors).filter((value) => value)
-      );
       return;
     }
     submitHandler(e);
   };
 
   const submitHandler = async (e) => {
-    setIsLoading(true);
+    // setIsLoading(true);
 
     const data = {
       username: username,
@@ -122,11 +124,14 @@ export default function Signup() {
       role: role,
       email_verify: redirectMyUrl && !copyMyUrl ? true : false,
     };
+
+    dispatch(SET_USER_DATA_LOADING(true));
+
     dispatch(REGISTER_USER(data))
       .then((res) => {
-        setTimeout(() => {
-          setIsLoading(true);
-        }, 1000);
+        // setTimeout(() => {
+        //   setIsLoading(true);
+        // }, 1000);
         if (redirectMyUrl && !copyMyUrl) {
           swal({
             title: "Successfully Complete",
@@ -157,9 +162,9 @@ export default function Signup() {
         }
       })
       .catch((err) => {
-        setTimeout(() => {
-          setIsLoading(false);
-        }, 1);
+        // setTimeout(() => {
+        //   setIsLoading(false);
+        // }, 1);
         if (
           err.response.data.message.non_field_errors ==
           "User Name already taken"
@@ -185,20 +190,19 @@ export default function Signup() {
           setErrors(tempErrors);
           return;
         }
+      })
+      .finally(() => {
+        dispatch(SET_USER_DATA_LOADING(false));
       });
   };
 
   return (
     <>
-      {/* {loading ? <LoadingSpinner /> : isLoading ? <LoadingSpinner /> : <></>} */}
+      {userLoader && <LoadingSpinner />}
       <div className="login-signup-wrapper">
-        <div className="card max-w-[650px] md:px-9">
-          <div className="mt-2.5 inline-flex items-center justify-center w-full h-full">
-            <img
-              src={Images.Logo}
-              className="h-auto max-w-[170px] md:max-w-[200px]"
-              alt=""
-            />
+        <div className="card max-w-[650px] md:px-9 w-full">
+          <div className="max-w-[150px] md:max-w-[200px] w-full mx-auto my-3 h-[65px]">
+            <Logo />
           </div>
           <h2 className="card-page-title text-center mb-5">
             Create your adifect account
@@ -211,7 +215,11 @@ export default function Signup() {
             <div className="input-fields-wrapper">
               <label>Username:</label>
               <input
-                className={errors.username ? "input-style input-err-style" : "input-style"}
+                className={
+                  errors.username
+                    ? "input-style input-err-style"
+                    : "input-style"
+                }
                 type="text"
                 autoComplete="nope"
                 value={username}
@@ -227,7 +235,11 @@ export default function Signup() {
             <div className="input-fields-wrapper">
               <label>First Name:</label>
               <input
-                className={errors.username ? "input-style input-err-style" : "input-style"}
+                className={
+                  errors.username
+                    ? "input-style input-err-style"
+                    : "input-style"
+                }
                 type="text"
                 autoComplete="nope"
                 value={firstname}
@@ -244,7 +256,11 @@ export default function Signup() {
             <div className="input-fields-wrapper">
               <label>Last Name:</label>
               <input
-                className={errors.username ? "input-style input-err-style" : "input-style"}
+                className={
+                  errors.username
+                    ? "input-style input-err-style"
+                    : "input-style"
+                }
                 type="text"
                 autoComplete="nope"
                 value={lastname}
@@ -260,7 +276,11 @@ export default function Signup() {
             <div className="input-fields-wrapper">
               <label>Email Address:</label>
               <input
-                className={errors.username ? "input-style input-err-style" : "input-style"}
+                className={
+                  errors.username
+                    ? "input-style input-err-style"
+                    : "input-style"
+                }
                 type="text"
                 value={email}
                 onChange={(e) => {
@@ -276,7 +296,11 @@ export default function Signup() {
             <div className="input-fields-wrapper">
               <label>Password: (must be 7 or more)</label>
               <input
-                className={errors.username ? "input-style input-err-style" : "input-style"}
+                className={
+                  errors.username
+                    ? "input-style input-err-style"
+                    : "input-style"
+                }
                 value={password}
                 autoComplete="new-password"
                 onChange={(e) => {
@@ -292,7 +316,11 @@ export default function Signup() {
             <div className="input-fields-wrapper">
               <label>Confirm Password:</label>
               <input
-                className={errors.username ? "input-style input-err-style" : "input-style"}
+                className={
+                  errors.username
+                    ? "input-style input-err-style"
+                    : "input-style"
+                }
                 value={confirm_password}
                 onChange={(e) => {
                   setErrors({ ...errors, confirmPassword: null });
@@ -315,10 +343,11 @@ export default function Signup() {
               >
                 <label>Role: </label>
                 <Select
-                  className={`${role === ""
-                    ? "!text-[#939393] hover:border-[#939393] "
-                    : "text-[#000]"
-                    }bg-[#f9fbfc] !rounded w-full !text-sm !font-semibold`}
+                  className={`${
+                    role === ""
+                      ? "!text-[#939393] hover:border-[#939393] "
+                      : "text-[#000]"
+                  }bg-[#f9fbfc] !rounded w-full !text-sm !font-semibold`}
                   value={role}
                   open={isOpen}
                   disabled={redirectMyUrl}
@@ -351,8 +380,12 @@ export default function Signup() {
                 type="submit"
                 value="Create Account"
               />
-              <p className="card-page-info mt-uni-gap">By signing up, you agree to our Privacy Policy</p>{" "}
-              <Link className="btn-link" to="/login">Sign In Instead</Link>
+              <p className="card-page-info mt-uni-gap">
+                By signing up, you agree to our Privacy Policy
+              </p>{" "}
+              <Link className="btn-link" to="/login">
+                Sign In Instead
+              </Link>
             </div>
           </form>
         </div>

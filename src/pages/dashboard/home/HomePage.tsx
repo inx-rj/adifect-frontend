@@ -6,6 +6,8 @@ import { Navigate } from "react-router-dom";
 import AdminDashboard from "../../../components/homePage/AdminDashboard";
 import AgencyDashboard from "../../../components/homePage/AgencyDashboard";
 import { Roles } from "../../../helper/config";
+import AgencyMemberDashboard from "components/homePage/AgencyMemberDashboard";
+import CreatorDashboard from "../../../components/homePage/CreatorDashboard";
 
 //Import lazy load Component
 // const PageHeading = lazy(() => import("../../components/heading/PageHeading"));
@@ -16,14 +18,13 @@ const HomePage = () => {
   return userData.data.user.role == Object.values(Roles)[0] ? (
     <AdminDashboard />
   ) : userData.data.user.role == Object.values(Roles)[1] ? (
-    // <CreatorDashboard />
-    <></>
+    <CreatorDashboard />
   ) : userData.data.user.role == 2 ? (
     <AgencyDashboard />
   ) : userData.data.user.role == Object.values(Roles)[3] ? (
-    // <AgencyMemberDashboard />
-    <></>
+    <AgencyMemberDashboard />
   ) : (
+    // <></>
     <Navigate to="/" />
   );
 };

@@ -63,15 +63,11 @@ const CustomPopup = ({
           },
         }}
       >
-        {/* !normal-case !font-semibold rounded-md !px-8 !py-2 hover:!bg-primary */}
-        <Button
-          onClick={mainActionHandler}
-          className="btn btn-primary max-h-[35px]"
-        >
+        <Button onClick={mainActionHandler} className="btn btn-primary">
           {mainActionTitle}
         </Button>
         <Button
-          className="btn btn-outline max-h-[35px]"
+          className="btn btn-outline"
           onClick={closePopup}
           variant="outlined"
         >

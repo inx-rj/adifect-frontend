@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Images } from "../../helper/images";
 import { TRIGGER_FORGOT_PASSWORD } from "../../redux/actions/auth/auth.actions";
 import { useAppDispatch } from "../../redux/store";
+import Logo from "components/common/logo/Logo";
 
 const ForgotPassword = () => {
   let navigate = useNavigate();
@@ -26,10 +27,6 @@ const ForgotPassword = () => {
     };
     setErrors(tempErrors);
     if (Object.values(tempErrors).filter((value) => value).length) {
-      console.log(
-        "..values",
-        Object.values(tempErrors).filter((value) => value)
-      );
       return;
     }
     submitHandler(e);
@@ -43,8 +40,8 @@ const ForgotPassword = () => {
           text: "Email has been sent successfully!",
           // text: res.data.message,
           className: "successAlert",
-          icon: "/img/logonew.svg",
-          //   buttons: false,
+          icon: Images.Logo,
+          buttons: { visible: false },
           timer: 5000,
         });
         navigate("/");
@@ -62,7 +59,7 @@ const ForgotPassword = () => {
           text: error,
           className: "errorAlert",
           icon: Images.Logo,
-          //   buttons: false,
+          buttons: { visible: false },
           timer: 5000,
         });
       });
@@ -74,15 +71,11 @@ const ForgotPassword = () => {
         <LoadingSpinner />
       ) : ( */}
       <>
-        <div className="flex my-0 mx-auto max-w-[380px] items-center justify-center w-[90%] h-screen">
-          <div className="card">
+        <div className="login-signup-wrapper">
+          <div className="card max-w-[380px] w-full">
             <div className="px-0 xs:px-5">
-              <div className="mt-2.5 mb-4 inline-flex items-center justify-center w-full h-full">
-                <img
-                  src={Images.Logo}
-                  className="h-auto max-w-[170px] md:max-w-[200px]"
-                  alt=""
-                />
+              <div className="max-w-[150px] md:max-w-[200px] w-full mx-auto my-3 h-[65px]">
+                <Logo />
               </div>
               <div className="login-content">
                 <div className="ForgotPgae">

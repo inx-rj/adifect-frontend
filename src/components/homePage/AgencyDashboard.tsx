@@ -9,8 +9,6 @@ import Title from "../../components/common/PageTitle/Title";
 
 // Chart.register(...registerables);
 const AgencyDashboard = () => {
-  console.log("AgencyDashboard");
-
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -25,25 +23,21 @@ const AgencyDashboard = () => {
       {/* {loading ? <LoadingSpinner /> : <></>} */}
       {/* {isLoading && <LoadingSpinner />} */}
 
-      <div className="Topallpage_sec">
-        <div className="creatordashbordtab ">
-          <div className="pb-5">
-            <Title title="Analytics" />
-          </div>
-          <div className="Work-D grid md:grid-cols-2 sm:grid-cols-1 gap-4">
-            <div className="rounded-md bg-white p-6 shadow-[0_4px_40px_#2472fc0f]">
-              <AgencyDashboardAnalyticsPerformanceChart />
-            </div>
-            <div className="rounded-md bg-white p-6 shadow-[0_4px_40px_#2472fc0f]">
-              <AgencyDashboardAnalyticsAdsList />
-            </div>
-            <div className="inProgressDashboardComponent">
-              <AgencyDashboardInProgress />
-            </div>
-            <div className="inReviewDashboardComponent">
-              <AgencyDashboardInReview />
-            </div>
-          </div>
+      <div className="pb-5">
+        <Title title="Analytics" />
+      </div>
+      <div className="Work-D grid md:grid-cols-2 sm:grid-cols-1 gap-4">
+        <div className="rounded-md bg-white p-6 shadow-[0_4px_40px_#2472fc0f]">
+          <AgencyDashboardAnalyticsPerformanceChart />
+        </div>
+        <div className="rounded-md bg-white p-6 shadow-[0_4px_40px_#2472fc0f]">
+          <AgencyDashboardAnalyticsAdsList />
+        </div>
+        <div className="inProgressDashboardComponent">
+          <AgencyDashboardInProgress />
+        </div>
+        <div className="inReviewDashboardComponent">
+          <AgencyDashboardInReview />
         </div>
       </div>
     </>

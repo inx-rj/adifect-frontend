@@ -42,7 +42,7 @@ const initialState: AuthInitialType = {
         email: "",
         first_name: "",
         last_name: "",
-        role: 2,
+        role: 0,
         user_level: 0,
       },
     },
@@ -50,7 +50,7 @@ const initialState: AuthInitialType = {
   userProfile: {
     loading: false,
     hasData: false,
-    data: [userProfileDetails]
+    data: userProfileDetails
   }
 };
 
@@ -113,3 +113,4 @@ export const {
 export const GET_USER_DATA = (state: RootState) => state.auth.user;
 export const GET_USER_PROFILE_DATA = (state: RootState) =>
   state.auth.userProfile;
+export const USER_DATA_LOADER = (state: RootState) => state.auth.user.loading;
