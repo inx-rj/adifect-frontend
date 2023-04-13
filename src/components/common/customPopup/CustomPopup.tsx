@@ -15,16 +15,18 @@ const CustomPopup = ({
   mainActionHandler,
   mainActionTitle,
   textAlign = "center",
+  maxWidth = "450px",
 }) => {
   return (
     <Dialog
       className="profileImgDialogagency popupclass logoutPopup"
       open={openPopup}
       onClose={closePopup}
-      maxWidth="xs"
+      // maxWidth="xs"
       sx={{
         "& .MuiDialog-container .MuiDialog-paper": {
           width: "100%",
+          maxWidth: maxWidth,
         },
       }}
     >

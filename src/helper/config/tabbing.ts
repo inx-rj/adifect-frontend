@@ -106,5 +106,3 @@ export const companyProfileTabHeaders: ProfileTabHeadersType[] = [
     permission: [Roles.AGENCY]
   }
 ];
-
-// Todo - Need to remove old route for leave settings page

@@ -67,9 +67,36 @@ const GET_USER_DETAILS = () => async (dispatch: AppDispatch) => {
           title: "Error",
           text: error?.response?.data?.message,
           className: "errorAlert-login",
-          // icon: "/img/logonew-red.svg",
-          icon: Images.Logo,
-          // buttons: false,
+          icon: Images.ErrorLogo,
+          buttons: { visible: false },
+          timer: 1500,
+        });
+      }
+    })
+    .finally(() => {
+      dispatch(SET_USER_PROFILE_LOADING(false));
+    });
+};
+
+// Edit user details
+const TRIGGER_EDIT_USER = (userUpdateData) => async (dispatch: AppDispatch) => {
+  console.log("userUpdateData", userUpdateData)
+  dispatch(SET_USER_PROFILE_LOADING(true));
+  return await AuthApiClient.updateUserProfileData(userUpdateData)
+    .then((response) => {
+      if (response.status === 200) {
+        console.log("Update user response", response)
+        dispatch(SET_USER_PROFILE_DATA(response?.data?.[0]));
+      }
+    })
+    .catch((error) => {
+      if (error?.response.status === 400) {
+        swal({
+          title: "Error",
+          text: error?.response?.data?.message,
+          className: "errorAlert-login",
+          icon: Images.ErrorLogo,
+          buttons: { visible: false },
           timer: 1500,
         });
       }
@@ -99,6 +126,7 @@ export {
   REGISTER_USER,
   TRIGGER_LOGIN,
   GET_USER_DETAILS,
+  TRIGGER_EDIT_USER,
   TRIGGER_FORGOT_PASSWORD,
   TRIGGER_RESET_PASSWORD,
   TRIGGER_GET_RESET_PASSWORD

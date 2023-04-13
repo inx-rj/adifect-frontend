@@ -3,8 +3,8 @@ import { API_URL } from "helper/env";
 
 class ProfileApiClient {
 
-    // Get User profile communication list 
-    fetchUserProfileCommunList = () =>
+  // Get User profile communication list 
+  fetchUserProfileCommunList = () =>
     axiosPrivate.get(
       `${API_URL.PROFILE.USER_COMMUNICATION}?ordering=created`
     );

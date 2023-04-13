@@ -138,7 +138,7 @@ const AgencyCompanyList = () => {
   //handle view action
   const handleView = (item) => {
     setAnchorEl(null);
-    navigate(`/companydata/${item.id}`);
+    navigate(`/company/${item.id}`);
   };
 
   //handle inactive action
