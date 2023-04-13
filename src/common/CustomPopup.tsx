@@ -63,7 +63,6 @@ const CustomPopup = ({
           },
         }}
       >
-        {/* !normal-case !font-semibold rounded-md !px-8 !py-2 hover:!bg-primary */}
         <Button onClick={mainActionHandler} className="btn btn-primary">
           {mainActionTitle}
         </Button>

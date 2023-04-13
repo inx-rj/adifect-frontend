@@ -25,4 +25,5 @@ export interface TableDataResponseType {
 export interface TablePaginationType {
   page: number;
   rowsPerPage: number;
+  search?: string
 }

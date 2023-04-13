@@ -1,46 +1,55 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import { useState } from "react";
 import swal from "sweetalert";
 import { Button, MenuItem, Select, Typography } from "@mui/material";
-import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import { useSingleEffect, useUpdateEffect } from "react-haiku";
 
+//import redux
 import { useAppSelector } from "redux/store";
 import { useAppDispatch } from "redux/store";
 import {
   DELETE_INVITE_USER,
-  GET_COMPANIES_LIST,
   GET_INVITE_USERS,
   POST_INVITE_USER,
   PUT_INVITE_USER,
 } from "redux/actions/inviteUser/inviteUser.actions";
-import {
-  COMPANIES_LIST,
-  INVITE_USER_LIST,
-} from "redux/reducers/inviteUser/inviteUser.slice";
+import { INVITE_USER_LIST } from "redux/reducers/inviteUser/inviteUser.slice";
+import { COMPANY_LIST } from "redux/reducers/companyTab/companyTab.slice";
+import { GET_COMPANY_LIST } from "redux/actions/companyTab/companyTab.actions";
 
-import Custom_MUI_Table from "common/MuiCustomTable/Custom-MUI-Table";
-import SearchBar from "common/MuiCustomTable/CustomSearchBar";
+//import components
+import SearchBar from "common/CustomSearchBar";
 import CustomPopup from "common/CustomPopup";
+import MuiCustomTable from "components/common/muiCustomTable/MuiCustomTable";
+import CustomActionComponent from "common/CustomActionComponent";
 
+//import assets
 import SortArrowIcon from "../../assets/images/sort_arrows.png";
 import PersonAddAltIcon from "@mui/icons-material/PersonAddAlt";
 import HomeIcon from "@mui/icons-material/Home";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
-import BorderColorIcon from "@mui/icons-material/BorderColor";
-import DeleteIcon from "@mui/icons-material/Delete";
+
+// import helpers
 import { validateEmail } from "helper/validations";
+import {
+  TablePaginationType,
+  TableRowColType,
+} from "helper/types/muiCustomTable/muiCustomTable";
+import { Images } from "helper/images";
 
 const InviteUser = () => {
   const dispatch = useAppDispatch();
-  const modalRef = useRef(null);
 
-  const { inviteUserData, loading: inviteUserLoading } =
-    useAppSelector(INVITE_USER_LIST);
-  const { companiesList } = useAppSelector(COMPANIES_LIST);
+  const { inviteUserList } = useAppSelector(INVITE_USER_LIST);
+  const { companyList } = useAppSelector(COMPANY_LIST);
 
   const [searchText, setSearchText] = useState("");
+  const [selectedItem, setSelectedItem] = useState({
+    currentTooltip: null,
+    currentId: null,
+  });
+  const [anchorEl, setAnchorEl] = useState(null);
   const [openModal, setOpenModal] = useState(false);
-  const [currentTooltip, setCurrentTooltip] = useState(null);
   const [openCompanyDropdown, setOpenCompanyDropdown] = useState(false);
   const [openLevelDropdown, setOpenLevelDropdown] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
@@ -54,31 +63,25 @@ const InviteUser = () => {
     level: "",
   });
   const [errors, setErrors] = useState({
-    email: null,
-    company: null,
-    level: null,
+    email: "",
+    company: "",
+    level: "",
   });
-  const [paginationData, setPaginationData] = useState({
+  const [paginationData, setPaginationData] = useState<TablePaginationType>({
     page: 1,
     rowsPerPage: 10,
+    search: "",
   });
 
-  useEffect(() => {
-    dispatch(GET_COMPANIES_LIST());
-  }, []);
+  //fetch inital invite users and companies data list
+  useSingleEffect(() => {
+    dispatch(GET_COMPANY_LIST(paginationData));
+    dispatch(GET_INVITE_USERS(paginationData));
+  });
 
-  useEffect(() => {
+  useUpdateEffect(() => {
     dispatch(GET_INVITE_USERS(paginationData));
   }, [paginationData]);
-
-  // Add event listener to detect clicks outside the modall
-  useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside);
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  });
 
   //get user level
   const getUserLevel = (level) => {
@@ -97,20 +100,13 @@ const InviteUser = () => {
     return "";
   };
 
-  //close modal if clicked outside for edit/delete tooltip
-  const handleClickOutside = (e) => {
-    if (modalRef.current && !modalRef.current.contains(e.target)) {
-      setCurrentTooltip(null);
-    }
-  };
-
   //set the edit mode
-  const handleEditEntry = (itemId, level) => {
-    setCurrentTooltip(itemId);
-    setIsEditMode(true);
+  const handleEdit = (item) => {
     setOpenModal(true);
-    setErrors({ ...errors, level: null });
-    setFormData({ ...formData, level });
+    setIsEditMode(true);
+    setErrors({ ...errors, level: "" });
+    setSelectedItem({ ...selectedItem, currentId: item?.id });
+    setFormData({ ...formData, level: item?.level });
   };
 
   //validate inputs
@@ -133,7 +129,6 @@ const InviteUser = () => {
       return;
     }
     handleFormSubmit();
-    setFormData({ ...formData, email: "" });
   };
 
   //handle form data
@@ -146,8 +141,9 @@ const InviteUser = () => {
   //handle add and edit form submit
   const handleFormSubmit = () => {
     if (isEditMode) {
-      dispatch(PUT_INVITE_USER(currentTooltip, { levels: formData?.level }));
-      setCurrentTooltip(null);
+      dispatch(
+        PUT_INVITE_USER(selectedItem.currentId, { levels: formData?.level })
+      );
     } else {
       dispatch(
         POST_INVITE_USER({
@@ -157,36 +153,31 @@ const InviteUser = () => {
         })
       );
     }
+    setAnchorEl(null);
+    setSelectedItem({ currentId: null, currentTooltip: null });
     setOpenModal(false);
     setIsEditMode(false);
+    setFormData({ ...formData, email: "" });
   };
 
   //handle delete action
-  const handleDeleteEntry = (itemId) => {
+  const handleDelete = (item) => {
     swal({
       title: "",
       text: "Are you sure you want to remove this user?",
       className: "errorAlert",
-      icon: "/img/logonew-red.svg",
-      // buttons: true,
+      icon: Images.Logo,
       dangerMode: true,
     }).then((willDelete) => {
       if (willDelete) {
-        dispatch(DELETE_INVITE_USER(itemId));
-        dispatch(GET_INVITE_USERS(paginationData));
-        swal({
-          title: "Successfully Complete",
-          text: "Successfully removed!",
-          className: "successAlert",
-          icon: "/img/logonew.svg",
-          // buttons: false,
-          timer: 1500,
-        });
+        dispatch(DELETE_INVITE_USER(item?.id));
       }
     });
+    setAnchorEl(null);
+    setSelectedItem({ currentId: null, currentTooltip: null });
   };
 
-  const columns = {
+  const data: TableRowColType = {
     columns: [
       {
         id: 1,
@@ -253,8 +244,8 @@ const InviteUser = () => {
     ],
 
     rows:
-      inviteUserData?.results?.length > 0
-        ? inviteUserData?.results?.map((item, index) => {
+      inviteUserList?.data?.results?.length > 0
+        ? inviteUserList?.data?.results?.map((item, index) => {
             return {
               name: (
                 <div key={index}>
@@ -303,33 +294,45 @@ const InviteUser = () => {
                 </Button>
               ),
               action: (
-                <div className="relative">
-                  <MoreVertIcon
-                    cursor="pointer"
-                    onClick={() => setCurrentTooltip(item?.id)}
-                  />
-                  {currentTooltip === item?.id && !isEditMode && (
-                    <div
-                      ref={modalRef}
-                      className="shadow-sm absolute left-3 top-[10px] bg-white z-10 p-[10px] rounded-[4px] max-w-fit text-sm text-disable leading-4"
-                    >
-                      <div
-                        className="flex justify-start items-center gap-2 cursor-pointer"
-                        onClick={() => handleEditEntry(item?.id, item?.level)}
-                      >
-                        <BorderColorIcon />
-                        <span>Edit</span>
-                      </div>
-                      <div
-                        className="flex justify-start items-center gap-2 pt-[15px] cursor-pointer"
-                        onClick={() => handleDeleteEntry(item?.id)}
-                      >
-                        <DeleteIcon />
-                        <span>Delete</span>
-                      </div>
-                    </div>
-                  )}
-                </div>
+                <CustomActionComponent
+                  selectedItem={selectedItem}
+                  setSelectedItem={setSelectedItem}
+                  setAnchorEl={setAnchorEl}
+                  anchorEl={anchorEl}
+                  handleEdit={() => handleEdit(item)}
+                  handleDelete={() => handleDelete(item)}
+                  showDelete={true}
+                  showEdit={true}
+                  isEditMode={isEditMode}
+                  item={{ id: item?.id, isActive: item?.is_active }}
+                />
+                // <div className="relative">
+                //   <MoreVertIcon
+                //     cursor="pointer"
+                //     onClick={() => setCurrentTooltip(item?.id)}
+                //   />
+                //   {currentTooltip === item?.id && !isEditMode && (
+                //     <div
+                //       ref={modalRef}
+                //       className="shadow-sm absolute left-3 top-[10px] bg-white z-10 p-[10px] rounded-[4px] max-w-fit text-sm text-disable leading-4"
+                //     >
+                //       <div
+                //         className="flex justify-start items-center gap-2 cursor-pointer"
+                //         onClick={() => handleEditEntry(item?.id, item?.level)}
+                //       >
+                //         <BorderColorIcon />
+                //         <span>Edit</span>
+                //       </div>
+                //       <div
+                //         className="flex justify-start items-center gap-2 pt-[15px] cursor-pointer"
+                //         onClick={() => handleDeleteEntry(item?.id)}
+                //       >
+                //         <DeleteIcon />
+                //         <span>Delete</span>
+                //       </div>
+                //     </div>
+                //   )}
+                // </div>
               ),
             };
           })
@@ -345,13 +348,16 @@ const InviteUser = () => {
             <HomeIcon color="disabled" />
           </Link>
           <span className="text-disable opacity-20">|</span>
-          <Link to="/invite-user">Invite User</Link>
+          <Link to="/invite">Invite User</Link>
         </div>
       </div>
 
       <div className="page-card">
         <div className="flex-between flex flex-wrap p-[15px] pb-5">
-          <SearchBar onChange={setSearchText} />
+          <SearchBar
+            setPaginationData={setPaginationData}
+            paginationData={paginationData}
+          />
           <button
             type="submit"
             onClick={() => setOpenModal(true)}
@@ -361,14 +367,14 @@ const InviteUser = () => {
             <span className="btn-label">Invite User</span>
           </button>
         </div>
-        {inviteUserLoading ? (
+        {inviteUserList?.loading ? (
           <h1>Loading...</h1>
         ) : (
           <>
-            <Custom_MUI_Table
-              loader={inviteUserLoading}
-              data={columns}
-              allData={inviteUserData}
+            <MuiCustomTable
+              loader={inviteUserList?.loading}
+              data={data}
+              allData={inviteUserList?.data}
               paginationData={paginationData}
               setPaginationData={setPaginationData}
             />
@@ -433,7 +439,7 @@ const InviteUser = () => {
                             inputProps={{ "aria-label": "Without label" }}
                           >
                             <MenuItem value="">Select Company</MenuItem>
-                            {companiesList?.map((item) =>
+                            {companyList?.data.results?.map((item) =>
                               item.is_active ? (
                                 <MenuItem key={item?.id} value={item?.id}>
                                   {item?.name}
@@ -466,7 +472,6 @@ const InviteUser = () => {
                         onClose={() => {
                           setOpenLevelDropdown(false);
                         }}
-                        // disabled={DamData?.[0]?.company_id}
                         MenuProps={{
                           variant: "menu",
                           disableScrollLock: true,

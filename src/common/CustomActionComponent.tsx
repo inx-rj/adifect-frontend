@@ -1,28 +1,76 @@
 //import MUI components and icons
-import { ListItemIcon, Menu, MenuItem, } from "@mui/material";
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
-import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
-import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
-import DeleteIcon from '@mui/icons-material/Delete';
+import { ListItemIcon, Menu, MenuItem } from "@mui/material";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
+import RemoveRedEyeOutlinedIcon from "@mui/icons-material/RemoveRedEyeOutlined";
+import DeleteIcon from "@mui/icons-material/Delete";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
+export interface propsType {
+  anchorEl: null | HTMLElement;
+  selectedItem: any;
+  showDelete?: boolean;
+  showView?: boolean;
+  showEdit?: boolean;
+  showInActive?: boolean;
+  isEditMode?: boolean;
+  item?: {
+    id: number;
+    isActive: boolean;
+  };
+  setAnchorEl: (newValue: null | HTMLElement | EventTarget) => void;
+  handleDelete?: () => void;
+  handleEdit?: () => void;
+  handleView?: () => void;
+  setSelectedItem?: React.Dispatch<React.SetStateAction<any>>;
+  handleInactive?: () => void;
+  handleActive?: () => void;
+}
 
-
-const CustomActionComponent = ({ anchorEl, setAnchorEl, open, handleDelete, handleEdit, handleView, handleInactive, showDelete = false, showView = false, showEdit = false, showInActive = false }) => {
+const CustomActionComponent = ({
+  anchorEl,
+  setAnchorEl,
+  selectedItem,
+  setSelectedItem,
+  handleDelete,
+  handleEdit,
+  handleView,
+  handleInactive,
+  handleActive,
+  showDelete = false,
+  showView = false,
+  showEdit = false,
+  showInActive = false,
+  isEditMode = false,
+  item,
+}: propsType) => {
   return (
     <div className="relative">
-      <MoreVertIcon cursor="pointer" onClick={(e) => setAnchorEl(anchorEl ? null : e.currentTarget)} />
+      <MoreVertIcon
+        cursor="pointer"
+        onClick={(e) => {
+          setAnchorEl(anchorEl ? null : e.currentTarget);
+          setSelectedItem({ currentId: item?.id, currentTooltip: item?.id });
+        }}
+      />
       <Menu
         anchorEl={anchorEl}
-        id="account-menu"
-        open={open}
-        onClose={() => setAnchorEl(null)}
-        onClick={() => setAnchorEl(null)}
+        id={`account-menu-${item?.id}`}
+        open={selectedItem?.currentTooltip === item?.id}
+        onClose={() => {
+          setAnchorEl(null);
+          setSelectedItem({ ...selectedItem, currentTooltip: null });
+        }}
+        onClick={() => {
+          setAnchorEl(null);
+          setSelectedItem({ ...selectedItem, currentTooltip: null });
+        }}
         PaperProps={{
           elevation: 0,
           sx: {
-            overflow: 'visible',
-            filter: 'drop-shadow(0px 0px 4px rgba(0, 0, 0, 0.25))',
-            '& .MuiAvatar-root': {
+            overflow: "visible",
+            filter: "drop-shadow(0px 0px 4px rgba(0, 0, 0, 0.25))",
+            "& .MuiAvatar-root": {
               width: 32,
               height: 32,
               ml: -0.5,
@@ -30,20 +78,22 @@ const CustomActionComponent = ({ anchorEl, setAnchorEl, open, handleDelete, hand
             },
           },
         }}
-        transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-        anchorOrigin={{ horizontal: 'left', vertical: 'top' }}
+        transformOrigin={{ horizontal: "right", vertical: "top" }}
+        anchorOrigin={{ horizontal: "left", vertical: "top" }}
       >
         {showView && (
-          <MenuItem sx={{
-            "&.MuiMenuItem-root": {
-              fontFamily: 'Figtree',
-              fontStyle: "normal",
-              fontWeight: 400,
-              fontSize: "14px",
-              lineHeight: "17px",
-            }
-          }}
-            onClick={handleView}>
+          <MenuItem
+            sx={{
+              "&.MuiMenuItem-root": {
+                fontFamily: "Figtree",
+                fontStyle: "normal",
+                fontWeight: 400,
+                fontSize: "14px",
+                lineHeight: "17px",
+              },
+            }}
+            onClick={handleView}
+          >
             <ListItemIcon>
               <RemoveRedEyeOutlinedIcon fontSize="small" />
             </ListItemIcon>
@@ -59,11 +109,15 @@ const CustomActionComponent = ({ anchorEl, setAnchorEl, open, handleDelete, hand
           </MenuItem>
         )}
         {showInActive && (
-          <MenuItem onClick={handleInactive}>
+          <MenuItem onClick={item?.isActive ? handleInactive : handleActive}>
             <ListItemIcon>
-              <RemoveCircleOutlineIcon fontSize="small" />
+              {item?.isActive ? (
+                <RemoveCircleOutlineIcon fontSize="small" />
+              ) : (
+                <AddCircleOutlineOutlinedIcon fontSize="small" />
+              )}
             </ListItemIcon>
-            Inactive
+            {item?.isActive ? "Inactive" : "Active"}
           </MenuItem>
         )}
         {showDelete && (
@@ -75,8 +129,8 @@ const CustomActionComponent = ({ anchorEl, setAnchorEl, open, handleDelete, hand
           </MenuItem>
         )}
       </Menu>
-    </div >
-  )
-}
+    </div>
+  );
+};
 
-export default CustomActionComponent
+export default CustomActionComponent;

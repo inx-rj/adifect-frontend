@@ -1,3 +1,4 @@
+import { setQueryParams } from "helper/utility/customFunctions";
 import axiosPrivate from "../../api/axios";
 import { API_URL } from "../../helper/env";
 
@@ -5,15 +6,8 @@ const userData = () => JSON.parse(localStorage.getItem("userData") ?? '');
 
 class InviteUserApiClient {
   // get invited users list
-  fetchInviteUsers = ({ rowsPerPage, page }) =>
-    axiosPrivate.get(`${API_URL.INVITE.INVITE_USERS}`, {
-      params: { page_size: rowsPerPage, page },
-    });
-
-  //get comapnies list
-  getCompaniesList = () =>
-    axiosPrivate.get(`${API_URL.COMPANY.COMPANY_LIST}`, {
-    });
+  fetchInviteUsers = (filters: any) =>
+    axiosPrivate.get(`${API_URL.INVITE.INVITE_USERS}` + setQueryParams(filters));
 
   //add invite user
   addInviteUser = (postObj: any) => {
@@ -29,10 +23,9 @@ class InviteUserApiClient {
     return axiosPrivate.put(`${API_URL.INVITE.INVITE_USERS}${id}/`, payload)
   }
 
-  //update invite user
+  //delete invite user
   deleteInviteUser = (id: number) => {
-    return axiosPrivate.delete(`${API_URL.INVITE.INVITE_USERS}${id}/`, {
-    });
+    return axiosPrivate.delete(`${API_URL.INVITE.INVITE_USERS}${id}/`);
   }
 }
 
