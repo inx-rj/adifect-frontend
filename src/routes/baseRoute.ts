@@ -116,8 +116,10 @@ export const DASHBOARD_TEMPLATES_ROUTES: Readonly<{
 // Company Route
 export const DASH_COMPANY: Readonly<{
   HOME: string;
+  COMPANY_LIST_DETAILS: string;
 }> = Object.freeze({
   HOME: `${PAGE_ROUTE.HOME}agency/company`,
+  COMPANY_LIST_DETAILS: `${PAGE_ROUTE.HOME}companydata/:companyId`,
 });
 
 // Company Route
@@ -162,7 +164,11 @@ export const SIDEBAR_ROUTES: SidebarRoutesTypes[] = [
     children: [],
     permission: [Roles.AGENCY],
   },
-  { name: "My Projects", path: PAGE_ROUTE.MY_PROJECTS, icon: "StickyNote2Outlined" },
+  {
+    name: "My Projects",
+    path: PAGE_ROUTE.MY_PROJECTS,
+    icon: "StickyNote2Outlined",
+  },
   {
     name: "Companies",
     // imgPath: "/img/Projects.png",
@@ -230,9 +236,10 @@ export const SIDEBAR_ROUTES: SidebarRoutesTypes[] = [
     permission: [Roles.CREATOR],
   },
   {
-    name: "Help", path: DASHBOARD_HELP_ROUTE.HOME,
+    name: "Help",
+    path: DASHBOARD_HELP_ROUTE.HOME,
     icon: "HelpOutlineOutlined",
-    children: []
+    children: [],
   },
 
   //Agency Member - ADMIN Sidebar

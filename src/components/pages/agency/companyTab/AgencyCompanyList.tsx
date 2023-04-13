@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useSingleEffect, useUpdateEffect } from "react-haiku";
 import swal from "sweetalert";
 
@@ -16,7 +16,10 @@ import HomeIcon from "@mui/icons-material/Home";
 import AddIcon from "@mui/icons-material/Add";
 
 //import helper files
-import { TableRowColType } from "helper/types/muiCustomTable/muiCustomTable";
+import {
+  TableRowColType,
+  TablePaginationType,
+} from "helper/types/muiCustomTable/muiCustomTable";
 import { Images } from "helper/images";
 import { formateISODateToLocaleString } from "helper/utility/customFunctions";
 
@@ -32,6 +35,7 @@ import { COMPANY_LIST } from "redux/reducers/companyTab/companyTab.slice";
 
 const AgencyCompanyList = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   // Redux states
   const { companyList } = useAppSelector(COMPANY_LIST);
@@ -58,9 +62,10 @@ const AgencyCompanyList = () => {
     company: "",
     description: "",
   });
-  const [paginationData, setPaginationData] = useState({
+  const [paginationData, setPaginationData] = useState<TablePaginationType>({
     page: 1,
     rowsPerPage: 10,
+    search: "",
   });
 
   //fetch inital companies data list
@@ -79,18 +84,6 @@ const AgencyCompanyList = () => {
     setFormData({ ...formData, [name]: name === "isActive" ? checked : value });
     setErrors({ ...errors, [name]: null });
   };
-
-  useUpdateEffect(() => {
-    console.log("useUpdateEffect", searchText);
-    // const search = async () => {
-    //   const response = await fetch(
-    //     `YOUR_API_ENDPOINT?searchText=${searchText}`
-    //   );
-    //   const data = await response.json();
-    //   setSearchResults(data);
-    // };
-    // search();
-  }, [searchText]);
 
   //handle edit action
   const handleEdit = (item) => {
@@ -143,9 +136,9 @@ const AgencyCompanyList = () => {
   };
 
   //handle view action
-  const handleView = () => {
-    console.log("handleView");
+  const handleView = (item) => {
     setAnchorEl(null);
+    navigate(`/companydata/${item.id}`);
   };
 
   //handle inactive action
@@ -277,7 +270,7 @@ const AgencyCompanyList = () => {
                   setAnchorEl={setAnchorEl}
                   anchorEl={anchorEl}
                   handleEdit={() => handleEdit(item)}
-                  handleView={handleView}
+                  handleView={() => handleView(item)}
                   handleInactive={handleInactive}
                   handleActive={handleActive}
                   showView={true}
@@ -306,7 +299,10 @@ const AgencyCompanyList = () => {
       </div>
       <div className="page-card">
         <div className="flex-between flex-wrap p-[15px] pb-5">
-          <SearchBar onChange={setSearchText} />
+          <SearchBar
+            setPaginationData={setPaginationData}
+            paginationData={paginationData}
+          />
           <button
             type="submit"
             onClick={() => setOpenModal(true)}

@@ -4,14 +4,15 @@ import {
 } from "../../reducers/inviteUser/inviteUser.slice";
 import { AppDispatch } from "../../store";
 import InviteUserApiClient from "services/inviteUser/InviteUserApiClient";
-import { inviteUserPayloadData, paginationData } from "helper/types/profileDropdown/inviteUserType";
+import { inviteUserPayloadData } from "helper/types/profileDropdown/inviteUserType";
 import { Images } from "helper/images";
+import { initialTableConfigInterface } from "helper/types/common/table";
 
 
 // Fetch the invite users list
-const GET_INVITE_USERS = (paginationData: paginationData) => async (dispatch: AppDispatch) => {
+const GET_INVITE_USERS = (tableConfig: initialTableConfigInterface) => async (dispatch: AppDispatch) => {
   dispatch(SET_INVITE_USER_LIST_LOADING(true));
-  await InviteUserApiClient.fetchInviteUsers(paginationData)
+  await InviteUserApiClient.fetchInviteUsers(tableConfig)
     .then((response) => {
       if (response.status === 201 || response.status === 200) {
         dispatch(SET_INVITE_USER_LIST_DATA(response?.data?.data));

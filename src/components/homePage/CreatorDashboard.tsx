@@ -12,7 +12,7 @@ import React, { useCallback, useState } from "react";
 import { useSingleEffect, useUpdateEffect } from "react-haiku";
 import { Link, useNavigate } from "react-router-dom";
 
-import { GET_USER_DATA } from "redux/reducers/auth/auth.slice";
+import { GET_USER_PROFILE_DATA } from "redux/reducers/auth/auth.slice";
 import { FRESHERS_JOBS_DATA } from "redux/reducers/homePage/fresherJobsList.slice";
 import { GET_JOBS_DETAILS } from "redux/reducers/homePage/jobsList.slice";
 import { useAppDispatch, useAppSelector } from "redux/store";
@@ -21,11 +21,35 @@ import CreatorDashboardInReview from "./creatorDashboard/CreatorDashboardInRevie
 import { useDropzone } from "react-dropzone";
 import swal from "sweetalert";
 import { Images } from "helper/images";
-import { APPLY_FOR_JOB, GET_JOB_DETAILS, GET_MEMEBERS_FRESHERS_JOBLIST, GET_MEMEBERS_FRESHERS_LATEST_JOBLIST } from "redux/actions/jobs/jobs.actions";
+import {
+  APPLY_FOR_JOB,
+  GET_JOB_DETAILS,
+  GET_MEMEBERS_FRESHERS_JOBLIST,
+  GET_MEMEBERS_FRESHERS_LATEST_JOBLIST,
+} from "redux/actions/jobs/jobs.actions";
+import LoadingSpinner from "components/common/loadingSpinner/Loader";
+import CustomDateRangePicker from "components/common/customDatePicker/CustomDateRangePicker";
+import {
+  Add,
+  Delete,
+  FileUploadOutlined,
+  InsertLink,
+} from "@mui/icons-material";
 
+interface ErrorsType {
+  selects?: null | string;
+  number?: null | number | string;
+  formUrls?: null | string;
+  date?: null | Date | string;
+  coverletter?: null | string;
+  url?: null | string;
+  formsampleImgUrls?: null | string | Array<string>;
+  sampleurl?: null | string | Array<string>;
+  formSampleUrls?: null | string | Array<string>;
+}
 const CreatorDashboard = () => {
   const dispatch = useAppDispatch();
-  const userData = useAppSelector(GET_USER_DATA);
+  const userData = useAppSelector(GET_USER_PROFILE_DATA);
 
   const freshJob = useAppSelector(FRESHERS_JOBS_DATA);
   const jobDetails = useAppSelector(GET_JOBS_DETAILS);
@@ -37,8 +61,8 @@ const CreatorDashboard = () => {
   const [offerPrice, setOfferPrice] = useState();
   const [jobDescription, setJobDescription] = useState();
   const [deliveryDate, setDeliveryDate] = useState();
-  const [proposedPrice, setProposedPrice] = useState();
-  const [proposedDate, setProposedDate] = useState();
+  const [proposedPrice, setProposedPrice] = useState("");
+  const [proposedDate, setProposedDate] = useState<Date>();
   const [userdata, setuserdata] = useState();
   const [company, setCompanyname] = useState("");
   const [jobDocumentsPopup, setJobDocumentsPopup] = useState();
@@ -55,6 +79,9 @@ const CreatorDashboard = () => {
     date: null,
     coverletter: null,
     url: null,
+    formsampleImgUrls: null,
+    sampleurl: null,
+    formSampleUrls: null,
   });
 
   // --------------------------show images and video-------------------------------------
@@ -73,8 +100,21 @@ const CreatorDashboard = () => {
   const [formUrls, setFormUrls] = useState([""]);
   const [hide, sethide] = useState(true);
 
+  const [datewarning, setdateWarning] = useState(false);
+  const [sampleimgUrl, setsampleImgUrl] = useState("");
+
+  // React states
+  const [filterData, setFilterData] = useState<{ [key: string]: string }>({
+    from_date: "",
+    to_date: "",
+    community: "",
+    status: "",
+    // Channel: "",
+    tag: "",
+  });
+
   useSingleEffect(() => {
-    if (userData?.data?.user?.user_level == 4) {
+    if (userData?.data?.user_level == 4) {
       dispatch(GET_MEMEBERS_FRESHERS_JOBLIST());
     } else {
       dispatch(GET_MEMEBERS_FRESHERS_LATEST_JOBLIST());
@@ -155,6 +195,17 @@ const CreatorDashboard = () => {
     ),
   });
 
+  const mainProposedCancel = () => {
+    setShow(false);
+    // setlink("");
+    // setdatepricewarning(false);
+    // set50value(false);
+    // set25value(false);
+
+    setlink(proposedPrice);
+    setStartDate(proposedDate);
+  };
+
   const openPopup = async (item_id) => {
     setOpen(true);
     setNewJobDetails(true);
@@ -177,6 +228,155 @@ const CreatorDashboard = () => {
     //   setCompanyname(jobDetails.company_name);
     // }
   };
+  //Clear Negotiation
+  const clearMainNegotiate = () => {
+    setlink("");
+    setStartDate(new Date());
+    setProposedPrice("");
+    // setProposedDate("");
+
+    // setdatepricewarning(false);
+    // set50value(false);
+    // set25value(false);
+  };
+
+  //Save Negotiation values
+  const savevalue = () => {
+    const tempErrors: any = {
+      number: !number && show && "Please enter Proposed Price",
+      date: !startDate && show && "Please add Proposed Due Date",
+    };
+
+    setErrors(tempErrors);
+
+    if (Object.values(tempErrors).filter((value) => value).length) {
+      // console.log(
+      //   "..values",
+      //   Object.values(tempErrors).filter((value) => value)
+      // );
+      return;
+    }
+    setProposedPrice(number);
+    setProposedDate(startDate);
+    setShow(false);
+
+    Number(offerPrice);
+    const per100 = 100;
+    const n = Number(offerPrice);
+    const percentage100 = n + (n / 100) * per100;
+    // if (number > percentage100 && daysdifference < 0) {
+    // }
+  };
+
+  let sampleurl: any = "";
+  let handleChangesampleUrls = (e) => {
+    sethide(true);
+    if (sampleimgUrl != "") {
+      if (
+        (sampleurl = sampleimgUrl.match(
+          /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g
+        ))
+      ) {
+        setFormSampleUrls([...formSampleUrls, sampleimgUrl]);
+        setsampleImgUrl("");
+      } else {
+        // setsampleImgUrl("");
+        const tempErrors: any = {
+          formsampleImgUrls:
+            sampleurl == null && "Please check the url(s) and try again",
+        };
+        setErrors(tempErrors);
+      }
+    } else if (sampleimgUrl == "") {
+      setsampleImgUrl("");
+      const tempErrors: any = {
+        sampleurl: !sampleimgUrl && "Please enter url",
+      };
+      setErrors(tempErrors);
+    } else {
+      setsampleImgUrl("");
+      const tempErrors: any = {
+        formsampleImgUrls:
+          sampleurl == null && "Please check the url(s) and try again",
+      };
+      setErrors(tempErrors);
+    }
+  };
+
+  const blockInvalidChar = (e) =>
+    ["e", "E", "+", "-"].includes(e.key) && e.preventDefault();
+
+  const handleChange1 = (evt) => {
+    // setdatepricewarning(false);
+    // set25value(false);
+    // set75value(false);
+    // set50value(false);
+    const { value } = evt.target;
+
+    // check if value includes a decimal point
+    if (value.match(/\./g)) {
+      const [, decimal] = value.split(".");
+
+      if (decimal?.length > 2) {
+        return;
+      }
+    }
+    Number(offerPrice);
+    const per50 = 50;
+    const per = 25;
+    const per75 = 75;
+    const per100 = 100;
+    const n = Number(offerPrice);
+
+    const percentage25 = n + (n / 100) * per;
+    const percentage50 = n + (n / 100) * per50;
+    const percentage75 = n + (n / 100) * per75;
+    const percentage100 = n + (n / 100) * per100;
+
+    // my change in project 28/9
+    const firstvalue = value - n;
+    const preDataValue = (firstvalue * 100) / n;
+    // console.log(preDataValue)
+    const preDataValue1 = Math.floor(preDataValue);
+    // setPrintPreData(preDataValue1);
+
+    const start = startDate;
+    let today = new Date(deliveryDate);
+    // const diffInMs = new Date(start) - new Date(today);
+    // const diffInDays = diffInMs / (1000 * 60 * 60 * 24);
+    // const diffInDate = Math.floor(diffInDays);
+
+    // if (value > percentage25 && Math.floor(diffInDays) < 0 && start != null) {
+    //   setdatepricewarning(true);
+    //   set50value(false);
+    //   set25value(false);
+    // } else if (
+    //   (value < percentage50 && value > percentage25) ||
+    //   number == percentage25
+    // ) {
+    //   set25value(true);
+    //   setdatepricewarning(false);
+    // } else if (value > percentage50 || value == percentage50) {
+    //   set50value(true);
+    //   setdatepricewarning(false);
+    // }
+    setlink(value);
+  };
+
+  //Open Negotiate box in Apply Job Modal on click of Negotiate button
+  const mainNegotiate = () => {
+    setShow(true);
+    if (number == "") {
+      setlink(jobDetails?.details?.price);
+    }
+  };
+
+  //set selected filter
+  const handleChange = (name: string, value: any) => {
+    setFilterData((prevState) => {
+      return { ...prevState, [name]: value };
+    });
+  };
 
   const handleClick = () => {
     setShowBlueBox(false);
@@ -189,7 +389,12 @@ const CreatorDashboard = () => {
   const handleClickOpen = async (item_id) => {
     console.log("ietm_id", item_id);
     setOpen1(true);
+    setIsPopupLoading(true);
+    setTimeout(() => {
+      setIsPopupLoading(false);
+    }, 1200);
 
+    dispatch(GET_JOB_DETAILS(item_id));
     // return () => clearTimeout(timer);
   };
 
@@ -218,6 +423,9 @@ const CreatorDashboard = () => {
   const [selects, setselects] = useState(null);
   const [question, setquestion] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+  setTimeout(function () {
+    setIsLoading(false);
+  }, 1200);
 
   const navigate = useNavigate();
 
@@ -276,31 +484,34 @@ const CreatorDashboard = () => {
     let user = JSON.parse(localStorage.getItem("userData"));
 
     if ((number) => 5) {
-      const formData = new FormData();
+      // const formData = new FormData();
+      const formData = {
+        question: question,
+        formSampleUrls: formSampleUrls,
+        number: number,
+        coverletter: coverletter,
+        user: user.user.user_id,
+        proposed_due_date: startDate.toISOString().slice(0, 10),
+        job: freshJob?.data?.data.id,
+        duration: selects,
+      };
 
       if (files) {
         for (const key of Object.keys(files)) {
-          formData.append("image", files[key]);
+          // formData.append("image", files[key]);
         }
       }
-      formData.append("question", question);
-      formData.append("links", formSampleUrls);
-      formData.append("proposed_price", number);
-      formData.append("cover_letter", coverletter);
-      formData.append("user", user.user.user_id);
-      formData.append(
-        "proposed_due_date",
-        formateISODateToLocaleString(startDate)
-      );
-      formData.append("job", freshJob?.data?.data.id);
-      formData.append("duration", selects);
-
-      const config = {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${userData?.data.token}`,
-        },
-      };
+      // formData.append("question", question);
+      // formData.append("links", formSampleUrls);
+      // formData.append("proposed_price", number);
+      // formData.append("cover_letter", coverletter);
+      // formData.append("user", user.user.user_id);
+      // formData.append(
+      //   "proposed_due_date",
+      //   formateISODateToLocaleString(startDate)
+      // );
+      // formData.append("job", freshJob?.data?.data.id);
+      // formData.append("duration", selects);
 
       // const success = await axios;
       // .post(`${BACKEND_API_URL}job-applied/`, formData, config)
@@ -361,24 +572,33 @@ const CreatorDashboard = () => {
     setJobSamplevideoDocumentsThumbs([]);
   };
 
+  let removeFormFieldsSampleUrls = (i) => {
+    let newFormValues = [...formSampleUrls];
+    newFormValues.splice(i, 1);
+    setFormSampleUrls(newFormValues);
+  };
+
   useUpdateEffect(() => {
-    if (userData?.data?.user?.user_level == 4) {
+    if (userData?.data?.user_level == 4) {
       dispatch(GET_MEMEBERS_FRESHERS_JOBLIST());
     } else {
       dispatch(GET_MEMEBERS_FRESHERS_LATEST_JOBLIST());
     }
     // dispatch(FreshJobs());
   }, [jobDetails]);
-  console.log("jobDetails", jobDetails, freshJob);
+
+  console.log("freshJob", freshJob);
+
   return (
     <div>
+      {isLoading && <LoadingSpinner />}
       {showBlueBox ? (
         <>
-          <div className="bg-white rounded-lg fresh_job_section">
+          <div className="bg-white rounded-lg">
             <div className="flex justify-between">
-              <div className="flex gap-2 ml-5 mt-5 items-center">
-                <Title title="Fresh Job" />
-                <span>
+              <div className="flex gap-2 ml-5 mt-5">
+                <span className="text-2xl font-bold">Fresh Job</span>
+                <span className="flex items-end">
                   <Link
                     className="hover:text-theme text-base text-[#A0A0A0] font-medium"
                     to="/jobs/list"
@@ -397,8 +617,8 @@ const CreatorDashboard = () => {
             </div>
 
             <>
-              {freshJob?.data?.data?.message == "No jobs to show" ? (
-                <h2 className="text-center text-2xl font-bold">
+              {freshJob?.data?.message == "No jobs to show" ? (
+                <h2 className="text-center text-2xl font-bold pb-5">
                   {" "}
                   No Latest Job Found
                 </h2>
@@ -426,13 +646,6 @@ const CreatorDashboard = () => {
                       </div>
                       <div className="">
                         <>
-                          <button
-                            onClick={handleClickOpen2}
-                            type="button"
-                            className="btn btn-primary Small border-radius Negotiate"
-                          >
-                            Negotiate
-                          </button>
                           <Dialog
                             className="CDashboard  "
                             open={open2}
@@ -507,111 +720,119 @@ const CreatorDashboard = () => {
                             </DialogContent>
                           </Dialog>
 
-                          <button
-                            onClick={() =>
-                              handleClickOpen(`${freshJob?.data?.data?.id}`)
-                            }
-                            type="button"
-                            className="btn btn-primary Small border-radius"
-                          >
-                            {" "}
-                            Apply Now
-                          </button>
                           <Dialog
                             className="CDashboard CDashboard1"
                             open={open1}
                             onClose={handleClose}
                           >
                             <DialogTitle className="CDashboarddiv1">
-                              <div className="ApplyTitledashboardnewdiv">
-                                <h1 className="ApplyTitledashboard1">
+                              <div className="flex justify-between">
+                                <h1 className="text-2xl font-bold text-[#1b4ea8]">
                                   Apply to Job
                                 </h1>{" "}
-                                <span
+                                {/* <span
                                   className="closebtnjoblist"
                                   onClick={handleClose}
                                 >
                                   <i className="fa-solid fa-xmark"></i>
-                                </span>
+                                </span> */}
+                                <div className="cursor-pointer">
+                                  <img
+                                    // disabled={!showBlueBox}
+                                    onClick={() => handleClose()}
+                                    src={Images.Close}
+                                  />
+                                </div>
                               </div>
                             </DialogTitle>
-                            <DialogContent className="applytojb">
+                            <DialogContent className="custom-scrollbar">
                               <div className="jobapplyform jobapplyformn">
-                                {!isPopupLoading ? (
-                                  // <LoadingSpinner />
-                                  <></>
+                                {isPopupLoading ? (
+                                  <LoadingSpinner />
                                 ) : (
                                   <>
-                                    <div className="amzingBannerAdMain">
-                                      <div className="amzingBannerText">
-                                        <h4>{title}</h4>
-                                        <Title title="title" />
-                                        <p className="amzingBannerParagraph">
-                                          {jobDescription}
-                                          {freshJob?.data?.data?.description?.substring(
+                                    <div className="grid grid-cols-5 gap-7">
+                                      <div className="col-span-3">
+                                        <Title
+                                          title={jobDetails?.details?.title}
+                                        />
+                                        <p className="text-base font-normal text-black">
+                                          {/* {jobDescription} */}
+                                          {jobDetails?.details?.description?.substring(
                                             0,
                                             300
                                           )}
+                                          ...
                                         </p>
                                       </div>
-                                      <div className="createrBoxAmazingBanner">
-                                        <div className="createrBoxContent">
-                                          <div className="flex gap-2">
-                                            <p className="text-base font-semibold text-[#A0A0A0]">
+                                      <div className="col-span-2">
+                                        <div className="border border-1 rounded-xl p-4 w-full max-w-[290px]">
+                                          <div className="grid grid-cols-5 gap-2">
+                                            <p className="text-base font-semibold text-[#A0A0A0] col-span-2">
                                               Created:{" "}
                                             </p>
-                                            <p className="johnDeoCreator">
-                                              {/* {createddate} */}
-                                              createddate
+                                            <p className="text-base font-bold text-semibold col-span-3">
+                                              {new Date(
+                                                jobDetails?.details?.created
+                                              )
+                                                .toISOString()
+                                                .slice(0, 10)}
                                             </p>
                                           </div>
-                                          <div className="flex gap-2">
-                                            <p className="text-base font-semibold text-[#A0A0A0]">
+                                          <div className="grid grid-cols-5 gap-2">
+                                            <p className="text-base font-semibold text-[#A0A0A0] col-span-2">
                                               Created by:
                                             </p>
-                                            <p className="johnDeoCreator">
-                                              {userdata}
+                                            <p className="text-base font-bold text-semibold col-span-3">
+                                              {jobDetails?.details?.created_by}
                                             </p>
                                           </div>
-                                          <div className="flex gap-2">
-                                            <p className="text-base font-semibold text-[#A0A0A0]">
+                                          <div className="grid grid-cols-5 gap-2">
+                                            <p className="text-base font-semibold text-[#A0A0A0] col-span-2">
                                               Company:
                                             </p>
-                                            <p className="starkIndusties">
-                                              {company}
+                                            <p className="text-base font-bold text-semibold col-span-3">
+                                              {
+                                                jobDetails?.details
+                                                  ?.company_name
+                                              }
                                             </p>
                                           </div>
                                         </div>
                                       </div>
                                     </div>
 
-                                    <div className="NegotiateMainDiv NegotiateMainDiv2">
-                                      <div className="negOfferPriceSec">
-                                        <div
-                                          className={
-                                            errors1.number
-                                              ? "Offer_A_P Offer_A_P1 error flex gap-2 text-danger"
-                                              : "Offer_A_P Offer_A_P1 flex gap-2 "
-                                          }
-                                        >
-                                          <h4 className="text-base font-semibold text-[#A0A0A0]">
-                                            Offer Price:{" "}
-                                          </h4>
-                                          <p className="offerp">
-                                            ${offerPrice}
-                                          </p>
+                                    <div className="w-full max-w-[430px]">
+                                      <div className="w-full flex justify-between gap-3 p-2">
+                                        <div className="my-2">
+                                          <div
+                                            className={
+                                              errors1.number
+                                                ? "Offer_A_P Offer_A_P1 error flex gap-2 text-danger"
+                                                : "Offer_A_P Offer_A_P1 "
+                                            }
+                                          >
+                                            <h4 className="text-base font-semibold text-[#1b4ea8]">
+                                              Offer Price{" "}
+                                            </h4>
+                                            <p className="offerp">
+                                              ${jobDetails?.details?.price}
+                                            </p>
+                                          </div>
                                         </div>
-                                      </div>
-                                      <div className="negDueDateSec">
-                                        <div className="flex gap-2">
-                                          <h4 className="text-base font-semibold text-[#A0A0A0]">
-                                            Due Date:
-                                          </h4>
-                                          <p className="offerp">
-                                            {deliveryDate}
-                                          </p>
+                                        <div className="">
+                                          <div className="my-2">
+                                            <h4 className="text-base font-semibold text-[#1b4ea8]">
+                                              Due Date:
+                                            </h4>
+                                            <p className="offerp">
+                                              {
+                                                jobDetails?.details
+                                                  ?.expected_delivery_date
+                                              }
+                                            </p>
 
-                                          {/* {deliveryhours && (
+                                            {/* {deliveryhours && (
                                           <p className="colorsec">
                                             {deliveryhoursvalue} hours away
                                           </p>
@@ -628,75 +849,83 @@ const CreatorDashboard = () => {
                                             {deliverydata} days away
                                           </p>
                                         )} */}
+                                          </div>
+                                        </div>
+                                        <div className="my-2">
+                                          <button
+                                            className="btn btn-primary"
+                                            onClick={mainNegotiate}
+                                            type="button"
+                                          >
+                                            Negotiate
+                                          </button>
                                         </div>
                                       </div>
-                                      <div className="my-2">
-                                        <button
-                                          className="btn btn-primary"
-                                          // onClick={mainNegotiate}
-                                          type="button"
-                                        >
-                                          Negotiate
-                                        </button>
-                                      </div>
+
+                                      {proposedPrice && !show && (
+                                        <>
+                                          <div className="flex">
+                                            <div className="w-full flex justify-between gap-3 p-2 border-dashed border-4 rounded-xl">
+                                              <div>
+                                                <span className="text-base font-semibold text-[#1b4ea8]">
+                                                  Proposed Price{" "}
+                                                </span>
+                                                <p>${proposedPrice}</p>
+                                              </div>
+                                              <div className="">
+                                                <h4 className="text-base font-semibold text-[#1b4ea8]">
+                                                  Proposed Due Date
+                                                </h4>
+                                                <p>
+                                                  {formateISODateToLocaleString(
+                                                    proposedDate
+                                                  )}
+                                                </p>
+                                              </div>
+                                              <div className="">
+                                                <button
+                                                  className="text-[#d14f4f]"
+                                                  onClick={clearMainNegotiate}
+                                                  type="button"
+                                                >
+                                                  Clear
+                                                </button>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </>
+                                      )}
                                     </div>
-
-                                    {proposedPrice && !show && (
-                                      <>
-                                        <div className="NegotiateMainDiv NegotiateMainDiv_sec proposed_section proposedPriceDueDate">
-                                          <div className="flex gap-2">
-                                            <h4 className="text-base font-semibold text-[#A0A0A0]">
-                                              Proposed Price{" "}
-                                            </h4>
-                                            <p>${proposedPrice}</p>
-                                          </div>
-                                          <div className="flex gap-2">
-                                            <h4 className="text-base font-semibold text-[#A0A0A0]">
-                                              Proposed Due Date
-                                            </h4>
-                                            <p>
-                                              {formateISODateToLocaleString(
-                                                proposedDate
-                                              )}
-                                            </p>
-                                          </div>
-                                          <div className="NegotiateButtonOne">
-                                            <button
-                                              className="btn btn-primary clear"
-                                              // onClick={clearMainNegotiate}
-                                              type="button"
-                                            >
-                                              Clear
-                                            </button>
-                                          </div>
-                                        </div>
-                                      </>
-                                    )}
-
-                                    <div className="proposedPriceDueDateMainDiv">
-                                      <div className="proposedPriceContent2">
-                                        {!show ? (
-                                          <>
-                                            <div className="proposedPriceDueDate">
-                                              <div className="creatorhomepage creatorhomepageH">
-                                                <div className="negOfferPriceSec negOffer21">
+                                    <>
+                                      {show ? (
+                                        <>
+                                          <div className="w-full max-w-[400px] ">
+                                            <div className="border-4 border-dashed rounded-xl p-5">
+                                              <div className="grid grid-cols-6 mb-4">
+                                                <div className="col-span-2 ">
                                                   <div
                                                     className={
                                                       errors1.number
                                                         ? "Offer_A_P error flex gap-2"
-                                                        : "flex gap-2"
+                                                        : ""
                                                     }
                                                   >
-                                                    <h4 className="text-base font-semibold text-[#A0A0A0]">
-                                                      Offer Price:{" "}
+                                                    <h4 className="text-base font-semibold text-[#1b4ea8]">
+                                                      Offer Price{" "}
                                                     </h4>
-                                                    <p>${offerPrice}</p>
+                                                    <p>
+                                                      $
+                                                      {
+                                                        jobDetails?.details
+                                                          ?.price
+                                                      }
+                                                    </p>
                                                   </div>
                                                 </div>
 
-                                                <div className="">
-                                                  <h4 className="text-base font-semibold text-[#A0A0A0]">
-                                                    Proposed Price:
+                                                <div className="col-span-4">
+                                                  <h4 className="text-base font-semibold text-black">
+                                                    Proposed Price
                                                   </h4>
                                                   <div className="flex gap-2">
                                                     <div
@@ -711,7 +940,7 @@ const CreatorDashboard = () => {
                                                         type="number"
                                                         placeholder="0.00"
                                                         id=""
-                                                        // value={number}
+                                                        value={number}
                                                         onInput={(e) => {
                                                           setErrors({
                                                             ...errors1,
@@ -730,10 +959,10 @@ const CreatorDashboard = () => {
                                                           //     );
                                                         }}
                                                         maxLength={8}
-                                                        // onKeyDown={
-                                                        //   blockInvalidChar
-                                                        // }
-                                                        // onChange={handleChange1}
+                                                        onKeyDown={
+                                                          blockInvalidChar
+                                                        }
+                                                        onChange={handleChange1}
                                                       />
                                                       {errors1.number && (
                                                         <span>
@@ -820,15 +1049,18 @@ const CreatorDashboard = () => {
                                               </li>
                                             </div> */}
 
-                                              <div className="creatordashbord">
-                                                <div className="creatorjoblistdate creatorjoblistdateH">
-                                                  <div className="duejoblist5">
-                                                    <div className="flex gap-2">
-                                                      <h4 className="text-base font-semibold">
-                                                        Due Date:
-                                                      </h4>
-                                                      <p>{deliveryDate}</p>
-                                                      {/* {deliveryhours && (
+                                              <div className="grid grid-cols-6">
+                                                <div className="col-span-2">
+                                                  <h4 className="text-base font-semibold text-[#1b4ea8]">
+                                                    Due Date
+                                                  </h4>
+                                                  <p>
+                                                    {
+                                                      jobDetails?.details
+                                                        ?.expected_delivery_date
+                                                    }
+                                                  </p>
+                                                  {/* {deliveryhours && (
                                                         <p className="colorsec">
                                                           {deliveryhoursvalue}{" "}
                                                           hours away
@@ -847,100 +1079,232 @@ const CreatorDashboard = () => {
                                                           away
                                                         </p>
                                                       )} */}
-                                                    </div>
-                                                  </div>
-                                                  <div
-                                                    className={
-                                                      errors1.date
-                                                        ? "ProposedDueDateContent ProposedDueDateContent1 error"
-                                                        : "ProposedDueDateContent ProposedDueDateContent1"
-                                                    }
-                                                  >
-                                                    <h4 className="text-base font-semibold">
-                                                      Proposed Due Date:
-                                                    </h4>
-                                                    {errors1.date && (
-                                                      <span>
-                                                        {errors1.date ??
-                                                          "valid"}
-                                                      </span>
-                                                    )}
-
-                                                    {/* <div>{showData ? <h1>{daysData} days</h1> : null}</div> */}
-                                                  </div>
                                                 </div>
+                                                <div
+                                                  className={
+                                                    errors1.date
+                                                      ? "col-span-4 error"
+                                                      : "col-span-4"
+                                                  }
+                                                >
+                                                  <h4 className="text-base font-semibold">
+                                                    Proposed Due Date
+                                                  </h4>
+                                                  <>
+                                                    <CustomDateRangePicker
+                                                      handleChange={
+                                                        handleChange
+                                                      }
+                                                    />
+                                                  </>
+                                                  {errors1.date && (
+                                                    <span>
+                                                      {errors1.date ?? "valid"}
+                                                    </span>
+                                                  )}
+
+                                                  {/* <div>{showData ? <h1>{daysData} days</h1> : null}</div> */}
+                                                </div>
+                                                {datewarning && (
+                                                  <p className="proposingtext colorsec proposingdayd">
+                                                    You’re proposing a due date
+                                                    more than 7 days away. Your
+                                                    Proposal is less likely to
+                                                    be accepted
+                                                  </p>
+                                                )}
+                                              </div>
+                                              <div className="flex gap-5 mt-4">
+                                                <button
+                                                  className="btn btn-primary"
+                                                  onClick={mainProposedCancel}
+                                                >
+                                                  Cancel
+                                                </button>
+                                                <button
+                                                  className="btn btn-primary"
+                                                  onClick={savevalue}
+                                                  type="button"
+                                                >
+                                                  Save
+                                                </button>
                                               </div>
                                             </div>
-                                          </>
-                                        ) : null}
-                                      </div>
-                                    </div>
+                                          </div>
+                                        </>
+                                      ) : null}
+                                    </>
 
-                                    <div className="applyJobImgAttach">
+                                    <div className="mt-2">
                                       <h4 className="text-lg font-semibold">
                                         Attach Files{" "}
-                                        <span className="text-base">
-                                          (Optional)
+                                        <span className="text-base text-[#A0A0A0]">
+                                          Optional
                                         </span>
                                       </h4>
-                                      <p className="attachfilesCreatorText">
+                                      <p className="text-sm">
                                         You may attach up to 10 files under the
                                         size of 10MB each. Include work samples
                                         or other documents to support your
                                         application.
                                       </p>
 
-                                      <div className="container containermargin1">
-                                        <div
-                                          className="uploadimgcreator"
-                                          {...getRootProps()}
-                                        >
-                                          <input {...getInputProps()} />
-                                          <p>
-                                            <img
-                                              className="uploadImageProfile uploadImageProfile2"
-                                              src={
-                                                process.env.PUBLIC_URL +
-                                                "/img/uploadimg.png"
-                                              }
-                                              alt=""
-                                            />
-                                            Attach Files
-                                          </p>
-                                        </div>
-                                        {/* <aside style={thumbsContainer}>
+                                      <div
+                                        className="mt-2 cursor-pointer"
+                                        {...getRootProps()}
+                                      >
+                                        <input {...getInputProps()} />
+                                        <p className="flex gap-1 text-base font-semibold text-[#2472fc]">
+                                          <FileUploadOutlined />
+                                          Attach Files
+                                        </p>
+                                      </div>
+                                      {/* <aside style={thumbsContainer}>
                                           {thumbs}
                                         </aside> */}
-                                      </div>
                                     </div>
 
                                     {/* Images */}
 
-                                    <div className="quesOptionalMain">
-                                      <h4 className="text-lg font-semibold">
-                                        Comments
-                                        <span className="OptionalHaveQuest"></span>
-                                      </h4>
+                                    {/* URL */}
+                                    <h4 className="my-2 text-lg font-semibold text-black">
+                                      or include a URL
+                                    </h4>
+                                    {formSampleUrls.map((element, index) => (
+                                      <div className="form-inline" key={index}>
+                                        {element && (
+                                          <div className="flex justify-between w-full max-w-[400px]">
+                                            <div className="flex gap-2">
+                                              <InsertLink />
+                                              <a className="adifecttesturl">
+                                                {element}
+                                              </a>
+                                            </div>
+                                            <div
+                                              className=""
+                                              onClick={(e) =>
+                                                removeFormFieldsSampleUrls(e)
+                                              }
+                                            >
+                                              <Delete></Delete>
+                                            </div>
+                                          </div>
+                                        )}
+                                      </div>
+                                    ))}
+
+                                    <div
+                                      className={
+                                        errors1.formsampleImgUrls
+                                          ? "enterUrlLinkButton1 enterUrlLinkButtonnew error"
+                                          : errors1.sampleurl
+                                          ? "error enterUrlLinkButtonnew"
+                                          : "enterUrlLinkButton1 enterUrlLinkButtonnew"
+                                      }
+                                    >
+                                      <input
+                                        className="input-style"
+                                        type="text"
+                                        value={sampleimgUrl}
+                                        placeholder="Enter URL"
+                                        onChange={(e) => {
+                                          setsampleImgUrl(e.target.value);
+                                          setErrors({
+                                            ...errors1,
+                                            formsampleImgUrls: null,
+                                            url: null,
+                                          });
+                                        }}
+                                        onKeyPress={(e) => {
+                                          if (e.key === "Enter") {
+                                            handleChangesampleUrls(e);
+                                          }
+                                        }}
+                                      />
+
+                                      <div className="flex justify-between gap-1 mt-1 cursor-pointer">
+                                        <a
+                                          onClick={(e) => {
+                                            handleChangesampleUrls(e);
+                                          }}
+                                          className=" text-[#0d6efd]"
+                                        >
+                                          <Add />
+                                          Add More
+                                        </a>
+                                        <div>
+                                          <span className="text-[#D14F4F]">
+                                            {errors1.sampleurl ?? ""}
+                                          </span>
+                                          <div
+                                            className={
+                                              errors1.formsampleImgUrls
+                                                ? "error"
+                                                : ""
+                                            }
+                                          >
+                                            <span className="text-[#D14F4F]">
+                                              {errors1.formsampleImgUrls
+                                                ? errors1.formsampleImgUrls
+                                                : ""}
+                                            </span>
+                                          </div>
+                                        </div>
+                                      </div>
                                     </div>
 
-                                    <div className="quesOptionalMain">
+                                    {/* Comments */}
+                                    <>
+                                      <div className="my-2">
+                                        <h4 className="text-lg font-semibold text-black">
+                                          Comments
+                                          <span className="OptionalHaveQuest"></span>
+                                        </h4>
+                                      </div>
+
+                                      <div
+                                        className={
+                                          errors1.coverletter
+                                            ? "mb-1 error"
+                                            : "mb-1"
+                                        }
+                                      >
+                                        <textarea
+                                          onChange={(e) => {
+                                            setcoverletter(e.target.value);
+                                            setErrors({
+                                              ...errors1,
+                                              coverletter: null,
+                                            });
+                                          }}
+                                          className="input-style h-[90px] custom-scrollbar"
+                                          // type="text"
+                                          placeholder="Enter your comments"
+                                        />
+                                        <span className="flex justify-end text-[#D14F4F]">
+                                          {errors1.coverletter ?? ""}
+                                        </span>
+                                      </div>
+                                    </>
+
+                                    <div className="">
                                       <h4 className="text-lg font-semibold">
                                         Have a question?{" "}
-                                        <span className="text-base">
-                                          (Optional)
+                                        <span className="text-base text-[#A0A0A0]">
+                                          Optional
                                         </span>
                                       </h4>
-                                      <p className="text-sm font-medium">
+                                      <p className="text-sm font-medium mb-2">
                                         Questions will be public on the Job
                                         Detail page.
                                       </p>
                                     </div>
-                                    <div className="askYourQuestionInput">
+                                    <div className="">
                                       <textarea
-                                        // onChange={(e) => {
-                                        //   setquestion(e.target.value);
-                                        // }}
-                                        className="input-style"
+                                        onChange={(e) => {
+                                          setquestion(e.target.value);
+                                        }}
+                                        className="input-style h-[90px]"
                                         // type="text"
                                         placeholder="Ask your question"
                                       />
@@ -949,7 +1313,7 @@ const CreatorDashboard = () => {
                                     <div className="">
                                       <div className="mt-2 flex gap-4">
                                         <button
-                                          className="btn btn-primary"
+                                          className="btn btn-outline"
                                           onClick={handleClose}
                                         >
                                           Cancel
@@ -961,9 +1325,11 @@ const CreatorDashboard = () => {
                                         Cancel
                                       </Link> */}
                                         <button
-                                          className="btn btn-primary "
-                                          // value="Send message"
-                                          onClick={(e) => validateSubmit(e)}
+                                          className="btn btn-primary"
+                                          value="Send message"
+                                          onClick={(e) => {
+                                            validateSubmit(e);
+                                          }}
                                           type="submit"
                                         >
                                           Apply Now
@@ -983,12 +1349,12 @@ const CreatorDashboard = () => {
                             <Link
                               to={`/jobs/apply/${freshJob?.data?.data?.id}`}
                             >
-                              <button
+                              {/* <button
                                 type="button"
-                                className="btn btn-primary Small border-radius"
+                                className="btn btn-primary border-radius"
                               >
                                 Apply Now
-                              </button>
+                              </button> */}
                             </Link>
                           )}
                           {/* <Link
@@ -1133,7 +1499,6 @@ const CreatorDashboard = () => {
                                           customClass="max-w-max text-sm font-semibold"
                                         >
                                           {tag}
-                                          {/* <Link to="#">{freshJob.skill_name}</Link> */}
                                         </BadgeUI>
                                       </div>
                                     ))}
@@ -1162,14 +1527,6 @@ const CreatorDashboard = () => {
                               </>
                             )}
                           </div>
-                          {/* <div className="ApplyButton_2">
-                            <button
-                              type="button"
-                              className="btn btn-primary Small border-radius"
-                            >
-                              Apply Now
-                            </button>
-                          </div> */}
                         </div>
                         {freshJob?.data?.data?.jobtasks_job?.length > 0 && (
                           <div className="taskBoxJobListCard1">
@@ -1232,7 +1589,7 @@ const CreatorDashboard = () => {
                         <span className="jobappied">Job Applied</span>
                       ) : (
                         <Link to={`/jobs/apply/${jobId}`}>
-                          Apply Nowtttttttt
+                          Apply Now
                           <button type="button" className="btn btn-primary">
                             Submit a Proposal
                           </button>

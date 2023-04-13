@@ -4,7 +4,7 @@ import MemeberDashBoardInProgress from "./memberDashboard/MemeberDashBoardInProg
 import { Pagination, Stack } from "@mui/material";
 import { Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "redux/store";
-import { GET_USER_DATA } from "redux/reducers/auth/auth.slice";
+import { GET_USER_PROFILE_DATA } from "redux/reducers/auth/auth.slice";
 import { useSingleEffect, useUpdateEffect } from "react-haiku";
 
 import { FRESHERS_JOBS_DATA } from "redux/reducers/homePage/fresherJobsList.slice";
@@ -21,7 +21,7 @@ import {
 
 const AgencyMemberDashboard = () => {
   const dispatch = useAppDispatch();
-  const userData = useAppSelector(GET_USER_DATA);
+  const userData = useAppSelector(GET_USER_PROFILE_DATA);
   const freshJob = useAppSelector(FRESHERS_JOBS_DATA);
   const memberApprovalJobList = useAppSelector(MEMBERS_APPROVAL_JOBS_DATA);
 
@@ -52,7 +52,7 @@ const AgencyMemberDashboard = () => {
       ordering: currentPage,
     };
     dispatch(GET_MEMEBERS_APPROVAL_JOBLIST(data));
-    if (userData?.data?.user?.user_level === 4) {
+    if (userData?.data?.user_level === 4) {
       dispatch(GET_MEMEBERS_FRESHERS_LATEST_JOBLIST());
     } else {
       dispatch(GET_MEMEBERS_FRESHERS_LATEST_JOBLIST());
@@ -61,22 +61,22 @@ const AgencyMemberDashboard = () => {
 
   useUpdateEffect(() => {
     dispatch(CLEAR_MEMBERS_APPROVAL_JOBS);
-    if (userData?.data?.user?.user_level === 3) {
+    if (userData?.data?.user_level === 3) {
       dispatch(GET_MEMEBERS_APPROVAL_JOBLIST(currentPage));
     }
   }, [currentPage]);
 
   useUpdateEffect(() => {
     window.scrollTo(0, 0);
-    if (userData?.data?.user?.user_level === 1) {
+    if (userData?.data?.user_level === 1) {
       setUserLevel("Admin");
-    } else if (userData?.data?.user?.user_level === 2) {
+    } else if (userData?.data?.user_level === 2) {
       setUserLevel("Marketer");
-    } else if (userData?.data?.user?.user_level === 3) {
+    } else if (userData?.data?.user_level === 3) {
       setUserLevel("Approver");
     }
-    setUserFirstName(userData?.data?.user?.first_name);
-    setUserLastName(userData?.data?.user?.last_name);
+    setUserFirstName(userData?.data?.first_name);
+    setUserLastName(userData?.data?.last_name);
   }, []);
 
   useUpdateEffect(() => {
@@ -97,7 +97,7 @@ const AgencyMemberDashboard = () => {
   return (
     <div>
       <>
-        {userData?.data?.user?.user_level ? (
+        {userData?.data?.user_level ? (
           // !showBlueBox ? (
           <>
             <div className="">
@@ -274,7 +274,7 @@ const AgencyMemberDashboard = () => {
                 {/* {userData?.user?.user_level === 4 ? (
         <>In-house User</>
       ) : ( */}
-                <>Permission Level - {userData?.data?.user?.user_level}</>
+                <>Permission Level - {userData?.data?.user_level}</>
                 {/* )} */}
                 <br />
               </h1>
@@ -283,7 +283,7 @@ const AgencyMemberDashboard = () => {
         )}
         <div className=" FreshJobTop">
           {memberApprovalJobList?.data?.results?.length > 0 &&
-            userData?.data?.user?.user_level === 3 &&
+            userData?.data?.user_level === 3 &&
             memberApprovalJobList?.data?.results?.map((item, index) => (
               <div className="Remotemarkeitng" key={index}>
                 <div className="bt-Title">
@@ -419,14 +419,14 @@ const AgencyMemberDashboard = () => {
             </div>
           )}
           {memberApprovalJobList?.data?.results?.length < 0 &&
-            userData?.data?.user?.user_level === 3 && (
+            userData?.data?.user_level === 3 && (
               <div className="Topallpage Custompage">
                 <h2 className="nonew">NO MORE APPROVALS TO DISPLAY</h2>
               </div>
             )}
         </div>
 
-        {userData?.data?.user?.user_level === 4 && (
+        {userData?.data?.user_level === 4 && (
           <div className="AllPageHight">
             <div className="Topallpage_sec">
               <div className="Work-D  grid md:grid-cols-2 sm:grid-cols-1 gap-4">
@@ -440,8 +440,8 @@ const AgencyMemberDashboard = () => {
             </div>
           </div>
         )}
-        {(userData?.data?.user?.user_level === 1 ||
-          userData?.data?.user?.user_level === 2) && (
+        {(userData?.data?.user_level === 1 ||
+          userData?.data?.user_level === 2) && (
           <div className="AllPageHight">
             <div className="Topallpage_sec">
               <div className="Work-D grid md:grid-cols-2 sm:grid-cols-1 gap-4">

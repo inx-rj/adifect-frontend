@@ -13,7 +13,6 @@ export interface CompaniesTagsInitialsType extends LoadingType {
   };
 }
 
-
 export interface tagPayloadDataType {
   community: number | undefined,
   title: string,

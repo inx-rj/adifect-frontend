@@ -5,7 +5,7 @@ import { TRIGGER_LOGIN } from "redux/actions/auth/auth.actions";
 import { useAppDispatch, useAppSelector } from "redux/store";
 import { emailRequired, passwordRequired } from "helper/validations";
 import {
-  GET_USER_DATA,
+  GET_USER_PROFILE_DATA,
   USER_DATA_LOADER,
 } from "redux/reducers/auth/auth.slice";
 import swal from "sweetalert";
@@ -26,7 +26,7 @@ const Login = () => {
     email: null,
     password: null,
   });
-  const userData = useAppSelector(GET_USER_DATA);
+  const userData = useAppSelector(GET_USER_PROFILE_DATA);
 
   const redirect =
     window.location.search && window.location.search?.split("=")[1];
