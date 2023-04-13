@@ -35,7 +35,7 @@ const TRIGGER_LOGIN = (data: EmailPWDType) => async (dispatch: AppDispatch) => {
       }
     })
     .catch((error) => {
-      if (error?.response.status === 400) {
+      if (error?.response?.status === 400) {
         swal({
           title: "Error",
           text: error?.response?.data?.message,

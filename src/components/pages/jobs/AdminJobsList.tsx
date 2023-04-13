@@ -720,7 +720,7 @@ const AdminJobsList = () => {
                                   </BadgeUI>
                                 ))
                               ) : (
-                                <>N/A</>
+                                null
                               )}
                             </div>
                           </div>

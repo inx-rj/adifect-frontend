@@ -1,0 +1,3 @@
+.CDashboard1 .MuiPaper-root.MuiPaper-elevation.MuiPaper-rounded {
+  @apply w-full max-w-[800px];
+}

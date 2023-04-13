@@ -125,7 +125,7 @@ const initialState = {
       prev: null,
       next: null,
       // results: [jobsListInitialState],
-      results: null,
+      results: [],
     },
   },
   JobsDetails: {
