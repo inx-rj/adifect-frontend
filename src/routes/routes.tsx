@@ -3,11 +3,11 @@ import { RouteType } from "../helper/types";
 import {
   AUTH_ROUTE,
   COMPANIES_ROUTE,
-  DASH_COMPANY,
-  DASHBOARD_COMPANY_ROUTE,
+  COMPANY_ROUTE,
+  MY_JOBS_ROUTE,
   PAGE_ROUTE,
-  PROFILE_ROUTE,
 } from "./baseRoute";
+import AdminJobsList from "components/pages/jobs/AdminJobsList";
 
 // => Import lazy load component
 
@@ -102,7 +102,7 @@ export const PAGES_ROUTES: RouteType[] = [
     ),
   },
   {
-    path: COMPANIES_ROUTE.COMPANY_PROJECTS,
+    path: PAGE_ROUTE.COMPANY_PROJECTS,
     component: (
       <Suspense fallback={""}>
         <AgencyCompanyProjects />
@@ -126,7 +126,7 @@ export const PAGES_ROUTES: RouteType[] = [
     ),
   },
   {
-    path: DASHBOARD_COMPANY_ROUTE.HOME,
+    path: PAGE_ROUTE.COMPANY,
     component: (
       <Suspense fallback={""}>
         <AgencyCompanyList />
@@ -134,7 +134,7 @@ export const PAGES_ROUTES: RouteType[] = [
     ),
   },
   {
-    path: DASH_COMPANY.COMPANY_LIST_DETAILS,
+    path: COMPANY_ROUTE.COMPANY_LIST_DETAILS,
     component: (
       <Suspense fallback={""}>
         <AgencyCompanyProfile />
@@ -142,7 +142,16 @@ export const PAGES_ROUTES: RouteType[] = [
     ),
   },
   {
-    path: PROFILE_ROUTE.INVITE,
+    path: MY_JOBS_ROUTE.HOME,
+    component: (
+      <Suspense fallback={""}>
+        <AdminJobsList />
+      </Suspense>
+    ),
+  },
+
+  {
+    path: PAGE_ROUTE.INVITE,
     component: (
       <Suspense fallback={""}>
         <InviteUser />
@@ -150,7 +159,7 @@ export const PAGES_ROUTES: RouteType[] = [
     ),
   },
   {
-    path: PROFILE_ROUTE.PROFILE,
+    path: PAGE_ROUTE.PROFILE,
     component: (
       <Suspense fallback={""}>
         <Profile />
