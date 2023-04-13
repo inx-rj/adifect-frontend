@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import AdminDashboardInProgress from "./adminDashboard/AdminDashboardInProgress";
 import AdminDashboardInReview from "./adminDashboard/AdminDashboardInReview";
+import LoadingSpinner from "components/common/loadingSpinner/Loader";
 // import LoadingSpinner from "./../../containers/LoadingSpinner";
 
 export default function AdminDashboard() {
@@ -10,7 +11,7 @@ export default function AdminDashboard() {
   }, 1200);
   return (
     <>
-      {/* {isLoading && <LoadingSpinner />} */}
+      {isLoading && <LoadingSpinner />}
       <div className="bg-white rounded-xl mb-5">
         <h1 className="p-5 text-center font-bold text-2xl">
           Welcome Admin
@@ -19,10 +20,10 @@ export default function AdminDashboard() {
       </div>
       {/* <div className="AllPageHight"></div> */}
       <div className="grid md:grid-cols-2 sm:grid-cols-1 gap-4">
-        <div className="inProgressDashboardComponent">
+        <div className="">
           <AdminDashboardInProgress />
         </div>
-        <div className="inReviewDashboardComponent">
+        <div className="">
           <AdminDashboardInReview />
         </div>{" "}
       </div>
