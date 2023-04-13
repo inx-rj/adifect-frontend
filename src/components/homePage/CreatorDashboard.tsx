@@ -12,7 +12,7 @@ import React, { useCallback, useState } from "react";
 import { useSingleEffect, useUpdateEffect } from "react-haiku";
 import { Link, useNavigate } from "react-router-dom";
 
-import { GET_USER_DATA } from "redux/reducers/auth/auth.slice";
+import { GET_USER_PROFILE_DATA } from "redux/reducers/auth/auth.slice";
 import { FRESHERS_JOBS_DATA } from "redux/reducers/homePage/fresherJobsList.slice";
 import { GET_JOBS_DETAILS } from "redux/reducers/homePage/jobsList.slice";
 import { useAppDispatch, useAppSelector } from "redux/store";
@@ -49,7 +49,7 @@ interface ErrorsType {
 }
 const CreatorDashboard = () => {
   const dispatch = useAppDispatch();
-  const userData = useAppSelector(GET_USER_DATA);
+  const userData = useAppSelector(GET_USER_PROFILE_DATA);
 
   const freshJob = useAppSelector(FRESHERS_JOBS_DATA);
   const jobDetails = useAppSelector(GET_JOBS_DETAILS);
@@ -114,7 +114,7 @@ const CreatorDashboard = () => {
   });
 
   useSingleEffect(() => {
-    if (userData?.data?.user?.user_level == 4) {
+    if (userData?.data?.user_level == 4) {
       dispatch(GET_MEMEBERS_FRESHERS_JOBLIST());
     } else {
       dispatch(GET_MEMEBERS_FRESHERS_LATEST_JOBLIST());
@@ -513,12 +513,6 @@ const CreatorDashboard = () => {
       // formData.append("job", freshJob?.data?.data.id);
       // formData.append("duration", selects);
 
-      const config = {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${userData?.data.token}`,
-        },
-      };
       // const success = await axios;
       // .post(`${BACKEND_API_URL}job-applied/`, formData, config)
       dispatch(APPLY_FOR_JOB(formData))
@@ -585,7 +579,7 @@ const CreatorDashboard = () => {
   };
 
   useUpdateEffect(() => {
-    if (userData?.data?.user?.user_level == 4) {
+    if (userData?.data?.user_level == 4) {
       dispatch(GET_MEMEBERS_FRESHERS_JOBLIST());
     } else {
       dispatch(GET_MEMEBERS_FRESHERS_LATEST_JOBLIST());
