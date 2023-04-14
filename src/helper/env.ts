@@ -24,7 +24,9 @@ export const API_URL = {
     TAGS: `${BASE_URL.COMPANIES}tags/`,
   },
   COMPANY: {
-    COMPANY_LIST: `${BASE_URL.AGENCY}company/`,
+    ADMIN: `${BASE_URL.COMPANY}`, //for admin
+    ADMIN_COMPANY_BLOCK: `${env.API_URL}admin-company-block/`, //for status update in admin
+    COMPANY_LIST: `${BASE_URL.AGENCY}company/`, //for agency
   },
   INVITE: {
     INVITE_USERS: `${BASE_URL.AGENCY}invite-member/`,
