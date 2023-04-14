@@ -18,7 +18,8 @@ import {
 import { useAppDispatch, useAppSelector } from "redux/store";
 import Cropper from "react-easy-crop";
 import swal from "sweetalert";
-import { useSingleEffect } from "react-haiku";
+import { useUpdateEffect } from "react-haiku";
+import { Images } from "helper/images";
 
 const EditProfileForm = () => {
   const dispatch = useAppDispatch();
@@ -81,7 +82,7 @@ const EditProfileForm = () => {
   // ---------Profile image state end--------------
 
   // Get data from redux/API in udpate mode
-  useSingleEffect(() => {
+  useUpdateEffect(() => {
     if (userProfile?.hasData || saveLoading) {
       // setSaveLoading(true);
 
@@ -92,7 +93,7 @@ const EditProfileForm = () => {
           title: "Successfully Complete",
           text: "Profile updated successfully",
           className: "successAlert",
-          icon: "/img/logonew.svg",
+          icon: Images.Logo,
           buttons: { visible: false },
           timer: 5000,
         });
@@ -130,7 +131,7 @@ const EditProfileForm = () => {
       // setLanguages(user.languages);
       // setProficiency(user.proficiency);
     }
-  });
+  }, [userProfile?.hasData]);
 
   // Submit profile form
   const submitHandler = async (e) => {
@@ -383,7 +384,7 @@ const EditProfileForm = () => {
         title: "",
         text: "Image type is not valid",
         className: "errorAlert",
-        icon: "/img/logonew-red.svg",
+        icon: Images.ErrorLogo,
         buttons: { visible: false },
         timer: 5000,
       });
@@ -395,7 +396,7 @@ const EditProfileForm = () => {
         title: "",
         text: "Max file size allowed is 2mb",
         className: "errorAlert",
-        icon: "/img/logonew-red.svg",
+        icon: Images.ErrorLogo,
         buttons: { visible: false },
         timer: 5000,
       });
@@ -404,6 +405,7 @@ const EditProfileForm = () => {
     if (e.target.files[0]) {
       setImageChanged(true);
       setSelectedFile(URL.createObjectURL(e.target.files[0]));
+      console.log("Cropped", URL.createObjectURL(e.target.files[0]));
       setCurrentCroppedImage(URL.createObjectURL(e.target.files[0]));
       setProfileImage(e.target.files[0]);
       const reader = new FileReader();
@@ -416,10 +418,10 @@ const EditProfileForm = () => {
 
   return (
     <>
-      <div className="img-profile_wrapper relative">
-        <div className="relative max-w-[120px] w-full mx-auto [&>.delete-icon]:text-[33px]">
+      <div className="img-profile_wrapper">
+        <div className="relative max-w-[120px] w-full mx-auto">
           {selectedFile ? (
-            <>
+            <div className="relative max-w-[120px] w-full mx-auto [&>.delete-icon]:text-[33px]">
               <i className="img img-cover rounded-full w-[120px] h-[120px] mx-auto overflow-hidden block drop-shadow-md border-2 border-white">
                 <img
                   src={selectedFile}
@@ -437,7 +439,7 @@ const EditProfileForm = () => {
                 <button
                   className="Cropbtnnew w-8 h-8 flex-center p-1 text-theme bg-white rounded-full absolute -right-3 bottom-[50px] border-2 border-white drop-shadow-md"
                   type="button"
-                  // hidden={doCrop}
+                  hidden={doCrop}
                   onClick={(e) => setDoCrop(true)}
                 >
                   <Crop fontSize="small" />
@@ -492,11 +494,11 @@ const EditProfileForm = () => {
                   </>
                 )}
               </div>
-            </>
+            </div>
           ) : userProfile?.data?.profile_img ? (
             <>
               {!removeProfileImage && (
-                <div className="relative max-w-[120px] w-full mx-auto [&>.delete-icon]:text-[33px]">
+                <div className="[&>.delete-icon]:text-[33px]">
                   <i className="img img-cover rounded-full w-[120px] h-[120px] mx-auto overflow-hidden block drop-shadow-md border-2 border-white">
                     <img
                       // value={userProfile?.data?.profile_img}
@@ -516,7 +518,7 @@ const EditProfileForm = () => {
                     <button
                       className="Cropbtnnew w-8 h-8 flex-center text-lg p-1 text-theme bg-white rounded-full absolute -right-3 bottom-[50px] border-2 border-white drop-shadow-md"
                       type="button"
-                      // hidden={doCrop}
+                      hidden={doCrop}
                       onClick={(e) => setDoCrop(true)}
                     >
                       <Crop fontSize="inherit" />

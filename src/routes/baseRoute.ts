@@ -27,22 +27,7 @@ export const AUTH_ROUTE: Readonly<{
 
 // Authentication Route
 export const PAGE_ROUTE: Readonly<{
-  HOME: string;
-  WORKFLOW: string;
-  MY_PROJECTS: string;
-  COMPANY: string;
-  COMPANIES: string;
-  MEDIA: string;
-  MY_JOBS: string;
-  DRAFT_JOBS: string;
-  TEMPLATES: string;
-  HELP: string;
-  PROFILE: string;
-  INVITE: string;
-  COMPANY_PROJECTS: string;
-  INDUSTRIES: string;
-  SKILLS: string;
-  USERS: string;
+  [key: string]: string;
 }> = Object.freeze({
   HOME: `${MAIN_ROUTE.HOME}`,
   WORKFLOW: `${MAIN_ROUTE.HOME}workflow`,
@@ -64,9 +49,7 @@ export const PAGE_ROUTE: Readonly<{
 
 // Workflow Route
 export const WORKFLOW_ROUTE: Readonly<{
-  HOME: string;
-  CREATE_WORKFLOW: string;
-  UPDATE_WORKFLOW: string;
+  [key: string]: string;
 }> = Object.freeze({
   HOME: `${PAGE_ROUTE.WORKFLOW}`,
   CREATE_WORKFLOW: `${PAGE_ROUTE.WORKFLOW}/add`,
@@ -75,8 +58,7 @@ export const WORKFLOW_ROUTE: Readonly<{
 
 // Companies Route
 export const COMPANIES_ROUTE: Readonly<{
-  COMPANY_PROJECTS_DETAILS: string;
-  TAGS: string;
+  [key: string]: string;
 }> = Object.freeze({
   COMPANY_PROJECTS_DETAILS: `${PAGE_ROUTE.COMPANY_PROJECTS}company-projects/:communityId`,
   TAGS: `${PAGE_ROUTE.HOME}company-project/tags`,
@@ -85,9 +67,7 @@ export const COMPANIES_ROUTE: Readonly<{
 
 // My Jobs Route
 export const MY_JOBS_ROUTE: Readonly<{
-  HOME: string;
-  CREATE_MY_JOB: string;
-  UPDATE_MY_JOB: string;
+  [key: string]: string;
 }> = Object.freeze({
   HOME: `${PAGE_ROUTE.MY_JOBS}/list`,
   CREATE_MY_JOB: `${PAGE_ROUTE.MY_JOBS}/add`,
@@ -96,15 +76,14 @@ export const MY_JOBS_ROUTE: Readonly<{
 
 // Templates Route
 export const TEMPLATES_ROUTES: Readonly<{
-  HOME: string;
+  [key: string]: string;
 }> = Object.freeze({
   HOME: `${PAGE_ROUTE.TEMPLATES}/list`,
 });
 
 // Company Route
 export const COMPANY_ROUTE: Readonly<{
-  COMPANY_LIST_DETAILS: string;
-  CREATE_COMPANY: string;
+  [key: string]: string;
 }> = Object.freeze({
   COMPANY_LIST_DETAILS: `${PAGE_ROUTE.COMPANY}/:companyId`,
   CREATE_COMPANY: `${PAGE_ROUTE.COMPANY}add`,
@@ -112,8 +91,7 @@ export const COMPANY_ROUTE: Readonly<{
 
 // Help Route
 export const HELP_ROUTE: Readonly<{
-  HOME: string;
-  CREATE_HELP: string;
+  [key: string]: string;
 }> = Object.freeze({
   HOME: `${PAGE_ROUTE.HELP}`,
   CREATE_HELP: `${PAGE_ROUTE.HELP}add`,

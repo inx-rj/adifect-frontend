@@ -1,3 +1,4 @@
+import { CloseRounded } from "@mui/icons-material";
 import {
   Button,
   Dialog,
@@ -39,12 +40,15 @@ const CustomPopup = ({
           lineHeight: "24px",
           borderBottom: "1px solid #71757B33",
           padding: "20px 25px",
+          display: "flex",
+          justifyContent: "space-between",
         }}
       >
         {dialogTitle}
-        <span className="closebuttonsec" onClick={closePopup}>
-          <i className="fa-solid fa-xmark  dialogcross"></i>
-        </span>
+        <CloseRounded
+          className="closebuttonsec cursor-pointer"
+          onClick={closePopup}
+        />
       </DialogTitle>
       <div className="dialogcontent_and_actions_new pb-4">
         <DialogContent
