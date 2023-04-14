@@ -100,7 +100,7 @@ const MuiCustomTable = (props: MuiCustomTablePropsType) => {
                       }
                     }}
                   >
-                    {Object.values(items).map(val => <TableCell sx={{ px: 3.125, py: 1.25 }} >{val}</TableCell>)}
+                    {Object.values(items).map(val => <TableCell sx={{ px: 3.125, py: 1.25, color: "#71757B" }} >{val}</TableCell>)}
                   </TableRow>
                 )
               })}
