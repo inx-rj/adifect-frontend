@@ -6,6 +6,7 @@ import RemoveRedEyeOutlinedIcon from "@mui/icons-material/RemoveRedEyeOutlined";
 import DeleteIcon from "@mui/icons-material/Delete";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
+import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 export interface propsType {
   anchorEl: null | HTMLElement;
   selectedItem: any;
@@ -13,6 +14,7 @@ export interface propsType {
   showView?: boolean;
   showEdit?: boolean;
   showInActive?: boolean;
+  showSetting?: boolean;
   isEditMode?: boolean;
   item?: {
     id: number;
@@ -25,6 +27,7 @@ export interface propsType {
   setSelectedItem?: React.Dispatch<React.SetStateAction<any>>;
   handleInactive?: () => void;
   handleActive?: () => void;
+  handleSetting?: () => void;
 }
 
 const CustomActionComponent = ({
@@ -37,6 +40,8 @@ const CustomActionComponent = ({
   handleView,
   handleInactive,
   handleActive,
+  handleSetting,
+  showSetting = false,
   showDelete = false,
   showView = false,
   showEdit = false,
@@ -126,6 +131,14 @@ const CustomActionComponent = ({
               <DeleteIcon fontSize="small" />
             </ListItemIcon>
             Delete
+          </MenuItem>
+        )}
+        {showSetting && (
+          <MenuItem onClick={handleSetting}>
+            <ListItemIcon>
+              <SettingsOutlinedIcon fontSize="small" />
+            </ListItemIcon>
+            Setting
           </MenuItem>
         )}
       </Menu>

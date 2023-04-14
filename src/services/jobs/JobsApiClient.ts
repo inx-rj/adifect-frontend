@@ -9,7 +9,9 @@ class JobsApiClient {
     axiosPrivate.get(`${API_URL.HOMEPAGE.JOBS_LIST}${id}/`);
 
   jobApply = (formData) =>
-    axiosPrivate.post(`${API_URL.HOMEPAGE.JOB_APPLIED}/` + formData);
+    axiosPrivate.post(
+      `${API_URL.HOMEPAGE.JOB_APPLIED}`, formData
+    );
 
   //create job
   createApply = (formData) =>
