@@ -231,7 +231,11 @@ const AgencyCompanyProjectsTags = () => {
                       <h4>Add New Tag</h4>
                       <div className="styled-select">
                         <input
-                          className="input-style"
+                          className={
+                            errors.tagName
+                              ? "input-style input-err-style"
+                              : "input-style"
+                          }
                           type="text"
                           placeholder="Enter tag name"
                           name="tagName"
@@ -239,9 +243,7 @@ const AgencyCompanyProjectsTags = () => {
                           onChange={handleInputChange}
                           required
                         />
-                        {errors.tagName && (
-                          <span>{errors.tagName ?? "valid"}</span>
-                        )}
+                        <span className="err-tag">{errors.tagName ?? ""}</span>
                       </div>
                     </div>
                     <div
@@ -255,16 +257,20 @@ const AgencyCompanyProjectsTags = () => {
                       <div className="styled-select">
                         <textarea
                           name="tagDescription"
-                          className="input-style"
+                          className={
+                            errors.tagDescription
+                              ? "input-style input-err-style"
+                              : "input-style"
+                          }
                           placeholder="Enter description"
                           maxLength={2000}
                           value={formData.tagDescription}
                           onChange={handleInputChange}
                           required
                         />
-                        {errors.tagDescription && (
-                          <span>{errors.tagDescription ?? "valid"}</span>
-                        )}
+                        <span className="err-tag">
+                          {errors.tagDescription ?? ""}
+                        </span>
                       </div>
                     </div>
                   </div>
