@@ -1,7 +1,11 @@
 import { Add, FileUploadOutlined } from "@mui/icons-material";
 import {
   Autocomplete,
+  FormControl,
+  InputAdornment,
+  InputLabel,
   MenuItem,
+  OutlinedInput,
   Select,
   TextField,
   ToggleButton,
@@ -9,17 +13,26 @@ import {
   createFilterOptions,
 } from "@mui/material";
 import CustomDateRangePicker from "components/common/customDatePicker/CustomDateRangePicker";
+import { Roles } from "helper/config";
+import { API_URL } from "helper/env";
+import { TablePaginationType } from "helper/types/muiCustomTable/muiCustomTable";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useDropzone } from "react-dropzone";
+import { useSingleEffect, useUpdateEffect } from "react-haiku";
 import {
   Link,
   useNavigate,
   useOutletContext,
   useParams,
 } from "react-router-dom";
+import { GET_COMPANY_LIST } from "redux/actions/companyTab/companyTab.actions";
 import { CREATE_JOB } from "redux/actions/jobs/jobs.actions";
+import { GET_WORKFLOW_LIST } from "redux/actions/workFlow/workFlow.actions";
+import { GET_USER_PROFILE_DATA } from "redux/reducers/auth/auth.slice";
 import { COMPANY_PROJECTS_DATA } from "redux/reducers/companies/companies.slice";
+import { COMPANY_LIST } from "redux/reducers/companyTab/companyTab.slice";
 import { GET_JOBS_DETAILS } from "redux/reducers/homePage/jobsList.slice";
+import { WORKFLOW_LIST } from "redux/reducers/workFlow/workFlow.slice";
 import { useAppDispatch, useAppSelector } from "redux/store";
 import swal from "sweetalert";
 
@@ -231,6 +244,11 @@ const AdminJobsAddEdit = () => {
   });
 
   const jobDetails = useAppSelector(GET_JOBS_DETAILS);
+  const { companyList } = useAppSelector(COMPANY_LIST);
+  const userProfile = useAppSelector(GET_USER_PROFILE_DATA);
+  const WorkFlowData = useAppSelector(WORKFLOW_LIST);
+
+  // console.log("WorkFlowData", WorkFlowData);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -263,6 +281,38 @@ const AdminJobsAddEdit = () => {
     company: null,
     level: null,
   });
+
+  const [paginationData, setPaginationData] = useState<TablePaginationType>({
+    page: 1,
+    rowsPerPage: 10,
+    search: "",
+  });
+
+  //fetch initial companies data list
+  useSingleEffect(() => {
+    if (userProfile?.data?.role === Roles.ADMIN) {
+      dispatch(GET_COMPANY_LIST(paginationData, `${API_URL.COMPANY.ADMIN}`));
+      dispatch(GET_WORKFLOW_LIST(paginationData, `${API_URL.WORKFLOW.ADMIN}`));
+    } else {
+      dispatch(GET_COMPANY_LIST(paginationData));
+      dispatch(GET_WORKFLOW_LIST(paginationData));
+    }
+  });
+
+  //fetch company list when pagination change
+  useUpdateEffect(() => {
+    if (userProfile?.data?.role === Roles.ADMIN) {
+      dispatch(GET_COMPANY_LIST(paginationData, `${API_URL.COMPANY.ADMIN}`));
+      dispatch(GET_WORKFLOW_LIST(paginationData, `${API_URL.WORKFLOW.ADMIN}`));
+    } else {
+      dispatch(
+        GET_COMPANY_LIST(paginationData, `${API_URL.COMPANY.COMPANY_LIST}`)
+      );
+      dispatch(
+        GET_WORKFLOW_LIST(paginationData, `${API_URL.WORKFLOW.WORKFLOW_LIST}`)
+      );
+    }
+  }, [paginationData, userProfile.data?.role]);
 
   const yesterday = new Date(
     new Date().setDate(new Date().getDate() + 1)
@@ -397,7 +447,7 @@ const AdminJobsAddEdit = () => {
   //Get value
   const getvalue = (e) => {
     setcompanyvalue(e.target.value);
-
+    setShow(true);
     // const success = api
     //   .get(`${BACKEND_API_URL}company/${e.target.value}`)
     //   .then((res) => {
@@ -2399,11 +2449,9 @@ const AdminJobsAddEdit = () => {
   return (
     <div className="page-container">
       <div className="">
-        <div className="pb-5">
-          <h1 className="text-2xl font-bold text-black">
-            What Service Are You Looking For?
-          </h1>
-        </div>
+        <h1 className="text-2xl font-bold text-black">
+          What Service Are You Looking For?
+        </h1>
       </div>
       <div className="page-card card p-5">
         <div className="w-full max-w-[560px]">
@@ -2480,20 +2528,20 @@ const AdminJobsAddEdit = () => {
                 inputProps={{ "aria-label": "Without label" }}
               >
                 <MenuItem value={null}>Select Company</MenuItem>
-                {/* {ListcompaniesData?.map((item) =>
+                {companyList?.data?.results?.map((item) =>
                   item.is_active ? (
                     <MenuItem key={item.id} value={item.id}>
                       {item?.name}
                     </MenuItem>
                   ) : null
-                )} */}
+                )}
               </Select>
               <span className="text-[#D14F4F] flex justify-end">
                 {errors.company ?? ""}
               </span>
             </div>
           </div>
-          {!show ? (
+          {show ? (
             <>
               <div className={errors.workflow ? " error mb-2" : " mb-2"}>
                 <h4 className="flex gap-1 text-lg text-black font-bold mb-1 justify-between">
@@ -2538,7 +2586,7 @@ const AdminJobsAddEdit = () => {
                     inputProps={{ "aria-label": "Without label" }}
                   >
                     <MenuItem value={null}>Select Workflow</MenuItem>
-                    {apivalue?.map((item) =>
+                    {WorkFlowData?.workFlowList?.data?.results?.map((item) =>
                       item.is_active ? (
                         <MenuItem key={item.id} value={item.id}>
                           {item?.name}
@@ -3930,8 +3978,8 @@ const AdminJobsAddEdit = () => {
 
             <div className={errors.tags ? "error" : " "}>
               <h4 className="text-lg text-black font-bold mb-1">Tags</h4>
-              <div className="">
-                <div className="">
+              <div className="Marketing  Marketing_2 display-f">
+                <div className="tags-input-container">
                   {tags?.map((tag, index) => (
                     <div className="tag-item" key={index}>
                       <span className="text">{tag}</span>
@@ -3955,7 +4003,8 @@ const AdminJobsAddEdit = () => {
                       setSavetagButton(e.target.value);
                     }}
                     type="text"
-                    className="input-style bg-[rgb(249_251_252)]"
+                    className="tags-input"
+                    // className="input-style bg-[rgb(249_251_252)]"
                     placeholder="Type something"
                     value={savetagbutton}
                     ref={inputRef}
