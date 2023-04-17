@@ -116,25 +116,19 @@ const AgencyCompanyProjectsTags = () => {
         ? companyProjectsTagsList?.data?.results?.map((data, index) => {
             return {
               community: (
-                <div key={index}>
-                  <Link to={`${data.id}`}>
-                    <Typography
-                      sx={{
-                        "&.MuiTypography-root": {
-                          display: "inline-block",
-                          cursor: "pointer",
-                          color: "rgba(39, 90, 208, 1)",
-                          fontSize: "14px",
-                          fontWeight: 400,
-                          p: 0,
-                          fontFamily: '"Figtree", sans-serif',
-                        },
-                      }}
-                    >
-                      {data.name}
-                    </Typography>
-                  </Link>
-                </div>
+                <Typography
+                  sx={{
+                    "&.MuiTypography-root": {
+                      display: "inline-block",
+                      fontSize: "14px",
+                      fontWeight: 400,
+                      p: 0,
+                      fontFamily: '"Figtree", sans-serif',
+                    },
+                  }}
+                >
+                  {data.name}
+                </Typography>
               ),
               tags: (
                 <Typography
