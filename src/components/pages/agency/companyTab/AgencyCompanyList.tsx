@@ -528,7 +528,11 @@ const AgencyCompanyList = () => {
                         <h4>Company</h4>
                         <div className="styled-select">
                           <input
-                            className="input-style"
+                            className={
+                              errors.company
+                                ? "input-style input-err-style"
+                                : "input-style"
+                            }
                             type="text"
                             placeholder="Enter Company Name"
                             name="company"
@@ -552,7 +556,11 @@ const AgencyCompanyList = () => {
                         <div className="styled-select">
                           <textarea
                             name="description"
-                            className="input-style"
+                            className={
+                              errors.description
+                                ? "input-style input-err-style"
+                                : "input-style"
+                            }
                             placeholder="Enter Company Description"
                             maxLength={2000}
                             value={formData.description}
@@ -588,7 +596,7 @@ const AgencyCompanyList = () => {
                 }
               }}
               mainActionHandler={
-                setIsSettingMode ? handleFormSubmit : validateSubmit
+                isSettingMode ? handleFormSubmit : validateSubmit
               }
               mainActionTitle={"Save"}
             />
