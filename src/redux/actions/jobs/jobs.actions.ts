@@ -107,6 +107,11 @@ const APPLY_FOR_JOB = (formData) => async (dispatch: AppDispatch) => {
   await JobsApiClient.jobApply(formData);
 };
 
+// Create Job (Admin Role)
+const CREATE_JOB = (formData) => async (dispatch: AppDispatch) => {
+  await JobsApiClient.createApply(formData);
+};
+
 // List All Jobs
 const LIST_ALL_JOBS = (formData) => async (dispatch: AppDispatch) => {
   console.log("formData", formData);
@@ -147,4 +152,5 @@ export {
   APPLY_FOR_JOB,
   LIST_ALL_JOBS,
   DELETE_JOB,
+  CREATE_JOB
 };

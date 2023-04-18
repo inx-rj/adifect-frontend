@@ -13,6 +13,10 @@ class JobsApiClient {
       `${API_URL.HOMEPAGE.JOB_APPLIED}`, formData
     );
 
+  //create job
+  createApply = (formData) =>
+    axiosPrivate.post(`${API_URL.HOMEPAGE.JOBS_LIST}` ,formData);
+
   //delete job
   deleteJob = (id) =>
     axiosPrivate.delete(`${API_URL.HOMEPAGE.JOBS_LIST}${id}/`);

@@ -183,7 +183,7 @@ export const SIDEBAR_ROUTES: SidebarRoutesTypes[] = [
     path: MY_JOBS_ROUTE.HOME,
     icon: "BusinessCenterOutlined",
     children: [],
-    permission: [Roles.AGENCY],
+    permission: [Roles.AGENCY, Roles.ADMIN, Roles.MEMBER],
   },
   {
     name: "Industries",

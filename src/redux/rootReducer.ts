@@ -1,3 +1,4 @@
+import { workFlowTabSlice } from "./reducers/workFlow/workFlow.slice";
 import { combineReducers } from "@reduxjs/toolkit";
 import { authSlice } from "redux/reducers/auth/auth.slice";
 import { companiesSlice } from "redux/reducers/companies/companies.slice";
@@ -28,7 +29,8 @@ const appReducer = combineReducers({
   companiesTags: companiesTagsSlice.reducer,
   inviteUser: inviteUserSlice.reducer,
   homePage: homePageReducer,
-  profile: profileReducer
+  workFlowTab: workFlowTabSlice.reducer,
+  profile: profileReducer,
 });
 
 export const rootReducer = (state, action) => {
