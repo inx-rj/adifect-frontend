@@ -1,53 +1,38 @@
 import swal from "sweetalert";
 import {
-  INVITE_USER_LIST_LOADING, INVITE_USER_LIST_DATA, COMPANIES_LIST_LOADING, COMPANIES_LIST_DATA
+  SET_INVITE_USER_LIST_LOADING, SET_INVITE_USER_LIST_DATA,
 } from "../../reducers/inviteUser/inviteUser.slice";
 import { AppDispatch } from "../../store";
 import InviteUserApiClient from "services/inviteUser/InviteUserApiClient";
-import { inviteUserPayloadData, paginationData } from "helper/types/profileDropdown/inviteUserType";
+import { inviteUserPayloadData } from "helper/types/profileDropdown/inviteUserType";
 import { Images } from "helper/images";
+import { initialTableConfigInterface } from "helper/types/common/table";
 
 
-// Perform User Registration
-const FETCH_INVITE_USERS = (paginationData: paginationData) => async (dispatch: AppDispatch) => {
-  dispatch(INVITE_USER_LIST_LOADING(true));
-  await InviteUserApiClient.getInviteUsers(paginationData)
+// Fetch the invite users list
+const GET_INVITE_USERS = (tableConfig: initialTableConfigInterface) => async (dispatch: AppDispatch) => {
+  dispatch(SET_INVITE_USER_LIST_LOADING(true));
+  await InviteUserApiClient.fetchInviteUsers(tableConfig)
     .then((response) => {
       if (response.status === 201 || response.status === 200) {
-        dispatch(INVITE_USER_LIST_DATA(response?.data?.data));
-        dispatch(INVITE_USER_LIST_LOADING(false));
+        dispatch(SET_INVITE_USER_LIST_DATA(response?.data?.data));
+        dispatch(SET_INVITE_USER_LIST_LOADING(false));
       }
     }).catch((error) => {
+      dispatch(SET_INVITE_USER_LIST_LOADING(false));
       swal({
         title: "Error",
         text: error?.response?.data?.message,
         className: "errorAlert-login",
         icon: Images.Logo,
-        timer: 1500,
+        timer: 5000,
       });
     });
 };
 
-const FETCH_COMPANIES_LIST = () => async (dispatch: AppDispatch) => {
-  dispatch(COMPANIES_LIST_LOADING(true));
-  await InviteUserApiClient.getCompaniesList()
-    .then((response) => {
-      if (response.status === 201 || response.status === 200) {
-        dispatch(COMPANIES_LIST_DATA(response?.data?.results));
-        dispatch(COMPANIES_LIST_LOADING(false));
-      }
-    }).catch((error) => {
-      swal({
-        title: "Error",
-        text: error?.response?.data?.message,
-        className: "errorAlert-login",
-        icon: Images.Logo,
-        timer: 1500,
-      });
-    });
-};
-
+// Add new invite user to the invite users list
 const POST_INVITE_USER = (formPayload: inviteUserPayloadData) => async (dispatch: AppDispatch) => {
+  dispatch(SET_INVITE_USER_LIST_LOADING(true));
   await InviteUserApiClient.addInviteUser(formPayload)
     .then((response) => {
       if (response.status === 201 || response.status === 200) {
@@ -58,23 +43,27 @@ const POST_INVITE_USER = (formPayload: inviteUserPayloadData) => async (dispatch
           timer: 5000,
         });
       }
-      dispatch(FETCH_INVITE_USERS({
+      dispatch(GET_INVITE_USERS({
         page: 1,
         rowsPerPage: 10,
       }));
+      dispatch(SET_INVITE_USER_LIST_LOADING(false));
     }).catch((error) => {
+      dispatch(SET_INVITE_USER_LIST_LOADING(false));
       swal({
         title: "Error",
         text: error?.response?.data?.message,
         className: "errorAlert-login",
         icon: Images.Logo,
-        timer: 1500,
+        timer: 5000,
       });
     })
 };
 
-const DELETE_INVITE_USER = (userId: number) => async (dispatch: AppDispatch) => {
-  await InviteUserApiClient.deleteInviteUser(userId)
+// Update an entry from the invite users list
+const PUT_INVITE_USER = (id: number, payloadObj: { levels: number | "" }) => async (dispatch: AppDispatch) => {
+  dispatch(SET_INVITE_USER_LIST_LOADING(true));
+  await InviteUserApiClient.updateInviteUser(id, payloadObj)
     .then((response) => {
       if (response.status === 201 || response.status === 200) {
         swal({
@@ -84,25 +73,57 @@ const DELETE_INVITE_USER = (userId: number) => async (dispatch: AppDispatch) => 
           timer: 5000,
         });
       }
-      dispatch(FETCH_INVITE_USERS({
+      dispatch(GET_INVITE_USERS({
         page: 1,
         rowsPerPage: 10,
       }));
+      dispatch(SET_INVITE_USER_LIST_LOADING(false));
     }).catch((error) => {
+      dispatch(SET_INVITE_USER_LIST_LOADING(false));
       swal({
         title: "Error",
         text: error?.response?.data?.message,
         className: "errorAlert-login",
         icon: Images.Logo,
-        timer: 1500,
+        timer: 5000,
+      });
+    })
+};
+
+// Delete an entry from the invite users list
+const DELETE_INVITE_USER = (itemId: number) => async (dispatch: AppDispatch) => {
+  dispatch(SET_INVITE_USER_LIST_LOADING(true));
+  await InviteUserApiClient.deleteInviteUser(itemId)
+    .then((response) => {
+      if (response.status === 201 || response.status === 200) {
+        swal({
+          title: "Successfully Complete",
+          text: response?.data?.message,
+          icon: Images.Logo,
+          timer: 5000,
+        });
+      }
+      dispatch(GET_INVITE_USERS({
+        page: 1,
+        rowsPerPage: 10,
+      }));
+      dispatch(SET_INVITE_USER_LIST_LOADING(false));
+    }).catch((error) => {
+      dispatch(SET_INVITE_USER_LIST_LOADING(false));
+      swal({
+        title: "Error",
+        text: error?.response?.data?.message,
+        className: "errorAlert-login",
+        icon: Images.Logo,
+        timer: 5000,
       });
     })
 };
 
 // Common auth Config
 export {
-  FETCH_INVITE_USERS,
-  FETCH_COMPANIES_LIST,
+  GET_INVITE_USERS,
   POST_INVITE_USER,
+  PUT_INVITE_USER,
   DELETE_INVITE_USER
 };

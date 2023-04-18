@@ -6,6 +6,10 @@ import Typography from "@mui/material/Typography";
 import { Link, useLocation } from "react-router-dom";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import RemoveIcon from "@mui/icons-material/Remove";
+import MuiIcon from "components/common/MuiIcon";
+import { IS_SIDEBAR_COLLAPSED } from "redux/reducers/config/app/app.slice";
+import { useAppSelector } from "redux/store";
+import { Button, Divider, Menu, MenuItem, Tooltip } from "@mui/material";
 
 const SidebarMenuItem = ({ navItem }) => {
   const { children } = navItem;
@@ -14,129 +18,134 @@ const SidebarMenuItem = ({ navItem }) => {
   const { pathname } = location;
 
   const [expanded, setExpanded] = useState(null);
+  const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
+    null
+  );
+  const [isMobile, setIsMobile] = useState(window.innerWidth);
+  const open = Boolean(anchorEl);
+
+  const isSidebarCollapsed = useAppSelector(IS_SIDEBAR_COLLAPSED);
+
+  const handleWindowResize = () => {
+    setIsMobile(window.innerWidth);
+  };
+  window.addEventListener("resize", handleWindowResize);
 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : null);
   };
 
+  const handleClick = (event) => {
+    setAnchorEl(anchorEl ? null : event.currentTarget);
+  };
+
   return (
     <>
       {children?.length > 0 ? (
-        <Accordion
-          sx={{
-            "&.MuiPaper-root": {
-              "&.MuiAccordion-root": {
-                boxShadow: "none",
-                margin: "0 9px",
-              },
-            },
-          }}
-          expanded={expanded === "panel1"}
-          onChange={handleChange("panel1")}
+        <li
+          className={`sub-menu-wrapper
+          ${children.find((item) => pathname.includes(item.path))
+              ? "active"
+              : ""
+            }
+        `}
         >
-          <AccordionSummary
-            sx={{
-              background: children.find((item) => pathname.includes(item.path))
-                ? "rgba(36, 114, 252, 0.1)"
-                : "",
-              color: children.find((item) => pathname.includes(item.path))
-                ? "#2472fc"
-                : "",
-              "&.MuiButtonBase-root": {
-                "&.MuiAccordionSummary-root": {
-                  padding: "0 16px 0 0",
-                  margin: "0",
-                },
-              },
-              ".MuiAccordionSummary-content": {
-                margin: "0",
-                "li.active a": {
-                  background: "transparent",
-                },
-                "&.Mui-expanded": {
-                  margin: "0",
-                },
-              },
-            }}
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel1bh-content"
-            id="panel1bh-header"
-          >
-            <li
-              className={`
-                ${
-                  children.find((item) => pathname.includes(item.path))
-                    ? "active"
-                    : ""
-                } m-0
-              `}
-            >
-              <Link className="Menu m-0" to={navItem.path}>
-                <Typography
-                  sx={{
-                    fontSize: "16px !important",
-                    fontFamily: "Figtree, sans-serif",
-                    fontWeight: "700",
-                    color: children.find((item) => pathname.includes(item.path))
-                      ? "#2472fc"
-                      : "#a0a0a0",
-                  }}
+          {/* Minisidebar menu with tooltip  */}
+          {!isSidebarCollapsed && (
+            <>
+              <Tooltip title={navItem.name} placement="right-start">
+                <Button
+                  onClick={handleClick}
+                  aria-controls={open ? navItem.name : undefined}
+                  aria-haspopup="true"
+                  aria-expanded={open ? "true" : undefined}
+                  className={`tooltip-btn ${open ? "tooltip-open" : ""} `}
                 >
-                  <span className="menu_img">
-                    <img
-                      className="mr-2"
-                      // src={process.env.PUBLIC_URL + navItem.imgPath}
-                      src={"/assest/images/logo.png"}
-                      alt=""
-                    />
-                  </span>
-                  {navItem.name}
-                </Typography>
-              </Link>
-            </li>
-          </AccordionSummary>
-          <AccordionDetails>
-            <ul>
-              {children.map((item, index) => (
-                <li
-                  key={index}
-                  className={
-                    pathname.includes(item.path) ? "submenu-active" : ""
-                  }
-                >
-                  <Link className="sub-menu" to={item.path}>
-                    <RemoveIcon
-                      sx={{
-                        width: "16px",
-                        margin: "0 10px 0 -9px",
-                      }}
-                    />
-                    {/* <span className="">
-                      <img
-                        className="mr-2"
-                        src={process.env.PUBLIC_URL + item.imgPath}
-                        alt=""
+                  <MuiIcon icon={navItem?.icon} />
+                </Button>
+              </Tooltip>
+              <Menu
+                anchorEl={anchorEl}
+                id={navItem.name}
+                open={open}
+                onClose={() => setAnchorEl(null)}
+                // onClick={handleClose}
+
+                transformOrigin={{ horizontal: "left", vertical: "top" }}
+                anchorOrigin={{ horizontal: "right", vertical: "top" }}
+                className="sidebar-mini-menu"
+              >
+                <MenuItem>{navItem.name}</MenuItem>
+                <Divider />
+                {children.map((item, index) => (
+                  <MenuItem
+                    key={index}
+                    className={
+                      pathname.includes(item.path) ? "submenu-active" : ""
+                    }
+                    onClick={() => setAnchorEl(null)}
+                  >
+                    <Link className="sub-menu" to={item.path}>
+                      <RemoveIcon
+                        sx={{
+                          width: "16px",
+                          margin: "0 10px 0 -9px",
+                        }}
                       />
-                    </span> */}
-                    {item.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </AccordionDetails>
-        </Accordion>
+                      {item.name}
+                    </Link>
+                  </MenuItem>
+                ))}
+              </Menu>{" "}
+            </>
+          )}
+          {isSidebarCollapsed && (
+            <Accordion
+              expanded={expanded === navItem.id}
+              onChange={handleChange(navItem.id)}
+            >
+              <AccordionSummary
+                expandIcon={isSidebarCollapsed && <ExpandMoreIcon />}
+                aria-controls="panel1bh-content"
+                id="panel1bh-header"
+              >
+                <Typography>
+                  <MuiIcon icon={navItem?.icon} />
+                  {isSidebarCollapsed && isMobile > 768 && <span className="ml-2">{navItem.name}</span>}
+                  {isMobile < 768 && <span className="ml-2">{navItem.name}</span>}
+                </Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <ul>
+                  {children.map((item, index) => (
+                    <li
+                      key={index}
+                      className={
+                        pathname.includes(item.path) ? "submenu-active" : ""
+                      }
+                    >
+                      <Link className="sub-menu" to={item.path}>
+                        <RemoveIcon
+                          sx={{
+                            width: "16px",
+                            margin: "0 10px 0 -9px",
+                          }}
+                        />
+                        {item.name}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </AccordionDetails>
+            </Accordion>
+          )}
+        </li>
       ) : (
         <li className={pathname === navItem.path ? "active" : ""}>
-          <Link className="Menu" to={navItem.path}>
-            <span className="menu_img">
-              <img
-                className="mr-2"
-                // src={process.env.PUBLIC_URL + navItem.imgPath}
-                src={"/assest/images/logo.png"}
-                alt=""
-              />
-            </span>
-            {navItem.name}
+          <Link className="Menu nav-link" to={navItem.path}>
+            <MuiIcon icon={navItem?.icon} />
+            {isSidebarCollapsed && isMobile > 768 && <span className="ml-2">{navItem.name}</span>}
+            {isMobile < 768 && <span className="ml-2">{navItem.name}</span>}
           </Link>
         </li>
       )}

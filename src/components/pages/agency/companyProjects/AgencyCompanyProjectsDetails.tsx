@@ -35,7 +35,7 @@ const AgencyCompanyProjectsDetails = () => {
             </div>
 
             <div className="Topallpage AllPageHight Custompage">
-                <div className="ContentDiv">
+                <div className="page-card">
                     {(companyProjectsList.data.results?.filter((e) => e.id == communityId)?.length > 0) &&
                         companyProjectsList.data.results?.filter((e) => e.id == communityId)?.map((item) => (
                             <Box sx={{ width: '100%', py: 2, pl: 2, pr: 3.125 }} key={item.id}>

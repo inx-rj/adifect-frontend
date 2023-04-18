@@ -1,10 +1,17 @@
 import { RouteType, SidebarRoutesTypes } from "helper/types";
+import { initialNotificationQueryInterface } from "helper/types/common/notification";
 import { initialTableConfigInterface } from "helper/types/common/table";
 import { intersection } from "lodash";
 
 // SET API URL Query params
 export const setQueryParams = (config: initialTableConfigInterface) => {
-  let queryParams = `?page=${config.page}&page_size=${config.rowsPerPage}`;
+  let queryParams = `?page=${config.page}&page_size=${
+    config.rowsPerPage
+  }&from_date=${config.from_date ?? ""}&to_date=${
+    config.to_date ?? ""
+  }&community=${config.community ?? ""}&status=${config.status ?? ""}&tag=${
+    config.tag ?? ""
+  }&search=${config.search ?? ""}`;
   return queryParams;
 };
 
@@ -37,3 +44,16 @@ export function getAllowedRoutes(
     else return intersection(permission, roles).length;
   });
 }
+
+// Notification query parameter 
+export const setNotificationQueryParams = (queryParams: initialNotificationQueryInterface) => {
+  
+  let notifiQueryParams: any;
+
+  if(queryParams?.companyId) {
+    notifiQueryParams = `?user=${queryParams?.id ?? 0}&company=${queryParams?.companyId ?? 0}&ordering=-created&offset=${queryParams?.offsetid ?? 0}`;
+  } else {
+    notifiQueryParams = `?user=${queryParams?.id ?? 0}&ordering=-created&offset=${queryParams?.offsetid ?? 0}`;
+  }
+  return notifiQueryParams;
+};

@@ -25,6 +25,7 @@ export interface UserProfileDetailsType {
   preferred_communication_id: string | null;
   availability: string | null;
   Portfolio_user: [];
+  user_level: number;
   sub_title: string | null;
   Language: string | null;
   website: string | null;
@@ -44,7 +45,7 @@ export interface AuthInitialType extends LoadingType {
   userProfile: {
     loading: false;
     hasData: boolean;
-    data: UserProfileDetailsType[];
+    data: UserProfileDetailsType;
   };
 }
 

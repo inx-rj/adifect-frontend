@@ -9,7 +9,7 @@ const SidebarToggle = () => {
 
   return (
     <button
-      className="btn-ic"
+      className="toggle-btn"
       onClick={() => dispatch(TOGGLE_SIDEBAR(!isSidebarCollapsed))}
     >
       <Menu />

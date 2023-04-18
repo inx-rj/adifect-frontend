@@ -1,174 +1,182 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useState } from "react";
 import swal from "sweetalert";
 import { Button, MenuItem, Select, Typography } from "@mui/material";
-import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import { useSingleEffect, useUpdateEffect } from "react-haiku";
 
+//import redux
 import { useAppSelector } from "redux/store";
 import { useAppDispatch } from "redux/store";
-import { DELETE_INVITE_USER, FETCH_COMPANIES_LIST, FETCH_INVITE_USERS, POST_INVITE_USER } from "redux/actions/inviteUser/inviteUser.actions";
-import { COMPANIES_LIST, INVITE_USER_LIST } from "redux/reducers/inviteUser/inviteUser.slice";
+import {
+  DELETE_INVITE_USER,
+  GET_INVITE_USERS,
+  POST_INVITE_USER,
+  PUT_INVITE_USER,
+} from "redux/actions/inviteUser/inviteUser.actions";
+import { INVITE_USER_LIST } from "redux/reducers/inviteUser/inviteUser.slice";
+import { COMPANY_LIST } from "redux/reducers/companyTab/companyTab.slice";
+import { GET_COMPANY_LIST } from "redux/actions/companyTab/companyTab.actions";
 
-import Custom_MUI_Table from "common/MuiCustomTable/Custom-MUI-Table";
-import SearchBar from "common/MuiCustomTable/CustomSearchBar";
+//import components
+import SearchBar from "common/CustomSearchBar";
 import CustomPopup from "common/CustomPopup";
+import MuiCustomTable from "components/common/muiCustomTable/MuiCustomTable";
+import CustomActionComponent from "common/CustomActionComponent";
 
-import SortArrowIcon from "../../assets/images/sort_arrows.png"
-import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
-import HomeIcon from '@mui/icons-material/Home';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import BorderColorIcon from '@mui/icons-material/BorderColor';
-import DeleteIcon from '@mui/icons-material/Delete';
+//import assets
+import SortArrowIcon from "../../assets/images/sort_arrows.png";
+import PersonAddAltIcon from "@mui/icons-material/PersonAddAlt";
+import HomeIcon from "@mui/icons-material/Home";
 
+// import helpers
+import { validateEmail } from "helper/validations";
+import {
+  TablePaginationType,
+  TableRowColType,
+} from "helper/types/muiCustomTable/muiCustomTable";
+import { Images } from "helper/images";
 
 const InviteUser = () => {
   const dispatch = useAppDispatch();
-  const modalRef = useRef(null);
 
-  const { inviteUserData, loading: inviteUserLoading } = useAppSelector(INVITE_USER_LIST);
-  const { companiesList, loading: companiesLoading } = useAppSelector(COMPANIES_LIST);
+  const { inviteUserList } = useAppSelector(INVITE_USER_LIST);
+  const { companyList } = useAppSelector(COMPANY_LIST);
 
-  const [searchText, setSearchText] = useState("");
-  const [currentTooltip, setCurrentTooltip] = useState(null);
+  const [selectedItem, setSelectedItem] = useState({
+    currentTooltip: null,
+    currentId: null,
+  });
+  const [anchorEl, setAnchorEl] = useState(null);
   const [openModal, setOpenModal] = useState(false);
   const [openCompanyDropdown, setOpenCompanyDropdown] = useState(false);
   const [openLevelDropdown, setOpenLevelDropdown] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
-  const [formData, setFormData] = useState<{ email: string, company: "" | number, level: "" | 1 | 2 | 3 | 4 }>({
+  const [formData, setFormData] = useState<{
+    email: string;
+    company: "" | number;
+    level: "" | 1 | 2 | 3 | 4;
+  }>({
     email: "",
     company: "",
-    level: ""
+    level: "",
   });
   const [errors, setErrors] = useState({
     email: "",
     company: "",
-    level: ""
+    level: "",
   });
-  const [paginationData, setPaginationData] = useState({
+  const [paginationData, setPaginationData] = useState<TablePaginationType>({
     page: 1,
     rowsPerPage: 10,
+    search: "",
   });
 
+  //fetch inital invite users and companies data list
+  useSingleEffect(() => {
+    dispatch(GET_COMPANY_LIST(paginationData));
+    dispatch(GET_INVITE_USERS(paginationData));
+  });
+
+  useUpdateEffect(() => {
+    dispatch(GET_INVITE_USERS(paginationData));
+  }, [paginationData]);
 
   //get user level
   const getUserLevel = (level) => {
-    if (level == 1) {
+    if (level === 1) {
       return "Admin";
     }
-    if (level == 2) {
+    if (level === 2) {
       return "Marketer";
     }
-    if (level == 3) {
+    if (level === 3) {
       return "Approver";
     }
-    if (level == 4) {
+    if (level === 4) {
       return "In-house Designer";
     }
-    return ""
-  }
-
-  useEffect(() => {
-    dispatch(FETCH_COMPANIES_LIST());
-  }, [])
-
-  useEffect(() => {
-    dispatch(FETCH_INVITE_USERS(paginationData));
-  }, [paginationData])
-
-
-  //handle the actions modal 
-  useEffect(() => {
-    // Add event listener to detect clicks outside the modal
-    document.addEventListener('mousedown', handleClickOutside);
-
-    return () => {
-      // Remove event listener on cleanup
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  });
-
-  const handleClickOutside = (e) => {
-    if (modalRef.current && !modalRef.current.contains(e.target)) {
-      setCurrentTooltip(null);
-    }
+    return "";
   };
 
   //set the edit mode
-  const handleEditEntry = () => {
-    setCurrentTooltip(null);
-    setIsEditMode(true)
-    setOpenModal(true)
-  }
+  const handleEdit = (item) => {
+    setOpenModal(true);
+    setIsEditMode(true);
+    setErrors({ ...errors, level: "" });
+    setSelectedItem({ ...selectedItem, currentId: item?.id });
+    setFormData({ ...formData, level: item?.level });
+  };
+
+  //validate inputs
+  const validateSubmit = (e) => {
+    e.preventDefault();
+    let tempErrors = {
+      email: null,
+      company: null,
+      level: !formData?.level ? "Please select a level" : null,
+    };
+    if (!isEditMode) {
+      tempErrors = {
+        email: validateEmail(formData?.email),
+        company: !formData?.company ? "Please select a company" : null,
+        level: !formData?.level ? "Please select a level" : null,
+      };
+    }
+    setErrors(tempErrors);
+    if (Object.values(tempErrors).filter((value) => value)?.length) {
+      return;
+    }
+    handleFormSubmit();
+  };
 
   //handle form data
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
     setErrors({ ...errors, [name]: null });
+  };
 
-  }
-
-  //validate inputs
-  const validateSubmit = (e) => {
-    e.preventDefault();
-    const tempErrors = {
-      email: !formData?.email ? "Please enter the email address" : !formData?.email?.toLowerCase()
-        .match(
-          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-        ) ? "Email is not valid" : "",
-      company: !formData?.company ? "Please select a company" : "",
-      level: !formData?.level ? "Please select a level" : "",
-    };
-
-    console.log(tempErrors, "tempErrors")
-    setErrors(tempErrors);
-    if (Object.values(tempErrors).filter((value) => value)?.length) {
-      return;
+  //handle add and edit form submit
+  const handleFormSubmit = () => {
+    if (isEditMode) {
+      dispatch(
+        PUT_INVITE_USER(selectedItem.currentId, { levels: formData?.level })
+      );
+    } else {
+      dispatch(
+        POST_INVITE_USER({
+          email: formData?.email,
+          company: formData?.company,
+          levels: formData?.level,
+        })
+      );
     }
-    handleFormSubmit();
+    setAnchorEl(null);
+    setSelectedItem({ currentId: null, currentTooltip: null });
+    setOpenModal(false);
+    setIsEditMode(false);
     setFormData({ ...formData, email: "" });
   };
 
-  const handleFormSubmit = () => {
-    if (isEditMode) {
-      console.log("IN the EDIT mode", formData, errors)
-      // dispatch(POST_INVITE_USER(formData);
-    } else {
-      console.log("IN the ADD mode", formData, errors)
-      dispatch(POST_INVITE_USER({
-        email: formData?.email,
-        company: formData?.company,
-        levels: formData?.level,
-      }));
-    }
-    setOpenModal(false)
-    setIsEditMode(false)
-  }
-
-  const handleDeleteEntry = (itemId) => {
+  //handle delete action
+  const handleDelete = (item) => {
     swal({
       title: "",
       text: "Are you sure you want to remove this user?",
       className: "errorAlert",
-      icon: "/img/logonew-red.svg",
-      // buttons: true,
+      icon: Images.Logo,
       dangerMode: true,
     }).then((willDelete) => {
       if (willDelete) {
-        dispatch(DELETE_INVITE_USER(itemId));
-        dispatch(FETCH_INVITE_USERS(paginationData));
-        swal({
-          title: "Successfully Complete",
-          text: "Successfully removed!",
-          className: "successAlert",
-          icon: "/img/logonew.svg",
-          // buttons: false,
-          timer: 1500,
-        });
+        dispatch(DELETE_INVITE_USER(item?.id));
       }
     });
+    setAnchorEl(null);
+    setSelectedItem({ currentId: null, currentTooltip: null });
   };
-  console.log("inviteUserData", inviteUserData)
-  const columns = {
+
+  const data: TableRowColType = {
     columns: [
       {
         id: 1,
@@ -180,7 +188,7 @@ const InviteUser = () => {
         ),
         field: "name",
         sort: "asc",
-        width: 300,
+        width: 180,
       },
       {
         id: 2,
@@ -192,7 +200,7 @@ const InviteUser = () => {
         ),
         field: "email",
         sort: "asc",
-        width: 120,
+        width: 180,
       },
       {
         id: 3,
@@ -211,187 +219,173 @@ const InviteUser = () => {
         label: (
           <label className="tableHead">
             Level
-            <img src={SortArrowIcon} />
+            <img src={SortArrowIcon} alt="Title" />
           </label>
         ),
         field: "level",
         sort: "asc",
-        width: 100,
+        width: 160,
       },
       {
         id: 6,
         label: "Status",
         field: "status",
         sort: "asc",
-        width: 100,
+        width: 160,
       },
       {
         id: 6,
         label: "Action",
         field: "action",
         sort: "asc",
-        width: 100,
+        width: 160,
       },
     ],
 
     rows:
-      inviteUserData?.results?.length > 0
-        ? inviteUserData?.results?.map((item, index) => {
-          return {
-            name: (
-              <div key={index}>
-                <Link to={`${item.id}`}>
-                  <Typography
-                    sx={{
-                      "&.MuiTypography-root": {
-                        display: "inline-block",
-                        cursor: "pointer",
-                        color: "rgba(39, 90, 208, 1)",
-                        fontSize: "14px",
-                        fontWeight: 400,
-                        p: 0,
-                        fontFamily: '"Figtree", sans-serif',
-                      },
-                    }}
-                  >
-                    {item?.user_email ? item?.user_name : "N/A"}
-                  </Typography>
-                </Link>
-              </div>
-            ),
-            email: item?.user_email ? item.user_email : item.email,
-            company: item?.company_name,
-            level: getUserLevel(item?.level),
-            status: (
-              <Button
-                variant="contained"
-                disableRipple
-                disableFocusRipple
-                disableElevation
-                sx={{
-                  width: "80px",
-                  background:
-                    item?.status !== 1
-                      ? "rgba(250, 45, 32, 0.08)"
-                      : "rgba(32, 161, 68, 0.08)",
-                  color:
-                    item?.status !== 1
-                      ? "rgba(250, 45, 32, 1)"
-                      : "#20A144",
-                  fontSize: "12px",
-                  textTransform: "none",
-                  pointerEvents: "none",
-                }}
-              >
-                {item?.status !== 1 ? "Inactive" : "Active"}
-              </Button>
-            ),
-            action: (
-              <div className="relative">
-                <MoreVertIcon cursor="pointer" onClick={() => setCurrentTooltip(item?.id)} />
-                {currentTooltip === item?.id && (
-                  <div ref={modalRef} className="modal-shadow absolute left-3 top-2 z-10 p-[10px] rounded-[4px] max-w-fit text-sm text-disable leading-4">
-                    <div className="flex justify-start items-center gap-2 cursor-pointer" onClick={handleEditEntry} >
-                      <BorderColorIcon />
-                      <span>Edit</span>
-                    </div>
-                    <div className="flex justify-start items-center gap-2 pt-[15px] cursor-pointer" onClick={() => handleDeleteEntry(item?.id)} >
-                      <DeleteIcon />
-                      <span>Delete</span>
-                    </div>
-                  </div>
-                )}
-              </div>
-            ),
-          };
-        })
+      inviteUserList?.data?.results?.length > 0
+        ? inviteUserList?.data?.results?.map((item, index) => {
+            return {
+              name: (
+                <Typography
+                  sx={{
+                    "&.MuiTypography-root": {
+                      display: "inline-block",
+                      fontSize: "14px",
+                      fontWeight: 400,
+                      p: 0,
+                      fontFamily: '"Figtree", sans-serif',
+                    },
+                  }}
+                >
+                  {item?.user_email ? item?.user_name : "N/A"}
+                </Typography>
+              ),
+              email: item?.user_email ? item.user_email : item.email,
+              company: item?.company_name,
+              level: getUserLevel(item?.level),
+              status: (
+                <Button
+                  variant="contained"
+                  disableRipple
+                  disableFocusRipple
+                  disableElevation
+                  sx={{
+                    width: "80px",
+                    background:
+                      item?.status !== 1
+                        ? "rgba(250, 45, 32, 0.08)"
+                        : "rgba(32, 161, 68, 0.08)",
+                    color:
+                      item?.status !== 1 ? "rgba(250, 45, 32, 1)" : "#20A144",
+                    fontSize: "12px",
+                    textTransform: "none",
+                    pointerEvents: "none",
+                  }}
+                >
+                  {item?.status !== 1 ? "Inactive" : "Active"}
+                </Button>
+              ),
+              action: (
+                <CustomActionComponent
+                  selectedItem={selectedItem}
+                  setSelectedItem={setSelectedItem}
+                  setAnchorEl={setAnchorEl}
+                  anchorEl={anchorEl}
+                  handleEdit={() => handleEdit(item)}
+                  handleDelete={() => handleDelete(item)}
+                  showDelete={true}
+                  showEdit={true}
+                  isEditMode={isEditMode}
+                  item={{ id: item?.id, isActive: item?.is_active }}
+                />
+              ),
+            };
+          })
         : [],
   };
 
-
   return (
-    <>
-      <div className="background">
-        <div className="Category">
-          <div className="flex justify-between items-center">
-            <h1>Invite User</h1>
-            <div className="flex justify-center items-center gap-[10px] font-sm leading-4 font-medium text-primary">
-              <Link to="/"><HomeIcon color="disabled" /></Link>
-              <span className="text-disable opacity-20">|</span>
-              <Link to="/invite-user">Invite User</Link>
-            </div>
-          </div>
+    <div className="page-container">
+      <div className="flex-between">
+        <h1>Invite User</h1>
+        <div className="flex-between gap-[10px] font-sm leading-4 font-medium text-primary">
+          <Link to="/">
+            <HomeIcon color="disabled" />
+          </Link>
+          <span className="text-disable opacity-20">|</span>
+          <Link to="/invite">Invite User</Link>
         </div>
       </div>
 
-      <div className="ContentDiv">
-        <div className="min-w-[180px] grid">
-          <div className="flex justify-between items-center my-[15px] mx-[25px]">
-            <SearchBar onChange={setSearchText} />
-            <button
-              type="submit"
-              onClick={() => setOpenModal(true)}
-              className="btn btn-primary btn-label px-[15px] py-[9px] btn-primary max-w-[135px] w-full flex justify-center items-center gap-2"
-            >
-              <PersonAddAltIcon />
-              <span className="btn-label">Invite User</span>
-            </button>
-          </div>
+      <div className="page-card">
+        <div className="flex-between flex flex-wrap p-[15px] pb-5">
+          <SearchBar
+            setPaginationData={setPaginationData}
+            paginationData={paginationData}
+          />
+          <button
+            type="submit"
+            onClick={() => setOpenModal(true)}
+            className="btn btn-primary flex items-center px-4 gap-3"
+          >
+            <PersonAddAltIcon />
+            <span className="btn-label">Invite User</span>
+          </button>
         </div>
-        {inviteUserLoading ? (
+        {inviteUserList?.loading ? (
           <h1>Loading...</h1>
         ) : (
           <>
-            <Custom_MUI_Table
-              loader={inviteUserLoading}
-              data={columns}
-              allData={inviteUserData}
+            <MuiCustomTable
+              loader={inviteUserList?.loading}
+              data={data}
+              allData={inviteUserList?.data}
               paginationData={paginationData}
               setPaginationData={setPaginationData}
             />
             <CustomPopup
-              dialogTitle="Invite User"
+              dialogTitle={isEditMode ? "Edit Invite User" : "Invite User"}
               textAlign="left"
               dialogContent={
-                <div className="Topallpage-- AllPageHight--">
-                  <div className="invitepage2">
-                    <div className="invite1sec">
+                <div className="mt-5">
+                  {!isEditMode && (
+                    <>
                       <div
                         className={
                           errors.email
-                            ? "inputCntnr error"
-                            : "inputCntnr CategoryinputH"
+                            ? "input-fields-wrapper error-style"
+                            : "input-fields-wrapper"
                         }
                       >
                         <h4>Email Address</h4>
-                        <input
-                          className="category_name validateInput w-100 h-47 border-radius border-1"
-                          type="email"
-                          placeholder="Enter Email Address"
-                          name="email"
-                          value={formData.email}
-                          onChange={handleInputChange}
-                          required
-                        />
-                        <span
-                          style={{
-                            color: "#D14F4F",
-                            opacity: errors.email ? 1 : 0,
-                          }}
-                        >
-                          {errors.email ?? "valid"}
-                        </span>
+                        <div className="styled-select">
+                          <input
+                            className={
+                              errors.email
+                                ? "input-style input-err-style"
+                                : "input-style"
+                            }
+                            type="email"
+                            placeholder="Enter Email Address"
+                            name="email"
+                            value={formData.email}
+                            onChange={handleInputChange}
+                            required
+                          />
+                          <span className="err-tag">{errors.email ?? ""}</span>
+                        </div>
                       </div>
 
                       <div
                         className={
                           errors.company
-                            ? "text-content error Experiencenew"
-                            : "text-content  Experiencenew"
+                            ? "input-fields-wrapper error-style"
+                            : "input-fields-wrapper"
                         }
                       >
-                        <h4 className="Company_nameinvite">Company</h4>{" "}
-                        <div className="styled-select inviteselect">
+                        <h4>Company</h4>
+                        <div className="styled-select">
                           <Select
                             name="company"
                             open={openCompanyDropdown}
@@ -411,7 +405,7 @@ const InviteUser = () => {
                             inputProps={{ "aria-label": "Without label" }}
                           >
                             <MenuItem value="">Select Company</MenuItem>
-                            {companiesList?.map((item) =>
+                            {companyList?.data.results?.map((item) =>
                               item.is_active ? (
                                 <MenuItem key={item?.id} value={item?.id}>
                                   {item?.name}
@@ -419,68 +413,67 @@ const InviteUser = () => {
                               ) : null
                             )}
                           </Select>
-                          <span
-                            className="companyclass45"
-                            style={{
-                              color: "#D14F4F",
-                              opacity: errors.company ? 1 : 0,
-                            }}
-                          >
-                            {errors.company ?? "valid"}
+                          <span className="err-tag">
+                            {errors.company ?? ""}
                           </span>
                         </div>
                       </div>
-
-                      <div className="Levelsec">
-                        <h4>Level</h4>
-                        <Select
-                          name="level"
-                          open={openLevelDropdown}
-                          onOpen={() => {
-                            setOpenLevelDropdown(true);
-                          }}
-                          onClose={() => {
-                            setOpenLevelDropdown(false);
-                          }}
-                          // disabled={DamData?.[0]?.company_id}
-                          MenuProps={{
-                            variant: "menu",
-                            disableScrollLock: true,
-                          }}
-                          value={formData.level}
-                          onChange={handleInputChange}
-                          displayEmpty
-                          inputProps={{ "aria-label": "Without label" }}
-                        >
-                          <MenuItem value=""> Select Level </MenuItem>
-                          <MenuItem value={1}>Admin Level</MenuItem>
-                          <MenuItem value={2}>Marketer Level</MenuItem>
-                          <MenuItem value={3}>Approver Level</MenuItem>
-                          <MenuItem value={4}>In-house Designer</MenuItem>
-                        </Select>
-                        <span
-                          className="companyclass45"
-                          style={{
-                            color: "#D14F4F",
-                            opacity: errors.level ? 1 : 0,
-                          }}
-                        >
-                          {errors.level ?? "valid"}
-                        </span>
-                      </div>
+                    </>
+                  )}
+                  <div
+                    className={
+                      errors.level
+                        ? "input-fields-wrapper error-style"
+                        : "input-fields-wrapper"
+                    }
+                  >
+                    <h4>Level</h4>
+                    <div className="styled-select">
+                      <Select
+                        name="level"
+                        open={openLevelDropdown}
+                        onOpen={() => {
+                          setOpenLevelDropdown(true);
+                        }}
+                        onClose={() => {
+                          setOpenLevelDropdown(false);
+                        }}
+                        MenuProps={{
+                          variant: "menu",
+                          disableScrollLock: true,
+                        }}
+                        value={formData.level}
+                        onChange={handleInputChange}
+                        displayEmpty
+                        inputProps={{ "aria-label": "Without label" }}
+                      >
+                        <MenuItem value=""> Select Level </MenuItem>
+                        <MenuItem value={1}>Admin Level</MenuItem>
+                        <MenuItem value={2}>Marketer Level</MenuItem>
+                        <MenuItem value={3}>Approver Level</MenuItem>
+                        <MenuItem value={4}>In-house Designer</MenuItem>
+                      </Select>
+                      <span className="err-tag">{errors.level ?? ""}</span>
                     </div>
                   </div>
                 </div>
               }
               openPopup={openModal}
-              closePopup={() => setOpenModal(false)}
+              closePopup={() => {
+                if (isEditMode) {
+                  setOpenModal(false);
+                  setIsEditMode(false);
+                } else {
+                  setOpenModal(false);
+                }
+              }}
               mainActionHandler={validateSubmit}
-              mainActionTitle="Invite"
+              mainActionTitle={isEditMode ? "Save" : "Invite"}
             />
           </>
         )}
-      </div >
-    </>
+      </div>
+    </div>
   );
 };
 

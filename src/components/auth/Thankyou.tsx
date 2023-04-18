@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
-import { Images } from "../../helper/images";
+import Logo from "components/common/logo/Logo";
 
 const Thankyou = () => {
   const { successPage } = useParams();
@@ -22,10 +22,10 @@ const Thankyou = () => {
         // <LoadingSpinner />
         <></>
       ) : (
-        <div className="flex my-0 mx-auto max-w-[380px] items-center justify-center w-[90%] h-screen">
-          <div className="card">
-            <div className="mt-2.5 mb-4 inline-flex items-center justify-center w-full h-full">
-              <img src={Images.Logo} className="h-auto max-w-[200px]" alt="" />
+        <div className="login-signup-wrapper">
+          <div className="card max-w-[380px] w-full">
+            <div className="max-w-[150px] md:max-w-[200px] w-full mx-auto my-3 h-[65px]">
+              <Logo />
             </div>
             <div className="thankyoupage">
               <div className="login-content-registering">
@@ -56,12 +56,8 @@ const Thankyou = () => {
                       </>
                     )}
                   </p>
-                  <div className="center mt-4 thankyoudiv flex">
-                    <Link
-                      to="/"
-                      type="button"
-                      className="btn btn-primary p-2 w-full my-0 mx-auto max-w-[120px] bg-theme border-solid border-theme text-white disabled:bg-dark-100 disabled:text-title-color Large thankbutton border-radius"
-                    >
+                  <div className="center mt-4 thankyoudiv flex justify-center">
+                    <Link to="/" type="button" className="btn btn-primary">
                       Log In
                     </Link>
                   </div>
