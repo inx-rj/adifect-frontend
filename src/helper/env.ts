@@ -23,6 +23,8 @@ export const API_URL = {
     COMPANY_PROJECTS: `${BASE_URL.COMPANIES}stories/`,
     FILTERS: `${BASE_URL.COMPANIES}list-community-status-tag-data/`,
     TAGS: `${BASE_URL.COMPANIES}tags/`,
+    COMMUNITY_SETTINGS: `${BASE_URL.COMPANIES}community-setting/`,
+    AUDIENCES: `${BASE_URL.AGENCY}audience/`,
   },
   COMPANY: {
     ADMIN: `${BASE_URL.COMPANY}`, //for admin

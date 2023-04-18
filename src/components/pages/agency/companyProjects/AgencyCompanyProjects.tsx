@@ -254,20 +254,28 @@ const AgencyCompanyProjects = () => {
             Loading . . .
           </div>
         ) : (
-          <div className="flex flex-wrap gap-[15px] p-[15px] pb-5">
-            {filterArr?.map((item, index) => (
-              <FormControl key={index} sx={{ minWidth: "180px" }} size="small">
-                {item.filterType === item.name ? (
-                  <CustomDateRangePicker handleChange={handleChange} />
-                ) : (
-                  <DropdownWithSearch
-                    filterList={item}
-                    handleChange={handleChange}
-                  />
-                )}
-              </FormControl>
-            ))}
-          </div>
+          <>
+            {companyProjectsList.data.results?.length > 0 && (
+              <div className="flex flex-wrap gap-[15px] p-[15px] pb-5">
+                {filterArr?.map((item, index) => (
+                  <FormControl
+                    key={index}
+                    sx={{ minWidth: "180px" }}
+                    size="small"
+                  >
+                    {item.filterType === item.name ? (
+                      <CustomDateRangePicker handleChange={handleChange} />
+                    ) : (
+                      <DropdownWithSearch
+                        filterList={item}
+                        handleChange={handleChange}
+                      />
+                    )}
+                  </FormControl>
+                ))}
+              </div>
+            )}
+          </>
         )}
 
         {companyProjectsList.loading ? (

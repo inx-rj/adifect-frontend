@@ -335,7 +335,6 @@ const AgencyCompanyList = () => {
                   sx={{
                     "&.MuiTypography-root": {
                       display: "inline-block",
-                      color: "rgba(39, 90, 208, 1)",
                       fontFamily: '"Figtree", sans-serif',
                       fontSize: "14px",
                       fontWeight: 400,
@@ -356,16 +355,24 @@ const AgencyCompanyList = () => {
                 disableElevation
                 sx={{
                   width: "80px",
-                  background: item?.is_active
-                    ? "rgba(32, 161, 68, 0.08)"
-                    : "rgba(250, 45, 32, 0.08)",
-                  color: item?.is_active ? "#20A144" : "rgba(250, 45, 32, 1)",
+                  background:
+                    item?.is_active && !item.is_blocked
+                      ? "rgba(32, 161, 68, 0.08)"
+                      : "rgba(250, 45, 32, 0.08)",
+                  color:
+                    item?.is_active && !item.is_blocked
+                      ? "#20A144"
+                      : "rgba(250, 45, 32, 1)",
                   fontSize: "12px",
                   textTransform: "none",
                   pointerEvents: "none",
                 }}
               >
-                {item?.is_active ? "Active" : "Inactive"}
+                {item.is_blocked
+                  ? "Blocked"
+                  : item?.is_active
+                  ? "Active"
+                  : "Inactive"}
               </Button>
             ),
             action: (
@@ -414,7 +421,6 @@ const AgencyCompanyList = () => {
           sx={{
             "&.MuiTypography-root": {
               display: "inline-block",
-              color: "rgba(39, 90, 208, 1)",
               fontFamily: '"Figtree", sans-serif',
               fontSize: "14px",
               fontWeight: 400,
@@ -422,7 +428,9 @@ const AgencyCompanyList = () => {
             },
           }}
         >
-          {companyList?.data.results[index]?.agency_name}
+          {companyList?.data.results[index]?.agency_name
+            ? companyList?.data.results[index]?.agency_name
+            : "N/A"}
         </Typography>
       ),
       createdAt: item?.createdAt,
@@ -520,7 +528,11 @@ const AgencyCompanyList = () => {
                         <h4>Company</h4>
                         <div className="styled-select">
                           <input
-                            className="input-style"
+                            className={
+                              errors.company
+                                ? "input-style input-err-style"
+                                : "input-style"
+                            }
                             type="text"
                             placeholder="Enter Company Name"
                             name="company"
@@ -544,7 +556,11 @@ const AgencyCompanyList = () => {
                         <div className="styled-select">
                           <textarea
                             name="description"
-                            className="input-style"
+                            className={
+                              errors.description
+                                ? "input-style input-err-style"
+                                : "input-style"
+                            }
                             placeholder="Enter Company Description"
                             maxLength={2000}
                             value={formData.description}
@@ -580,7 +596,7 @@ const AgencyCompanyList = () => {
                 }
               }}
               mainActionHandler={
-                setIsSettingMode ? handleFormSubmit : validateSubmit
+                isSettingMode ? handleFormSubmit : validateSubmit
               }
               mainActionTitle={"Save"}
             />
