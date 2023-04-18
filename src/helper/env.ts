@@ -8,6 +8,7 @@ export const BASE_URL = {
   AGENCY: `${env.API_URL}agency/`,
   COMPANY: `${env.API_URL}company/`,
   MEMBER: `${env.API_URL}member/`,
+  WORKFLOW: `${env.API_URL}workflows/`,
 };
 
 export const API_URL = {
@@ -22,6 +23,8 @@ export const API_URL = {
     COMPANY_PROJECTS: `${BASE_URL.COMPANIES}stories/`,
     FILTERS: `${BASE_URL.COMPANIES}list-community-status-tag-data/`,
     TAGS: `${BASE_URL.COMPANIES}tags/`,
+    COMMUNITY_SETTINGS: `${BASE_URL.COMPANIES}community-setting/`,
+    AUDIENCES: `${BASE_URL.AGENCY}audience/`,
   },
   COMPANY: {
     ADMIN: `${BASE_URL.COMPANY}`, //for admin
@@ -45,9 +48,13 @@ export const API_URL = {
     MEMBER_NOTIFICATION: `${BASE_URL.MEMBER}member-notification/`,
   },
   PROFILE: {
-    USER_COMMUNICATION: `${env.API_URL}user-communication/`
+    USER_COMMUNICATION: `${env.API_URL}user-communication/`,
   },
   MY_JOBS: {
     AGENCY_JOBS_LIST: `${BASE_URL.AGENCY}agency-jobs/`,
-  }
+  },
+  WORKFLOW: {
+    ADMIN: `${BASE_URL.WORKFLOW}`, //for admin
+    WORKFLOW_LIST: `${BASE_URL.AGENCY}works-flow/`, //for agency
+  },
 };

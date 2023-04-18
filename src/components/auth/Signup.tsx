@@ -376,7 +376,7 @@ export default function Signup() {
             )}
             <div className="md:col-start-1 md:col-end-3 text-center mt-uni-gap">
               <input
-                className="btn btn-primary w-full md:max-w-[335px] text-base"
+                className="btn btn-primary w-full md:max-w-[335px] text-base md:mx-auto"
                 type="submit"
                 value="Create Account"
               />

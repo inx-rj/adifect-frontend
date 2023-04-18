@@ -1,3 +1,4 @@
+import React from "react";
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -43,6 +44,8 @@ import { COMPANY_LIST } from "redux/reducers/companyTab/companyTab.slice";
 import { GET_USER_PROFILE_DATA } from "redux/reducers/auth/auth.slice";
 import { API_URL } from "helper/env";
 import { singleCompanyPayloadData } from "helper/types/companyTab/comapniesType";
+import { WORKFLOW_LIST } from "redux/reducers/workFlow/workFlow.slice";
+import { DELETE_SINGLE_WORKFLOW, GET_WORKFLOW_LIST, POST_SINGLE_WORKFLOW } from "redux/actions/workFlow/workFlow.actions";
 
 const ROLES = {
   ADMIN: 0,
@@ -53,12 +56,13 @@ const ROLES = {
 
 const userData = () => JSON.parse(localStorage.getItem("userData") ?? "");
 
-const AgencyCompanyList = () => {
+const WorkFlowList = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   // Redux states
-  const { companyList } = useAppSelector(COMPANY_LIST);
+//   const { companyList } = useAppSelector(COMPANY_LIST);
+  const { workFlowList } = useAppSelector(WORKFLOW_LIST);
   const userProfile = useAppSelector(GET_USER_PROFILE_DATA);
 
   // React states
@@ -97,19 +101,19 @@ const AgencyCompanyList = () => {
   //fetch initial companies data list
   useSingleEffect(() => {
     if (userProfile?.data?.role === ROLES.ADMIN) {
-      dispatch(GET_COMPANY_LIST(paginationData, `${API_URL.COMPANY.ADMIN}`));
+      dispatch(GET_WORKFLOW_LIST(paginationData, `${API_URL.WORKFLOW.ADMIN}`));
     } else {
-      dispatch(GET_COMPANY_LIST(paginationData));
+      dispatch(GET_WORKFLOW_LIST(paginationData));
     }
   });
 
-  //fetch company list when pagination change
+  //fetch workflow list when pagination change
   useUpdateEffect(() => {
     if (userProfile?.data?.role === ROLES.ADMIN) {
-      dispatch(GET_COMPANY_LIST(paginationData, `${API_URL.COMPANY.ADMIN}`));
+      dispatch(GET_WORKFLOW_LIST(paginationData, `${API_URL.WORKFLOW.ADMIN}`));
     } else {
       dispatch(
-        GET_COMPANY_LIST(paginationData, `${API_URL.COMPANY.COMPANY_LIST}`)
+        GET_WORKFLOW_LIST(paginationData, `${API_URL.WORKFLOW.WORKFLOW_LIST}`)
       );
     }
   }, [paginationData, userProfile.data?.role]);
@@ -189,8 +193,8 @@ const AgencyCompanyList = () => {
         // Handle Add new company action
         payload.agency = userData()?.user.user_id;
         userProfile?.data?.role === ROLES.ADMIN
-          ? dispatch(POST_SINGLE_COMPANY(payload, `${API_URL.COMPANY.ADMIN}`))
-          : dispatch(POST_SINGLE_COMPANY(payload));
+          ? dispatch(POST_SINGLE_WORKFLOW(payload, `${API_URL.WORKFLOW.ADMIN}`))
+          : dispatch(POST_SINGLE_WORKFLOW(payload));
       }
     } else {
       // Handle Setting option action for admin
@@ -230,13 +234,13 @@ const AgencyCompanyList = () => {
         if (userProfile?.data?.role === ROLES.ADMIN) {
           //admin
           dispatch(
-            DELETE_SINGLE_COMPANY(
+            DELETE_SINGLE_WORKFLOW(
               selectedItem.currentId,
-              `${API_URL.COMPANY.ADMIN}`
+              `${API_URL.WORKFLOW.ADMIN}`
             )
           );
         } else {
-          dispatch(DELETE_SINGLE_COMPANY(selectedItem.currentId)); //agency user
+          dispatch(DELETE_SINGLE_WORKFLOW(selectedItem.currentId)); //agency user
         }
       }
     });
@@ -291,18 +295,18 @@ const AgencyCompanyList = () => {
       sort: "asc",
       width: 180,
     },
-    {
-      id: 2,
-      label: (
-        <label className="flex items-center">
-          Created At
-          <img className="ml-2" src={Images.SortArrows} alt="title" />
-        </label>
-      ),
-      field: "createdAt",
-      sort: "asc",
-      width: 180,
-    },
+    // {
+    //   id: 2,
+    //   label: (
+    //     <label className="flex items-center">
+    //       Created At
+    //       <img className="ml-2" src={Images.SortArrows} alt="title" />
+    //     </label>
+    //   ),
+    //   field: "createdAt",
+    //   sort: "asc",
+    //   width: 180,
+    // },
     {
       id: 3,
       label: "Status",
@@ -321,13 +325,13 @@ const AgencyCompanyList = () => {
 
   let rows: {
     title: JSX.Element;
-    agency?: JSX.Element;
-    createdAt: string;
+    comapany?: JSX.Element;
+    // createdAt: string;
     status: JSX.Element;
     action: JSX.Element;
   }[] =
-    companyList?.data?.results?.length > 0
-      ? companyList?.data.results?.map((item, index) => {
+    workFlowList?.data?.results?.length > 0
+      ? workFlowList?.data.results?.map((item, index) => {
           return {
             title: (
               <div key={index}>
@@ -335,6 +339,7 @@ const AgencyCompanyList = () => {
                   sx={{
                     "&.MuiTypography-root": {
                       display: "inline-block",
+                      color: "rgba(39, 90, 208, 1)",
                       fontFamily: '"Figtree", sans-serif',
                       fontSize: "14px",
                       fontWeight: 400,
@@ -346,7 +351,7 @@ const AgencyCompanyList = () => {
                 </Typography>
               </div>
             ),
-            createdAt: formateISODateToLocaleString(item?.created ?? ""),
+            // createdAt: formateISODateToLocaleString(item?.created ?? ""),
             status: (
               <Button
                 variant="contained"
@@ -355,24 +360,16 @@ const AgencyCompanyList = () => {
                 disableElevation
                 sx={{
                   width: "80px",
-                  background:
-                    item?.is_active && !item.is_blocked
-                      ? "rgba(32, 161, 68, 0.08)"
-                      : "rgba(250, 45, 32, 0.08)",
-                  color:
-                    item?.is_active && !item.is_blocked
-                      ? "#20A144"
-                      : "rgba(250, 45, 32, 1)",
+                  background: item?.is_active
+                    ? "rgba(32, 161, 68, 0.08)"
+                    : "rgba(250, 45, 32, 0.08)",
+                  color: item?.is_active ? "#20A144" : "rgba(250, 45, 32, 1)",
                   fontSize: "12px",
                   textTransform: "none",
                   pointerEvents: "none",
                 }}
               >
-                {item.is_blocked
-                  ? "Blocked"
-                  : item?.is_active
-                  ? "Active"
-                  : "Inactive"}
+                {item?.is_active ? "Active" : "Inactive"}
               </Button>
             ),
             action: (
@@ -398,47 +395,6 @@ const AgencyCompanyList = () => {
         })
       : [];
 
-  //Modify table data for the admin user
-  if (userProfile?.data?.role === ROLES.ADMIN) {
-    const newCol = {
-      id: 2,
-      label: (
-        <label className="flex items-center">
-          Agency
-          <img className="ml-2" src={Images.SortArrows} alt="Title" />
-        </label>
-      ),
-      field: "agency",
-      sort: "asc",
-      width: 180,
-    };
-    columns.splice(1, 0, newCol);
-    columns = columns.map((item, index) => ({ ...item, id: index + 1 }));
-    rows = rows.map((item, index) => ({
-      title: item?.title,
-      agency: (
-        <Typography
-          sx={{
-            "&.MuiTypography-root": {
-              display: "inline-block",
-              fontFamily: '"Figtree", sans-serif',
-              fontSize: "14px",
-              fontWeight: 400,
-              p: 0,
-            },
-          }}
-        >
-          {companyList?.data.results[index]?.agency_name
-            ? companyList?.data.results[index]?.agency_name
-            : "N/A"}
-        </Typography>
-      ),
-      createdAt: item?.createdAt,
-      status: item?.status,
-      action: item?.action,
-    }));
-  }
-
   //final table data
   const data: TableRowColType = {
     columns,
@@ -446,165 +402,159 @@ const AgencyCompanyList = () => {
   };
 
   return (
-    <div className="page-container">
-      <div className="flex-between">
-        <h1>Company</h1>
-        <div className="flex-between gap-[10px] font-sm leading-4 font-medium text-primary">
-          <Link to="/">
-            <HomeIcon color="disabled" />
-          </Link>
-          <span className="text-disable opacity-20">|</span>
-          <Link to="/company">Company</Link>
+    <div>
+      <div className="page-container">
+        <div className="flex-between">
+          <h1>Workflow List</h1>
+          <div className="flex-between gap-[10px] font-sm leading-4 font-medium text-primary">
+            <Link to="/">
+              <HomeIcon color="disabled" />
+            </Link>
+            <span className="text-disable opacity-20">|</span>
+            <Link to="/company">Company</Link>
+          </div>
         </div>
-      </div>
-      <div className="page-card">
-        <div className="flex-between flex-wrap p-[15px] pb-5">
-          <SearchBar
-            setPaginationData={setPaginationData}
-            paginationData={paginationData}
-          />
-          <button
-            type="submit"
-            onClick={() => setOpenModal(true)}
-            className="btn btn-primary btn-label bg-primary flex items-center px-[15px] py-[9px] max-w-[155px] w-full flex-center gap-2"
-          >
-            <AddIcon />
-            <span className="btn-label">Add Company</span>
-          </button>
-        </div>
-        {companyList?.loading ? (
-          <h1>Loading...</h1>
-        ) : (
-          <>
-            <MuiCustomTable
-              loader={companyList?.loading}
-              data={data}
-              allData={companyList?.data}
-              paginationData={paginationData}
+        <div className="page-card">
+          <div className="flex-between flex-wrap p-[15px] pb-5">
+            <SearchBar
               setPaginationData={setPaginationData}
+              paginationData={paginationData}
             />
-            <CustomPopup
-              dialogTitle={
-                isEditMode
-                  ? "Edit Company"
-                  : isSettingMode
-                  ? "Change Setting"
-                  : "Add Company"
-              }
-              textAlign="left"
-              dialogContent={
-                <div className="mt-5">
-                  {isSettingMode ? (
-                    <div>
-                      <h4>Company Status</h4>
-                      <div className="styled-select">
-                        <Select
-                          name="companyStatus"
-                          MenuProps={{
-                            variant: "menu",
-                            disableScrollLock: true,
-                          }}
-                          displayEmpty
-                          inputProps={{ "aria-label": "Without label" }}
-                          value={companyStatus ? 1 : 0}
-                          onChange={(e) =>
-                            setCompanyStatus(Boolean(e.target.value))
+            <button
+              type="submit"
+              onClick={() => setOpenModal(true)}
+              className="btn btn-primary btn-label bg-primary flex items-center px-[15px] py-[9px] max-w-[155px] w-full flex-center gap-2"
+            >
+              <AddIcon />
+              <span className="btn-label">Add Workflow</span>
+            </button>
+          </div>
+          {workFlowList?.loading ? (
+            <h1>Loading...</h1>
+          ) : (
+            <>
+              <MuiCustomTable
+                loader={workFlowList?.loading}
+                data={data}
+                allData={workFlowList?.data}
+                paginationData={paginationData}
+                setPaginationData={setPaginationData}
+              />
+              <CustomPopup
+                dialogTitle={
+                  isEditMode
+                    ? "Edit Company"
+                    : isSettingMode
+                    ? "Change Setting"
+                    : "Add Company"
+                }
+                textAlign="left"
+                dialogContent={
+                  <div className="mt-5">
+                    {isSettingMode ? (
+                      <div>
+                        <h4>Company Status</h4>
+                        <div className="styled-select">
+                          <Select
+                            name="companyStatus"
+                            MenuProps={{
+                              variant: "menu",
+                              disableScrollLock: true,
+                            }}
+                            displayEmpty
+                            inputProps={{ "aria-label": "Without label" }}
+                            value={companyStatus ? 1 : 0}
+                            onChange={(e) =>
+                              setCompanyStatus(Boolean(e.target.value))
+                            }
+                          >
+                            <MenuItem value={0}>Unblock</MenuItem>
+                            <MenuItem value={1}> Block</MenuItem>
+                          </Select>
+                        </div>
+                      </div>
+                    ) : (
+                      <>
+                        <div
+                          className={
+                            errors.company
+                              ? "input-fields-wrapper error-style"
+                              : "input-fields-wrapper"
                           }
                         >
-                          <MenuItem value={0}>Unblock</MenuItem>
-                          <MenuItem value={1}> Block</MenuItem>
-                        </Select>
-                      </div>
-                    </div>
-                  ) : (
-                    <>
-                      <div
-                        className={
-                          errors.company
-                            ? "input-fields-wrapper error-style"
-                            : "input-fields-wrapper"
-                        }
-                      >
-                        <h4>Company</h4>
-                        <div className="styled-select">
-                          <input
-                            className={
-                              errors.company
-                                ? "input-style input-err-style"
-                                : "input-style"
-                            }
-                            type="text"
-                            placeholder="Enter Company Name"
-                            name="company"
-                            value={formData.company}
-                            onChange={handleInputChange}
-                            required
-                          />
-                          <span className="err-tag">
-                            {errors.company ?? ""}
-                          </span>
+                          <h4>Company</h4>
+                          <div className="styled-select">
+                            <input
+                              className="input-style"
+                              type="text"
+                              placeholder="Enter Company Name"
+                              name="company"
+                              value={formData.company}
+                              onChange={handleInputChange}
+                              required
+                            />
+                            <span className="err-tag">
+                              {errors.company ?? ""}
+                            </span>
+                          </div>
                         </div>
-                      </div>
-                      <div
-                        className={
-                          errors.description
-                            ? "input-fields-wrapper error-style"
-                            : "input-fields-wrapper"
-                        }
-                      >
-                        <h4>Description</h4>
-                        <div className="styled-select">
-                          <textarea
-                            name="description"
-                            className={
-                              errors.description
-                                ? "input-style input-err-style"
-                                : "input-style"
-                            }
-                            placeholder="Enter Company Description"
-                            maxLength={2000}
-                            value={formData.description}
-                            onChange={handleInputChange}
-                            required
-                          />
-                          <span className="err-tag">
-                            {errors.description ?? ""}
-                          </span>
+                        <div
+                          className={
+                            errors.description
+                              ? "input-fields-wrapper error-style"
+                              : "input-fields-wrapper"
+                          }
+                        >
+                          <h4>Description</h4>
+                          <div className="styled-select">
+                            <textarea
+                              name="description"
+                              className="input-style"
+                              placeholder="Enter Company Description"
+                              maxLength={2000}
+                              value={formData.description}
+                              onChange={handleInputChange}
+                              required
+                            />
+                            <span className="err-tag">
+                              {errors.description ?? ""}
+                            </span>
+                          </div>
                         </div>
-                      </div>
-                      <FormControlLabel
-                        control={
-                          <Checkbox
-                            checked={formData.isActive}
-                            onChange={handleInputChange}
-                            name="isActive"
-                          />
-                        }
-                        label="Active"
-                      />
-                    </>
-                  )}
-                </div>
-              }
-              openPopup={openModal}
-              closePopup={() => {
-                if (isEditMode) {
-                  setOpenModal(false);
-                  setIsEditMode(false);
-                } else {
-                  setOpenModal(false);
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              checked={formData.isActive}
+                              onChange={handleInputChange}
+                              name="isActive"
+                            />
+                          }
+                          label="Active"
+                        />
+                      </>
+                    )}
+                  </div>
                 }
-              }}
-              mainActionHandler={
-                isSettingMode ? handleFormSubmit : validateSubmit
-              }
-              mainActionTitle={"Save"}
-            />
-          </>
-        )}
+                openPopup={openModal}
+                closePopup={() => {
+                  if (isEditMode) {
+                    setOpenModal(false);
+                    setIsEditMode(false);
+                  } else {
+                    setOpenModal(false);
+                  }
+                }}
+                mainActionHandler={
+                  setIsSettingMode ? handleFormSubmit : validateSubmit
+                }
+                mainActionTitle={"Save"}
+              />
+            </>
+          )}
+        </div>
       </div>
     </div>
   );
 };
 
-export default AgencyCompanyList;
+export default WorkFlowList;

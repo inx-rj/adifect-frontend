@@ -43,7 +43,6 @@ const InviteUser = () => {
   const { inviteUserList } = useAppSelector(INVITE_USER_LIST);
   const { companyList } = useAppSelector(COMPANY_LIST);
 
-  const [searchText, setSearchText] = useState("");
   const [selectedItem, setSelectedItem] = useState({
     currentTooltip: null,
     currentId: null,
@@ -248,25 +247,19 @@ const InviteUser = () => {
         ? inviteUserList?.data?.results?.map((item, index) => {
             return {
               name: (
-                <div key={index}>
-                  <Link to={`${item.id}`}>
-                    <Typography
-                      sx={{
-                        "&.MuiTypography-root": {
-                          display: "inline-block",
-                          cursor: "pointer",
-                          color: "rgba(39, 90, 208, 1)",
-                          fontSize: "14px",
-                          fontWeight: 400,
-                          p: 0,
-                          fontFamily: '"Figtree", sans-serif',
-                        },
-                      }}
-                    >
-                      {item?.user_email ? item?.user_name : "N/A"}
-                    </Typography>
-                  </Link>
-                </div>
+                <Typography
+                  sx={{
+                    "&.MuiTypography-root": {
+                      display: "inline-block",
+                      fontSize: "14px",
+                      fontWeight: 400,
+                      p: 0,
+                      fontFamily: '"Figtree", sans-serif',
+                    },
+                  }}
+                >
+                  {item?.user_email ? item?.user_name : "N/A"}
+                </Typography>
               ),
               email: item?.user_email ? item.user_email : item.email,
               company: item?.company_name,
@@ -306,33 +299,6 @@ const InviteUser = () => {
                   isEditMode={isEditMode}
                   item={{ id: item?.id, isActive: item?.is_active }}
                 />
-                // <div className="relative">
-                //   <MoreVertIcon
-                //     cursor="pointer"
-                //     onClick={() => setCurrentTooltip(item?.id)}
-                //   />
-                //   {currentTooltip === item?.id && !isEditMode && (
-                //     <div
-                //       ref={modalRef}
-                //       className="shadow-sm absolute left-3 top-[10px] bg-white z-10 p-[10px] rounded-[4px] max-w-fit text-sm text-disable leading-4"
-                //     >
-                //       <div
-                //         className="flex justify-start items-center gap-2 cursor-pointer"
-                //         onClick={() => handleEditEntry(item?.id, item?.level)}
-                //       >
-                //         <BorderColorIcon />
-                //         <span>Edit</span>
-                //       </div>
-                //       <div
-                //         className="flex justify-start items-center gap-2 pt-[15px] cursor-pointer"
-                //         onClick={() => handleDeleteEntry(item?.id)}
-                //       >
-                //         <DeleteIcon />
-                //         <span>Delete</span>
-                //       </div>
-                //     </div>
-                //   )}
-                // </div>
               ),
             };
           })
