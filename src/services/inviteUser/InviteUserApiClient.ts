@@ -35,6 +35,11 @@ class InviteUserApiClient {
         Authorization: "",
       },
     });
+
+  fetchInviteStatus = (decodeId: string, inviteCode: string, exclusive: string) =>
+    axiosPrivate.get(
+      `${API_URL.INVITE.INVITE_STATUS}${decodeId}/${inviteCode}/${exclusive}`
+    );
 }
 
 export default new InviteUserApiClient();
