@@ -42,8 +42,18 @@ class AuthApiClient {
       },
     });
 
-  // Edit profile
+  // get profile
   editProfile = () => axiosPrivate.get(`${API_URL.AUTH.EDIT_PROFILE}`);
+
+  // Edit and update profile
+  updateUserProfileData = (userUpdateData) =>
+    axiosPrivate.post(
+      `${API_URL.AUTH.EDIT_PROFILE}`, userUpdateData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }
+    );
 }
 
 export default new AuthApiClient();
