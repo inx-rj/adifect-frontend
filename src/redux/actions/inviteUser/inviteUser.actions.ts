@@ -1,6 +1,6 @@
 import swal from "sweetalert";
 import {
-  SET_INVITE_USER_LIST_LOADING, SET_INVITE_USER_LIST_DATA,
+  SET_INVITE_USER_LIST_LOADING, SET_INVITE_USER_LIST_DATA, SET_INVITE_USER_LOADING,
 } from "../../reducers/inviteUser/inviteUser.slice";
 import { AppDispatch } from "../../store";
 import InviteUserApiClient from "services/inviteUser/InviteUserApiClient";
@@ -125,11 +125,31 @@ const REGISTER_INVITE_USER = (data: any, inviteId: string, exclusive: string) =>
   return await InviteUserApiClient.registerInviteUser(data, inviteId, exclusive);
 };
 
+//fetch invitation accept or reject status
+const GET_INVITE_STATUS = (decodeId: string, inviteCode: string, exclusive: string) => async (dispatch: AppDispatch) => {
+  return new Promise<string>((resolve, reject) => {
+    dispatch(SET_INVITE_USER_LOADING(true));
+    InviteUserApiClient.fetchInviteStatus(decodeId, inviteCode, exclusive)
+      .then((response) => {
+        console.log("GET_INVITE_STATUS", response)
+        if (response.status === 201 || response.status === 200) {
+          dispatch(SET_INVITE_USER_LOADING(false));
+          resolve(response?.data?.message)
+        }
+      })
+      .catch((error) => {
+        reject(error?.response?.data?.message);
+        dispatch(SET_INVITE_USER_LOADING(false));
+      });
+  });
+};
+
 // Common auth Config
 export {
   GET_INVITE_USERS,
   POST_INVITE_USER,
   PUT_INVITE_USER,
   DELETE_INVITE_USER,
-  REGISTER_INVITE_USER
+  REGISTER_INVITE_USER,
+  GET_INVITE_STATUS
 };

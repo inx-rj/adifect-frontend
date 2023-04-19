@@ -35,6 +35,7 @@ export const API_URL = {
   INVITE: {
     INVITE_USERS: `${BASE_URL.AGENCY}invite-member/`,
     INVITE_USER_REGISTER: `${BASE_URL.AGENCY}register-view-invite/`,
+    INVITE_STATUS: `${BASE_URL.AGENCY}update-invite-member/`
   },
   HOMEPAGE: {
     JOBS_LIST: `${env.API_URL}jobs/`,
