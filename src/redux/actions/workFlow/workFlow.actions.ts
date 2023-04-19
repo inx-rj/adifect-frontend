@@ -22,16 +22,8 @@ const GET_WORKFLOW_LIST =
       .then((response) => {
         console.log("response", response.status);
         if (response.status === 201 || response.status === 200) {
-          const dummyData = {
-            count: 2,
-            next: null,
-            prev: null,
-            results: [],
-          };
-          dummyData.results = response?.data
-          console.log(response.data, "res data");
 
-          dispatch(SET_WORKFLOW_LIST_DATA(dummyData));
+          dispatch(SET_WORKFLOW_LIST_DATA(response?.data?.data));
           dispatch(SET_WORKFLOW_LIST_LOADING(false));
         }
       })
