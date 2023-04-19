@@ -6,6 +6,7 @@ import RemoveRedEyeOutlinedIcon from "@mui/icons-material/RemoveRedEyeOutlined";
 import DeleteIcon from "@mui/icons-material/Delete";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
+import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 export interface propsType {
   anchorEl: null | HTMLElement;
   selectedItem: any;
@@ -13,6 +14,7 @@ export interface propsType {
   showView?: boolean;
   showEdit?: boolean;
   showInActive?: boolean;
+  showSetting?: boolean;
   isEditMode?: boolean;
   item?: {
     id: number;
@@ -25,6 +27,7 @@ export interface propsType {
   setSelectedItem?: React.Dispatch<React.SetStateAction<any>>;
   handleInactive?: () => void;
   handleActive?: () => void;
+  handleSetting?: () => void;
 }
 
 const CustomActionComponent = ({
@@ -37,6 +40,8 @@ const CustomActionComponent = ({
   handleView,
   handleInactive,
   handleActive,
+  handleSetting,
+  showSetting = false,
   showDelete = false,
   showView = false,
   showEdit = false,
@@ -44,10 +49,21 @@ const CustomActionComponent = ({
   isEditMode = false,
   item,
 }: propsType) => {
+  const menuItemStyle = {
+    "&.MuiMenuItem-root": {
+      fontFamily: "Figtree",
+      fontStyle: "normal",
+      fontWeight: 400,
+      fontSize: "14px",
+      lineHeight: "17px",
+      color: "#71757B",
+    },
+  };
   return (
-    <div className="relative">
+    <div className="relative action-menu">
       <MoreVertIcon
         cursor="pointer"
+        style={{ color: "black" }}
         onClick={(e) => {
           setAnchorEl(anchorEl ? null : e.currentTarget);
           setSelectedItem({ currentId: item?.id, currentTooltip: item?.id });
@@ -82,18 +98,7 @@ const CustomActionComponent = ({
         anchorOrigin={{ horizontal: "left", vertical: "top" }}
       >
         {showView && (
-          <MenuItem
-            sx={{
-              "&.MuiMenuItem-root": {
-                fontFamily: "Figtree",
-                fontStyle: "normal",
-                fontWeight: 400,
-                fontSize: "14px",
-                lineHeight: "17px",
-              },
-            }}
-            onClick={handleView}
-          >
+          <MenuItem sx={menuItemStyle} onClick={handleView}>
             <ListItemIcon>
               <RemoveRedEyeOutlinedIcon fontSize="small" />
             </ListItemIcon>
@@ -101,7 +106,7 @@ const CustomActionComponent = ({
           </MenuItem>
         )}
         {showEdit && (
-          <MenuItem onClick={handleEdit}>
+          <MenuItem sx={menuItemStyle} onClick={handleEdit}>
             <ListItemIcon>
               <EditOutlinedIcon fontSize="small" />
             </ListItemIcon>
@@ -109,7 +114,10 @@ const CustomActionComponent = ({
           </MenuItem>
         )}
         {showInActive && (
-          <MenuItem onClick={item?.isActive ? handleInactive : handleActive}>
+          <MenuItem
+            sx={menuItemStyle}
+            onClick={item?.isActive ? handleInactive : handleActive}
+          >
             <ListItemIcon>
               {item?.isActive ? (
                 <RemoveCircleOutlineIcon fontSize="small" />
@@ -121,11 +129,19 @@ const CustomActionComponent = ({
           </MenuItem>
         )}
         {showDelete && (
-          <MenuItem onClick={handleDelete}>
+          <MenuItem sx={menuItemStyle} onClick={handleDelete}>
             <ListItemIcon>
               <DeleteIcon fontSize="small" />
             </ListItemIcon>
             Delete
+          </MenuItem>
+        )}
+        {showSetting && (
+          <MenuItem sx={menuItemStyle} onClick={handleSetting}>
+            <ListItemIcon>
+              <SettingsOutlinedIcon fontSize="small" />
+            </ListItemIcon>
+            Setting
           </MenuItem>
         )}
       </Menu>

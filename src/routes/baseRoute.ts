@@ -60,10 +60,9 @@ export const WORKFLOW_ROUTE: Readonly<{
 export const COMPANIES_ROUTE: Readonly<{
   [key: string]: string;
 }> = Object.freeze({
-  COMPANY_PROJECTS_DETAILS: `${PAGE_ROUTE.COMPANY_PROJECTS}company-projects/:communityId`,
+  COMPANY_PROJECTS_DETAILS: `${PAGE_ROUTE.COMPANY_PROJECTS}/:communityId`,
   TAGS: `${PAGE_ROUTE.HOME}company-project/tags`,
 });
-
 
 // My Jobs Route
 export const MY_JOBS_ROUTE: Readonly<{
@@ -86,7 +85,7 @@ export const COMPANY_ROUTE: Readonly<{
   [key: string]: string;
 }> = Object.freeze({
   COMPANY_LIST_DETAILS: `${PAGE_ROUTE.COMPANY}/:companyId`,
-  CREATE_COMPANY: `${PAGE_ROUTE.COMPANY}add`,
+  CREATE_COMPANY: `${PAGE_ROUTE.COMPANY}/add`,
 });
 
 // Help Route
@@ -94,7 +93,7 @@ export const HELP_ROUTE: Readonly<{
   [key: string]: string;
 }> = Object.freeze({
   HOME: `${PAGE_ROUTE.HELP}`,
-  CREATE_HELP: `${PAGE_ROUTE.HELP}add`,
+  CREATE_HELP: `${PAGE_ROUTE.HELP}/add`,
 });
 
 // Define Sidebar Route
@@ -162,7 +161,7 @@ export const SIDEBAR_ROUTES: SidebarRoutesTypes[] = [
     path: MY_JOBS_ROUTE.HOME,
     icon: "BusinessCenterOutlined",
     children: [],
-    permission: [Roles.AGENCY],
+    permission: [Roles.AGENCY, Roles.ADMIN, Roles.MEMBER],
   },
   {
     name: "Industries",

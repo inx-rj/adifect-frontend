@@ -7,6 +7,7 @@ import {
   MY_JOBS_ROUTE,
   PAGE_ROUTE,
 } from "./baseRoute";
+import JobAddEdit from "components/pages/jobs/JobAddEdit";
 import AdminJobsList from "components/pages/jobs/AdminJobsList";
 
 // => Import lazy load component
@@ -163,6 +164,22 @@ export const PAGES_ROUTES: RouteType[] = [
     component: (
       <Suspense fallback={""}>
         <Profile />
+      </Suspense>
+    ),
+  },
+  {
+    path: MY_JOBS_ROUTE.HOME,
+    component: (
+      <Suspense fallback={""}>
+        <AdminJobsList />
+      </Suspense>
+    ),
+  },
+  {
+    path: MY_JOBS_ROUTE.CREATE_MY_JOB,
+    component: (
+      <Suspense fallback={""}>
+        <JobAddEdit />
       </Suspense>
     ),
   },
