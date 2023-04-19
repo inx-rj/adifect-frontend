@@ -27,6 +27,14 @@ class InviteUserApiClient {
   deleteInviteUser = (id: number) => {
     return axiosPrivate.delete(`${API_URL.INVITE.INVITE_USERS}${id}/`);
   }
+
+  // Register invited user
+  registerInviteUser = (data: any, inviteId: string, exclusive: string) =>
+    axiosPrivate.post(`${API_URL.INVITE.INVITE_USER_REGISTER}${inviteId}/${exclusive}`, data, {
+      headers: {
+        Authorization: "",
+      },
+    });
 }
 
 export default new InviteUserApiClient();

@@ -23,9 +23,10 @@ import SearchBar from "common/CustomSearchBar";
 import CustomPopup from "common/CustomPopup";
 import MuiCustomTable from "components/common/muiCustomTable/MuiCustomTable";
 import CustomActionComponent from "common/CustomActionComponent";
+import LoadingSpinner from "components/common/loadingSpinner/Loader";
 
 //import assets
-import SortArrowIcon from "../../assets/images/sort_arrows.png";
+import SortArrowIcon from "../../../assets/images/sort_arrows.png";
 import PersonAddAltIcon from "@mui/icons-material/PersonAddAlt";
 import HomeIcon from "@mui/icons-material/Home";
 
@@ -62,9 +63,9 @@ const InviteUser = () => {
     level: "",
   });
   const [errors, setErrors] = useState({
-    email: "",
-    company: "",
-    level: "",
+    email: null,
+    company: null,
+    level: null,
   });
   const [paginationData, setPaginationData] = useState<TablePaginationType>({
     page: 1,
@@ -103,7 +104,7 @@ const InviteUser = () => {
   const handleEdit = (item) => {
     setOpenModal(true);
     setIsEditMode(true);
-    setErrors({ ...errors, level: "" });
+    setErrors({ ...errors, level: null });
     setSelectedItem({ ...selectedItem, currentId: item?.id });
     setFormData({ ...formData, level: item?.level });
   };
@@ -334,7 +335,7 @@ const InviteUser = () => {
           </button>
         </div>
         {inviteUserList?.loading ? (
-          <h1>Loading...</h1>
+          <LoadingSpinner positionClass="left-[calc(40%_-_50px)] top-[calc(40%_-_50px)" />
         ) : (
           <>
             <MuiCustomTable

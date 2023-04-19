@@ -120,10 +120,16 @@ const DELETE_INVITE_USER = (itemId: number) => async (dispatch: AppDispatch) => 
     })
 };
 
+// Perform User Registration
+const REGISTER_INVITE_USER = (data: any, inviteId: string, exclusive: string) => async (dispatch: AppDispatch) => {
+  return await InviteUserApiClient.registerInviteUser(data, inviteId, exclusive);
+};
+
 // Common auth Config
 export {
   GET_INVITE_USERS,
   POST_INVITE_USER,
   PUT_INVITE_USER,
-  DELETE_INVITE_USER
+  DELETE_INVITE_USER,
+  REGISTER_INVITE_USER
 };
