@@ -21,7 +21,7 @@ const GET_COMPANY_LIST =
       await CompanyTabApiClient.fetchCompanyList(tableConfig, endpoint)
         .then((response) => {
           if (response.status === 201 || response.status === 200) {
-            dispatch(SET_COMPANY_LIST_DATA(response?.data));
+            dispatch(SET_COMPANY_LIST_DATA(response?.data?.data));
             dispatch(SET_COMPANY_LIST_LOADING(false));
           }
         })

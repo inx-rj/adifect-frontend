@@ -1,6 +1,10 @@
 import { Add, FileUploadOutlined } from "@mui/icons-material";
 import {
   Autocomplete,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
   FormControl,
   InputAdornment,
   InputLabel,
@@ -153,6 +157,10 @@ const AdminJobsAddEdit = () => {
   const [isOpen10, setIsOpen10] = useState(false);
   const [isOpen11, setIsOpen11] = useState(false);
 
+  const [sampledam, setsampledam] = useState(false);
+  const [dam, setdam] = useState(false);
+
+
   const [show, setShow] = useState(false);
 
   const [title, setTitle] = useState("");
@@ -247,6 +255,7 @@ const AdminJobsAddEdit = () => {
   const { companyList } = useAppSelector(COMPANY_LIST);
   const userProfile = useAppSelector(GET_USER_PROFILE_DATA);
   const WorkFlowData = useAppSelector(WORKFLOW_LIST);
+  console.log("WorkFlowData", WorkFlowData);
 
   // console.log("WorkFlowData", WorkFlowData);
   const dispatch = useAppDispatch();
@@ -723,9 +732,51 @@ const AdminJobsAddEdit = () => {
     setisfiles((current) => !current);
   };
 
+  const handleCloseDam = () => {
+    setOpenVault(false);
+    // localStorage.setItem("dam", false);
+    localStorage.removeItem("damon");
+    localStorage.removeItem("jobdamid");
+    localStorage.removeItem("prev_vault");
+  };
+  const handleCloseDam1 = () => {
+    setOpenVault1(false);
+    // localStorage.setItem("dam", false);
+    localStorage.removeItem("damon");
+    localStorage.removeItem("jobdamid");
+    localStorage.removeItem("prev_vault");
+  };
+
+  const saveDamDataHandler = () => {
+    setdam(true);
+    setsampledam(false);
+    setOpenVault(false);
+    localStorage.removeItem("damon");
+    localStorage.removeItem("jobdamid");
+    localStorage.removeItem("prev_vault");
+    let useimage = localStorage.getItem("useimage");
+    // dispatch(CollectionView(useimage));
+    // setexistingmediafile1([Collectionviewdata]);
+  };
+
+  const saveDamDataHandler1 = () => {
+    setsampledam(true);
+    setdam(false);
+    setOpenVault1(false);
+    localStorage.removeItem("damon");
+    localStorage.removeItem("jobdamid");
+    localStorage.removeItem("prev_vault");
+    let useimage = localStorage.getItem("useimage");
+    // dispatch(CollectionView(useimage));
+    // setexistingsamplemediafile1(Collectionviewdata);
+  };
+
   const handleClickOpenDam = () => {
     setOpenVault(true);
     localStorage.setItem("damon", "on");
+    // if (mediafile1.length && mediafile1[0] != undefined) {
+    //   localStorage.setItem("prev_vault", JSON.stringify(mediafile1));
+    // }
     if (mediafile1.length && mediafile1[0] != undefined) {
       localStorage.setItem("prev_vault", JSON.stringify(mediafile1));
     }
@@ -932,36 +983,39 @@ const AdminJobsAddEdit = () => {
   ));
 
   // console.log("mediafile1 -- ", mediafile1);
-  const existingMedia1 = mediafile1?.map((file) => (
-    <div
-      className="inline-flex rounded-sm border-1-[#eaeaea] mb-[8px] mr-[8px] w-full h-full p-[4px]"
-      key={file?.id}
-    >
-      {file && (
-        <>
-          <img className="img-upload-item" src="/img/assertgallery.png" />{" "}
-        </>
-      )}
-      <div className="removeimgdevpage" style={thumbInner}>
-        <button onClick={removedamFile1(file)}>
-          {file && (
-            <>
-              <img src="/img/assertbin.png" />
-            </>
-          )}
-        </button>
-        {file?.title}
-        <div>
-          {file && (
-            <>
-              {" "}
-              <span className="thumbDesignWButton">Vault</span>
-            </>
-          )}
+  const existingMedia1 = mediafile1?.map((file) => {
+    console.log("existingMedia1");
+    return (
+      <div
+        className="inline-flex rounded-sm border-1-[#eaeaea] mb-[8px] mr-[8px] w-full h-full p-[4px]"
+        key={file?.id}
+      >
+        {file && (
+          <>
+            <img className="img-upload-item" src="/img/assertgallery.png" />{" "}
+          </>
+        )}
+        <div className="removeimgdevpage" style={thumbInner}>
+          <button onClick={removedamFile1(file)}>
+            {file && (
+              <>
+                <img src="/img/assertbin.png" />
+              </>
+            )}
+          </button>
+          {file?.title}
+          <div>
+            {file && (
+              <>
+                {" "}
+                <span className="thumbDesignWButton">Vault</span>
+              </>
+            )}
+          </div>
         </div>
       </div>
-    </div>
-  ));
+    );
+  });
 
   const handleClickOpenDam1 = () => {
     setOpenVault1(true);
@@ -1463,26 +1517,26 @@ const AdminJobsAddEdit = () => {
 
     // console.log("check");
     if (jobId) {
-      if (files) {
+      if (files.length) {
         for (const key of Object.keys(files)) {
           formData.append("image", files[key]);
         }
       }
     } else {
-      if (files) {
+      if (files.length) {
         for (const key of Object.keys(files)) {
           formData.append("image", files[key]);
         }
       }
     }
     if (jobId) {
-      if (files) {
+      if (files.length) {
         for (const key of Object.keys(files)) {
           formData.append("template_image", files[key]);
         }
       }
     } else {
-      if (files) {
+      if (files.length) {
         for (const key of Object.keys(files)) {
           formData.append("template_image", files[key]);
         }
@@ -1490,13 +1544,16 @@ const AdminJobsAddEdit = () => {
     }
     // }
     // console.log("removeJobDocuments---____", removeJobDocuments);
-    if (removeJobDocuments) {
+    if (removeJobDocuments.length) {
       for (const key of Object.keys(removeJobDocuments)) {
         formData.append("remove_image", removeJobDocuments[key]);
       }
     }
 
-    if (mediafile) {
+    console.log("formdata", { formData, mediafile });
+    debugger;
+
+    if (mediafile.length) {
       {
         mediafile.map((item) => {
           const idget = item.id;
@@ -1518,7 +1575,7 @@ const AdminJobsAddEdit = () => {
       }
     }
 
-    if (samplemediafile1) {
+    if (samplemediafile1.length) {
       {
         samplemediafile1.map((item) => {
           const idget = item.id;
@@ -1527,7 +1584,7 @@ const AdminJobsAddEdit = () => {
       }
     }
 
-    if (mediafile1) {
+    if (mediafile1.length) {
       {
         mediafile1.map((item) => {
           const idget = item.id;
@@ -1536,7 +1593,7 @@ const AdminJobsAddEdit = () => {
       }
     }
 
-    if (samplemediafile) {
+    if (samplemediafile.length) {
       {
         samplemediafile.map((item) => {
           const idget = item.id;
@@ -1545,14 +1602,14 @@ const AdminJobsAddEdit = () => {
       }
     }
 
-    if (removetaskDocuments) {
+    if (removetaskDocuments.length) {
       for (const key of Object.keys(removetaskDocuments)) {
         formData.append("task_id", removetaskDocuments[key]);
       }
     }
 
     // console.log("removeJobDocuments---____", removeJobDocuments);
-    if (removeJobSampleDocuments) {
+    if (removeJobSampleDocuments.length) {
       for (const key of Object.keys(removeJobSampleDocuments)) {
         formData.append("remove_image", removeJobSampleDocuments[key]);
       }
@@ -1594,26 +1651,26 @@ const AdminJobsAddEdit = () => {
     }
 
     if (jobId) {
-      if (fileGallery) {
+      if (fileGallery.length) {
         for (const key of Object.keys(fileGallery)) {
           formData.append("sample_image", fileGallery[key]);
         }
       }
     } else {
-      if (fileGallery) {
+      if (fileGallery.length) {
         for (const key of Object.keys(fileGallery)) {
           formData.append("sample_image", fileGallery[key]);
         }
       }
     }
     if (jobId) {
-      if (fileGallery) {
+      if (fileGallery.length) {
         for (const key of Object.keys(fileGallery)) {
           formData.append("template_sample_image", fileGallery[key]);
         }
       }
     } else {
-      if (fileGallery) {
+      if (fileGallery.length) {
         for (const key of Object.keys(fileGallery)) {
           formData.append("template_sample_image", fileGallery[key]);
         }
@@ -1624,7 +1681,7 @@ const AdminJobsAddEdit = () => {
       setFormUrls(formUrls.filter((item) => item));
       formData.append("image_url", formUrls);
     }
-    if (formSampleUrls) {
+    if (formSampleUrls.length) {
       setFormSampleUrls(formSampleUrls.filter((item) => item));
       // formData.append("sample_work_url", formSampleUrls);
     }
@@ -4139,6 +4196,73 @@ const AdminJobsAddEdit = () => {
           </div>
         </div>
       </div>
+      <Dialog
+        className="BrowseVaultDialogMedia media"
+        open={openVault}
+        onClose={handleCloseDam}
+      >
+        <DialogTitle className="profileImgHeadingAnew">
+          <div className="Ajobshare">
+            <span className="closebuttonsec" onClick={handleCloseDam}>
+              <i className="fa-solid fa-xmark"></i>
+            </span>
+          </div>
+        </DialogTitle>
+        <div className="dialogcontent_and_actions_new">
+          <DialogContent className="ChangeEmailAContent">
+            {/* <Admin_Media /> */}
+          </DialogContent>
+        </div>
+        <DialogActions>
+          <div className="sharebuttonjobcontent">
+            <div className="cancelButtonnewWithSave">
+              <button onClick={handleCloseDam} className="canceButtonnewPop">
+                Cancel
+              </button>
+              <button
+                onClick={saveDamDataHandler}
+                className="shareNewPopPublic"
+              >
+                Attach files
+              </button>
+            </div>
+          </div>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog
+        className="BrowseVaultDialogMedia media"
+        open={openVault1}
+        onClose={handleCloseDam1}
+      >
+        <DialogTitle className="profileImgHeadingAnew">
+          <div className="Ajobshare">
+            <span className="closebuttonsec" onClick={handleCloseDam1}>
+              <i className="fa-solid fa-xmark"></i>
+            </span>
+          </div>
+        </DialogTitle>
+        <div className="dialogcontent_and_actions_new">
+          <DialogContent className="ChangeEmailAContent">
+            {/* <Admin_Media /> */}
+          </DialogContent>
+        </div>
+        <DialogActions>
+          <div className="sharebuttonjobcontent">
+            <div className="cancelButtonnewWithSave">
+              <button onClick={handleCloseDam1} className="canceButtonnewPop">
+                Cancel
+              </button>
+              <button
+                onClick={saveDamDataHandler1}
+                className="shareNewPopPublic"
+              >
+                Attach files
+              </button>
+            </div>
+          </div>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };

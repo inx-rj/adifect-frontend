@@ -39,6 +39,10 @@ switch input {
   height: 0;
 }
 
+.first_toogle_button button {
+  background: #2472fc;
+}
+
 .double_toogle_button
   .secondjobPricingTypebtn
   button.MuiButtonBase-root.MuiToggleButton-root {
