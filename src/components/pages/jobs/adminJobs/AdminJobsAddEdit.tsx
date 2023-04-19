@@ -31,11 +31,15 @@ import {
 } from "react-router-dom";
 import { GET_COMPANY_LIST } from "redux/actions/companyTab/companyTab.actions";
 import { CREATE_JOB } from "redux/actions/jobs/jobs.actions";
+import { GET_LEVELS_LIST } from "redux/actions/levels/levels.action";
+import { GET_SKILLS_LIST } from "redux/actions/skills/skills.action";
 import { GET_WORKFLOW_LIST } from "redux/actions/workFlow/workFlow.actions";
 import { GET_USER_PROFILE_DATA } from "redux/reducers/auth/auth.slice";
 import { COMPANY_PROJECTS_DATA } from "redux/reducers/companies/companies.slice";
 import { COMPANY_LIST } from "redux/reducers/companyTab/companyTab.slice";
 import { GET_JOBS_DETAILS } from "redux/reducers/homePage/jobsList.slice";
+import { LEVELS_LIST } from "redux/reducers/levels/levels.slice";
+import { SKILLS_LIST } from "redux/reducers/skills/skills.slice";
 import { WORKFLOW_LIST } from "redux/reducers/workFlow/workFlow.slice";
 import { useAppDispatch, useAppSelector } from "redux/store";
 import swal from "sweetalert";
@@ -68,88 +72,6 @@ const thumbInner = {
 const AdminJobsAddEdit = () => {
   const [files, setFiles] = useState([]);
 
-  //skills data
-  const skillsData = [
-    {
-      id: 5,
-      created: "2023-04-10T07:52:42.302127Z",
-      modified: "2023-04-10T07:52:42.302149Z",
-      is_trashed: false,
-      skill_name: "css",
-      slug: "css",
-      is_active: true,
-    },
-    {
-      id: 4,
-      created: "2023-04-10T07:52:37.911890Z",
-      modified: "2023-04-10T07:52:37.911911Z",
-      is_trashed: false,
-      skill_name: "html",
-      slug: "html",
-      is_active: true,
-    },
-    {
-      id: 3,
-      created: "2022-11-17T12:19:09.564078Z",
-      modified: "2022-11-17T12:19:09.564094Z",
-      is_trashed: false,
-      skill_name: "Demo",
-      slug: "demo",
-      is_active: true,
-    },
-    {
-      id: 2,
-      created: "2022-11-17T12:19:06.755116Z",
-      modified: "2022-11-17T12:19:06.755136Z",
-      is_trashed: false,
-      skill_name: "Dmeo",
-      slug: "dmeo",
-      is_active: true,
-    },
-    {
-      id: 1,
-      created: "2022-11-17T00:53:45.237803Z",
-      modified: "2022-11-17T00:53:45.237822Z",
-      is_trashed: false,
-      skill_name: "Design",
-      slug: "design",
-      is_active: true,
-    },
-  ];
-
-  //Level Data
-  const levelsData = [
-    {
-      id: 3,
-      created: "2022-11-16T15:32:39.864644Z",
-      modified: "2022-11-16T15:32:39.864664Z",
-      is_trashed: false,
-      level_name: "Expert",
-      slug: "expert",
-      description: "Expert",
-      is_active: true,
-    },
-    {
-      id: 2,
-      created: "2022-11-16T15:32:28.636908Z",
-      modified: "2022-11-16T15:32:28.636927Z",
-      is_trashed: false,
-      level_name: "Intermediate",
-      slug: "intermediate",
-      description: "Intermediate",
-      is_active: true,
-    },
-    {
-      id: 1,
-      created: "2022-11-16T15:32:00.009703Z",
-      modified: "2022-11-16T15:32:00.009723Z",
-      is_trashed: false,
-      level_name: "Beginner",
-      slug: "beginner",
-      description: "Beginner",
-      is_active: true,
-    },
-  ];
   const [isOpen2, setIsOpen2] = useState(false);
   const [isOpen7, setIsOpen7] = useState(false);
   const [isOpen8, setIsOpen8] = useState(false);
@@ -159,7 +81,6 @@ const AdminJobsAddEdit = () => {
 
   const [sampledam, setsampledam] = useState(false);
   const [dam, setdam] = useState(false);
-
 
   const [show, setShow] = useState(false);
 
@@ -255,7 +176,8 @@ const AdminJobsAddEdit = () => {
   const { companyList } = useAppSelector(COMPANY_LIST);
   const userProfile = useAppSelector(GET_USER_PROFILE_DATA);
   const WorkFlowData = useAppSelector(WORKFLOW_LIST);
-  console.log("WorkFlowData", WorkFlowData);
+  const skillsData = useAppSelector(SKILLS_LIST)
+  const levelsData = useAppSelector(LEVELS_LIST)
 
   // console.log("WorkFlowData", WorkFlowData);
   const dispatch = useAppDispatch();
@@ -302,9 +224,11 @@ const AdminJobsAddEdit = () => {
     if (userProfile?.data?.role === Roles.ADMIN) {
       dispatch(GET_COMPANY_LIST(paginationData, `${API_URL.COMPANY.ADMIN}`));
       dispatch(GET_WORKFLOW_LIST(paginationData, `${API_URL.WORKFLOW.ADMIN}`));
+      dispatch(GET_SKILLS_LIST(paginationData));
     } else {
       dispatch(GET_COMPANY_LIST(paginationData));
       dispatch(GET_WORKFLOW_LIST(paginationData));
+      dispatch(GET_SKILLS_LIST(paginationData));
     }
   });
 
@@ -313,6 +237,8 @@ const AdminJobsAddEdit = () => {
     if (userProfile?.data?.role === Roles.ADMIN) {
       dispatch(GET_COMPANY_LIST(paginationData, `${API_URL.COMPANY.ADMIN}`));
       dispatch(GET_WORKFLOW_LIST(paginationData, `${API_URL.WORKFLOW.ADMIN}`));
+      dispatch(GET_SKILLS_LIST(paginationData));
+      dispatch(GET_LEVELS_LIST(paginationData))
     } else {
       dispatch(
         GET_COMPANY_LIST(paginationData, `${API_URL.COMPANY.COMPANY_LIST}`)
@@ -320,6 +246,8 @@ const AdminJobsAddEdit = () => {
       dispatch(
         GET_WORKFLOW_LIST(paginationData, `${API_URL.WORKFLOW.WORKFLOW_LIST}`)
       );
+      dispatch(GET_SKILLS_LIST(paginationData));
+      dispatch(GET_LEVELS_LIST(paginationData))
     }
   }, [paginationData, userProfile.data?.role]);
 
@@ -670,8 +598,8 @@ const AdminJobsAddEdit = () => {
     const filteredCurrentSkills = skills.filter((str) =>
       str.skill_name.toLowerCase().includes(value.toLowerCase().trim())
     );
-    // console.log("filteredCurrentSkills", filteredCurrentSkills);
-    const filteredDatabaseSkills = skillsData.filter((str) => {
+    console.log("filteredCurrentSkills", filteredCurrentSkills);
+    const filteredDatabaseSkills = skillsData?.skillsList?.data?.results?.filter((str) => {
       if (str.skill_name.toLowerCase() === value.toLowerCase().trim()) {
         return true;
       }
@@ -689,9 +617,10 @@ const AdminJobsAddEdit = () => {
       });
       return;
     }
-    for (var i = 0; i < skillsData.length; i++) {
+    for (var i = 0; i < skillsData?.skillsList?.data?.results.length; i++) {
+      console.log("forloop skills Data", skillsData?.skillsList?.data?.results[i])
       if (
-        skillsData[i].skill_name
+        skillsData?.skillsList?.data?.results[i].skill_name
           .toLowerCase()
           .indexOf(value.toLowerCase().trim()) > -1
       ) {
@@ -1519,26 +1448,26 @@ const AdminJobsAddEdit = () => {
     if (jobId) {
       if (files.length) {
         for (const key of Object.keys(files)) {
-          formData.append("image", files[key]);
+          formData.append("image", JSON.stringify(files[key]));
         }
       }
     } else {
       if (files.length) {
         for (const key of Object.keys(files)) {
-          formData.append("image", files[key]);
+          formData.append("image", JSON.stringify(files[key]));
         }
       }
     }
     if (jobId) {
       if (files.length) {
         for (const key of Object.keys(files)) {
-          formData.append("template_image", files[key]);
+          formData.append("template_image", JSON.stringify(files[key]));
         }
       }
     } else {
       if (files.length) {
         for (const key of Object.keys(files)) {
-          formData.append("template_image", files[key]);
+          formData.append("template_image", JSON.stringify(files[key]));
         }
       }
     }
@@ -1546,30 +1475,27 @@ const AdminJobsAddEdit = () => {
     // console.log("removeJobDocuments---____", removeJobDocuments);
     if (removeJobDocuments.length) {
       for (const key of Object.keys(removeJobDocuments)) {
-        formData.append("remove_image", removeJobDocuments[key]);
+        formData.append("remove_image", JSON.stringify(removeJobDocuments[key]));
       }
     }
-
-    console.log("formdata", { formData, mediafile });
-    debugger;
 
     if (mediafile.length) {
       {
         mediafile.map((item) => {
           const idget = item.id;
-          formData.append("dam_images", idget);
+          formData.append("dam_images", JSON.stringify(idget));
         });
       }
     }
 
     if (isBudgetNotRequired) {
-      formData.append("is_house_member", isBudgetNotRequired);
+      formData.append("is_house_member", JSON.stringify(isBudgetNotRequired));
 
       if (inHouseUser?.length > 0) {
         for (var i = 0; i < inHouseUser.length; i++) {
           formData.append(
             "house_member",
-            inHouseUser[i].id ? inHouseUser[i].id : inHouseUser[i]
+            inHouseUser[i].id ? JSON.stringify(inHouseUser[i].id) : JSON.stringify(inHouseUser[i])
           );
         }
       }
@@ -1579,7 +1505,7 @@ const AdminJobsAddEdit = () => {
       {
         samplemediafile1.map((item) => {
           const idget = item.id;
-          formData.append("dam_sample_images", idget);
+          formData.append("dam_sample_images", JSON.stringify(idget));
         });
       }
     }
@@ -1588,7 +1514,7 @@ const AdminJobsAddEdit = () => {
       {
         mediafile1.map((item) => {
           const idget = item.id;
-          formData.append("dam_images", idget);
+          formData.append("dam_images", JSON.stringify(idget));
         });
       }
     }
@@ -1597,54 +1523,54 @@ const AdminJobsAddEdit = () => {
       {
         samplemediafile.map((item) => {
           const idget = item.id;
-          formData.append("dam_sample_images", idget);
+          formData.append("dam_sample_images", JSON.stringify(idget));
         });
       }
     }
 
     if (removetaskDocuments.length) {
       for (const key of Object.keys(removetaskDocuments)) {
-        formData.append("task_id", removetaskDocuments[key]);
+        formData.append("task_id", JSON.stringify(removetaskDocuments[key]));
       }
     }
 
     // console.log("removeJobDocuments---____", removeJobDocuments);
     if (removeJobSampleDocuments.length) {
       for (const key of Object.keys(removeJobSampleDocuments)) {
-        formData.append("remove_image", removeJobSampleDocuments[key]);
+        formData.append("remove_image", JSON.stringify(removeJobSampleDocuments[key]));
       }
     }
     formData.append("title", title);
     // formData.append("tasks_due_date", date);
     formData.append("tasks", JSON.stringify(itemData));
     formData.append("description", description);
-    // formData.append("due_date_index", divid);
-    // formData.append("is_active", true);
+    formData.append("due_date_index", JSON.stringify(divid));
+    formData.append("is_active", "true");
 
-    // formData.append("assigned_to", userData?.user?.user_id);
-    // formData.append("created_by", userData?.user?.user_id);
+    formData.append("assigned_to", JSON.stringify(userProfile?.data?.id));
+    formData.append("created_by", JSON.stringify(userProfile?.data?.id));
 
-    // if (isShown && data == "post") {
-    //   formData.append("status", 1);
-    // } else if (data == "post") {
-    //   formData.append("status", 2);
-    // } else if (data == "draft") {
-    //   formData.append("status", 0);
-    // }
-    // formData.append(
-    //   "expected_delivery_date",
-    //   moment(deliveryDate).format("YYYY-MM-DD")
-    // );
+    if (isShown && data == "post") {
+      formData.append("status", "1");
+    } else if (data == "post") {
+      formData.append("status", "2");
+    } else if (data == "draft") {
+      formData.append("status", "0");
+    }
+    formData.append(
+      "expected_delivery_date",
+      new Date(deliveryDate).toISOString().slice(0,10)
+    );
     for (var i = 0; i < skills.length; i++) {
-      formData.append("skills", skills[i].id ? skills[i].id : skills[i]);
+      formData.append("skills", skills[i].id ? JSON.stringify(skills[i].id) : JSON.stringify(skills[i]));
     }
     if (isRelatedToPrevJob) {
       if (relatedJobs) {
         // for (var i = 0; i < relatedJobs.length; i++) {
-        formData.append("related_jobs", relatedJobs);
+        formData.append("related_jobs", JSON.stringify(relatedJobs));
         // }
       } else {
-        formData.append("relatedJobs", relatedJobs);
+        formData.append("relatedJobs", JSON.stringify(relatedJobs));
       }
     } else {
       formData.append("relatedJobs", null);
@@ -1653,41 +1579,41 @@ const AdminJobsAddEdit = () => {
     if (jobId) {
       if (fileGallery.length) {
         for (const key of Object.keys(fileGallery)) {
-          formData.append("sample_image", fileGallery[key]);
+          formData.append("sample_image", JSON.stringify(fileGallery[key]));
         }
       }
     } else {
       if (fileGallery.length) {
         for (const key of Object.keys(fileGallery)) {
-          formData.append("sample_image", fileGallery[key]);
+          formData.append("sample_image", JSON.stringify(fileGallery[key]));
         }
       }
     }
     if (jobId) {
       if (fileGallery.length) {
         for (const key of Object.keys(fileGallery)) {
-          formData.append("template_sample_image", fileGallery[key]);
+          formData.append("template_sample_image", JSON.stringify(fileGallery[key]));
         }
       }
     } else {
       if (fileGallery.length) {
         for (const key of Object.keys(fileGallery)) {
-          formData.append("template_sample_image", fileGallery[key]);
+          formData.append("template_sample_image", JSON.stringify(fileGallery[key]));
         }
       }
     }
 
     if (formUrls) {
       setFormUrls(formUrls.filter((item) => item));
-      formData.append("image_url", formUrls);
+      formData.append("image_url", JSON.stringify(formUrls));
     }
     if (formSampleUrls.length) {
       setFormSampleUrls(formSampleUrls.filter((item) => item));
-      // formData.append("sample_work_url", formSampleUrls);
+      formData.append("sample_work_url", JSON.stringify(formSampleUrls));
     }
 
     // if (industry) {
-    //   formData.append("industry", industry);
+    //   formData.append("industry", JSON.stringify(industry));
     // }
     if (data == "draft") {
       if (companyvalue) {
@@ -1698,7 +1624,7 @@ const AdminJobsAddEdit = () => {
     }
 
     if (price && !isBudgetNotRequired) {
-      formData.append("price", price);
+      formData.append("price", (price));
     }
 
     if (level && !isBudgetNotRequired) {
@@ -1707,7 +1633,7 @@ const AdminJobsAddEdit = () => {
     if (job_type && !isBudgetNotRequired) {
       formData.append("job_type", job_type);
     }
-    // formData.append("tags", tags);
+    formData.append("tags", JSON.stringify(tags));
     if (templatename) {
       formData.append("template_name", templatename);
     }
@@ -1715,7 +1641,7 @@ const AdminJobsAddEdit = () => {
       formData.append("industry", industryname);
     }
 
-    // formData.append("user", userData.user.user_id);
+    formData.append("user", JSON.stringify(userProfile?.data?.id));
 
     if (Workflowdata != null) {
       formData.append("workflow", Workflowdata);
@@ -2885,7 +2811,7 @@ const AdminJobsAddEdit = () => {
                   // open={true}
                   onInputChange={handleInputChangeAutocomplete}
                   filterOptions={filterOptions}
-                  options={skillsData.filter((item) => item.is_active)}
+                  options={skillsData?.skillsList?.data?.results.filter((item) => item.is_active)}
                   getOptionLabel={(option) => option.skill_name}
                   // onChange={(event, value) => setSkills(value)}
                   onChange={(e, v) => {
@@ -3790,7 +3716,7 @@ const AdminJobsAddEdit = () => {
                       inputProps={{ "aria-label": "Without label" }}
                     >
                       <MenuItem value="null">Select Level</MenuItem>
-                      {levelsData?.map((item) =>
+                      {levelsData?.levelsList?.data?.results?.map((item) =>
                         item.is_active ? (
                           <MenuItem key={item.id} value={item.id}>
                             {item.level_name}
@@ -3882,7 +3808,7 @@ const AdminJobsAddEdit = () => {
                   onInputChange={handleInputChangeAutocompleteUsers}
                   filterOptions={filterOptionsUsers}
                   // options={adminInHouseUsers ?? []}
-                  options={skillsData ?? []}
+                  options={skillsData?.skillsList?.data?.results.length > 0 ? skillsData?.skillsList?.data?.results : []}
                   getOptionLabel={(option) => option?.user_full_name}
                   // onChange={(event, value) => setSkills(value)}
                   onChange={(e, v) => {

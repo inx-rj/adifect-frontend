@@ -9,6 +9,8 @@ export const BASE_URL = {
   COMPANY: `${env.API_URL}company/`,
   MEMBER: `${env.API_URL}member/`,
   WORKFLOW: `${env.API_URL}workflows/`,
+  SKILLS: `${env.API_URL}skills/`,
+  LEVELS: `${env.API_URL}levels/`,
 };
 
 export const API_URL = {
@@ -57,4 +59,10 @@ export const API_URL = {
     ADMIN: `${BASE_URL.WORKFLOW}`, //for admin
     WORKFLOW_LIST: `${BASE_URL.AGENCY}works-flow/`, //for agency
   },
+  SKILLS: {
+    SKILLS_LIST: `${BASE_URL.SKILLS}`,
+  },
+  LEVELS: {
+    LEVELS_LIST: `${BASE_URL.LEVELS}`,
+  }
 };

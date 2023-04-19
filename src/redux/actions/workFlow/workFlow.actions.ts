@@ -20,10 +20,13 @@ const GET_WORKFLOW_LIST =
     dispatch(SET_WORKFLOW_LIST_LOADING(true));
     await WorkFlowTabApiClient.fetchWorkFlowList(tableConfig, endpoint)
       .then((response) => {
-        console.log("response", response.status);
+        console.log("response", response);
         if (response.status === 201 || response.status === 200) {
-
-          dispatch(SET_WORKFLOW_LIST_DATA(response?.data?.data));
+          dispatch(
+            SET_WORKFLOW_LIST_DATA(
+              response?.data?.data ? response?.data?.data : response?.data
+            )
+          );
           dispatch(SET_WORKFLOW_LIST_LOADING(false));
         }
       })
