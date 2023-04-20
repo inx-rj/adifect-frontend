@@ -21,10 +21,14 @@ const ResetPassword = lazy(() => import("components/auth/ResetPassword"));
 // ==> Header Pages
 
 // Profile dropdown pages
-const Profile = lazy(() => import("components/ProfileDropdown/profile/Profile"));
+const Profile = lazy(
+  () => import("components/ProfileDropdown/profile/Profile")
+);
 
-// Invite Pages and Components 
-const InviteUser = lazy(() => import("components/ProfileDropdown/invite/InviteUser"));
+// Invite Pages and Components
+const InviteUser = lazy(
+  () => import("components/ProfileDropdown/invite/InviteUser")
+);
 
 // ==> Sidebar pages
 
@@ -32,8 +36,12 @@ const InviteUser = lazy(() => import("components/ProfileDropdown/invite/InviteUs
 const HomePage = lazy(() => import("pages/dashboard/home/HomePage"));
 
 // Workflow Pages and Components
-const WorkFlowList = lazy(() => import("components/pages/workflow/WorkFlowList"));
-const ApprovalWorkflow = lazy(() => import("components/pages/workflow/ApprovalWorkflow"));
+const WorkFlowList = lazy(
+  () => import("components/pages/workflow/WorkFlowList")
+);
+const ApprovalWorkflow = lazy(
+  () => import("components/pages/workflow/ApprovalWorkflow")
+);
 
 // Company Projects(Communities) Pages and Components
 const AgencyCompanyProjects = lazy(
@@ -52,7 +60,9 @@ const AgencyCompanyProjectsTags = lazy(
 
 // Jobs Pages and Components
 const AdminJobsList = lazy(() => import("components/pages/jobs/AdminJobsList"));
-const AdminJobsAddEdit = lazy(() => import("components/pages/jobs/adminJobs/AdminJobsAddEdit"));
+const AdminJobsAddEdit = lazy(
+  () => import("components/pages/jobs/adminJobs/AdminJobsAddEdit")
+);
 
 // Company Pages and Components
 const AgencyCompanyList = lazy(
@@ -227,6 +237,14 @@ export const TEMPLATES_ROUTES: RouteType[] = [];
 export const COMPANY_ROUTES: RouteType[] = [
   {
     path: COMPANY_ROUTE.COMPANY_LIST_DETAILS,
+    component: (
+      <Suspense fallback={""}>
+        <AgencyCompanyProfile />
+      </Suspense>
+    ),
+  },
+  {
+    path: COMPANY_ROUTE.ADMIN_COMPANY_LIST_DETAILS,
     component: (
       <Suspense fallback={""}>
         <AgencyCompanyProfile />

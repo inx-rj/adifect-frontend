@@ -8,6 +8,8 @@ import { TAB_NAVIGATION_CONFIG } from "redux/reducers/config/tabbing/tabbing.sli
 import { GET_USER_PROFILE_DATA } from "redux/reducers/auth/auth.slice";
 import { COMPANY_LIST } from "redux/reducers/companyTab/companyTab.slice";
 import { GET_COMPANY_LIST } from "redux/actions/companyTab/companyTab.actions";
+import { TRIGGER_NAVIGATION_TAB_CONFIG } from "redux/actions/config/tabbing/tabbing.actions";
+
 import {
   companyProfileTabHeaders,
   companyProfileTabTitle,
@@ -45,6 +47,21 @@ const AgencyCompanyProfile = () => {
       );
     }
   });
+
+  //set initial active tab
+  useEffect(() => {
+    if (userProfile.data?.role >= 0) {
+      const initialActiveTab = companyProfileTabHeaders?.find((item) =>
+        item?.permission.includes(userProfile.data?.role)
+      );
+      dispatch(
+        TRIGGER_NAVIGATION_TAB_CONFIG(
+          ProfilePageAccess.COMPANY,
+          initialActiveTab?.name
+        )
+      );
+    }
+  }, [userProfile.data?.role, dispatch]);
 
   //check which company is selected
   useEffect(() => {
@@ -150,6 +167,26 @@ const AgencyCompanyProfile = () => {
               return (
                 <Suspense fallback="">
                   <p>JOB TEMPLATE</p>
+                </Suspense>
+              );
+            }
+            if (
+              activeUserTab?.company_profile?.active ===
+              companyProfileTabTitle.WORKFLOW
+            ) {
+              return (
+                <Suspense fallback="">
+                  <p>WORKFLOW</p>
+                </Suspense>
+              );
+            }
+            if (
+              activeUserTab?.company_profile?.active ===
+              companyProfileTabTitle.MEMBERS
+            ) {
+              return (
+                <Suspense fallback="">
+                  <p>MEMBERS</p>
                 </Suspense>
               );
             }

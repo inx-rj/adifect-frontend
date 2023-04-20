@@ -1,13 +1,15 @@
-import ProfileInfo from "components/common/tabbing/ProfileInfo";
-import TabbingBodyTitle from "components/common/tabbing/TabbingBodyTitle";
-import { ProfilePageAccess } from "helper/config/config";
-import { Images } from "helper/images";
 import { lazy, ReactNode, Suspense } from "react";
 import { TRIGGER_NAVIGATION_TAB_CONFIG } from "redux/actions/config/tabbing/tabbing.actions";
 import { GET_USER_PROFILE_DATA } from "redux/reducers/auth/auth.slice";
 import { useAppDispatch, useAppSelector } from "redux/store";
+import { Images } from "helper/images";
+import { ProfilePageAccess } from "helper/config/config";
 
 const Title = lazy(() => import("components/common/PageTitle/Title"));
+const TabbingBodyTitle = lazy(
+  () => import("components/common/tabbing/TabbingBodyTitle")
+);
+const ProfileInfo = lazy(() => import("components/common/tabbing/ProfileInfo"));
 const TabbingHeadTitle = lazy(
   () => import("components/common/tabbing/TabbingHeadTitle")
 );

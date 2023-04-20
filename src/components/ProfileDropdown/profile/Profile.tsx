@@ -1,10 +1,11 @@
-import { lazy, Suspense, useMemo } from "react";
-import TabbingLayout from "layouts/TabbingLayout";
-import { profileTabHeaders, profileTabTitle } from "helper/config/tabbing";
-import { useAppSelector } from "redux/store";
+import { lazy, Suspense, useEffect, useMemo } from "react";
+import { useAppDispatch, useAppSelector } from "redux/store";
 import { TAB_NAVIGATION_CONFIG } from "redux/reducers/config/tabbing/tabbing.slice";
 import { GET_USER_PROFILE_DATA } from "redux/reducers/auth/auth.slice";
+import { TRIGGER_NAVIGATION_TAB_CONFIG } from "redux/actions/config/tabbing/tabbing.actions";
+import TabbingLayout from "layouts/TabbingLayout";
 import { ProfilePageAccess } from "helper/config/config";
+import { profileTabHeaders, profileTabTitle } from "helper/config/tabbing";
 import { LanguageOutlined } from "@mui/icons-material";
 
 const UserAbout = lazy(
@@ -15,8 +16,25 @@ const UserCommunication = lazy(
 );
 
 const Profile = () => {
+  const dispatch = useAppDispatch();
+
   const activeUserTab = useAppSelector(TAB_NAVIGATION_CONFIG);
   const userProfile = useAppSelector(GET_USER_PROFILE_DATA);
+
+  //set initial active tab
+  useEffect(() => {
+    if (userProfile.data?.role >= 0) {
+      const initialActiveTab = profileTabHeaders?.find((item) =>
+        item?.permission.includes(userProfile.data?.role)
+      );
+      dispatch(
+        TRIGGER_NAVIGATION_TAB_CONFIG(
+          ProfilePageAccess.USER,
+          initialActiveTab?.name
+        )
+      );
+    }
+  }, [userProfile.data?.role, dispatch]);
 
   //prepare the icons list to display on the profile
   const iconList = useMemo(() => {
