@@ -45,7 +45,12 @@ import { GET_USER_PROFILE_DATA } from "redux/reducers/auth/auth.slice";
 import { API_URL } from "helper/env";
 import { singleCompanyPayloadData } from "helper/types/companyTab/comapniesType";
 import { WORKFLOW_LIST } from "redux/reducers/workFlow/workFlow.slice";
-import { DELETE_SINGLE_WORKFLOW, GET_WORKFLOW_LIST, POST_SINGLE_WORKFLOW } from "redux/actions/workFlow/workFlow.actions";
+import {
+  DELETE_SINGLE_WORKFLOW,
+  GET_WORKFLOW_LIST,
+  POST_SINGLE_WORKFLOW,
+} from "redux/actions/workFlow/workFlow.actions";
+import { WORKFLOW_ROUTE } from "routes/baseRoute";
 
 const ROLES = {
   ADMIN: 0,
@@ -61,7 +66,7 @@ const WorkFlowList = () => {
   const navigate = useNavigate();
 
   // Redux states
-//   const { companyList } = useAppSelector(COMPANY_LIST);
+  //   const { companyList } = useAppSelector(COMPANY_LIST);
   const { workFlowList } = useAppSelector(WORKFLOW_LIST);
   const userProfile = useAppSelector(GET_USER_PROFILE_DATA);
 
@@ -420,14 +425,16 @@ const WorkFlowList = () => {
               setPaginationData={setPaginationData}
               paginationData={paginationData}
             />
-            <button
-              type="submit"
-              onClick={() => setOpenModal(true)}
-              className="btn btn-primary btn-label bg-primary flex items-center px-[15px] py-[9px] max-w-[155px] w-full flex-center gap-2"
-            >
-              <AddIcon />
-              <span className="btn-label">Add Workflow</span>
-            </button>
+            <Link to={WORKFLOW_ROUTE.CREATE_WORKFLOW}>
+              <button
+                type="submit"
+                // onClick={() => setOpenModal(true)}
+                className="btn btn-primary btn-label bg-primary flex items-center px-[15px] py-[9px] max-w-[155px] w-full flex-center gap-2"
+              >
+                <AddIcon />
+                <span className="btn-label">Add Workflow</span>
+              </button>
+            </Link>
           </div>
           {workFlowList?.loading ? (
             <h1>Loading...</h1>

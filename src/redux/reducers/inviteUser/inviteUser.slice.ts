@@ -1,6 +1,6 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { InviteUserInitialType } from "../../../helper/types/profileDropdown/inviteUserType"
-import { RootState } from 'redux/rootReducer';
+import { createSlice } from "@reduxjs/toolkit";
+import { InviteUserInitialType } from "../../../helper/types/profileDropdown/inviteUserType";
+import { RootState } from "redux/rootReducer";
 
 const initialState: InviteUserInitialType = {
   loading: false,
@@ -12,6 +12,10 @@ const initialState: InviteUserInitialType = {
       next: null,
       results: [],
     },
+  },
+  inviteMembersList: {
+    loading: false,
+    data: [],
   },
 };
 
@@ -39,10 +43,23 @@ export const inviteUserSlice = createSlice({
         data: action.payload,
       },
     }),
+
+    SET_INVITE_MEMBER_LIST_DATA: (state, action) => ({
+      ...state,
+      inviteMembersList: {
+        ...state.inviteMembersList,
+        hasData: true,
+        data: action.payload,
+      },
+    }),
   },
 });
 
 export const {
-  SET_INVITE_USER_LOADING, SET_INVITE_USER_LIST_LOADING, SET_INVITE_USER_LIST_DATA } = inviteUserSlice.actions;
+  SET_INVITE_USER_LOADING,
+  SET_INVITE_USER_LIST_LOADING,
+  SET_INVITE_USER_LIST_DATA,
+  SET_INVITE_MEMBER_LIST_DATA,
+} = inviteUserSlice.actions;
 
 export const INVITE_USER_LIST = (state: RootState) => state.inviteUser;

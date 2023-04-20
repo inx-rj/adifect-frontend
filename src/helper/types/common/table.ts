@@ -8,4 +8,6 @@ export interface initialTableConfigInterface {
   community?: string;
   status?: string;
   tag?: string;
+  level?: number;
+  company?: string | number;
 }

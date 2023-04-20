@@ -33,6 +33,7 @@ export const API_URL = {
   },
   INVITE: {
     INVITE_USERS: `${BASE_URL.AGENCY}invite-member/`,
+    INVITE_MEMBERS_LIST: `${BASE_URL.AGENCY}invite-member-list/`,
   },
   HOMEPAGE: {
     JOBS_LIST: `${env.API_URL}jobs/`,
