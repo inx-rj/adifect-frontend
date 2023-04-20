@@ -85,6 +85,7 @@ export const COMPANY_ROUTE: Readonly<{
   [key: string]: string;
 }> = Object.freeze({
   COMPANY_LIST_DETAILS: `${PAGE_ROUTE.COMPANY}/:companyId`,
+  ADMIN_COMPANY_LIST_DETAILS: `${PAGE_ROUTE.COMPANY}/:companyId/:agencyId`,
   CREATE_COMPANY: `${PAGE_ROUTE.COMPANY}/add`,
 });
 

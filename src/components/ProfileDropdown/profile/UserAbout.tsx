@@ -1,59 +1,30 @@
-import { AccountCircleOutlined, LanguageOutlined } from "@mui/icons-material";
-import { ProfilePageAccess } from "helper/config/config";
+import ProfileIconListItem from "./ProfileIconListItem";
 
 interface UserAboutType {
-  data: any;
-  navType: string;
+  title: string;
+  description: string;
+  iconList: { title: string; value: string; icon: JSX.Element; url?: string }[];
 }
 
 const UserAbout = (props: UserAboutType) => {
-  const { data, navType = "user" } = props;
+  const { title, description, iconList } = props;
   return (
     <>
-      <h5 className="card-page-title text-base mb-4">
-        {data?.name ? data?.name : data?.sub_title ?? ""}
-      </h5>
-      <p className="card-page-info text-sm">
-        {data?.description
-          ? data?.description
-          : data?.profile_description ?? ""}
-      </p>
+      <h5 className="card-page-title text-base mb-4">{title}</h5>
+      <p className="card-page-info text-sm">{description}</p>
       <ul className="text-sm flex gap-3">
-        {navType === ProfilePageAccess.COMPANY && data?.agency_name && (
-          <li className="flex items-center gap-2">
-            <i className="bg-theme w-9 h-9 flex-center rounded-full p-2 text-white">
-              <AccountCircleOutlined />
-            </i>
-            <div className="w-[calc(100%-35px)]">
-              <label className="block text-[#71757B]">Owner</label>
-              <p>{data?.agency_name ?? ""}</p>
-            </div>
-          </li>
-        )}
-        {data?.website && (
-          <li className="flex items-center gap-2">
-            <i className="bg-theme w-9 h-9 flex-center rounded-full p-2 text-white">
-              <LanguageOutlined />
-            </i>
-            <div className="w-[calc(100%-35px)]">
-              <label className="block text-[#71757B]">Website</label>
-              <a target="_blank" href={data?.website ?? ""}>
-                {data?.website ?? ""}
-              </a>
-            </div>
-          </li>
-        )}
-        {data?.Language && (
-          <li className="flex items-center gap-2">
-            <i className="bg-theme w-9 h-9 flex-center rounded-full p-2 text-white">
-              <LanguageOutlined />
-            </i>
-            <div className="w-[calc(100%-35px)]">
-              <label className="block text-[#71757B]">Language</label>
-              <p>{data?.Language ?? "English (US)"}</p>
-            </div>
-          </li>
-        )}
+        {iconList?.map((item) => (
+          <>
+            {item.value && item?.url !== null && (
+              <ProfileIconListItem
+                icon={item.icon}
+                title={item.title}
+                value={item?.value}
+                url={item?.url}
+              />
+            )}
+          </>
+        ))}
       </ul>
     </>
   );
