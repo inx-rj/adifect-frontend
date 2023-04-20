@@ -61,7 +61,7 @@ const Profile = () => {
             }
             return (
               <Suspense fallback="">
-                <UserAbout data={userProfile?.data} />
+                <UserAbout data={userProfile?.data} navType="user" />
               </Suspense>
             );
           })}

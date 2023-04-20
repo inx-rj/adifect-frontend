@@ -43,7 +43,7 @@ const AgencyCompanyProfile = lazy(
 );
 
 // Profile dropdown pages
-const InviteUser = lazy(() => import("components/ProfileDropdown/InviteUser"));
+const InviteUser = lazy(() => import("components/ProfileDropdown/invite/InviteUser"));
 const Profile = lazy(
   () => import("components/ProfileDropdown/profile/Profile")
 );

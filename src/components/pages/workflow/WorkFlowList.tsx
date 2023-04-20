@@ -300,6 +300,18 @@ const WorkFlowList = () => {
       sort: "asc",
       width: 180,
     },
+    {
+      id: 1,
+      label: (
+        <label className="flex items-center">
+          Company
+          <img className="ml-2" src={Images.SortArrows} alt="Company" />
+        </label>
+      ),
+      field: "company",
+      sort: "asc",
+      width: 180,
+    },
     // {
     //   id: 2,
     //   label: (
@@ -353,6 +365,24 @@ const WorkFlowList = () => {
                   }}
                 >
                   {item?.name}
+                </Typography>
+              </div>
+            ),
+            company: (
+              <div key={index}>
+                <Typography
+                  sx={{
+                    "&.MuiTypography-root": {
+                      display: "inline-block",
+                      color: "rgba(39, 90, 208, 1)",
+                      fontFamily: '"Figtree", sans-serif',
+                      fontSize: "14px",
+                      fontWeight: 400,
+                      p: 0,
+                    },
+                  }}
+                >
+                  {item?.company_name}
                 </Typography>
               </div>
             ),
