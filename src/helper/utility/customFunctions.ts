@@ -11,7 +11,7 @@ export const setQueryParams = (config: initialTableConfigInterface) => {
     config.to_date ?? ""
   }&community=${config.community ?? ""}&status=${config.status ?? ""}&tag=${
     config.tag ?? ""
-  }&search=${config.search ?? ""}`;
+  }&search=${config.search ?? ""}&level=${config.level ?? ""}&company=${config.company ?? ""}`;
   return queryParams;
 };
 
