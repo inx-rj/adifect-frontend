@@ -1,5 +1,5 @@
 import React, { lazy, Suspense } from "react";
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes, useNavigate, useRoutes } from "react-router-dom";
 import { RouteType } from "./helper/types";
 import { AUTH_ROUTES, PAGES_ROUTES } from "./routes/routes";
 import { useAppSelector } from "redux/store";
@@ -14,6 +14,10 @@ const NotFound = lazy(() => import("pages/error/NotFound"));
 const DashLayout = lazy(() => import("layouts/DashLayout"));
 
 const RouteApp = () => {
+
+  // Router hook
+  let navigate = useNavigate();
+
   // Redux states
   const isPersist = useAppSelector(IS_PERSISTED);
   const userProfile = useAppSelector(GET_USER_PROFILE_DATA);
@@ -21,12 +25,14 @@ const RouteApp = () => {
   // RBAC - Code
   const allowedRoutes = [];
 
-  if (isPersist)
-    allowedRoutes.push(getAllowedRoutes([PAGES_ROUTES], [userProfile.data.role]))
-  else return <Navigate to={`/login`} />;
+  if (isPersist) {
+    allowedRoutes.push(getAllowedRoutes([...PAGES_ROUTES], [userProfile.data.role]))
+  }
+  else {
+    navigate('/login');
+  }
 
-  console.log([...PAGES_ROUTES,], allowedRoutes, 'allowed');
-
+  console.log(isPersist, [...PAGES_ROUTES,], allowedRoutes, 'allowed');
 
   return (
     <Routes>
@@ -90,4 +96,5 @@ const RouteApp = () => {
     </Routes >
   );
 };
+
 export default RouteApp;
