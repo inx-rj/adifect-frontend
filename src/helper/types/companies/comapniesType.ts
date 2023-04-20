@@ -14,16 +14,19 @@ export interface CompaniesInitialsType extends LoadingType {
   companyProjectsFilters: {
     loading: boolean;
     data: {
-      community: string[];
-      tag: string[];
-      status: string[];
+      community: IdNameObjectType[];
+      tag: IdNameObjectType[];
+      status: IdNameObjectType[];
     };
   };
 }
-
+export interface IdNameObjectType {
+  id: number;
+  name: string;
+}
 export interface filterUIOptionsListType {
   name: string;
   label: string;
-  options: string[];
+  options: IdNameObjectType[];
   filterType?: string;
 }

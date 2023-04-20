@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Autocomplete, TextField } from "@mui/material";
-import { filterUIOptionsListType } from "helper/types/companies/comapniesType";
+import { IdNameObjectType, filterUIOptionsListType } from "helper/types/companies/comapniesType";
 
 interface DropdownWithSearchPropsType {
   filterList: filterUIOptionsListType;
@@ -17,14 +17,13 @@ const DropdownWithSearch = ({ filterList, handleChange }: DropdownWithSearchProp
   const [selectedOption, setSelectedOption] = useState<string>("");
   const [searchText, setSearchText] = useState<string>("");
 
-
   //modify the options array as per requirement
   const displayedOptions = useMemo(
     () =>
-      filterList?.options?.map((option: string) => {
+      filterList?.options?.map((option: IdNameObjectType) => {
         return {
-          label: option,
-          value: option,
+          label: option.name,
+          value: option.name,
         };
       }),
     [filterList?.options]

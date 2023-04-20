@@ -255,7 +255,7 @@ const AgencyCompanyProjects = () => {
           </div>
         ) : (
           <>
-            {companyProjectsList.data.results?.length > 0 && (
+            {filterArr.length > 0 && (
               <div className="flex flex-wrap gap-[15px] p-[15px] pb-5">
                 {filterArr?.map((item, index) => (
                   <FormControl
