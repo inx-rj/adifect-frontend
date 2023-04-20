@@ -1,7 +1,8 @@
 import ProfileInfo from "components/common/tabbing/ProfileInfo";
 import TabbingBodyTitle from "components/common/tabbing/TabbingBodyTitle";
+import { ProfilePageAccess } from "helper/config/config";
 import { Images } from "helper/images";
-import { lazy, Suspense } from "react";
+import { lazy, ReactNode, Suspense } from "react";
 import { TRIGGER_NAVIGATION_TAB_CONFIG } from "redux/actions/config/tabbing/tabbing.actions";
 import { GET_USER_PROFILE_DATA } from "redux/reducers/auth/auth.slice";
 import { useAppDispatch, useAppSelector } from "redux/store";
@@ -12,15 +13,29 @@ const TabbingHeadTitle = lazy(
 );
 
 interface TabbingLayoutType {
-  children: JSX.Element;
-  tabBodySection: JSX.Element;
-  tabHeadArrL: any;
+  children: ReactNode;
+  tabBodySection?: JSX.Element;
+  tabHeadArr: any;
   navType: string;
   tabBodyTitle: string;
+  tabData: {
+    profileImg: string;
+    title: string;
+    description: string;
+    countList: { title: string; value: string }[];
+  };
 }
 
-const TabbingLayout = (props) => {
-  const { children, tabHeadArr, tabBodySection, navType, tabBodyTitle } = props;
+const TabbingLayout = (props: TabbingLayoutType) => {
+  const {
+    children,
+    navType,
+    tabData,
+    tabHeadArr,
+    tabBodySection,
+    tabBodyTitle,
+  } = props;
+
   const dispatch = useAppDispatch();
   const userProfile = useAppSelector(GET_USER_PROFILE_DATA);
 
@@ -32,7 +47,11 @@ const TabbingLayout = (props) => {
   return (
     <>
       <Suspense fallback="">
-        <Title title={navType === "user" ? "Profile" : "Company Info"} />
+        <Title
+          title={
+            navType === ProfilePageAccess.USER ? "Profile" : "Company Info"
+          }
+        />
       </Suspense>
       <section className="flex gap-5 pt-0 flex-wrap md:flex-nowrap mt-4">
         <div className="card tab-head-content custom-scrollbar">
@@ -42,13 +61,13 @@ const TabbingLayout = (props) => {
               return (
                 <div
                   key={empIndex}
-                  onClick={(e) => handleNavigationClick(nav.name, e)}
+                  onClick={(e) => handleNavigationClick(nav?.name, e)}
                   className={`tab-head-wrapper`}
                 >
                   <Suspense fallback="">
                     <TabbingHeadTitle
                       active={tabBodyTitle}
-                      title={nav.name}
+                      title={nav?.name}
                       info={nav.info}
                       icon={nav.icon}
                     />
@@ -63,7 +82,12 @@ const TabbingLayout = (props) => {
             <div className="h-[200px] img img-cover absolute inset-0 w-full">
               <img src={Images.ProfileBG} alt="profile" />
             </div>
-            <ProfileInfo />
+            <ProfileInfo
+              profileImg={tabData.profileImg}
+              title={tabData.title}
+              description={tabData.description}
+              countList={tabData.countList}
+            />
           </div>
           <div className="p-5 pt-0 -mt-5">
             <div className="card border p-4 z-[1] relative">{children}</div>
