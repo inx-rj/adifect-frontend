@@ -59,7 +59,7 @@ const MuiCustomTable = (props: MuiCustomTablePropsType) => {
         boxShadow: "none",
       }}
     >
-      <TableContainer sx={{ maxHeight: "654px" }}>
+      <TableContainer sx={{ maxHeight: "668px" }}>
         <Table
           stickyHeader
           sx={{
@@ -100,10 +100,22 @@ const MuiCustomTable = (props: MuiCustomTablePropsType) => {
                       }
                     }}
                   >
-                    {Object.values(items).map(val => <TableCell sx={{ px: 3.125, py: 1.25 }} >{val}</TableCell>)}
+                    {Object.values(items).map(val => <TableCell sx={{ px: 3.125, py: 1.25, color: "#71757B" }} >{val}</TableCell>)}
                   </TableRow>
                 )
               })}
+            {data.rows.length < 1 && (
+              <TableRow
+                sx={{
+                  display: 'block',
+                  height: '8vh',
+                  px: 3.125,
+                  pt: 2
+                }}
+              >
+                No matching records found
+              </TableRow>
+            )}
           </TableBody>
         </Table>
       </TableContainer>

@@ -22,8 +22,6 @@ const TRIGGER_LOGIN = (data: EmailPWDType) => async (dispatch: AppDispatch) => {
   return await AuthApiClient.login(data)
     .then((response) => {
       if (response.status === 200) {
-        console.log(response.data);
-
         dispatch(TRIGGER_PERSIST_MODE(true)).then((r) => r);
         dispatch(SET_USER_DATA(response?.data));
         const { refresh, token } = response?.data || {
@@ -37,7 +35,7 @@ const TRIGGER_LOGIN = (data: EmailPWDType) => async (dispatch: AppDispatch) => {
       }
     })
     .catch((error) => {
-      if (error?.response.status === 400) {
+      if (error?.response?.status === 400) {
         swal({
           title: "Error",
           text: error?.response?.data?.message,
@@ -60,7 +58,7 @@ const GET_USER_DETAILS = () => async (dispatch: AppDispatch) => {
   return await AuthApiClient.editProfile()
     .then((response) => {
       if (response.status === 200) {
-        dispatch(SET_USER_PROFILE_DATA(response?.data));
+        dispatch(SET_USER_PROFILE_DATA(response?.data?.[0]));
       }
     })
     .catch((error) => {
@@ -69,9 +67,36 @@ const GET_USER_DETAILS = () => async (dispatch: AppDispatch) => {
           title: "Error",
           text: error?.response?.data?.message,
           className: "errorAlert-login",
-          // icon: "/img/logonew-red.svg",
-          icon: Images.Logo,
-          // buttons: false,
+          icon: Images.ErrorLogo,
+          buttons: { visible: false },
+          timer: 1500,
+        });
+      }
+    })
+    .finally(() => {
+      dispatch(SET_USER_PROFILE_LOADING(false));
+    });
+};
+
+// Edit user details
+const TRIGGER_EDIT_USER = (userUpdateData) => async (dispatch: AppDispatch) => {
+  console.log("userUpdateData", userUpdateData)
+  dispatch(SET_USER_PROFILE_LOADING(true));
+  return await AuthApiClient.updateUserProfileData(userUpdateData)
+    .then((response) => {
+      if (response.status === 200) {
+        console.log("Update user response", response)
+        dispatch(SET_USER_PROFILE_DATA(response?.data?.[0]));
+      }
+    })
+    .catch((error) => {
+      if (error?.response.status === 400) {
+        swal({
+          title: "Error",
+          text: error?.response?.data?.message,
+          className: "errorAlert-login",
+          icon: Images.ErrorLogo,
+          buttons: { visible: false },
           timer: 1500,
         });
       }
@@ -87,8 +112,13 @@ const TRIGGER_FORGOT_PASSWORD = (data: EmailType) => async () => {
 };
 
 // Reset Password
-const TRIGGER_RESET_PASSWORD = (data: any) => async () => {
-  return await AuthApiClient.resetPassword(data);
+const TRIGGER_RESET_PASSWORD = (data: any, ResetpasswordId: string, userId: string) => async () => {
+  return await AuthApiClient.resetPassword(data, ResetpasswordId, userId);
+};
+
+// Reset Password
+const TRIGGER_GET_RESET_PASSWORD = (ResetpasswordId: string, userId: string) => async () => {
+  return await AuthApiClient.getResetPassword(ResetpasswordId, userId);
 };
 
 // Common auth Config
@@ -96,6 +126,8 @@ export {
   REGISTER_USER,
   TRIGGER_LOGIN,
   GET_USER_DETAILS,
+  TRIGGER_EDIT_USER,
   TRIGGER_FORGOT_PASSWORD,
   TRIGGER_RESET_PASSWORD,
+  TRIGGER_GET_RESET_PASSWORD
 };

@@ -1,40 +1,53 @@
+import { setQueryParams } from "helper/utility/customFunctions";
 import axiosPrivate from "../../api/axios";
 import { API_URL } from "../../helper/env";
 
-const userData = () => JSON.parse(localStorage.getItem("userData") ?? '');
+const userData = () => JSON.parse(localStorage.getItem("userData") ?? "");
 
 class InviteUserApiClient {
   // get invited users list
-  getInviteUsers = ({ rowsPerPage, page }) =>
-    axiosPrivate.get(`${API_URL.INVITE.INVITE_USERS}`, {
-      params: { page_size: rowsPerPage, page },
-    });
+  fetchInviteUsers = (filters: any) =>
+    axiosPrivate.get(
+      `${API_URL.INVITE.INVITE_USERS}` + setQueryParams(filters)
+    );
 
-  //get comapnies list
-  getCompaniesList = () =>
-    axiosPrivate.get(`${API_URL.COMPANY.COMPANY_LIST}`, {
-    });
+  // get invited members list
+  fetchInviteMembersList = (filters: any) =>
+    axiosPrivate.get(
+      `${API_URL.INVITE.INVITE_MEMBERS_LIST}` + setQueryParams(filters)
+    );
 
   //add invite user
-  addInviteUser = (postObj) => {
+  addInviteUser = (postObj: any) => {
     const payload = {
       ...postObj,
-      agency: userData()?.user.user_id
-    }
-    return axiosPrivate.post(`${API_URL.INVITE.INVITE_USERS}`, payload, {
-    });
-  }
+      agency: userData()?.user.user_id,
+    };
+    return axiosPrivate.post(`${API_URL.INVITE.INVITE_USERS}`, payload);
+  };
 
   //update invite user
-  updateInviteUser = (id, payload) => {
-    return axiosPrivate.put(`${API_URL.INVITE.INVITE_USERS}${id}/`, payload)
+  updateInviteUser = (id: number, payload: any) => {
+    return axiosPrivate.put(`${API_URL.INVITE.INVITE_USERS}${id}/`, payload);
+  };
+
+  //delete invite user
+  deleteInviteUser = (id: number) => {
+    return axiosPrivate.delete(`${API_URL.INVITE.INVITE_USERS}${id}/`);
   }
 
-  //update invite user
-  deleteInviteUser = (id) => {
-    return axiosPrivate.delete(`${API_URL.INVITE.INVITE_USERS}${id}/`, {
+  // Register invited user
+  registerInviteUser = (data: any, inviteId: string, exclusive: string) =>
+    axiosPrivate.post(`${API_URL.INVITE.INVITE_USER_REGISTER}${inviteId}/${exclusive}`, data, {
+      headers: {
+        Authorization: "",
+      },
     });
-  }
+
+  fetchInviteStatus = (decodeId: string, inviteCode: string, exclusive: string) =>
+    axiosPrivate.get(
+      `${API_URL.INVITE.INVITE_STATUS}${decodeId}/${inviteCode}/${exclusive}`
+    );
 }
 
 export default new InviteUserApiClient();

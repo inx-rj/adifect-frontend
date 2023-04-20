@@ -28,15 +28,32 @@ class AuthApiClient {
     });
 
   // Reset Password
-  resetPassword = (data: any) =>
-    axiosPrivate.post(`${API_URL.AUTH.CHANGE_PASSWORD}`, data, {
+  resetPassword = (data: any, ResetpasswordId: string, userId: string) =>
+    axiosPrivate.put(`${API_URL.AUTH.RESET_PASSWORD}${ResetpasswordId}/${userId}/`, data, {
       headers: {
         Authorization: "",
       },
     });
 
-  // Edit profile
+  getResetPassword = (ResetpasswordId: string, userId: string) =>
+    axiosPrivate.get(`${API_URL.AUTH.RESET_PASSWORD}${ResetpasswordId}/${userId}/`, {
+      headers: {
+        Authorization: "",
+      },
+    });
+
+  // get profile
   editProfile = () => axiosPrivate.get(`${API_URL.AUTH.EDIT_PROFILE}`);
+
+  // Edit and update profile
+  updateUserProfileData = (userUpdateData) =>
+    axiosPrivate.post(
+      `${API_URL.AUTH.EDIT_PROFILE}`, userUpdateData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }
+    );
 }
 
 export default new AuthApiClient();

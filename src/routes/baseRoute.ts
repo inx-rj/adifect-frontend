@@ -16,34 +16,18 @@ export const AUTH_ROUTE: Readonly<{
   SIGNUP: string;
   THANK_YOU: string;
   FORGOT_PASSWORD: string;
+  RESET_PASSWORD: string;
 }> = Object.freeze({
   LOGIN: `${SYSTEM.LOGIN}`,
   SIGNUP: `${SYSTEM.HOME}signup`,
-  THANK_YOU: `${SYSTEM.HOME}/thank-you`,
-  FORGOT_PASSWORD: `${SYSTEM.HOME}/forgot-password`,
-});
-
-// Profile Route
-export const PROFILE_ROUTE: Readonly<{
-  PROFILE: string;
-  INVITE: string;
-}> = Object.freeze({
-  PROFILE: `${SYSTEM.HOME}profile`,
-  INVITE: `${SYSTEM.HOME}invite`,
+  THANK_YOU: `${SYSTEM.HOME}thank-you`,
+  FORGOT_PASSWORD: `${SYSTEM.HOME}forgot-password`,
+  RESET_PASSWORD: `${SYSTEM.HOME}reset-password/:ResetpasswordId/:userId/`,
 });
 
 // Authentication Route
 export const PAGE_ROUTE: Readonly<{
-  HOME: string;
-  WORKFLOW: string;
-  MY_PROJECTS: string;
-  COMPANY: string;
-  COMPANIES: string;
-  MEDIA: string;
-  MY_JOBS: string;
-  DRAFT_JOBS: string;
-  TEMPLATES: string;
-  HELP: string;
+  [key: string]: string;
 }> = Object.freeze({
   HOME: `${MAIN_ROUTE.HOME}`,
   WORKFLOW: `${MAIN_ROUTE.HOME}workflow`,
@@ -54,93 +38,62 @@ export const PAGE_ROUTE: Readonly<{
   MY_JOBS: `${MAIN_ROUTE.HOME}jobs`,
   DRAFT_JOBS: `${MAIN_ROUTE.HOME}draft-jobs`,
   TEMPLATES: `${MAIN_ROUTE.HOME}templates`,
-  HELP: `${MAIN_ROUTE.HOME}`,
+  HELP: `${MAIN_ROUTE.HOME}help`,
+  PROFILE: `${MAIN_ROUTE.HOME}profile`,
+  INVITE: `${MAIN_ROUTE.HOME}invite`,
+  COMPANY_PROJECTS: `${MAIN_ROUTE.HOME}company-projects`,
+  INDUSTRIES: `${MAIN_ROUTE.HOME}industries`,
+  SKILLS: `${MAIN_ROUTE.HOME}skills`,
+  USERS: `${MAIN_ROUTE.HOME}users`,
+});
+
+// Workflow Route
+export const WORKFLOW_ROUTE: Readonly<{
+  [key: string]: string;
+}> = Object.freeze({
+  HOME: `${PAGE_ROUTE.WORKFLOW}`,
+  CREATE_WORKFLOW: `${PAGE_ROUTE.WORKFLOW}/add`,
+  UPDATE_WORKFLOW: `${PAGE_ROUTE.WORKFLOW}/update`,
 });
 
 // Companies Route
 export const COMPANIES_ROUTE: Readonly<{
-  COMPANY_PROJECTS: string;
-  COMPANY_PROJECTS_DETAILS: string;
-  TAGS: string;
+  [key: string]: string;
 }> = Object.freeze({
-  COMPANY_PROJECTS: `${PAGE_ROUTE.HOME}company-projects`,
-  COMPANY_PROJECTS_DETAILS: `${PAGE_ROUTE.HOME}company-projects/:communityId`,
+  COMPANY_PROJECTS_DETAILS: `${PAGE_ROUTE.COMPANY_PROJECTS}/:communityId`,
   TAGS: `${PAGE_ROUTE.HOME}company-project/tags`,
 });
 
-// Workflow Route
-export const DASH_WORKFLOW: Readonly<{
-  HOME: string;
-}> = Object.freeze({
-  HOME: `${PAGE_ROUTE.WORKFLOW}workflow`,
-});
-
-// Workflow Route
-export const DASHBOARD_WORKFLOW_ROUTE: Readonly<{
-  HOME: string;
-  CREATE_WORKFLOW: string;
-  UPDATE_WORKFLOW: string;
-}> = Object.freeze({
-  HOME: `${DASH_WORKFLOW.HOME}`,
-  CREATE_WORKFLOW: `${DASH_WORKFLOW.HOME}add`,
-  UPDATE_WORKFLOW: `${DASH_WORKFLOW.HOME}update`,
-});
-
 // My Jobs Route
-export const DASH_MY_JOBS: Readonly<{
-  HOME: string;
+export const MY_JOBS_ROUTE: Readonly<{
+  [key: string]: string;
 }> = Object.freeze({
-  HOME: `${PAGE_ROUTE.MY_JOBS}`,
-});
-
-// My Jobs Route
-export const DASHBOARD_MY_JOBS_ROUTE: Readonly<{
-  HOME: string;
-  CREATE_MY_JOB: string;
-  UPDATE_MY_JOB: string;
-}> = Object.freeze({
-  HOME: `${DASH_MY_JOBS.HOME}list`,
-  CREATE_MY_JOB: `${DASH_MY_JOBS.HOME}add`,
-  UPDATE_MY_JOB: `${DASH_MY_JOBS.HOME}update`,
+  HOME: `${PAGE_ROUTE.MY_JOBS}/list`,
+  CREATE_MY_JOB: `${PAGE_ROUTE.MY_JOBS}/add`,
+  UPDATE_MY_JOB: `${PAGE_ROUTE.MY_JOBS}/update`,
 });
 
 // Templates Route
-export const DASHBOARD_TEMPLATES_ROUTES: Readonly<{
-  HOME: string;
+export const TEMPLATES_ROUTES: Readonly<{
+  [key: string]: string;
 }> = Object.freeze({
-  HOME: `${PAGE_ROUTE.TEMPLATES}list`,
+  HOME: `${PAGE_ROUTE.TEMPLATES}/list`,
 });
 
 // Company Route
-export const DASH_COMPANY: Readonly<{
-  HOME: string;
+export const COMPANY_ROUTE: Readonly<{
+  [key: string]: string;
 }> = Object.freeze({
-  HOME: `${PAGE_ROUTE.COMPANY}agency/company`,
-});
-
-// Company Route
-export const DASHBOARD_COMPANY_ROUTE: Readonly<{
-  HOME: string;
-  CREATE_COMPANY: string;
-}> = Object.freeze({
-  HOME: `${DASH_COMPANY.HOME}`,
-  CREATE_COMPANY: `${DASH_COMPANY.HOME}add`,
+  COMPANY_LIST_DETAILS: `${PAGE_ROUTE.COMPANY}/:companyId`,
+  CREATE_COMPANY: `${PAGE_ROUTE.COMPANY}/add`,
 });
 
 // Help Route
-export const DASH_HELP: Readonly<{
-  HOME: string;
+export const HELP_ROUTE: Readonly<{
+  [key: string]: string;
 }> = Object.freeze({
-  HOME: `${PAGE_ROUTE.HELP}help`,
-});
-
-// Help Route
-export const DASHBOARD_HELP_ROUTE: Readonly<{
-  HOME: string;
-  CREATE_HELP: string;
-}> = Object.freeze({
-  HOME: `${DASH_HELP.HOME}`,
-  CREATE_HELP: `${DASH_HELP.HOME}add`,
+  HOME: `${PAGE_ROUTE.HELP}`,
+  CREATE_HELP: `${PAGE_ROUTE.HELP}/add`,
 });
 
 // Define Sidebar Route
@@ -151,25 +104,29 @@ export const SIDEBAR_ROUTES: SidebarRoutesTypes[] = [
     name: "Home",
     path: PAGE_ROUTE.HOME,
     icon: "HomeOutlined",
-    children: [],
+    children: [], // Empty means it has all role access
   },
   {
     name: "Workflow",
-    path: DASHBOARD_WORKFLOW_ROUTE.HOME,
+    path: WORKFLOW_ROUTE.HOME,
     icon: "GridViewOutlined",
     children: [],
-    permission: [Roles.AGENCY],
+    permission: [Roles.ADMIN, Roles.AGENCY],
   },
-  { name: "My Projects", path: PAGE_ROUTE.MY_PROJECTS, icon: "StickyNote2Outlined" },
+  {
+    name: "My Projects",
+    path: PAGE_ROUTE.MY_PROJECTS,
+    icon: "StickyNote2Outlined",
+    permission: [Roles.CREATOR, Roles.AGENCY],
+  },
   {
     name: "Companies",
-    // imgPath: "/img/Projects.png",
     path: PAGE_ROUTE.COMPANIES,
     icon: "DescriptionOutlined",
     children: [
       {
         name: "Company Projects",
-        path: COMPANIES_ROUTE.COMPANY_PROJECTS,
+        path: PAGE_ROUTE.COMPANY_PROJECTS,
         children: [],
       },
       {
@@ -183,23 +140,50 @@ export const SIDEBAR_ROUTES: SidebarRoutesTypes[] = [
       //   path: "/company-project/stories-options",
       // },
     ],
-    permission: [Roles.ADMIN, Roles.AGENCY],
+    permission: [Roles.AGENCY],
   },
   {
     name: "Media",
     path: PAGE_ROUTE.MEDIA,
-    icon: "PermMediaOutlined",
+    icon: "MovieOutlined",
     children: [],
-    permission: [Roles.AGENCY],
+    permission: [Roles.ADMIN, Roles.AGENCY],
+  },
+  {
+    name: "Jobs",
+    path: MY_JOBS_ROUTE.HOME,
+    icon: "BusinessCenterOutlined",
+    children: [],
+    permission: [Roles.ADMIN],
   },
   {
     name: "My Jobs",
-    path: DASHBOARD_MY_JOBS_ROUTE.HOME,
+    path: MY_JOBS_ROUTE.HOME,
     icon: "BusinessCenterOutlined",
     children: [],
-    permission: [Roles.AGENCY],
+    permission: [Roles.AGENCY, Roles.ADMIN, Roles.MEMBER],
   },
-  // { name: "Media", imgPath: "/img/Projects.png", path: "/Media" },
+  {
+    name: "Industries",
+    path: PAGE_ROUTE.INDUSTRIES,
+    icon: "LocationCityOutlined",
+    children: [],
+    permission: [Roles.ADMIN],
+  },
+  {
+    name: "Skills",
+    path: PAGE_ROUTE.SKILLS,
+    icon: "DrawOutlined",
+    children: [],
+    permission: [Roles.ADMIN],
+  },
+  {
+    name: "Users",
+    path: PAGE_ROUTE.SKILLS,
+    icon: "Groups2Outlined",
+    children: [],
+    permission: [Roles.ADMIN],
+  },
   {
     name: "Draft Jobs",
     path: PAGE_ROUTE.DRAFT_JOBS,
@@ -209,28 +193,29 @@ export const SIDEBAR_ROUTES: SidebarRoutesTypes[] = [
   },
   {
     name: "Templates",
-    path: DASHBOARD_TEMPLATES_ROUTES.HOME,
+    path: TEMPLATES_ROUTES.HOME,
     icon: "ReceiptLongOutlined",
     children: [],
     permission: [Roles.AGENCY],
   },
   {
     name: "Company",
-    path: DASHBOARD_COMPANY_ROUTE.HOME,
+    path: PAGE_ROUTE.COMPANY,
     icon: "ApartmentOutlined",
     children: [],
-    permission: [Roles.AGENCY],
+    permission: [Roles.ADMIN, Roles.AGENCY],
   },
   {
     name: "Available Jobs",
-    path: DASHBOARD_MY_JOBS_ROUTE.HOME,
+    path: MY_JOBS_ROUTE.HOME,
     icon: "CardTravelOutlined",
     permission: [Roles.CREATOR],
   },
   {
-    name: "Help", path: DASHBOARD_HELP_ROUTE.HOME,
+    name: "Help",
+    path: HELP_ROUTE.HOME,
     icon: "HelpOutlineOutlined",
-    children: []
+    children: [],
   },
 
   //Agency Member - ADMIN Sidebar

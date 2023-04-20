@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useRef } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useEffect, useState, useRef, lazy, Suspense } from "react";
+import { Link } from "react-router-dom";
 // import useWebSocket, { ReadyState } from 'react-use-websocket';
 
 //import mui components
@@ -24,14 +24,10 @@ import Business from "@mui/icons-material/Business";
 //SUPER ADMIN
 // import { listAllAdminCompanies } from "../../redux/actions/company-actions";
 import { useAppDispatch, useAppSelector } from "redux/store";
-import {
-  GET_USER_DATA,
-  GET_USER_PROFILE_DATA,
-} from "redux/reducers/auth/auth.slice";
+import { GET_USER_PROFILE_DATA } from "redux/reducers/auth/auth.slice";
 import { Images } from "helper/images";
 import CustomPopup from "../customPopup/CustomPopup";
 import { GET_USER_DETAILS } from "redux/actions/auth/auth.actions";
-import Logo from "../logo/Logo";
 import {
   ArrowDropDownOutlined,
   DescriptionOutlined,
@@ -40,13 +36,19 @@ import {
   Person,
   PowerSettingsNewOutlined,
 } from "@mui/icons-material";
-import { MAIN_ROUTE } from "routes/baseRoute";
 import { ActionTypes } from "helper/actions";
-import SidebarToggle from "./SidebarToggle";
-import { useSingleEffect } from "react-haiku";
+import { useSingleEffect, useUpdateEffect } from "react-haiku";
+import { GET_NOTIFICATION_DATA } from "redux/reducers/common/notification.slice";
+import { GET_NOTIFICATIONS_LIST } from "redux/actions/common/notification.actions";
+import { Roles } from "helper/config";
+
+// Import lazy load component
+const Logo = lazy(() => import("components/common/logo/Logo"));
+const SidebarToggle = lazy(
+  () => import("components/common/header/SidebarToggle")
+);
 
 export default function Header(props) {
-  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [count, setcount] = useState("");
   const [notificationId, setNotificationId] = useState("");
@@ -77,8 +79,6 @@ export default function Header(props) {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const userData = useAppSelector(GET_USER_DATA);
-
   // -------------------------comapny Show Reducer Member--------------------------------
   // const {
   //   memberAdminCompanyData,
@@ -91,7 +91,6 @@ export default function Header(props) {
   // const { updateagencyCountData, success: successupdateCount } = useAppSelector(
   //   (state) => state.updateAllAgencycountReducer
   // );
-
   const [isActive, setIsActive] = useState(false);
 
   const handleClick = (event) => {
@@ -103,6 +102,7 @@ export default function Header(props) {
   //   (state) => state.listAllAgencycountReducer
   // );
 
+  const notificationData = useAppSelector(GET_NOTIFICATION_DATA);
   // const { memberInviteAdmin, success: successCompanyList } = useAppSelector(
   //   (state) => state.memberAdminInviteListReducer
   // );
@@ -113,7 +113,7 @@ export default function Header(props) {
     const newfileGallery = [...rowadd];
     newfileGallery.splice(newfileGallery.indexOf(file), 1);
     setrowadd(newfileGallery);
-    // dispatch(Deletenotification(file.id, userData.data.user.user_id));
+    // dispatch(Deletenotification(file.id, userProfile?.data?.id));
   };
 
   // ----------------------------action------------------------------------c
@@ -126,8 +126,8 @@ export default function Header(props) {
 
   // useEffect(() => {
   //   let myArr = [];
-  //   if (agencyCountData?.data?.length) {
-  //     setrowadd(agencyCountData?.data);
+  //   if (?.data?.length) {
+  //     setrowadd(notificationData?.agencyCountData?.data);
   //   }
   // }, [successCount, props.headerCompany]);
 
@@ -136,24 +136,19 @@ export default function Header(props) {
   // }, []);
 
   // useEffect(() => {
-  //   setNotificationId(agencyCountData?.data?.[0]?.id);
+  //   setNotificationId(notificationDataagencyCountData?.data?.[0]?.id);
   // }, [successCount, props.headerCompany]);
 
   // useEffect(() => {
-  //   dispatch(listAllcount());
-  //   // setcount(CountData);
-  // }, [success]);
-
-  // useEffect(() => {
   //   // set for Member user
-  //   if (memberAdminCompanyData && userData.data.user.role === 3) {
+  //   if (memberAdminCompanyData && userProfile?.data?.role === 3) {
   //     props.setHeaderCompany(memberAdminCompanyData[0]?.company_id);
   //     setCompanyName(memberAdminCompanyData[0]?.name);
   //   }
   // }, [memberSuccessCompanyList]);
 
   // useEffect(() => {
-  //   if (companyData?.length > 0 && userData.data.user.role === 2) {
+  //   if (companyData?.length > 0 && userProfile?.data?.role === 2) {
   //     const findCompanyName = companyData?.find(
   //       (item) => item.id === props.headerCompany
   //     );
@@ -164,61 +159,76 @@ export default function Header(props) {
   //     }
   //   }
   // }, [companyData, props.headerCompany, openMenuInProgress]);
+  useSingleEffect(() => {
+    if (!userProfile?.data?.id) {
+      dispatch(GET_USER_DETAILS());
+    }
+  });
 
-  // useEffect(() => {
-  //   if (userData.data.user.role === 3 && props.headerCompany) {
-  //     dispatch(
-  //       listAllAgencycount(userData.data.user.user_id, 0, props.headerCompany)
-  //     );
-  //   } else {
-  //     if (props.headerCompany) {
-  //       dispatch(
-  //         listAllAgencycount(userData.data.user.user_id, 0, props.headerCompany)
-  //       );
-  //     } else {
-  //       dispatch(listAllAgencycount(userData.data.user.user_id, 0));
-  //     }
-  //   }
-  // }, [successupdateCount, props.headerCompany]);
+  useUpdateEffect(() => {
+    if (userProfile?.data?.id) {
+      dispatch(
+        GET_NOTIFICATIONS_LIST(
+          userProfile?.data?.id,
+          0,
+          props.headerCompany,
+          userProfile?.data?.role
+        )
+      );
+    }
+  }, [userProfile?.data?.id]);
 
-  // useEffect(() => {
-  //   let beforecount = agencyCountData?.count;
-  //   setcount(beforecount);
-  // }, [successCount, props.headerCompany]);
-
-  const chatSocket = new WebSocket(
-    "wss://" +
-      "dev-ws.adifect.com" +
-      "/ws/notifications/" +
-      userData.data.user.user_id +
-      "/"
-  );
-
-  chatSocket.onmessage = function (e) {
-    const data = JSON.parse(e.data);
-
-    if (data && data?.data?.value) {
-      let newStr1 = data.data.value.text.count;
-      setcount(newStr1);
+  useEffect(() => {
+    if (userProfile?.data?.role === Roles?.MEMBER && props.headerCompany) {
     }
 
-    // let newStr = data.data.value.replace("/", "");
-    // let newarr = newStr.split(",");
-    // let updatedarray = newarr[0].replace("{", "");
-    // let updated = updatedarray.split(":");
-    // console.log("abc---",updated)
-    // setcount(updated[1]);
-    // document.querySelector('#chat-log').value += (data.message + '\n');
-    // console.log("updatedd--", updated[1]?.data?.value?.text?.count);
-  };
+    // else {
+    //   if (props.headerCompany) {
+    //     dispatch(
+    //       GET_NOTIFICATIONS_LIST(userProfile?.data?.id, 0, props.headerCompany)
+    //     );
+    //   } else {
+    //     dispatch(GET_NOTIFICATIONS_LIST(userProfile?.data?.id, 0));
+    //   }
+    // }
+  }, [props.headerCompany]);
 
-  chatSocket.onclose = function (e) {
-    // console.error("Chat socket closed unexpectedly");
-  };
+  useEffect(() => {
+    let beforecount = notificationData?.agencyCountData?.count;
+    setcount(beforecount);
+  }, [notificationData?.hasData, props.headerCompany]);
+
+  // const chatSocket = new WebSocket(
+  //   "wss://" +
+  //     "dev-ws.adifect.com" +
+  //     "/ws/notifications/" +
+  //     userProfile?.data?.id +
+  //     "/"
+  // );
+
+  // chatSocket.onmessage = function (e) {
+  // const data = JSON.parse(e.data);
+  // if (data && data?.data?.value) {
+  //   let newStr1 = data.data.value.text.count;
+  //   setcount(newStr1);
+  // }
+  // let newStr = data.data.value.replace("/", "");
+  // let newarr = newStr.split(",");
+  // let updatedarray = newarr[0].replace("{", "");
+  // let updated = updatedarray.split(":");
+  // console.log("abc---",updated)
+  // setcount(updated[1]);
+  // document.querySelector('#chat-log').value += (data.message + '\n');
+  // console.log("updatedd--", updated[1]?.data?.value?.text?.count);
+  // };
+
+  // chatSocket.onclose = function (e) {
+  // console.error("Chat socket closed unexpectedly");
+  // };
 
   // useEffect(() => {
   //   // Set for member user
-  //   if (memberAdminCompanyData && userData.data.user.role === 3) {
+  //   if (memberAdminCompanyData && userProfile?.data?.role === 3) {
   //     const findCompanyName = memberAdminCompanyData.find(
   //       (item) => item.company_id === props.headerCompany
   //     );
@@ -241,7 +251,7 @@ export default function Header(props) {
 
   // useEffect(() => {
   //   // Set for Admin user
-  //   if (adminCompanies && userData.data.user.role === 0) {
+  //   if (adminCompanies && userProfile?.data?.role === 0) {
   //     const findCompanyName = adminCompanies.find(
   //       (item) => item.id === props.headerCompany
   //     );
@@ -254,7 +264,7 @@ export default function Header(props) {
   // }, [adminCompanies, props.headerCompany, openMenuInProgress]);
 
   // useEffect(() => {
-  //   if (userData.data.user.role === 0) {
+  //   if (userProfile?.data?.role === 0) {
   //     dispatch(listAllAdminCompanies());
   //   }
   // }, []);
@@ -314,7 +324,7 @@ export default function Header(props) {
 
   // useEffect(() => {
   //   const callThis = () => {
-  //     if (userData.data.user.role === 2) {
+  //     if (userProfile?.data?.role === 2) {
   //       // dispatch(listAllCompanies());
   //     }
 
@@ -322,10 +332,6 @@ export default function Header(props) {
   //   };
   //   callThis();
   // }, [dispatch]);
-
-  useSingleEffect(() => {
-    dispatch(GET_USER_DETAILS());
-  })
 
   //handle logout popup and actinon
   const logoutHandler = () => {
@@ -354,27 +360,25 @@ export default function Header(props) {
   }
 
   function restrictUsers() {
-    if (userData.data.user.role === 1) {
+    if (userProfile?.data?.role === 1) {
       // Creator
       return false;
     }
-    if (userData.data.user.role === 3 && userData.data.user.user_level !== 1) {
+    if (userProfile?.data?.role === 3 && userProfile?.data?.user_level !== 1) {
       // Member Agency other than MEMBER ADMIN
       return false;
     }
     return true;
   }
-  console.log("userData", userData);
-
   function restrictUsersOtherThanAgency() {
-    if (userData.data.user.role !== 2) {
+    if (userProfile?.data?.role !== 2) {
       // Other than agency user
       return false;
     }
     return true;
   }
   function restrictUsersOtherThanMember() {
-    if (userData.data.user.role !== 3) {
+    if (userProfile?.data?.role !== 3) {
       // Other than agency user
       return false;
     }
@@ -383,7 +387,7 @@ export default function Header(props) {
   // -----------------------------SUPER ADMIN START----------------------------------------------
 
   function restrictUsersOtherThanSuperAdmin() {
-    if (userData.data.user.role !== 0) {
+    if (userProfile?.data?.role !== 0) {
       // Other than superadmin user
       return false;
     }
@@ -393,12 +397,14 @@ export default function Header(props) {
 
   return (
     <div className="header">
-      <div className="logo h-[40px] max-w-[250px] w-full px-4">
-        <Logo />
+      <div className="logo h-[40px] max-w-[100px] xs:max-w-[200px] lg:max-w-[250px] w-full pl-3 pr-0 md:px-4">
+        <Suspense fallback={""}>
+          <Logo />
+        </Suspense>
       </div>
-      <div className="px-4 py-3 flex justify-between items-center w-full border-l">
+      <div className="px-4 py-3 flex justify-between items-center w-full shadow-[0px_4px_10px_-9px_#d6d6d6]">
         <SidebarToggle />
-        <ul className="loginRight flex items-center justify-end ml-auto">
+        <ul className="loginRight flex items-center justify-end ml-auto gap-5 [&>:not(:last-child)]:hidden [&>:not(:last-child)]:md:block">
           {/* View company list dropdown  */}
 
           {/* <li style={{ color: "#a0a0a0", marginRight: "5px", fontSize: "15px" }}>
@@ -406,10 +412,7 @@ export default function Header(props) {
           company name
         </li> */}
           <li className="icon1" ref={companyRef} onClick={handleClickCompany}>
-            {/* <Link to=""> */}
-            {/* <img src={process.env.PUBLIC_URL + "/img/icon.png"} alt="" /> */}
-
-            {userData.data.user.role !== 1 && (
+            {userProfile?.data?.role !== 1 && (
               <Business
                 sx={{
                   "&.MuiSvgIcon-root ": {
@@ -418,8 +421,6 @@ export default function Header(props) {
                 }}
               />
             )}
-
-            {/* </Link> */}
             {restrictUsersOtherThanAgency() && (
               <>
                 <Menu
@@ -429,6 +430,14 @@ export default function Header(props) {
                   keepMounted
                   open={openMenuInProgress}
                   onClose={handleCloseCompany}
+                  transformOrigin={{
+                    horizontal: "right",
+                    vertical: "top",
+                  }}
+                  anchorOrigin={{
+                    horizontal: "right",
+                    vertical: "bottom",
+                  }}
                 >
                   {/* <Menu
                           id="long-menu"
@@ -471,6 +480,14 @@ export default function Header(props) {
                   keepMounted
                   open={openMenuInProgress}
                   onClose={handleCloseCompany}
+                  transformOrigin={{
+                    horizontal: "right",
+                    vertical: "top",
+                  }}
+                  anchorOrigin={{
+                    horizontal: "right",
+                    vertical: "bottom",
+                  }}
                 >
                   {/* <Menu
                           id="long-menu"
@@ -511,6 +528,14 @@ export default function Header(props) {
                   keepMounted
                   open={openMenuInProgress}
                   onClose={handleCloseCompany}
+                  transformOrigin={{
+                    horizontal: "right",
+                    vertical: "top",
+                  }}
+                  anchorOrigin={{
+                    horizontal: "right",
+                    vertical: "bottom",
+                  }}
                 >
                   <MenuItem
                     onClick={(e) => menuHandleCompanyMember(e, "value", "name")}
@@ -537,7 +562,7 @@ export default function Header(props) {
           </li>
 
           {/* View Email  */}
-          <li className="ml-7 icon2">
+          <li className="icon2">
             <MailOutline
               sx={{
                 "&.MuiSvgIcon-root ": {
@@ -548,7 +573,7 @@ export default function Header(props) {
           </li>
 
           {/* View Notification dropdown  */}
-          <li className="ml-7 nots">
+          <li className="nots">
             <Link
               className="agencyCountDataDesDiv"
               //  to={`/jobs/details/${item.id}`}
@@ -572,7 +597,7 @@ export default function Header(props) {
                 </IconButton>
                 {!open && (
                   // first && count &&
-                  <span className="agencyCountDataDes">{count ?? 0}0</span>
+                  <span className="notification-count">{count ?? 0}</span>
                 )}
               </div>
               {rowadd && (
@@ -596,6 +621,14 @@ export default function Header(props) {
                       onClose={handleClose}
                       TransitionComponent={Fade}
                       className="notificationheaddiv"
+                      transformOrigin={{
+                        horizontal: "right",
+                        vertical: "top",
+                      }}
+                      anchorOrigin={{
+                        horizontal: "right",
+                        vertical: "bottom",
+                      }}
                     >
                       {rowadd?.slice(0, 3).map((item, index) => (
                         <MenuItem className="notmenutop" key={item?.id}>
@@ -711,26 +744,24 @@ export default function Header(props) {
               )} */}
           </li>
           <li
-            className="ml-7 relative"
+            className="relative"
             ref={menuRef}
             onClick={() => setShowDropdown(!showDropdown)}
           >
             <Link className="LoginName dropdown flex items-center" to="#">
-              <span className="header-profile-pic max-w-[40px] w-full h-[40px]">
-                {!userProfile?.data?.[0].profile_img && (
-                  <img
-                    src={
-                      !userProfile?.data?.[0].profile_img
-                        ? Images?.UserAvatar
-                        : userProfile?.data?.[0].profile_img
-                    }
-                    alt=""
-                  />
-                )}
+              <span className="header-profile-pic max-w-[40px] w-full h-[40px] img img-cover rounded-full overflow-hidden drop-shadow-md border-2 border-white">
+                <img
+                  src={
+                    !userProfile?.data?.profile_img
+                      ? Images?.UserAvatar
+                      : userProfile?.data?.profile_img
+                  }
+                  alt=""
+                />
               </span>
               <span className="loginName ml-1">
-                {userData.data.user.first_name ?? "Invalid First Name"}{" "}
-                {userData.data.user.last_name ?? "Invalid Last Name"}
+                {userProfile?.data?.first_name ?? "Invalid First Name"}{" "}
+                {userProfile?.data?.last_name ?? "Invalid Last Name"}
               </span>
               <ArrowDropDownOutlined />
             </Link>
@@ -774,31 +805,17 @@ export default function Header(props) {
             dialogContent={
               <>
                 <img
-                  className="py-4 mx-auto"
+                  className="mx-auto mb-5"
                   src={Images?.LogoutPopupVector}
                   alt="logout"
                 />
-                <Typography
-                  component="div"
-                  sx={{
-                    "&.MuiTypography-root h4": {
-                      fontSize: "18px !important",
-                      fontWeight: "500 !important",
-                      lineHeight: "22px",
-                    },
-                    "&.MuiTypography-root p": {
-                      fontSize: "14px !important",
-                      fontWeight: "400 !important",
-                      lineHeight: "17px",
-                    },
-                  }}
-                >
-                  <h4>Are you Sure?</h4>
-                  <p>
+                <div>
+                  <h4 className="mb-3 font-semibold text-lg">Are you Sure?</h4>
+                  <p className="max-w-[350px] w-full mx-auto text-base">
                     Do you really want to logout this account? This process
                     cannot be undone.
                   </p>
-                </Typography>
+                </div>
               </>
             }
             openPopup={openLogoutPopup}

@@ -1,3 +1,4 @@
+import { CloseRounded } from "@mui/icons-material";
 import {
   Button,
   Dialog,
@@ -15,12 +16,20 @@ const CustomPopup = ({
   mainActionHandler,
   mainActionTitle,
   textAlign = "center",
+  maxWidth = "450px",
 }) => {
   return (
     <Dialog
       className="profileImgDialogagency popupclass logoutPopup"
       open={openPopup}
       onClose={closePopup}
+      // maxWidth="xs"
+      sx={{
+        "& .MuiDialog-container .MuiDialog-paper": {
+          width: "100%",
+          maxWidth: maxWidth,
+        },
+      }}
     >
       <DialogTitle
         className="profileImgfolder imgsizefixer"
@@ -31,12 +40,15 @@ const CustomPopup = ({
           lineHeight: "24px",
           borderBottom: "1px solid #71757B33",
           padding: "20px 25px",
+          display: "flex",
+          justifyContent: "space-between",
         }}
       >
         {dialogTitle}
-        <span className="closebuttonsec" onClick={closePopup}>
-          <i className="fa-solid fa-xmark  dialogcross"></i>
-        </span>
+        <CloseRounded
+          className="closebuttonsec cursor-pointer"
+          onClick={closePopup}
+        />
       </DialogTitle>
       <div className="dialogcontent_and_actions_new pb-4">
         <DialogContent
@@ -55,13 +67,14 @@ const CustomPopup = ({
               justifyContent: "center",
               alignItems: "center",
               padding: 0,
+              gap: "15px",
             },
           }}
         >
-          <Button onClick={mainActionHandler} className="shareNewPop">
+          <Button onClick={mainActionHandler} className="btn btn-primary">
             {mainActionTitle}
           </Button>
-          <button className="canceButtonnewPop" onClick={closePopup}>
+          <button className="btn btn-outline" onClick={closePopup}>
             Cancel
           </button>
         </DialogActions>
