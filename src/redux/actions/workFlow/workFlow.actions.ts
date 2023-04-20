@@ -23,7 +23,7 @@ const GET_WORKFLOW_LIST =
         console.log("response", response.status);
         if (response.status === 201 || response.status === 200) {
 
-          dispatch(SET_WORKFLOW_LIST_DATA(response?.data?.data));
+          dispatch(SET_WORKFLOW_LIST_DATA(response?.data?.data || response?.data));
           dispatch(SET_WORKFLOW_LIST_LOADING(false));
         }
       })
