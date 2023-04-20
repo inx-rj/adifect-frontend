@@ -1,10 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useSingleEffect, useUpdateEffect } from "react-haiku";
 
 import MuiCustomTable from "components/common/muiCustomTable/MuiCustomTable";
 import CustomPopup from "common/CustomPopup";
+import LoadingSpinner from "components/common/loadingSpinner/Loader";
 
 import { Button, Typography } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
@@ -200,8 +201,7 @@ const AgencyCompanyProjectsTags = () => {
       <div className="page-card">
         {companyProjectsTagsList?.loading ? (
           <div className="projectsLoaderCreatorPage">
-            {/* <LoadingSpinner /> */}
-            Loading . . .
+            <LoadingSpinner positionClass="left-[calc(40%_-_50px)] top-[calc(40%_-_50px)" />
           </div>
         ) : (
           <MuiCustomTable

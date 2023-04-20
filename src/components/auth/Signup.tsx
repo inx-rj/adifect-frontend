@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import {
   validateUsername,
@@ -24,20 +24,22 @@ import {
   SET_USER_DATA_LOADING,
   USER_DATA_LOADER,
 } from "redux/reducers/auth/auth.slice";
+import { REGISTER_INVITE_USER } from "redux/actions/inviteUser/inviteUser.actions";
 
 export default function Signup() {
   let navigate = useNavigate();
   const dispatch = useAppDispatch();
+  let { inviteId, encodedEmail, exclusive } = useParams();
 
   const userLoader = useAppSelector(USER_DATA_LOADER);
 
   const [username, setUsername] = useState("");
   const [firstname, setFirstName] = useState("");
-  const [role, setRole] = useState("");
   const [lastname, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirm_password, setConfirmPassword] = useState("");
+  const [role, setRole] = useState("");
   const [errors, setErrors] = useState({
     username: null,
     firstname: null,
@@ -49,13 +51,16 @@ export default function Signup() {
   });
   const [isOpen, setIsOpen] = useState(false);
 
-  // const [isLoading, setIsLoading] = useState(false);
-
   const [decryptedJobId, setDecryptedJobId] = useState("");
   const [redirectMyUrl, setRedirectMyUrl] = useState(false);
   const [copyMyUrl, setCopyMyUrl] = useState(false);
 
   useEffect(() => {
+    if (encodedEmail) {
+      let encodedEmailId = encodedEmail;
+      let decodedEmail = window.atob(encodedEmailId);
+      setEmail(decodedEmail);
+    }
     let redirectUrl = localStorage.getItem("redirJob");
     let copiedUrl = localStorage.getItem("cop-url");
     if (redirectUrl) {
@@ -90,10 +95,9 @@ export default function Signup() {
     disableScrollLock: true,
   };
 
-  // const { loading } = useSelector((state) => state.loaderReducer);
-
   const validateSubmit = (e) => {
     e.preventDefault();
+
     const tempErrors: any = {
       username: validateUsername(username),
       firstname: firstName(firstname),
@@ -101,10 +105,11 @@ export default function Signup() {
       email: validateEmail(email),
       password: validatePassword(password),
       confirmPassword: confirmPassword(password, confirm_password),
-      role: validateRole(role),
     };
+    if (!inviteId) {
+      tempErrors.role = validateRole(role);
+    }
     setErrors(tempErrors);
-
     if (Object.values(tempErrors).filter((value) => value).length) {
       return;
     }
@@ -112,22 +117,23 @@ export default function Signup() {
   };
 
   const submitHandler = async (e) => {
-    // setIsLoading(true);
-
-    const data = {
+    const data: any = {
       username: username,
       first_name: firstname,
       last_name: lastname,
       email: email,
       password: password,
       confirm_password: confirm_password,
-      role: role,
       email_verify: redirectMyUrl && !copyMyUrl ? true : false,
     };
 
+    if (!inviteId) data.role = role;
     dispatch(SET_USER_DATA_LOADING(true));
-
-    dispatch(REGISTER_USER(data))
+    dispatch(
+      inviteId
+        ? REGISTER_INVITE_USER(data, inviteId, exclusive)
+        : REGISTER_USER(data)
+    )
       .then((res) => {
         // setTimeout(() => {
         //   setIsLoading(true);
@@ -273,25 +279,27 @@ export default function Signup() {
               />
               <span className="err-tag">{errors.lastname ?? ""}</span>
             </div>
-            <div className="input-fields-wrapper">
-              <label>Email Address:</label>
-              <input
-                className={
-                  errors.username
-                    ? "input-style input-err-style"
-                    : "input-style"
-                }
-                type="text"
-                value={email}
-                onChange={(e) => {
-                  setErrors({ ...errors, email: null });
-                  setEmail(e.target.value);
-                }}
-                name="email"
-                id="email"
-              />
-              <span className="err-tag">{errors.email ?? ""}</span>
-            </div>
+            {!inviteId && (
+              <div className="input-fields-wrapper">
+                <label>Email Address:</label>
+                <input
+                  className={
+                    errors.username
+                      ? "input-style input-err-style"
+                      : "input-style"
+                  }
+                  type="text"
+                  value={email}
+                  onChange={(e) => {
+                    setErrors({ ...errors, email: null });
+                    setEmail(e.target.value);
+                  }}
+                  name="email"
+                  id="email"
+                />
+                <span className="err-tag">{errors.email ?? ""}</span>
+              </div>
+            )}
 
             <div className="input-fields-wrapper">
               <label>Password: (must be 7 or more)</label>
@@ -328,12 +336,11 @@ export default function Signup() {
                 }}
                 type="password"
                 name="confirm_password"
-                // Agency
                 id="confirm_password"
               />
               <span className="err-tag">{errors.confirmPassword ?? ""}</span>
             </div>
-            {!redirectMyUrl && (
+            {!redirectMyUrl && !inviteId && (
               <div
                 className={
                   errors.role

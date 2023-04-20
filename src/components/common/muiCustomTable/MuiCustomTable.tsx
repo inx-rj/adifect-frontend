@@ -104,6 +104,18 @@ const MuiCustomTable = (props: MuiCustomTablePropsType) => {
                   </TableRow>
                 )
               })}
+            {data.rows.length < 1 && (
+              <TableRow
+                sx={{
+                  display: 'block',
+                  height: '8vh',
+                  px: 3.125,
+                  pt: 2
+                }}
+              >
+                No matching records found
+              </TableRow>
+            )}
           </TableBody>
         </Table>
       </TableContainer>

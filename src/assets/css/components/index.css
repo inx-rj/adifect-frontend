@@ -10,4 +10,5 @@
 @import "./sweetAlert/sweetAlert.css";
 
 @import "./tabbing/tabbing.css";
-@import "./jobs/applyJob.css"
+@import "./jobs/applyJob.css";
+@import "./workflow/workflow.css";

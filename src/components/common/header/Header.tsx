@@ -198,35 +198,33 @@ export default function Header(props) {
     setcount(beforecount);
   }, [notificationData?.hasData, props.headerCompany]);
 
-  const chatSocket = new WebSocket(
-    "wss://" +
-      "dev-ws.adifect.com" +
-      "/ws/notifications/" +
-      userProfile?.data?.id +
-      "/"
-  );
+  // const chatSocket = new WebSocket(
+  //   "wss://" +
+  //     "dev-ws.adifect.com" +
+  //     "/ws/notifications/" +
+  //     userProfile?.data?.id +
+  //     "/"
+  // );
 
-  chatSocket.onmessage = function (e) {
-    const data = JSON.parse(e.data);
+  // chatSocket.onmessage = function (e) {
+  // const data = JSON.parse(e.data);
+  // if (data && data?.data?.value) {
+  //   let newStr1 = data.data.value.text.count;
+  //   setcount(newStr1);
+  // }
+  // let newStr = data.data.value.replace("/", "");
+  // let newarr = newStr.split(",");
+  // let updatedarray = newarr[0].replace("{", "");
+  // let updated = updatedarray.split(":");
+  // console.log("abc---",updated)
+  // setcount(updated[1]);
+  // document.querySelector('#chat-log').value += (data.message + '\n');
+  // console.log("updatedd--", updated[1]?.data?.value?.text?.count);
+  // };
 
-    if (data && data?.data?.value) {
-      let newStr1 = data.data.value.text.count;
-      setcount(newStr1);
-    }
-
-    // let newStr = data.data.value.replace("/", "");
-    // let newarr = newStr.split(",");
-    // let updatedarray = newarr[0].replace("{", "");
-    // let updated = updatedarray.split(":");
-    // console.log("abc---",updated)
-    // setcount(updated[1]);
-    // document.querySelector('#chat-log').value += (data.message + '\n');
-    // console.log("updatedd--", updated[1]?.data?.value?.text?.count);
-  };
-
-  chatSocket.onclose = function (e) {
-    // console.error("Chat socket closed unexpectedly");
-  };
+  // chatSocket.onclose = function (e) {
+  // console.error("Chat socket closed unexpectedly");
+  // };
 
   // useEffect(() => {
   //   // Set for member user

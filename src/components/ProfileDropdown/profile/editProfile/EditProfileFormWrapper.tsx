@@ -11,6 +11,7 @@ const EditProfileFormWrapper = ({ openPopup, handlePopup }) => {
       closePopup={handlePopup}
       mainActionHandler={() => console.log("Profile edit")}
       mainActionTitle="Create"
+      maxWidth="950px"
     />
   );
 };

@@ -45,7 +45,12 @@ import { GET_USER_PROFILE_DATA } from "redux/reducers/auth/auth.slice";
 import { API_URL } from "helper/env";
 import { singleCompanyPayloadData } from "helper/types/companyTab/comapniesType";
 import { WORKFLOW_LIST } from "redux/reducers/workFlow/workFlow.slice";
-import { DELETE_SINGLE_WORKFLOW, GET_WORKFLOW_LIST, POST_SINGLE_WORKFLOW } from "redux/actions/workFlow/workFlow.actions";
+import {
+  DELETE_SINGLE_WORKFLOW,
+  GET_WORKFLOW_LIST,
+  POST_SINGLE_WORKFLOW,
+} from "redux/actions/workFlow/workFlow.actions";
+import { WORKFLOW_ROUTE } from "routes/baseRoute";
 
 const ROLES = {
   ADMIN: 0,
@@ -61,7 +66,7 @@ const WorkFlowList = () => {
   const navigate = useNavigate();
 
   // Redux states
-//   const { companyList } = useAppSelector(COMPANY_LIST);
+  //   const { companyList } = useAppSelector(COMPANY_LIST);
   const { workFlowList } = useAppSelector(WORKFLOW_LIST);
   const userProfile = useAppSelector(GET_USER_PROFILE_DATA);
 
@@ -295,6 +300,18 @@ const WorkFlowList = () => {
       sort: "asc",
       width: 180,
     },
+    {
+      id: 1,
+      label: (
+        <label className="flex items-center">
+          Company
+          <img className="ml-2" src={Images.SortArrows} alt="Company" />
+        </label>
+      ),
+      field: "company",
+      sort: "asc",
+      width: 180,
+    },
     // {
     //   id: 2,
     //   label: (
@@ -348,6 +365,24 @@ const WorkFlowList = () => {
                   }}
                 >
                   {item?.name}
+                </Typography>
+              </div>
+            ),
+            company: (
+              <div key={index}>
+                <Typography
+                  sx={{
+                    "&.MuiTypography-root": {
+                      display: "inline-block",
+                      color: "rgba(39, 90, 208, 1)",
+                      fontFamily: '"Figtree", sans-serif',
+                      fontSize: "14px",
+                      fontWeight: 400,
+                      p: 0,
+                    },
+                  }}
+                >
+                  {item?.company_name}
                 </Typography>
               </div>
             ),
@@ -420,14 +455,16 @@ const WorkFlowList = () => {
               setPaginationData={setPaginationData}
               paginationData={paginationData}
             />
-            <button
-              type="submit"
-              onClick={() => setOpenModal(true)}
-              className="btn btn-primary btn-label bg-primary flex items-center px-[15px] py-[9px] max-w-[155px] w-full flex-center gap-2"
-            >
-              <AddIcon />
-              <span className="btn-label">Add Workflow</span>
-            </button>
+            <Link to={WORKFLOW_ROUTE.CREATE_WORKFLOW}>
+              <button
+                type="submit"
+                // onClick={() => setOpenModal(true)}
+                className="btn btn-primary btn-label bg-primary flex items-center px-[15px] py-[9px] max-w-[155px] w-full flex-center gap-2"
+              >
+                <AddIcon />
+                <span className="btn-label">Add Workflow</span>
+              </button>
+            </Link>
           </div>
           {workFlowList?.loading ? (
             <h1>Loading...</h1>
