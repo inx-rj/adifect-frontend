@@ -8,9 +8,6 @@ import {
   PAGE_ROUTE,
   WORKFLOW_ROUTE,
 } from "./baseRoute";
-import JobAddEdit from "components/pages/jobs/JobAddEdit";
-import AdminJobsList from "components/pages/jobs/AdminJobsList";
-import AdminJobsAddEdit from "components/pages/jobs/adminJobs/AdminJobsAddEdit";
 
 // ---------------------------- Import lazy load component ----------------------------
 
@@ -52,6 +49,10 @@ const AgencyCompanyProjectsTags = lazy(
   () =>
     import("components/pages/agency/companyProjects/AgencyCompanyProjectsTags")
 );
+
+// Jobs Pages and Components
+const AdminJobsList = lazy(() => import("components/pages/jobs/AdminJobsList"));
+const AdminJobsAddEdit = lazy(() => import("components/pages/jobs/adminJobs/AdminJobsAddEdit"));
 
 // Company Pages and Components
 const AgencyCompanyList = lazy(
@@ -107,6 +108,26 @@ export const AUTH_ROUTES: RouteType[] = [
   },
 ];
 
+// => Header Dropdown Pages Route
+export const HEADER_ROUTES: RouteType[] = [
+  {
+    path: PAGE_ROUTE.INVITE,
+    component: (
+      <Suspense fallback={""}>
+        <InviteUser />
+      </Suspense>
+    ),
+  },
+  {
+    path: PAGE_ROUTE.PROFILE,
+    component: (
+      <Suspense fallback={""}>
+        <Profile />
+      </Suspense>
+    ),
+  },
+];
+
 // => Tabs/Pages Wise Route
 export const PAGES_ROUTES: RouteType[] = [
   {
@@ -114,6 +135,14 @@ export const PAGES_ROUTES: RouteType[] = [
     component: (
       <Suspense fallback={""}>
         <HomePage />
+      </Suspense>
+    ),
+  },
+  {
+    path: WORKFLOW_ROUTE.HOME,
+    component: (
+      <Suspense fallback={""}>
+        <WorkFlowList />
       </Suspense>
     ),
   },
@@ -134,58 +163,18 @@ export const PAGES_ROUTES: RouteType[] = [
     ),
   },
   {
+    path: MY_JOBS_ROUTE.HOME,
+    component: (
+      <Suspense fallback={""}>
+        <AdminJobsList />
+      </Suspense>
+    ),
+  },
+  {
     path: PAGE_ROUTE.COMPANY,
     component: (
       <Suspense fallback={""}>
         <AgencyCompanyList />
-      </Suspense>
-    ),
-  },
-  {
-    path: COMPANY_ROUTE.COMPANY_LIST_DETAILS,
-    component: (
-      <Suspense fallback={""}>
-        <AgencyCompanyProfile />
-      </Suspense>
-    ),
-  },
-  {
-    path: MY_JOBS_ROUTE.HOME,
-    component: (
-      <Suspense fallback={""}>
-        <AdminJobsList />
-      </Suspense>
-    ),
-  },
-  {
-    path: PAGE_ROUTE.INVITE,
-    component: (
-      <Suspense fallback={""}>
-        <InviteUser />
-      </Suspense>
-    ),
-  },
-  {
-    path: PAGE_ROUTE.PROFILE,
-    component: (
-      <Suspense fallback={""}>
-        <Profile />
-      </Suspense>
-    ),
-  },
-  {
-    path: MY_JOBS_ROUTE.HOME,
-    component: (
-      <Suspense fallback={""}>
-        <AdminJobsList />
-      </Suspense>
-    ),
-  },
-  {
-    path: MY_JOBS_ROUTE.CREATE_MY_JOB,
-    component: (
-      <Suspense fallback={""}>
-        <JobAddEdit />
       </Suspense>
     ),
   },
@@ -195,14 +184,6 @@ export const PAGES_ROUTES: RouteType[] = [
 
 // Workflow page routes
 export const WORKFLOW_ROUTES: RouteType[] = [
-  {
-    path: WORKFLOW_ROUTE.HOME,
-    component: (
-      <Suspense fallback={""}>
-        <WorkFlowList />
-      </Suspense>
-    ),
-  },
   {
     path: WORKFLOW_ROUTE.CREATE_WORKFLOW,
     component: (
@@ -214,6 +195,19 @@ export const WORKFLOW_ROUTES: RouteType[] = [
 ];
 // MY Projects page routes
 export const MY_PROJECTS_ROUTES: RouteType[] = [];
+// Company(Community) page routes
+export const COMPANIES_ROUTES: RouteType[] = [
+  {
+    path: COMPANIES_ROUTE.COMPANY_PROJECTS_DETAILS,
+    component: (
+      <Suspense fallback={""}>
+        <AgencyCompanyProjectsDetails />
+      </Suspense>
+    ),
+  },
+];
+// Media page routes
+export const MEDIA_ROUTES: RouteType[] = [];
 // Jobs page routes
 export const JOBS_ROUTES: RouteType[] = [
   {
@@ -225,18 +219,18 @@ export const JOBS_ROUTES: RouteType[] = [
     ),
   },
 ];
-
-export const COMPANIES_ROUTES: RouteType[] = [
+// Draft jobs routes
+export const DRAFT_JOBS_ROUTES: RouteType[] = [];
+// Template jobs routes
+export const TEMPLATES_ROUTES: RouteType[] = [];
+// Company page routes
+export const COMPANY_ROUTES: RouteType[] = [
   {
-    path: COMPANIES_ROUTE.COMPANY_PROJECTS_DETAILS,
+    path: COMPANY_ROUTE.COMPANY_LIST_DETAILS,
     component: (
       <Suspense fallback={""}>
-        <AgencyCompanyProjectsDetails />
+        <AgencyCompanyProfile />
       </Suspense>
     ),
   },
 ];
-
-// export const JOBS_ROUTES: RouteType[] = [];
-// export const JOBS_ROUTES: RouteType[] = [];
-// export const JOBS_ROUTES: RouteType[] = [];

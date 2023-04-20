@@ -1,7 +1,7 @@
 import React, { lazy, Suspense } from "react";
-import { Navigate, Route, Routes, useNavigate, useRoutes } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import { RouteType } from "./helper/types";
-import { AUTH_ROUTES, PAGES_ROUTES } from "./routes/routes";
+import { AUTH_ROUTES, WORKFLOW_ROUTES, COMPANIES_ROUTES, DRAFT_JOBS_ROUTES, JOBS_ROUTES, MEDIA_ROUTES, MY_PROJECTS_ROUTES, PAGES_ROUTES, TEMPLATES_ROUTES, COMPANY_ROUTES } from "./routes/routes";
 import { useAppSelector } from "redux/store";
 import { IS_PERSISTED } from "redux/reducers/config/app/app.slice";
 import { getAllowedRoutes } from "helper/utility/customFunctions";
@@ -22,17 +22,15 @@ const RouteApp = () => {
   const isPersist = useAppSelector(IS_PERSISTED);
   const userProfile = useAppSelector(GET_USER_PROFILE_DATA);
 
+  const COMBINED_ROUTES = [...PAGES_ROUTES, ...WORKFLOW_ROUTES, ...MY_PROJECTS_ROUTES, ...COMPANIES_ROUTES, ...MEDIA_ROUTES, ...JOBS_ROUTES, ...DRAFT_JOBS_ROUTES, ...TEMPLATES_ROUTES, ...COMPANY_ROUTES]
+
   // RBAC - Code
-  const allowedRoutes = [];
+  const AllowedRoutes = [];
 
-  if (isPersist) {
-    allowedRoutes.push(getAllowedRoutes([...PAGES_ROUTES], [userProfile.data.role]))
-  }
-  else {
-    navigate('/login');
-  }
+  if (isPersist) AllowedRoutes.push(getAllowedRoutes(COMBINED_ROUTES, [userProfile.data.role]))
+  else navigate('/login');
 
-  console.log(isPersist, [...PAGES_ROUTES,], allowedRoutes, 'allowed');
+  // console.log(isPersist, COMBINED_ROUTES, AllowedRoutes, 'Allowed');
 
   return (
     <Routes>
@@ -72,7 +70,7 @@ const RouteApp = () => {
           }
         >
           {/* Pages Route  */}
-          {PAGES_ROUTES?.map((pageItem: RouteType, pageIndex: number) => {
+          {COMBINED_ROUTES?.map((pageItem: RouteType, pageIndex: number) => {
             return (
               <Route
                 key={pageIndex}
