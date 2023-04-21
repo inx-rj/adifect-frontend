@@ -195,7 +195,7 @@ const ApprovalWorkflow = () => {
           icon: Images.LogoRed,
           buttons: {
             Cancel: true,
-            OK: true,
+            Confirm: true,
           },
           dangerMode: true,
         }).then((willDelete) => {
@@ -531,7 +531,7 @@ const ApprovalWorkflow = () => {
                 icon: Images.LogoRed,
                 // buttons: false,
                 buttons: {
-                  OK: false,
+                  Confirm: false,
                 },
                 timer: 2000,
               });
@@ -544,7 +544,7 @@ const ApprovalWorkflow = () => {
                 icon: Images.LogoRed,
                 // buttons: false,
                 buttons: {
-                  OK: false,
+                  Confirm: false,
                 },
                 timer: 2000,
               });
@@ -558,7 +558,7 @@ const ApprovalWorkflow = () => {
                 icon: Images.Logo,
                 // buttons: false,
                 buttons: {
-                  OK: false,
+                  Confirm: false,
                 },
                 timer: 1500,
               });
@@ -571,7 +571,7 @@ const ApprovalWorkflow = () => {
                 icon: Images.LogoRed,
                 // buttons: false,
                 buttons: {
-                  OK: false,
+                  Confirm: false,
                 },
                 timer: 1500,
               });
@@ -585,7 +585,7 @@ const ApprovalWorkflow = () => {
               icon: Images.LogoRed,
               // buttons: false,
               buttons: {
-                OK: false,
+                Confirm: false,
               },
               timer: 1500,
             });
@@ -609,7 +609,7 @@ const ApprovalWorkflow = () => {
                 className: "errorAlert",
                 icon: Images.LogoRed,
                 buttons: {
-                  OK: false,
+                  Confirm: false,
                 },
                 // buttons: false,
                 timer: 1500,
@@ -622,7 +622,7 @@ const ApprovalWorkflow = () => {
                 className: "successAlert-login",
                 icon: Images.Logo,
                 buttons: {
-                  OK: false,
+                  Confirm: false,
                 },
                 // buttons: false,
                 timer: 1500,
@@ -637,7 +637,7 @@ const ApprovalWorkflow = () => {
               className: "errorAlert",
               icon: Images.LogoRed,
               buttons: {
-                OK: false,
+                Confirm: false,
               },
               // buttons: false,
               timer: 1500,
@@ -818,7 +818,7 @@ const ApprovalWorkflow = () => {
   }, []);
 
   //fetch company list when pagination change
-  useUpdateEffect(() => {
+  useEffect(() => {
     if (userProfile?.data?.role === Roles.ADMIN) {
       dispatch(GET_COMPANY_LIST(paginationData, `${API_URL.COMPANY.ADMIN}`));
     } else {

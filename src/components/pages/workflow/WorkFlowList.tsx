@@ -220,8 +220,8 @@ const WorkFlowList = () => {
       className: "errorAlert",
       icon: Images.Logo,
       buttons: {
-        cancel: true,
-        confirm: true,
+        Cancel: true,
+        Confirm: true,
       },
       dangerMode: true,
     }).then((willDelete) => {
