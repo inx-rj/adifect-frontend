@@ -27,22 +27,7 @@ export const AUTH_ROUTE: Readonly<{
 
 // Authentication Route
 export const PAGE_ROUTE: Readonly<{
-  HOME: string;
-  WORKFLOW: string;
-  MY_PROJECTS: string;
-  COMPANY: string;
-  COMPANIES: string;
-  MEDIA: string;
-  MY_JOBS: string;
-  DRAFT_JOBS: string;
-  TEMPLATES: string;
-  HELP: string;
-  PROFILE: string;
-  INVITE: string;
-  COMPANY_PROJECTS: string;
-  INDUSTRIES: string;
-  SKILLS: string;
-  USERS: string;
+  [key: string]: string;
 }> = Object.freeze({
   HOME: `${MAIN_ROUTE.HOME}`,
   WORKFLOW: `${MAIN_ROUTE.HOME}workflow`,
@@ -64,19 +49,16 @@ export const PAGE_ROUTE: Readonly<{
 
 // Workflow Route
 export const WORKFLOW_ROUTE: Readonly<{
-  HOME: string;
-  CREATE_WORKFLOW: string;
-  UPDATE_WORKFLOW: string;
+  [key: string]: string;
 }> = Object.freeze({
   HOME: `${PAGE_ROUTE.WORKFLOW}`,
   CREATE_WORKFLOW: `${PAGE_ROUTE.WORKFLOW}/add`,
-  UPDATE_WORKFLOW: `${PAGE_ROUTE.WORKFLOW}/update`,
+  UPDATE_WORKFLOW: `${PAGE_ROUTE.WORKFLOW}/edit/:workflowId`,
 });
 
 // Companies Route
 export const COMPANIES_ROUTE: Readonly<{
-  COMPANY_PROJECTS_DETAILS: string;
-  TAGS: string;
+  [key: string]: string;
 }> = Object.freeze({
   COMPANY_PROJECTS_DETAILS: `${PAGE_ROUTE.COMPANY_PROJECTS}/:communityId`,
   TAGS: `${PAGE_ROUTE.HOME}company-project/tags`,
@@ -84,9 +66,7 @@ export const COMPANIES_ROUTE: Readonly<{
 
 // My Jobs Route
 export const MY_JOBS_ROUTE: Readonly<{
-  HOME: string;
-  CREATE_MY_JOB: string;
-  UPDATE_MY_JOB: string;
+  [key: string]: string;
 }> = Object.freeze({
   HOME: `${PAGE_ROUTE.MY_JOBS}/list`,
   CREATE_MY_JOB: `${PAGE_ROUTE.MY_JOBS}/add`,
@@ -94,25 +74,24 @@ export const MY_JOBS_ROUTE: Readonly<{
 });
 
 // Templates Route
-export const TEMPLATES_ROUTES: Readonly<{
-  HOME: string;
+export const TEMPLATES_ROUTE: Readonly<{
+  [key: string]: string;
 }> = Object.freeze({
   HOME: `${PAGE_ROUTE.TEMPLATES}/list`,
 });
 
 // Company Route
 export const COMPANY_ROUTE: Readonly<{
-  COMPANY_LIST_DETAILS: string;
-  CREATE_COMPANY: string;
+  [key: string]: string;
 }> = Object.freeze({
   COMPANY_LIST_DETAILS: `${PAGE_ROUTE.COMPANY}/:companyId`,
+  ADMIN_COMPANY_LIST_DETAILS: `${PAGE_ROUTE.COMPANY}/:companyId/:agencyId`,
   CREATE_COMPANY: `${PAGE_ROUTE.COMPANY}/add`,
 });
 
 // Help Route
 export const HELP_ROUTE: Readonly<{
-  HOME: string;
-  CREATE_HELP: string;
+  [key: string]: string;
 }> = Object.freeze({
   HOME: `${PAGE_ROUTE.HELP}`,
   CREATE_HELP: `${PAGE_ROUTE.HELP}/add`,
@@ -215,7 +194,7 @@ export const SIDEBAR_ROUTES: SidebarRoutesTypes[] = [
   },
   {
     name: "Templates",
-    path: TEMPLATES_ROUTES.HOME,
+    path: TEMPLATES_ROUTE.HOME,
     icon: "ReceiptLongOutlined",
     children: [],
     permission: [Roles.AGENCY],

@@ -9,6 +9,7 @@ import MuiCustomTable from "components/common/muiCustomTable/MuiCustomTable";
 import SearchBar from "common/CustomSearchBar";
 import CustomActionComponent from "common/CustomActionComponent";
 import CustomPopup from "common/CustomPopup";
+import LoadingSpinner from "components/common/loadingSpinner/Loader";
 
 //import MUI components and icons
 import {
@@ -29,6 +30,8 @@ import {
 } from "helper/types/muiCustomTable/muiCustomTable";
 import { Images } from "helper/images";
 import { formateISODateToLocaleString } from "helper/utility/customFunctions";
+import { API_URL } from "helper/env";
+import { singleCompanyPayloadData } from "helper/types/companyTab/comapniesType";
 
 //import redux
 import { useAppDispatch, useAppSelector } from "redux/store";
@@ -41,8 +44,6 @@ import {
 } from "redux/actions/companyTab/companyTab.actions";
 import { COMPANY_LIST } from "redux/reducers/companyTab/companyTab.slice";
 import { GET_USER_PROFILE_DATA } from "redux/reducers/auth/auth.slice";
-import { API_URL } from "helper/env";
-import { singleCompanyPayloadData } from "helper/types/companyTab/comapniesType";
 
 const ROLES = {
   ADMIN: 0,
@@ -85,8 +86,8 @@ const AgencyCompanyList = () => {
     isActive: false,
   });
   const [errors, setErrors] = useState({
-    company: "",
-    description: "",
+    company: null,
+    description: null,
   });
   const [paginationData, setPaginationData] = useState<TablePaginationType>({
     page: 1,
@@ -125,7 +126,7 @@ const AgencyCompanyList = () => {
   const handleEdit = (item) => {
     setOpenModal(true);
     setIsEditMode(true);
-    setErrors({ company: "", description: "" });
+    setErrors({ company: null, description: null });
     setSelectedItem({ ...selectedItem, currentId: item?.id });
     setFormData({
       company: item?.name,
@@ -156,8 +157,8 @@ const AgencyCompanyList = () => {
   const validateSubmit = (e) => {
     e.preventDefault();
     const tempErrors = {
-      company: !formData.company ? "Please enter Tag Name" : "",
-      description: !formData.description ? "Please enter Description" : "",
+      company: !formData.company ? "Please enter Tag Name" : null,
+      description: !formData.description ? "Please enter Description" : null,
     };
     setErrors(tempErrors);
     if (Object.values(tempErrors).filter((value) => value)?.length) {
@@ -473,7 +474,7 @@ const AgencyCompanyList = () => {
           </button>
         </div>
         {companyList?.loading ? (
-          <h1>Loading...</h1>
+          <LoadingSpinner positionClass="left-[calc(40%_-_50px)] top-[calc(40%_-_50px)" />
         ) : (
           <>
             <MuiCustomTable

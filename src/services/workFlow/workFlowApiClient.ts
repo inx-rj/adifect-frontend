@@ -1,10 +1,21 @@
 import { setQueryParams } from "helper/utility/customFunctions";
 import axiosPrivate from "../../api/axios";
+import { API_URL } from "helper/env";
 
 class WorkFlowTabApiClient {
   //fetch workflow list
   fetchWorkFlowList = (filters: any, endpoint: string) =>
     axiosPrivate.get(endpoint + setQueryParams(filters));
+
+  //fetch main workflow details
+  fetchMainWorkFlowDetails = (workflowId: any) =>
+    axiosPrivate.get(`${API_URL.WORKFLOW.WORKFLOW_LIST}${workflowId}/`);
+
+  //fetch workflow stage details
+  fetchWorkFlowStageDetails = (workflowId) =>
+    axiosPrivate.get(
+      `${API_URL.WORKFLOW.WORKFLOW_STAGES}?workflow=${workflowId}`
+    );
 
   //Add a new workflow entry
   addSingleWorkFlow = (payload: any, endpoint: string) => {

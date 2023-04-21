@@ -22,9 +22,7 @@ const GET_COMPANY_LIST =
       .then((response) => {
         if (response.status === 201 || response.status === 200) {
           dispatch(
-            SET_COMPANY_LIST_DATA(
-              response?.data?.data ? response?.data?.data : response?.data
-            )
+            SET_COMPANY_LIST_DATA(response?.data?.data || response?.data)
           );
           dispatch(SET_COMPANY_LIST_LOADING(false));
         }

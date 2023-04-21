@@ -35,7 +35,9 @@ export const companyProfileTabTitle: ProfileTabTitleTYpe = {
   USERS: 'Users',
   APPROVAL_WORKFLOWS: 'Approval Workflows',
   JOBS: 'Jobs',
-  JOB_TEMPLATE: "Job Template"
+  JOB_TEMPLATE: "Job Template",
+  WORKFLOW: "Workflow",
+  MEMBERS: "Members"
 };
 
 export const profileTabHeaders: ProfileTabHeadersType[] = [
@@ -96,7 +98,7 @@ export const companyProfileTabHeaders: ProfileTabHeadersType[] = [
     icon: 'DescriptionOutlined',
     name: companyProfileTabTitle.JOBS,
     info: 'It is a long established fact that a reader will be distracted.',
-    permission: [Roles.AGENCY]
+    permission: [Roles.AGENCY, Roles.ADMIN]
   },
   {
     id: 5,
@@ -104,7 +106,19 @@ export const companyProfileTabHeaders: ProfileTabHeadersType[] = [
     name: companyProfileTabTitle.JOB_TEMPLATE,
     info: 'It is a long established fact that a reader will be distracted.',
     permission: [Roles.AGENCY]
-  }
+  },
+  {
+    id: 6,
+    icon: 'AccountTreeOutlined',
+    name: companyProfileTabTitle.WORKFLOW,
+    info: 'It is a long established fact that a reader will be distracted.',
+    permission: [Roles.ADMIN]
+  },
+  {
+    id: 7,
+    icon: 'PeopleAltOutlined',
+    name: companyProfileTabTitle.MEMBERS,
+    info: 'It is a long established fact that a reader will be distracted.',
+    permission: [Roles.ADMIN]
+  },
 ];
-
-// Todo - Need to remove old route for leave settings page

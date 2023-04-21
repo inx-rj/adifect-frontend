@@ -33,10 +33,7 @@ export function isArrayWithLength(arr) {
   return Array.isArray(arr) && arr.length;
 }
 
-export function getAllowedRoutes(
-  routes: SidebarRoutesTypes[],
-  roles: number[]
-) {
+export function getAllowedRoutes(routes: any[], roles: number[]) {
   // const roles = JSON.parse(localStorage.getItem("roles"));
   return routes.filter(({ permission }) => {
     if (!permission) return true;
@@ -45,15 +42,20 @@ export function getAllowedRoutes(
   });
 }
 
-// Notification query parameter 
-export const setNotificationQueryParams = (queryParams: initialNotificationQueryInterface) => {
-  
+// Notification query parameter
+export const setNotificationQueryParams = (
+  queryParams: initialNotificationQueryInterface
+) => {
   let notifiQueryParams: any;
 
-  if(queryParams?.companyId) {
-    notifiQueryParams = `?user=${queryParams?.id ?? 0}&company=${queryParams?.companyId ?? 0}&ordering=-created&offset=${queryParams?.offsetid ?? 0}`;
+  if (queryParams?.companyId) {
+    notifiQueryParams = `?user=${queryParams?.id ?? 0}&company=${
+      queryParams?.companyId ?? 0
+    }&ordering=-created&offset=${queryParams?.offsetid ?? 0}`;
   } else {
-    notifiQueryParams = `?user=${queryParams?.id ?? 0}&ordering=-created&offset=${queryParams?.offsetid ?? 0}`;
+    notifiQueryParams = `?user=${
+      queryParams?.id ?? 0
+    }&ordering=-created&offset=${queryParams?.offsetid ?? 0}`;
   }
   return notifiQueryParams;
 };

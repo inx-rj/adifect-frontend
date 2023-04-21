@@ -45,7 +45,14 @@ import { GET_USER_PROFILE_DATA } from "redux/reducers/auth/auth.slice";
 import { API_URL } from "helper/env";
 import { singleCompanyPayloadData } from "helper/types/companyTab/comapniesType";
 import { WORKFLOW_LIST } from "redux/reducers/workFlow/workFlow.slice";
-import { DELETE_SINGLE_WORKFLOW, GET_WORKFLOW_LIST, POST_SINGLE_WORKFLOW } from "redux/actions/workFlow/workFlow.actions";
+import {
+  DELETE_SINGLE_WORKFLOW,
+  GET_WORKFLOW_LIST,
+  POST_SINGLE_WORKFLOW,
+  PUT_SINGLE_WORKFLOW,
+} from "redux/actions/workFlow/workFlow.actions";
+import { WORKFLOW_ROUTE } from "routes/baseRoute";
+import LoadingSpinner from "components/common/loadingSpinner/Loader";
 
 const ROLES = {
   ADMIN: 0,
@@ -61,7 +68,7 @@ const WorkFlowList = () => {
   const navigate = useNavigate();
 
   // Redux states
-//   const { companyList } = useAppSelector(COMPANY_LIST);
+  //   const { companyList } = useAppSelector(COMPANY_LIST);
   const { workFlowList } = useAppSelector(WORKFLOW_LIST);
   const userProfile = useAppSelector(GET_USER_PROFILE_DATA);
 
@@ -118,24 +125,18 @@ const WorkFlowList = () => {
     }
   }, [paginationData, userProfile.data?.role]);
 
-  //handle form data
-  const handleInputChange = (e) => {
-    const { name, value, checked } = e.target;
-    setFormData({ ...formData, [name]: name === "isActive" ? checked : value });
-    setErrors({ ...errors, [name]: null });
-  };
-
   //handle edit action
   const handleEdit = (item) => {
-    setOpenModal(true);
-    setIsEditMode(true);
-    setErrors({ company: "", description: "" });
-    setSelectedItem({ ...selectedItem, currentId: item?.id });
-    setFormData({
-      company: item?.name,
-      description: item?.description,
-      isActive: item?.is_active,
-    });
+    // setOpenModal(true);
+    // setIsEditMode(true);
+    // setErrors({ company: "", description: "" });
+    // setSelectedItem({ ...selectedItem, currentId: item?.id });
+    // setFormData({
+    //   company: item?.name,
+    //   description: item?.description,
+    //   isActive: item?.is_active,
+    // });
+    navigate(`edit/${item?.id}`);
   };
 
   //handle settings action
@@ -144,16 +145,6 @@ const WorkFlowList = () => {
     setIsSettingMode(true);
     setSelectedItem({ ...selectedItem, currentId: item?.id });
     setCompanyStatus(item?.is_blocked);
-  };
-
-  //handle view action
-  const handleView = (item) => {
-    if (userProfile?.data?.role === ROLES.ADMIN) {
-      navigate(item.agency ? `/company/${item.id}/${item.agency}` : "#");
-    } else {
-      navigate(`/company/${item.id}`);
-    }
-    setAnchorEl(null);
   };
 
   //validate inputs
@@ -182,13 +173,13 @@ const WorkFlowList = () => {
         // Handle edit option action
         userProfile?.data?.role === ROLES.ADMIN
           ? dispatch(
-              PUT_SINGLE_COMPANY(
+              PUT_SINGLE_WORKFLOW(
                 selectedItem.currentId,
                 payload,
-                `${API_URL.COMPANY.ADMIN}`
+                `${API_URL.WORKFLOW.ADMIN}`
               )
             )
-          : dispatch(PUT_SINGLE_COMPANY(selectedItem.currentId, payload));
+          : dispatch(PUT_SINGLE_WORKFLOW(selectedItem.currentId, payload));
       } else {
         // Handle Add new company action
         payload.agency = userData()?.user.user_id;
@@ -221,60 +212,21 @@ const WorkFlowList = () => {
     });
   };
 
-  //handle inactive action
-  const handleInactive = () => {
+  //handle delete action
+  const handleDelete = (item) => {
     swal({
       title: "",
-      text: "Are you sure you want to inActive this company?",
+      text: "Are you sure you want to remove this workflow?",
       className: "errorAlert",
       icon: Images.Logo,
+      buttons: {
+        cancel: true,
+        confirm: true,
+      },
       dangerMode: true,
     }).then((willDelete) => {
       if (willDelete) {
-        if (userProfile?.data?.role === ROLES.ADMIN) {
-          //admin
-          dispatch(
-            DELETE_SINGLE_WORKFLOW(
-              selectedItem.currentId,
-              `${API_URL.WORKFLOW.ADMIN}`
-            )
-          );
-        } else {
-          dispatch(DELETE_SINGLE_WORKFLOW(selectedItem.currentId)); //agency user
-        }
-      }
-    });
-    setAnchorEl(null);
-    setSelectedItem({ currentId: null, currentTooltip: null });
-  };
-
-  //handle active action
-  const handleActive = () => {
-    swal({
-      title: "",
-      text: "Are you sure you want to active this company?",
-      className: "errorAlert",
-      icon: Images.Logo,
-      dangerMode: true,
-    }).then((willDelete) => {
-      if (willDelete) {
-        if (userProfile?.data?.role === ROLES.ADMIN) {
-          dispatch(
-            PUT_SINGLE_COMPANY(
-              selectedItem.currentId,
-              {
-                is_active: true,
-              },
-              `${API_URL.COMPANY.ADMIN}`
-            )
-          );
-        } else {
-          dispatch(
-            PUT_SINGLE_COMPANY(selectedItem.currentId, {
-              is_active: true,
-            })
-          );
-        }
+        dispatch(DELETE_SINGLE_WORKFLOW(item?.id));
       }
     });
     setAnchorEl(null);
@@ -409,14 +361,11 @@ const WorkFlowList = () => {
                 setAnchorEl={setAnchorEl}
                 anchorEl={anchorEl}
                 handleEdit={() => handleEdit(item)}
-                handleView={() => handleView(item)}
                 handleSetting={() => handleSetting(item)}
-                handleInactive={handleInactive}
-                handleActive={handleActive}
+                handleDelete={() => handleDelete(item)}
                 showSetting={userProfile?.data?.role === ROLES.ADMIN}
-                showView={true}
                 showEdit={true}
-                showInActive={true}
+                showDelete={true}
                 isEditMode={isEditMode}
                 item={{ id: item?.id, isActive: item?.is_active }}
               />
@@ -432,158 +381,55 @@ const WorkFlowList = () => {
   };
 
   return (
-    <div>
-      <div className="page-container">
-        <div className="flex-between">
-          <h1>Workflow List</h1>
-          <div className="flex-between gap-[10px] font-sm leading-4 font-medium text-primary">
-            <Link to="/">
-              <HomeIcon color="disabled" />
-            </Link>
-            <span className="text-disable opacity-20">|</span>
-            <Link to="/company">Company</Link>
+    <>
+      {workFlowList?.loading ? (
+        <LoadingSpinner></LoadingSpinner>
+      ) : (
+        <div className="page-container">
+          <div className="flex-between">
+            <h1>Workflow List</h1>
+            <div className="flex-between gap-[10px] font-sm leading-4 font-medium text-primary">
+              <Link to="/">
+                <HomeIcon color="disabled" />
+              </Link>
+              <span className="text-disable opacity-20">|</span>
+              <Link to="/company">Company</Link>
+            </div>
           </div>
-        </div>
-        <div className="page-card">
-          <div className="flex-between flex-wrap p-[15px] pb-5">
-            <SearchBar
-              setPaginationData={setPaginationData}
-              paginationData={paginationData}
-            />
-            <button
-              type="submit"
-              onClick={() => setOpenModal(true)}
-              className="btn btn-primary btn-label bg-primary flex items-center px-[15px] py-[9px] max-w-[155px] w-full flex-center gap-2"
-            >
-              <AddIcon />
-              <span className="btn-label">Add Workflow</span>
-            </button>
-          </div>
-          {workFlowList?.loading ? (
-            <h1>Loading...</h1>
-          ) : (
-            <>
-              <MuiCustomTable
-                loader={workFlowList?.loading}
-                data={data}
-                allData={workFlowList?.data}
-                paginationData={paginationData}
+          <div className="page-card">
+            <div className="flex-between flex-wrap p-[15px] pb-5">
+              <SearchBar
                 setPaginationData={setPaginationData}
+                paginationData={paginationData}
               />
-              <CustomPopup
-                dialogTitle={
-                  isEditMode
-                    ? "Edit Company"
-                    : isSettingMode
-                    ? "Change Setting"
-                    : "Add Company"
-                }
-                textAlign="left"
-                dialogContent={
-                  <div className="mt-5">
-                    {isSettingMode ? (
-                      <div>
-                        <h4>Company Status</h4>
-                        <div className="styled-select">
-                          <Select
-                            name="companyStatus"
-                            MenuProps={{
-                              variant: "menu",
-                              disableScrollLock: true,
-                            }}
-                            displayEmpty
-                            inputProps={{ "aria-label": "Without label" }}
-                            value={companyStatus ? 1 : 0}
-                            onChange={(e) =>
-                              setCompanyStatus(Boolean(e.target.value))
-                            }
-                          >
-                            <MenuItem value={0}>Unblock</MenuItem>
-                            <MenuItem value={1}> Block</MenuItem>
-                          </Select>
-                        </div>
-                      </div>
-                    ) : (
-                      <>
-                        <div
-                          className={
-                            errors.company
-                              ? "input-fields-wrapper error-style"
-                              : "input-fields-wrapper"
-                          }
-                        >
-                          <h4>Company</h4>
-                          <div className="styled-select">
-                            <input
-                              className="input-style"
-                              type="text"
-                              placeholder="Enter Company Name"
-                              name="company"
-                              value={formData.company}
-                              onChange={handleInputChange}
-                              required
-                            />
-                            <span className="err-tag">
-                              {errors.company ?? ""}
-                            </span>
-                          </div>
-                        </div>
-                        <div
-                          className={
-                            errors.description
-                              ? "input-fields-wrapper error-style"
-                              : "input-fields-wrapper"
-                          }
-                        >
-                          <h4>Description</h4>
-                          <div className="styled-select">
-                            <textarea
-                              name="description"
-                              className="input-style"
-                              placeholder="Enter Company Description"
-                              maxLength={2000}
-                              value={formData.description}
-                              onChange={handleInputChange}
-                              required
-                            />
-                            <span className="err-tag">
-                              {errors.description ?? ""}
-                            </span>
-                          </div>
-                        </div>
-                        <FormControlLabel
-                          control={
-                            <Checkbox
-                              checked={formData.isActive}
-                              onChange={handleInputChange}
-                              name="isActive"
-                            />
-                          }
-                          label="Active"
-                        />
-                      </>
-                    )}
-                  </div>
-                }
-                openPopup={openModal}
-                closePopup={() => {
-                  if (isEditMode) {
-                    setOpenModal(false);
-                    setIsEditMode(false);
-                  } else {
-                    setOpenModal(false);
-                  }
-                }}
-                mainActionHandler={
-                  setIsSettingMode ? handleFormSubmit : validateSubmit
-                }
-                mainActionTitle={"Save"}
-              />
-            </>
-          )}
+              <Link to={WORKFLOW_ROUTE.CREATE_WORKFLOW}>
+                <button
+                  type="submit"
+                  // onClick={() => setOpenModal(true)}
+                  className="btn btn-primary btn-label bg-primary flex items-center px-[15px] py-[9px] max-w-[155px] w-full flex-center gap-2"
+                >
+                  <AddIcon />
+                  <span className="btn-label">Add Workflow</span>
+                </button>
+              </Link>
+            </div>
+            {workFlowList?.loading ? (
+              <LoadingSpinner />
+            ) : (
+              <>
+                <MuiCustomTable
+                  loader={workFlowList?.loading}
+                  data={data}
+                  allData={workFlowList?.data}
+                  paginationData={paginationData}
+                  setPaginationData={setPaginationData}
+                />
+              </>
+            )}
+          </div>
         </div>
-      </div>
-    </div>
+      )}
+    </>
   );
 };
 

@@ -41,7 +41,7 @@ const GET_COMPANY_PROJECTS_TAGS_LIST =
           ],
         };
 
-        if (response.data.data.length) {
+        if (response.data.data.results.length) {
           dispatch(SET_COMPANIES_PROJECTS_TAGS_DATA(response?.data?.data));
         } else {
           dispatch(SET_COMPANIES_PROJECTS_TAGS_DATA(dummyData));

@@ -26,3 +26,13 @@
 .successAlert-login .swal-title {
   @apply text-[#59cf65] tracking-[0.5px];
 }
+
+.swal-modal.errorAlert .swal-footer {
+  @apply text-center;
+}
+.swal-modal.errorAlert .swal-footer .swal-button.swal-button--Cancel {
+  @apply  text-[#555] bg-[#efefef] disabled:bg-dark-100 disabled:text-title-color hover:bg-[#efefef];
+}
+.swal-modal.errorAlert .swal-footer .swal-button.swal-button--OK {
+  @apply bg-[#e64942];
+}
