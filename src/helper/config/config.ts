@@ -1,5 +1,5 @@
 export const ProfilePageAccess = {
-    USER: "user",
+  USER: "user",
   COMPANY: "company",
   JOBS: "jobs",
 }

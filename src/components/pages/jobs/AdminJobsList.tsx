@@ -295,7 +295,7 @@ const AdminJobsList = () => {
   return (
     <>
       <div className="pb-5">
-        <Title title="Jobs" />
+        <Title title="Jobs List" />
       </div>
       <div className="bg-white p-5 rounded-xl">
         <div className="w-full ">

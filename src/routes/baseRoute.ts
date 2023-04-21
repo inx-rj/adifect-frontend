@@ -74,7 +74,7 @@ export const MY_JOBS_ROUTE: Readonly<{
 });
 
 // Templates Route
-export const TEMPLATES_ROUTES: Readonly<{
+export const TEMPLATES_ROUTE: Readonly<{
   [key: string]: string;
 }> = Object.freeze({
   HOME: `${PAGE_ROUTE.TEMPLATES}/list`,
@@ -85,6 +85,7 @@ export const COMPANY_ROUTE: Readonly<{
   [key: string]: string;
 }> = Object.freeze({
   COMPANY_LIST_DETAILS: `${PAGE_ROUTE.COMPANY}/:companyId`,
+  ADMIN_COMPANY_LIST_DETAILS: `${PAGE_ROUTE.COMPANY}/:companyId/:agencyId`,
   CREATE_COMPANY: `${PAGE_ROUTE.COMPANY}/add`,
 });
 
@@ -193,7 +194,7 @@ export const SIDEBAR_ROUTES: SidebarRoutesTypes[] = [
   },
   {
     name: "Templates",
-    path: TEMPLATES_ROUTES.HOME,
+    path: TEMPLATES_ROUTE.HOME,
     icon: "ReceiptLongOutlined",
     children: [],
     permission: [Roles.AGENCY],
