@@ -7,7 +7,8 @@
 /* Create Job Page */
 /* job switch*/
 .switch_Agency .slider {
-  padding: 22px 0 0;
+  @apply absolute cursor-pointer top-0 left-0 right-0 bottom-0 bg-[#dde0e2] duration-300;
+  /* padding: 22px 0 0;
   position: absolute;
   cursor: pointer;
   top: 0;
@@ -15,28 +16,52 @@
   right: 0;
   bottom: 0;
   background-color: #dde0e2;
-  transition: 0.4s;
+  transition: 0.4s; */
 }
 
 .switch_Agency input:checked + .slider {
-  background-color: #2472fc;
+  @apply bg-[#2472fc]
+  /* background-color: #2472fc; */;
 }
 
 .switch_Agency .slider.round {
-  border-radius: 34px;
+  @apply rounded-[34px];
+  /* border-radius: 34px; */
 }
 
 .switch {
-  position: relative;
+  @apply relative inline-block w-[60px] h-[34px];
+  /* position: relative;
   display: inline-block;
   width: 60px;
-  height: 34px;
+  height: 34px; */
 }
 
-switch input {
+.switch input {
   opacity: 0;
   width: 0;
   height: 0;
+}
+
+.switch_Agency input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+.switch_Agency .slider.round:before {
+  @apply rounded-[50%]
+  /* border-radius: 50%; */;
+}
+
+.switch_Agency .slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: #fff;
+  transition: 0.4s;
 }
 
 .first_toogle_button button {
