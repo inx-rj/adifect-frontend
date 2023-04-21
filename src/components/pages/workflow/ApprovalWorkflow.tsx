@@ -16,16 +16,25 @@ import Title from "components/common/PageTitle/Title";
 import LoadingSpinner from "components/common/loadingSpinner/Loader";
 import { Roles } from "helper/config";
 import { API_URL } from "helper/env";
+import { Images } from "helper/images";
 import { TablePaginationType } from "helper/types/muiCustomTable/muiCustomTable";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { useSingleEffect, useUpdateEffect } from "react-haiku";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { GET_COMPANY_LIST } from "redux/actions/companyTab/companyTab.actions";
 import { GET_INVITE_MEMBERS_USERS } from "redux/actions/inviteUser/inviteUser.actions";
+import {
+  GET_WORKFLOW_MAIN_DETAILS,
+  GET_WORKFLOW_STAGE_DETAILS,
+} from "redux/actions/workFlow/workFlow.actions";
 import { GET_USER_PROFILE_DATA } from "redux/reducers/auth/auth.slice";
 import { COMPANY_LIST } from "redux/reducers/companyTab/companyTab.slice";
 import { INVITE_USER_LIST } from "redux/reducers/inviteUser/inviteUser.slice";
+import {
+  WORKFLOW_MAIN_DETAILS,
+  WORKFLOW_STAGE_DETAILS,
+} from "redux/reducers/workFlow/workFlow.slice";
 import { useAppDispatch, useAppSelector } from "redux/store";
 import { WORKFLOW_ROUTE } from "routes/baseRoute";
 import swal from "sweetalert";
@@ -38,6 +47,8 @@ const ApprovalWorkflow = () => {
   const companyData = useAppSelector(COMPANY_LIST);
   const userProfile = useAppSelector(GET_USER_PROFILE_DATA);
   const workflowMemberApproversData = useAppSelector(INVITE_USER_LIST);
+  const workflowMainDetails = useAppSelector(WORKFLOW_MAIN_DETAILS);
+  const workflowStageDetails = useAppSelector(WORKFLOW_STAGE_DETAILS);
 
   const [isLoading, setIsLoading] = useState(true);
   const [showbutton, setshowbutton] = useState(true);
@@ -45,7 +56,7 @@ const ApprovalWorkflow = () => {
   const [isOpen6, setIsOpen6] = useState(false);
 
   const [workflowName, setWorkflowName] = useState("");
-  const [companydata, setcompanydata] = useState();
+  const [companydata, setcompanydata] = useState([]);
   const [companyvalue, setcompanyvalue] = useState(null);
   const [nudgeChange, setNudgeChange] = useState(false);
 
@@ -181,8 +192,11 @@ const ApprovalWorkflow = () => {
           title: "Warning",
           text: "Are you sure you want to delete this stage?",
           className: "errorAlert",
-          icon: "/img/logonew-red.svg",
-          // buttons: true,
+          icon: Images.LogoRed,
+          buttons: {
+            Cancel: true,
+            OK: true,
+          },
           dangerMode: true,
         }).then((willDelete) => {
           if (willDelete) {
@@ -348,9 +362,8 @@ const ApprovalWorkflow = () => {
   };
 
   const removeNudge = (e, index, nudge_index) => {
+    e.preventDefault();
     const list = stages;
-
-    console.log(list[index]?.nudge_time[nudge_index]);
 
     list[index]?.nudge_time?.splice(nudge_index, 1);
 
@@ -360,6 +373,7 @@ const ApprovalWorkflow = () => {
   };
 
   const addMoreNudge = (e, index) => {
+    e.preventDefault();
     const list = stages;
 
     const prevLength = list[index].nudge_time?.length;
@@ -502,7 +516,7 @@ const ApprovalWorkflow = () => {
       }
       if (workflowId) {
         const update = axiosPrivate
-          .put(`${API_URL.WORKFLOW}agency/works-flow/${workflowId}/`, {
+          .put(`${API_URL.WORKFLOW.WORKFLOW_LIST}${workflowId}/`, {
             agency: userProfile.data.id,
             name: workflowName,
             stage: newArr,
@@ -514,8 +528,11 @@ const ApprovalWorkflow = () => {
                 title: "Error",
                 text: "Workflow name already exists",
                 className: "errorAlert",
-                icon: "/img/logonew-red.svg",
+                icon: Images.LogoRed,
                 // buttons: false,
+                buttons: {
+                  OK: false,
+                },
                 timer: 2000,
               });
             } else if (res?.data?.status == 400) {
@@ -524,8 +541,11 @@ const ApprovalWorkflow = () => {
                 title: "Error",
                 text: res?.data?.message,
                 className: "errorAlert",
-                icon: "/img/logonew-red.svg",
+                icon: Images.LogoRed,
                 // buttons: false,
+                buttons: {
+                  OK: false,
+                },
                 timer: 2000,
               });
               navigate("/workflow");
@@ -535,8 +555,11 @@ const ApprovalWorkflow = () => {
                 title: "Successfully Complete",
                 text: "Successfully Saved",
                 className: "successAlert-login",
-                icon: "/img/logonew.svg",
+                icon: Images.Logo,
                 // buttons: false,
+                buttons: {
+                  OK: false,
+                },
                 timer: 1500,
               });
               navigate("/workflow");
@@ -545,8 +568,11 @@ const ApprovalWorkflow = () => {
                 title: "Error",
                 text: res?.data?.message,
                 className: "errorAlert",
-                icon: "/img/logonew-red.svg",
+                icon: Images.LogoRed,
                 // buttons: false,
+                buttons: {
+                  OK: false,
+                },
                 timer: 1500,
               });
             }
@@ -556,8 +582,11 @@ const ApprovalWorkflow = () => {
               title: "Error",
               text: err.message,
               className: "errorAlert",
-              icon: "/img/logonew-red.svg",
+              icon: Images.LogoRed,
               // buttons: false,
+              buttons: {
+                OK: false,
+              },
               timer: 1500,
             });
             setTimeout(() => {
@@ -565,7 +594,6 @@ const ApprovalWorkflow = () => {
             }, 1);
           });
       } else {
-        console.log("API_URL", API_URL);
         const success = axiosPrivate
           .post(`${API_URL.WORKFLOW.WORKFLOW_LIST}`, {
             agency: userProfile.data.id,
@@ -579,7 +607,10 @@ const ApprovalWorkflow = () => {
                 title: "Error",
                 text: "Workflow name already exists",
                 className: "errorAlert",
-                icon: "/img/logonew-red.svg",
+                icon: Images.LogoRed,
+                buttons: {
+                  OK: false,
+                },
                 // buttons: false,
                 timer: 1500,
               });
@@ -589,7 +620,10 @@ const ApprovalWorkflow = () => {
                 title: "Successfully Complete",
                 text: "Successfully Created",
                 className: "successAlert-login",
-                icon: "/img/logonew.svg",
+                icon: Images.Logo,
+                buttons: {
+                  OK: false,
+                },
                 // buttons: false,
                 timer: 1500,
               });
@@ -601,7 +635,10 @@ const ApprovalWorkflow = () => {
               title: "Error",
               text: err.message,
               className: "errorAlert",
-              icon: "/img/logonew-red.svg",
+              icon: Images.LogoRed,
+              buttons: {
+                OK: false,
+              },
               // buttons: false,
               timer: 1500,
             });
@@ -664,6 +701,122 @@ const ApprovalWorkflow = () => {
     }
   });
 
+  useEffect(() => {
+    if (workflowMainDetails && workflowId) {
+      setWorkflowName(workflowMainDetails?.name);
+      setcompanyvalue(workflowMainDetails?.company);
+
+      if (workflowMainDetails?.assigned_job == true) {
+        setshowbutton(false);
+      } else {
+        setshowbutton(true);
+      }
+    }
+  }, [workflowMainDetails]);
+
+  useEffect(() => {
+    let finalArr = [];
+
+    // if (!workflowId && headerCompany) {
+    //   setcompanyvalue(headerCompany);
+    // }
+    if (workflowStageDetails && workflowId) {
+      if (workflowStageDetails?.data?.results.length > 0) {
+        for (let i in workflowStageDetails?.data?.results) {
+          const finalNudgeTimeArr = [];
+          const finalNudgeOpenArr = [];
+          if (
+            workflowStageDetails?.data?.results[i]?.nudge_time &&
+            workflowStageDetails?.data?.results[i]?.nudge_time?.length > 0
+          ) {
+            const nudgeTimeArr =
+              workflowStageDetails?.data?.results[i]?.nudge_time?.split(",");
+            nudgeTimeArr.pop();
+
+            var resultNudgeTime = nudgeTimeArr?.map(function (x) {
+              return parseInt(x, 10);
+            });
+
+            for (let index = 0; index < resultNudgeTime?.length; index++) {
+              finalNudgeTimeArr.push({
+                id: index + 1,
+                time: resultNudgeTime[index],
+              });
+              finalNudgeOpenArr.push({ id: index + 1, open: false });
+            }
+          }
+
+          finalArr.push({
+            stage_id: workflowStageDetails?.data?.results[i]?.id,
+            stage_name: workflowStageDetails?.data?.results[i]?.name,
+            is_all_approval:
+              workflowStageDetails?.data?.results[i]?.is_all_approval,
+            is_approval: workflowStageDetails?.data?.results[i]?.is_approval,
+            approvals:
+              workflowStageDetails?.data?.results[i]?.approvals_details,
+            is_observer: workflowStageDetails?.data?.results[i]?.is_observer,
+            observer: workflowStageDetails?.data?.results[i]?.observer_detail,
+            order: workflowStageDetails?.data?.results[i]?.order,
+            isDeadline: workflowStageDetails?.data?.results[i]?.approval_time
+              ? true
+              : false,
+            approval_time: workflowStageDetails?.data?.results[i]?.approval_time
+              ? workflowStageDetails?.data?.results[i]?.approval_time
+              : 1,
+            isOpenDeadline: false,
+            is_nudge: workflowStageDetails?.data?.results[i]?.is_nudge,
+            nudgeOpen:
+              finalNudgeOpenArr?.length > 0
+                ? finalNudgeOpenArr
+                : [{ id: 1, open: false }],
+            nudge_time:
+              finalNudgeTimeArr?.length > 0
+                ? finalNudgeTimeArr
+                : [{ id: 1, time: 3 }],
+          });
+        }
+      } else {
+        finalArr.push({
+          stage_id: "",
+          stage_name: "",
+          is_all_approval: false,
+          is_approval: false,
+          approvals: [],
+          is_observer: false,
+          observer: [],
+          order: "",
+          isDeadline: false,
+          approval_time: 12,
+          isOpenDeadline: false,
+          is_nudge: false,
+          nudgeOpen: [{ id: 1, open: false }],
+          nudge_time: [{ id: 1, time: 3 }],
+        });
+      }
+      setStages(finalArr);
+      stagesRef.current = finalArr;
+    }
+  }, [workflowStageDetails]);
+
+  // Adding more nudges by using useEffect
+  useEffect(() => {
+    if (nudgeChange) {
+      setStages(stages);
+      stagesRef.current = stagesRef.current;
+      setNudgeChange(false);
+    }
+  }, [nudgeChange]);
+
+  useEffect(() => {
+    const success = axiosPrivate
+      .get(`${API_URL.COMPANY.COMPANY_LIST}?is_active=1`)
+      .then((res) => {
+        console.log(res);
+        setcompanydata(res?.data?.data?.results);
+      })
+      .catch((err) => {});
+  }, []);
+
   //fetch company list when pagination change
   useUpdateEffect(() => {
     if (userProfile?.data?.role === Roles.ADMIN) {
@@ -672,6 +825,10 @@ const ApprovalWorkflow = () => {
       dispatch(
         GET_COMPANY_LIST(paginationData, `${API_URL.COMPANY.COMPANY_LIST}`)
       );
+    }
+    if (workflowId) {
+      dispatch(GET_WORKFLOW_STAGE_DETAILS(workflowId));
+      dispatch(GET_WORKFLOW_MAIN_DETAILS(workflowId));
     }
   }, [paginationData, userProfile.data?.role]);
 
@@ -787,7 +944,7 @@ const ApprovalWorkflow = () => {
                     inputProps={{ "aria-label": "Without label" }}
                   >
                     <MenuItem value={null}>Select Company</MenuItem>
-                    {companyData?.companyList?.data?.results?.map((item) => (
+                    {companydata?.map((item) => (
                       <MenuItem
                         className={`agency-workflow-company-selenium-${item.id}`}
                         key={item.id}
@@ -846,12 +1003,12 @@ const ApprovalWorkflow = () => {
                         <Draggable
                           isDragDisabled={!showbutton}
                           key={index}
-                          draggableId={String(index)}
-                          // draggableId={
-                          //   item.stage_id != ""
-                          //     ? String(item.stage_id)
-                          //     : index
-                          // }
+                          // draggableId={String(index)}
+                          draggableId={
+                            item.stage_id != ""
+                              ? String(item.stage_id)
+                              : String(index)
+                          }
                           index={index}
                         >
                           {(provided) => (

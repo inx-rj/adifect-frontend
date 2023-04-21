@@ -53,7 +53,7 @@ export const WORKFLOW_ROUTE: Readonly<{
 }> = Object.freeze({
   HOME: `${PAGE_ROUTE.WORKFLOW}`,
   CREATE_WORKFLOW: `${PAGE_ROUTE.WORKFLOW}/add`,
-  UPDATE_WORKFLOW: `${PAGE_ROUTE.WORKFLOW}/update`,
+  UPDATE_WORKFLOW: `${PAGE_ROUTE.WORKFLOW}/edit/:workflowId`,
 });
 
 // Companies Route
