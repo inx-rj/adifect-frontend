@@ -3,14 +3,14 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useSingleEffect, useUpdateEffect } from "react-haiku";
 
-import MuiCustomTable from "components/common/muiCustomTable/MuiCustomTable";
+import MuiCustomTable from "components/common/muiTable/MuiTable";
 import CustomPopup from "common/CustomPopup";
 import LoadingSpinner from "components/common/loadingSpinner/Loader";
 
 import { Button, Typography } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
 
-import { TableRowColType } from "helper/types/muiCustomTable/muiCustomTable";
+import { TableRowColType } from "helper/types/muiTable/muiTable";
 import { Images } from "helper/images";
 
 import { useAppDispatch, useAppSelector } from "redux/store";

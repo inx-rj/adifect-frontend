@@ -1,5 +1,5 @@
 import { LoadingType } from "..";
-import { TableRowsType } from "../muiCustomTable/muiCustomTable";
+import { TableRowsType } from "../muiTable/muiTable";
 
 export interface CompanyListInitialsType extends LoadingType {
   companyList: {

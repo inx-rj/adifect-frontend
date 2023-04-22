@@ -20,8 +20,9 @@ import Cropper from "react-easy-crop";
 import swal from "sweetalert";
 import { useUpdateEffect } from "react-haiku";
 import { Images } from "helper/images";
+import MuiPopup from "components/common/muiPopup/MuiPopup";
 
-const EditProfileForm = () => {
+const EditProfileForm = ({openPopup, handlePopup}) => {
   const dispatch = useAppDispatch();
 
   // Redux State
@@ -134,7 +135,7 @@ const EditProfileForm = () => {
   }, [userProfile?.hasData]);
 
   // Submit profile form
-  const submitHandler = async (e) => {
+  const submitHandler = async () => {
     // alert("passed");
     const formData = new FormData();
 
@@ -222,8 +223,8 @@ const EditProfileForm = () => {
   };
 
   // Validate form input
-  const validateSubmit = (e) => {
-    e.preventDefault();
+  const validateSubmit = () => {
+    // e.preventDefault();
     const tempErrors = {
       firstname: firstName(firstname),
       lastname: lastName(lastname),
@@ -239,7 +240,7 @@ const EditProfileForm = () => {
     if (Object.values(tempErrors).filter((value) => value).length) {
       return;
     }
-    submitHandler(e);
+    submitHandler();
   };
 
   const removeSelectedImage = () => {
@@ -417,7 +418,16 @@ const EditProfileForm = () => {
   };
 
   return (
-    <>
+    <MuiPopup
+      dialogTitle="Edit Profile"
+      textAlign="left"
+      openPopup={openPopup}
+      closePopup={handlePopup}
+      mainActionHandler={validateSubmit}
+      mainActionTitle="Create"
+      maxWidth="950px"
+      dialogContent={
+        <>
       <div className="img-profile_wrapper">
         <div className="relative max-w-[120px] w-full mx-auto">
           {selectedFile ? (
@@ -746,18 +756,11 @@ const EditProfileForm = () => {
           </label>
         </div>
       </div>
-      <Button
-        className="save_profilepic"
-        hidden={doCrop}
-        onClick={(e) => {
-          // !errors && handleClose4(e);
-          validateSubmit(e);
-          // setUpdateButtonClick(true);
-        }}
-      >
-        Save
-      </Button>
     </>
+      }
+      
+    />
+    
   );
 };
 

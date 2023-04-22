@@ -10,11 +10,11 @@ import {
   TableContainer,
   LabelDisplayedRowsArgs,
 } from "@mui/material";
-import CustomPagination from "./CustomPagination";
-import { TableDataResponseType, TablePaginationType, TableRowColType } from "helper/types/muiCustomTable/muiCustomTable";
+import CustomPagination from "./MuiPagination";
 import { OnChangeFiledValueType, UseStateType } from "helper/types";
+import { TableDataResponseType, TablePaginationType, TableRowColType } from "helper/types/muiTable/muiTable";
 
-interface MuiCustomTablePropsType {
+interface MuiTablePropsType {
   loader: boolean;
   data: TableRowColType;
   allData: TableDataResponseType;
@@ -23,7 +23,7 @@ interface MuiCustomTablePropsType {
   [restProps: string]: any;
 }
 
-const MuiCustomTable = (props: MuiCustomTablePropsType) => {
+const MuiTable = (props: MuiTablePropsType) => {
   // De-structuring of 'props'
   // debugger;
   const { loader, data, allData, paginationData, setPaginationData, ...restProps } = props;
@@ -187,4 +187,4 @@ const MuiCustomTable = (props: MuiCustomTablePropsType) => {
   );
 };
 
-export default MuiCustomTable;
+export default MuiTable;

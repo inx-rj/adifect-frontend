@@ -1,5 +1,5 @@
 import React from "react";
-import Title from "../../components/common/PageTitle/Title";
+import Title from "../common/pageTitle/Title";
 
 function AgencyDashboardAnalyticsAdsList() {
   const dummyData = [

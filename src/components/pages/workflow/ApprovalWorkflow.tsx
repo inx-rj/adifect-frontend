@@ -12,12 +12,12 @@ import {
   createFilterOptions,
 } from "@mui/material";
 import axiosPrivate from "api/axios";
-import Title from "components/common/PageTitle/Title";
+import Title from "components/common/pageTitle/Title";
 import LoadingSpinner from "components/common/loadingSpinner/Loader";
 import { Roles } from "helper/config";
 import { API_URL } from "helper/env";
 import { Images } from "helper/images";
-import { TablePaginationType } from "helper/types/muiCustomTable/muiCustomTable";
+import { TablePaginationType } from "helper/types/muiTable/muiTable";
 import React, { useEffect, useRef, useState } from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { useSingleEffect, useUpdateEffect } from "react-haiku";

@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 
 import { Chart, registerables } from "chart.js";
-import Title from "../../components/common/PageTitle/Title";
+import Title from "../common/pageTitle/Title";
 
 Chart.register(...registerables);
 

@@ -19,10 +19,10 @@ import { COMPANY_LIST } from "redux/reducers/companyTab/companyTab.slice";
 import { GET_COMPANY_LIST } from "redux/actions/companyTab/companyTab.actions";
 
 //import components
-import SearchBar from "common/CustomSearchBar";
+import SearchBar from "components/common/searchBar/SearchBar";
 import CustomPopup from "common/CustomPopup";
-import MuiCustomTable from "components/common/muiCustomTable/MuiCustomTable";
-import CustomActionComponent from "common/CustomActionComponent";
+import MuiCustomTable from "components/common/muiTable/MuiTable";
+import ActionMenuButton from "components/common/actionMenuButton/ActionMenuButton";
 import LoadingSpinner from "components/common/loadingSpinner/Loader";
 
 //import assets
@@ -35,7 +35,7 @@ import { validateEmail } from "helper/validations";
 import {
   TablePaginationType,
   TableRowColType,
-} from "helper/types/muiCustomTable/muiCustomTable";
+} from "helper/types/muiTable/muiTable";
 import { Images } from "helper/images";
 
 const InviteUser = () => {
@@ -288,7 +288,7 @@ const InviteUser = () => {
                 </Button>
               ),
               action: (
-                <CustomActionComponent
+                <ActionMenuButton
                   selectedItem={selectedItem}
                   setSelectedItem={setSelectedItem}
                   setAnchorEl={setAnchorEl}

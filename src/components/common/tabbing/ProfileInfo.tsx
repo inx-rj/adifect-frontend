@@ -6,8 +6,8 @@
 import { useState } from "react";
 import { BorderColorOutlined, StarRounded } from "@mui/icons-material";
 import { Button } from "@mui/material";
-import EditProfileFormWrapper from "components/ProfileDropdown/profile/editProfile/EditProfileFormWrapper";
 import { Images } from "helper/images";
+import EditProfileForm from "components/ProfileDropdown/profile/editProfile/EditProfileForm";
 
 interface ProfileDataType {
   profileImg: string;
@@ -61,7 +61,7 @@ const ProfileInfo = (props: ProfileDataType) => {
         </Button>
       </div>
       {editModal && (
-        <EditProfileFormWrapper
+        <EditProfileForm
           openPopup={editModal}
           handlePopup={() => setEditModal(false)}
         />

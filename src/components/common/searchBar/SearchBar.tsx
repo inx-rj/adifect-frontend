@@ -1,6 +1,6 @@
 import { InputAdornment, TextField } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-import { TablePaginationType } from "helper/types/muiCustomTable/muiCustomTable";
+import { TablePaginationType } from "helper/types/muiTable/muiTable";
 
 interface searchBarPropTypes {
   paginationData: TablePaginationType;

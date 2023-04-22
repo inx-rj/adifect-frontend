@@ -8,7 +8,7 @@ import {
   Typography,
 } from "@mui/material";
 
-const CustomPopup = ({
+const MuiPopup = ({
   dialogTitle,
   dialogContent,
   openPopup,
@@ -23,7 +23,6 @@ const CustomPopup = ({
       className="profileImgDialogagency popupclass logoutPopup"
       open={openPopup}
       onClose={closePopup}
-      // maxWidth="xs"
       sx={{
         "& .MuiDialog-container .MuiDialog-paper": {
           width: "100%",
@@ -83,4 +82,4 @@ const CustomPopup = ({
   );
 };
 
-export default CustomPopup;
+export default MuiPopup;

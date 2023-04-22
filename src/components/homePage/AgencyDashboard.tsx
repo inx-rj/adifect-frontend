@@ -5,7 +5,7 @@ import AgencyDashboardAnalyticsPerformanceChart from "./AgencyDashboardAnalytics
 import AgencyDashboardAnalyticsAdsList from "./AgencyDashboardAnanlyticsAdsList";
 import AgencyDashboardInProgress from "./AgencyDashboardInProgress";
 import AgencyDashboardInReview from "./AgencyDashboardInReview";
-import Title from "../../components/common/PageTitle/Title";
+import Title from "../common/pageTitle/Title";
 import LoadingSpinner from "components/common/loadingSpinner/Loader";
 
 // Chart.register(...registerables);

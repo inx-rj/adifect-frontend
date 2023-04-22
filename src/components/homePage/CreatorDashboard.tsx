@@ -5,7 +5,7 @@ import {
   DialogContent,
   DialogTitle,
 } from "@mui/material";
-import Title from "components/common/PageTitle/Title";
+import Title from "components/common/pageTitle/Title";
 import BadgeUI from "components/common/badge/BadgeUI";
 import { formateISODateToLocaleString } from "helper/utility/customFunctions";
 import React, { useCallback, useState } from "react";
@@ -28,7 +28,7 @@ import {
   GET_MEMEBERS_FRESHERS_LATEST_JOBLIST,
 } from "redux/actions/jobs/jobs.actions";
 import LoadingSpinner from "components/common/loadingSpinner/Loader";
-import CustomDateRangePicker from "components/common/customDatePicker/CustomDateRangePicker";
+import CustomDateRangePicker from "components/common/reactDatePicker/ReactDateRangePicker";
 import {
   Add,
   Delete,

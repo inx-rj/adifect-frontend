@@ -24,7 +24,7 @@ import {
 import { useAppDispatch, useAppSelector } from "redux/store";
 import { GET_USER_PROFILE_DATA } from "redux/reducers/auth/auth.slice";
 import { formateISODateToLocaleString } from "helper/utility/customFunctions";
-import Title from "components/common/PageTitle/Title";
+import Title from "components/common/pageTitle/Title";
 import { useSingleEffect, useUpdateEffect } from "react-haiku";
 import {
   DELETE_JOB,

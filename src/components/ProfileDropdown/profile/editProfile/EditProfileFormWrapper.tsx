@@ -1,12 +1,12 @@
-import CustomPopup from "components/common/customPopup/CustomPopup";
+import MuiPopup from "components/common/muiPopup/MuiPopup";
 import EditProfileForm from "./EditProfileForm";
 
 const EditProfileFormWrapper = ({ openPopup, handlePopup }) => {
   return (
-    <CustomPopup
+    <MuiPopup
       dialogTitle="Edit Profile"
       textAlign="left"
-      dialogContent={<EditProfileForm />}
+      dialogContent={<p></p>}
       openPopup={openPopup}
       closePopup={handlePopup}
       mainActionHandler={() => console.log("Profile edit")}
