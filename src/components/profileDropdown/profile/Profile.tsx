@@ -7,6 +7,8 @@ import TabbingLayout from "layouts/TabbingLayout";
 import { ProfilePageAccess } from "helper/config/config";
 import { profileTabHeaders, profileTabTitle } from "helper/config/tabbing";
 import { LanguageOutlined } from "@mui/icons-material";
+import { useSingleEffect, useUpdateEffect } from "react-haiku";
+import { GET_USER_DETAILS } from "redux/actions/auth/auth.actions";
 
 const UserAbout = lazy(
   () => import("components/profileDropdown/profile/UserAbout")
@@ -20,6 +22,10 @@ const Profile = () => {
 
   const activeUserTab = useAppSelector(TAB_NAVIGATION_CONFIG);
   const userProfile = useAppSelector(GET_USER_PROFILE_DATA);
+
+  // useUpdateEffect(()=>{
+  //   dispatch(GET_USER_DETAILS());
+  // },[userProfile])
 
   //set initial active tab
   useEffect(() => {

@@ -53,8 +53,9 @@ export const API_URL = {
     AGENCY_NOTIFICATION: `${BASE_URL.AGENCY}agency-notification/`,
     MEMBER_NOTIFICATION: `${BASE_URL.MEMBER}member-notification/`,
   },
-  PROFILE: {
+  USER_PROFILE: {
     USER_COMMUNICATION: `${env.API_URL}user-communication/`,
+    USER_PORTFOLIO: `${env.API_URL}user-portfolio/`
   },
   MY_JOBS: {
     AGENCY_JOBS_LIST: `${BASE_URL.AGENCY}agency-jobs/`,

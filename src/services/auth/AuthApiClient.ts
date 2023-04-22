@@ -1,5 +1,5 @@
 import axiosPrivate from "../../api/axios";
-import { API_URL, env } from "../../helper/env";
+import { API_URL } from "../../helper/env";
 import { EmailPWDType, EmailType } from "../../helper/types";
 
 class AuthApiClient {

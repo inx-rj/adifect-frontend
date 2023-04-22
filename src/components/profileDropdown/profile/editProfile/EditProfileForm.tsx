@@ -1,9 +1,10 @@
 import {
+  CancelRounded,
   Crop,
   DeleteForeverOutlined,
   DriveFileRenameOutlineOutlined,
 } from "@mui/icons-material";
-import { Button } from "@mui/material";
+import { Button, Pagination, Stack } from "@mui/material";
 import { lastName } from "helper/validations";
 import { firstName } from "helper/validations";
 import { useCallback, useState } from "react";
@@ -18,10 +19,12 @@ import {
 import { useAppDispatch, useAppSelector } from "redux/store";
 import Cropper from "react-easy-crop";
 import swal from "sweetalert";
-import { useUpdateEffect } from "react-haiku";
+import { useSingleEffect, useUpdateEffect } from "react-haiku";
 import { Images } from "helper/images";
 import MuiPopup from "components/common/muiPopup/MuiPopup";
 import { useDropzone } from "react-dropzone";
+import { GET_PROFILE_PORTFOLIO } from "redux/reducers/profile/commun.slice";
+import { TRIGGER_PROFILE_PORTFOLIO_LIST } from "redux/actions/profile/profile.actions";
 
 const EditProfileForm = ({ openPopup, handlePopup }) => {
   const dispatch = useAppDispatch();
@@ -29,6 +32,7 @@ const EditProfileForm = ({ openPopup, handlePopup }) => {
   // Redux State
   const userProfile = useAppSelector(GET_USER_PROFILE_DATA);
   const userData = useAppSelector(GET_USER_DATA);
+  const portfolioDetails = useAppSelector(GET_PROFILE_PORTFOLIO);
 
   // -----Edit profile input form start ---------
   const [errors, setErrors] = useState({
@@ -48,7 +52,6 @@ const EditProfileForm = ({ openPopup, handlePopup }) => {
   const [profile_status, setProfileStatus] = useState("1");
   const [modeOfComm, setModeOfComm] = useState("0");
   const [communication, setCommunication] = useState("");
-  const [portfolioChanged, setPortfolioChanged] = useState(false);
   const [selectedPortfolio, setSelectedPortfolio] = useState([]);
   const [removePortfolio, setRemovePortfolio] = useState([]);
   const [videoChanged, setVideoChanged] = useState(false);
@@ -56,6 +59,8 @@ const EditProfileForm = ({ openPopup, handlePopup }) => {
   const [skills, setSkills] = useState([]);
   const [showMoreDesc, setShowMoreDesc] = useState(false);
   const [saveLoading, setSaveLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pages, setPages] = useState<number>(0);
   // -------Edit profile input form end -------
 
   // -------  Profile image state start------------
@@ -84,9 +89,12 @@ const EditProfileForm = ({ openPopup, handlePopup }) => {
   // ---------Profile image state end--------------
 
   // Get data from redux/API in udpate mode
+  useSingleEffect(()=>{
+    dispatch(GET_USER_DETAILS());
+  })
   useUpdateEffect(() => {
     if (userProfile?.hasData || saveLoading) {
-      // setSaveLoading(true);
+      setSaveLoading(true);
 
       setTimeout(() => {
         setSaveLoading(false);
@@ -108,7 +116,7 @@ const EditProfileForm = ({ openPopup, handlePopup }) => {
       userProfile?.hasData ||
       userProfile?.data?.id !== userData?.data?.user?.user_id
     ) {
-      // dispatch(GET_USER_DETAILS());
+      dispatch(GET_USER_DETAILS());
     } else {
       // user.sub_title == "null" ? "" : user.sub_title;
 
@@ -162,11 +170,10 @@ const EditProfileForm = ({ openPopup, handlePopup }) => {
     formData.append("preferred_communication_mode", modeOfComm);
     formData.append("preferred_communication_id", communication);
 
-    if (portfolioChanged) {
       for (const key of Object.keys(selectedPortfolio)) {
+        console.log(selectedPortfolio[key], "selectedPortfolio[key]")
         formData.append("portfolio", selectedPortfolio[key]);
       }
-    }
     if (removePortfolio) {
       for (const key of Object.keys(removePortfolio)) {
         formData.append("remove_portfolio", removePortfolio[key]);
@@ -218,7 +225,6 @@ const EditProfileForm = ({ openPopup, handlePopup }) => {
     setRemoveProfileImage(false);
     setImageChanged(false);
     setVideoChanged(false);
-    setPortfolioChanged(false);
     setDoCrop(false);
     setSaveLoading(true);
 
@@ -422,6 +428,33 @@ const EditProfileForm = ({ openPopup, handlePopup }) => {
   };
 
   // Portfolio upload-drop box 
+  const pageHandler = (gotopage) => {
+    setCurrentPage(gotopage);
+  };
+  useUpdateEffect(() => {
+    // dispatch({ type: USER_PORTFOLIO_RESET });
+    console.log("User Profile", userProfile)
+    dispatch(TRIGGER_PROFILE_PORTFOLIO_LIST(userProfile?.data?.id, currentPage));
+    // dispatch(getUserSkillsetDetails());
+  }, [currentPage, userProfile?.hasData]);
+
+  useUpdateEffect(() => {
+    console.log("portfolioDetails", portfolioDetails)
+    if (portfolioDetails?.data?.results?.length > 0) {
+      let numberPages = Math.ceil(portfolioDetails?.data?.count / 4);
+      setPages(numberPages);
+
+      // setSelectedPortfolio(
+      //   portfolioDetails?.data?.results?.map((file) =>
+      //     Object.assign(file, {
+      //       preview: file.portfolio_images,
+      //       title: file.portfolio_name,
+      //     })
+      //   )
+      // );
+    }
+  },[userProfile?.hasData]);
+
   const onDrop = useCallback(
     (acceptedFiles) => {
       setSelectedPortfolio([
@@ -463,17 +496,14 @@ const EditProfileForm = ({ openPopup, handlePopup }) => {
   };
 
   const thumbs = selectedPortfolio?.map((file) => (
-    <div className="port-single port-singlecreator" key={file.id}>
+    <div className="port-single port-singlecreator rounded drop-shadow relative overflow-hidden" key={file.id}>
       <img
-        style={{
-          maxWidth: "100px",
-          padding: "5px",
-        }}
         src={file.preview}
+        className="max-w-full w-full h-full object-cover min-h-[170px]"
       />
       <span
         // index={file.id}
-        className="overlayasdasd"
+        className="overlayasdasd absolute top-2 right-2 rounded-full drop-shadow cursor-pointer"
         onClick={() => removeFile(file)}
       >
         <a
@@ -481,14 +511,14 @@ const EditProfileForm = ({ openPopup, handlePopup }) => {
           className="icon_asdsdasd"
           title="Remove"
         >
-          <i className="fa-solid fa-circle-xmark"></i>
+          <CancelRounded className="text-theme bg-white rounded-full" />
         </a>
       </span>
     </div>
   ));
 
   const fileRejectionItems = fileRejections.map(({ file, errors }) => (
-    
+
     <li className="mapDataDiv">
       {`${console.log("FFILE", file)}`}
       <ul className="mapDataDiv2">
@@ -849,13 +879,13 @@ const EditProfileForm = ({ openPopup, handlePopup }) => {
                     Portfolio
                   </h5>
                   <span
-                    className="creatorprofilesec"
+                    className="creatorprofilesec relative w-full inline-block"
                     {...getRootProps()}
                   >
                     <input id="portfolio"  {...getInputProps()} />
-                    <button>Attach File</button>
+                    <button className="border border-theme text-theme rounded text-lg min-h-[80px] w-full" >Attach File</button>
                   </span>
-                  <div className="port-images port-imagesPopUp">
+                  <div className="port-images port-imagesPopUp grid grid-cols-4 gap-3 mt-3">
                     {thumbs}
                   </div>
                   {fileRejectionItems?.length > 0 && (
@@ -868,6 +898,22 @@ const EditProfileForm = ({ openPopup, handlePopup }) => {
                 </div>
               </label>
             </div>
+            {pages > 1 && (
+                          <div className="adminjobpagination paginationAdifect">
+                            <Stack spacing={2}>
+                              <Pagination
+                                page={currentPage}
+                                shape="rounded"
+                                size="large"
+                                count={pages}
+                                onChange={(e, page) => {
+                                  pageHandler(page);
+                                }}
+                                color="primary"
+                              />
+                            </Stack>
+                          </div>
+                        )}
           </div>
         </>
       }
