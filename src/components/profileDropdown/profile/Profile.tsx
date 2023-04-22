@@ -9,10 +9,10 @@ import { profileTabHeaders, profileTabTitle } from "helper/config/tabbing";
 import { LanguageOutlined } from "@mui/icons-material";
 
 const UserAbout = lazy(
-  () => import("components/ProfileDropdown/profile/UserAbout")
+  () => import("components/profileDropdown/profile/UserAbout")
 );
 const UserCommunication = lazy(
-  () => import("components/ProfileDropdown/profile/UserCommunication")
+  () => import("components/profileDropdown/profile/UserCommunication")
 );
 
 const Profile = () => {
