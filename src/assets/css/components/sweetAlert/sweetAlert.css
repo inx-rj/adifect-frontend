@@ -1,6 +1,6 @@
 .swal-modal .swal-icon,
 .swal-modal .swal-icon.swal-icon--custom {
-  @apply w-full max-w-[220px];
+  @apply w-full max-w-[150px];
 }
 .swal-modal .swal-button,
 .swal-modal .swal-button:not([disabled]):hover {
@@ -35,4 +35,13 @@
 }
 .swal-modal.errorAlert .swal-footer .swal-button.swal-button--OK {
   @apply bg-[#e64942];
+}
+.swal-title {
+  @apply text-xl pt-0;
+}
+.swal-modal {
+  @apply max-w-[350px] max-h-[210px] w-full h-full bg-white rounded;
+}
+.swal-text {
+  @apply text-center
 }

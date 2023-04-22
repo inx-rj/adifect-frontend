@@ -20,8 +20,10 @@ import Cropper from "react-easy-crop";
 import swal from "sweetalert";
 import { useUpdateEffect } from "react-haiku";
 import { Images } from "helper/images";
+import MuiPopup from "components/common/muiPopup/MuiPopup";
+import { useDropzone } from "react-dropzone";
 
-const EditProfileForm = () => {
+const EditProfileForm = ({ openPopup, handlePopup }) => {
   const dispatch = useAppDispatch();
 
   // Redux State
@@ -134,7 +136,7 @@ const EditProfileForm = () => {
   }, [userProfile?.hasData]);
 
   // Submit profile form
-  const submitHandler = async (e) => {
+  const submitHandler = async () => {
     // alert("passed");
     const formData = new FormData();
 
@@ -219,11 +221,14 @@ const EditProfileForm = () => {
     setPortfolioChanged(false);
     setDoCrop(false);
     setSaveLoading(true);
+
+    //Close edit profile modal
+    handlePopup();
   };
 
   // Validate form input
-  const validateSubmit = (e) => {
-    e.preventDefault();
+  const validateSubmit = () => {
+    // e.preventDefault();
     const tempErrors = {
       firstname: firstName(firstname),
       lastname: lastName(lastname),
@@ -239,7 +244,7 @@ const EditProfileForm = () => {
     if (Object.values(tempErrors).filter((value) => value).length) {
       return;
     }
-    submitHandler(e);
+    submitHandler();
   };
 
   const removeSelectedImage = () => {
@@ -416,112 +421,122 @@ const EditProfileForm = () => {
     }
   };
 
+  // Portfolio upload-drop box 
+  const onDrop = useCallback(
+    (acceptedFiles) => {
+      setSelectedPortfolio([
+        ...selectedPortfolio,
+        ...acceptedFiles.map((file) =>
+          Object.assign(file, {
+            preview: URL.createObjectURL(file),
+            title: file.name,
+          })
+        ),
+      ]);
+    },
+    [selectedPortfolio]
+  );
+
+  const {
+    getRootProps: getRootProps,
+    getInputProps: getInputProps,
+    acceptedFiles: acceptedFiles,
+    fileRejections,
+    isFocused,
+    isDragAccept,
+    isDragReject,
+  } = useDropzone({
+    accept: {
+      "image/jpeg": [],
+      "image/jpg": [],
+      "image/png": [],
+    },
+    minSize: 0,
+    onDrop: onDrop,
+  });
+
+  const removeFile = (file) => {
+    const newFiles = [...selectedPortfolio];
+    const removedFiles = newFiles.splice(newFiles.indexOf(file), 1);
+    setRemovePortfolio([...removePortfolio, removedFiles[0]]);
+    setSelectedPortfolio(newFiles);
+  };
+
+  const thumbs = selectedPortfolio?.map((file) => (
+    <div className="port-single port-singlecreator" key={file.id}>
+      <img
+        style={{
+          maxWidth: "100px",
+          padding: "5px",
+        }}
+        src={file.preview}
+      />
+      <span
+        // index={file.id}
+        className="overlayasdasd"
+        onClick={() => removeFile(file)}
+      >
+        <a
+          // href="#"
+          className="icon_asdsdasd"
+          title="Remove"
+        >
+          <i className="fa-solid fa-circle-xmark"></i>
+        </a>
+      </span>
+    </div>
+  ));
+
+  const fileRejectionItems = fileRejections.map(({ file, errors }) => (
+    
+    <li className="mapDataDiv">
+      {`${console.log("FFILE", file)}`}
+      <ul className="mapDataDiv2">
+        {errors.map((e) => (
+          <li className="mapDataDiv3" key={e.code}>
+            {e.message}
+          </li>
+        ))}
+      </ul>
+    </li>
+  ));
+
   return (
-    <>
-      <div className="img-profile_wrapper">
-        <div className="relative max-w-[120px] w-full mx-auto">
-          {selectedFile ? (
-            <div className="relative max-w-[120px] w-full mx-auto [&>.delete-icon]:text-[33px]">
-              <i className="img img-cover rounded-full w-[120px] h-[120px] mx-auto overflow-hidden block drop-shadow-md border-2 border-white">
-                <img
-                  src={selectedFile}
-                  alt="Thumb"
-                  hidden={doCrop}
-                  className="profileimgchange"
-                />
-              </i>
-              <DeleteForeverOutlined
-                fontSize="inherit"
-                className="delete-icon cursor-pointer p-1 text-danger bg-white rounded-full absolute right-0 bottom-[10px] border-2 border-white drop-shadow-md"
-                onClick={removeSelectedImage}
-              />
-              <div className="Cropbtn">
-                <button
-                  className="Cropbtnnew w-8 h-8 flex-center p-1 text-theme bg-white rounded-full absolute -right-3 bottom-[50px] border-2 border-white drop-shadow-md"
-                  type="button"
-                  hidden={doCrop}
-                  onClick={(e) => setDoCrop(true)}
-                >
-                  <Crop fontSize="small" />
-                </button>
-                {doCrop && (
-                  <>
-                    <div className="App-profile-image">
-                      <div className="crop-container-profile-image">
-                        <Cropper
-                          image={currentCroppedImage}
-                          crop={crop}
-                          zoom={zoom}
-                          aspect={4 / 3}
-                          onCropChange={setCrop}
-                          onCropComplete={onCropComplete}
-                          onZoomChange={setZoom}
-                        />
-                      </div>
-                      <div className="controls-profile-image relative">
-                        <label> Zoom </label>
-                        <input
-                          type="range"
-                          value={zoom}
-                          min={1}
-                          max={3}
-                          step={0.1}
-                          aria-labelledby="Zoom"
-                          onChange={(e) => {
-                            // @ts-ignore
-                            setZoom(e.target.value);
-                          }}
-                          className="zoom-range-profile-image border-t-2 border-b-2 h-[2px] bg-theme"
-                        />
-                        <Button
-                          onClick={() => showCroppedImage}
-                          variant="contained"
-                          color="primary"
-                        >
-                          Save
-                        </Button>
-                      </div>
-                    </div>
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        setDoCrop(false);
-                        setSelectedFile(null);
-                      }}
-                    >
-                      Cancel
-                    </button>
-                  </>
-                )}
-              </div>
-            </div>
-          ) : userProfile?.data?.profile_img ? (
-            <>
-              {!removeProfileImage && (
-                <div className="[&>.delete-icon]:text-[33px]">
+    <MuiPopup
+      dialogTitle="Edit Profile"
+      textAlign="left"
+      openPopup={openPopup}
+      closePopup={handlePopup}
+      mainActionHandler={validateSubmit}
+      mainActionTitle="Create"
+      maxWidth="950px"
+      dialogContent={
+        <>
+          <div className="img-profile_wrapper">
+            <div className="relative max-w-[120px] w-full mx-auto">
+              {selectedFile ? (
+                <div className="relative max-w-[120px] w-full mx-auto [&>.delete-icon]:text-[33px]">
                   <i className="img img-cover rounded-full w-[120px] h-[120px] mx-auto overflow-hidden block drop-shadow-md border-2 border-white">
                     <img
-                      // value={userProfile?.data?.profile_img}
-                      src={userProfile?.data?.profile_img}
-                      alt="ProfileImgCurrent"
-                      id="ProfileImgCurrent"
+                      src={selectedFile}
+                      alt="Thumb"
+                      hidden={doCrop}
                       className="profileimgchange"
                     />
                   </i>
-                  <label className="upload-profileImg" htmlFor="upload"></label>
                   <DeleteForeverOutlined
                     fontSize="inherit"
                     className="delete-icon cursor-pointer p-1 text-danger bg-white rounded-full absolute right-0 bottom-[10px] border-2 border-white drop-shadow-md"
                     onClick={removeSelectedImage}
                   />
-                  <div>
+                  <div className="Cropbtn">
                     <button
-                      className="Cropbtnnew w-8 h-8 flex-center text-lg p-1 text-theme bg-white rounded-full absolute -right-3 bottom-[50px] border-2 border-white drop-shadow-md"
+                      className="Cropbtnnew w-8 h-8 flex-center p-1 text-theme bg-white rounded-full absolute -right-3 bottom-[50px] border-2 border-white drop-shadow-md"
                       type="button"
                       hidden={doCrop}
                       onClick={(e) => setDoCrop(true)}
                     >
-                      <Crop fontSize="inherit" />
+                      <Crop fontSize="small" />
                     </button>
                     {doCrop && (
                       <>
@@ -553,7 +568,7 @@ const EditProfileForm = () => {
                               className="zoom-range-profile-image border-t-2 border-b-2 h-[2px] bg-theme"
                             />
                             <Button
-                              onClick={showCroppedImage}
+                              onClick={() => showCroppedImage}
                               variant="contained"
                               color="primary"
                             >
@@ -574,190 +589,291 @@ const EditProfileForm = () => {
                     )}
                   </div>
                 </div>
-              )}
-              {removeProfileImage && (
-                <div className="mb-5 text-zinc-500">
+              ) : userProfile?.data?.profile_img ? (
+                <>
+                  {!removeProfileImage && (
+                    <div className="[&>.delete-icon]:text-[33px]">
+                      <i className="img img-cover rounded-full w-[120px] h-[120px] mx-auto overflow-hidden block drop-shadow-md border-2 border-white">
+                        <img
+                          // value={userProfile?.data?.profile_img}
+                          src={userProfile?.data?.profile_img}
+                          alt="ProfileImgCurrent"
+                          id="ProfileImgCurrent"
+                          className="profileimgchange"
+                        />
+                      </i>
+                      <label className="upload-profileImg" htmlFor="upload"></label>
+                      <DeleteForeverOutlined
+                        fontSize="inherit"
+                        className="delete-icon cursor-pointer p-1 text-danger bg-white rounded-full absolute right-0 bottom-[10px] border-2 border-white drop-shadow-md"
+                        onClick={removeSelectedImage}
+                      />
+                      <div>
+                        <button
+                          className="Cropbtnnew w-8 h-8 flex-center text-lg p-1 text-theme bg-white rounded-full absolute -right-3 bottom-[50px] border-2 border-white drop-shadow-md"
+                          type="button"
+                          hidden={doCrop}
+                          onClick={(e) => setDoCrop(true)}
+                        >
+                          <Crop fontSize="inherit" />
+                        </button>
+                        {doCrop && (
+                          <>
+                            <div className="App-profile-image">
+                              <div className="crop-container-profile-image">
+                                <Cropper
+                                  image={currentCroppedImage}
+                                  crop={crop}
+                                  zoom={zoom}
+                                  aspect={4 / 3}
+                                  onCropChange={setCrop}
+                                  onCropComplete={onCropComplete}
+                                  onZoomChange={setZoom}
+                                />
+                              </div>
+                              <div className="controls-profile-image relative">
+                                <label> Zoom </label>
+                                <input
+                                  type="range"
+                                  value={zoom}
+                                  min={1}
+                                  max={3}
+                                  step={0.1}
+                                  aria-labelledby="Zoom"
+                                  onChange={(e) => {
+                                    // @ts-ignore
+                                    setZoom(e.target.value);
+                                  }}
+                                  className="zoom-range-profile-image border-t-2 border-b-2 h-[2px] bg-theme"
+                                />
+                                <Button
+                                  onClick={showCroppedImage}
+                                  variant="contained"
+                                  color="primary"
+                                >
+                                  Save
+                                </Button>
+                              </div>
+                            </div>
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                setDoCrop(false);
+                                setSelectedFile(null);
+                              }}
+                            >
+                              Cancel
+                            </button>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                  {removeProfileImage && (
+                    <div className="mb-5 text-zinc-500">
+                      <span>No image</span>
+                    </div>
+                  )}
+                  <label
+                    className="upload-profileImg leading-[0] p-1 text-[#D99836] bg-white rounded-full absolute right-[35px] -bottom-[10px] border-2 border-white drop-shadow-md w-8 h-8 flex-center text-xl"
+                    htmlFor="upload"
+                  >
+                    {" "}
+                    <DriveFileRenameOutlineOutlined
+                      className="cursor-pointer"
+                      fontSize="inherit"
+                    />
+                  </label>
+                </>
+              ) : (
+                <div className="flex-center text-zinc-500 gap-2">
                   <span>No image</span>
+                  <label className="upload-profileImg" htmlFor="upload">
+                    {" "}
+                    <DriveFileRenameOutlineOutlined
+                      fontSize="small"
+                      className="cursor-pointer"
+                    />
+                  </label>
                 </div>
               )}
+              <input
+                type="file"
+                onChange={(e) => {
+                  onChangePicture(e);
+                }}
+                hidden
+                alt="ProfileImg"
+                id="upload"
+              />
+            </div>
+          </div>
+          <div className="form-wrapper grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-2 mt-10">
+            <div className="input-fields-wrapper">
               <label
-                className="upload-profileImg leading-[0] p-1 text-[#D99836] bg-white rounded-full absolute right-[35px] -bottom-[10px] border-2 border-white drop-shadow-md w-8 h-8 flex-center text-xl"
-                htmlFor="upload"
+                className={
+                  errors.firstname
+                    ? "upload-profileImg error profile_info upload-profileImgNewpop"
+                    : "upload-profileImg profile_info"
+                }
+                htmlFor="first_name"
               >
-                {" "}
-                <DriveFileRenameOutlineOutlined
-                  className="cursor-pointer"
-                  fontSize="inherit"
-                />
-              </label>
-            </>
-          ) : (
-            <div className="flex-center text-zinc-500 gap-2">
-              <span>No image</span>
-              <label className="upload-profileImg" htmlFor="upload">
-                {" "}
-                <DriveFileRenameOutlineOutlined
-                  fontSize="small"
-                  className="cursor-pointer"
-                />
+                <div className="profileinpProfilePop">
+                  <label>First Name</label>
+                  <input
+                    className="input-style"
+                    value={firstname}
+                    id="first_namePop"
+                    type="text"
+                    onChange={(e) => {
+                      setFirstName(e.target.value);
+                      setErrors({ ...errors, firstname: null });
+                    }}
+                  />
+                </div>
+                <span className="err-tag">{errors.firstname ?? ""}</span>
               </label>
             </div>
-          )}
-          <input
-            type="file"
-            onChange={(e) => {
-              onChangePicture(e);
-            }}
-            hidden
-            alt="ProfileImg"
-            id="upload"
-          />
-        </div>
-      </div>
-      <div className="form-wrapper grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-2 mt-10">
-        <div className="input-fields-wrapper">
-          <label
-            className={
-              errors.firstname
-                ? "upload-profileImg error profile_info upload-profileImgNewpop"
-                : "upload-profileImg profile_info"
-            }
-            htmlFor="first_name"
-          >
-            <div className="profileinpProfilePop">
-              <label>First Name</label>
-              <input
-                className="input-style"
-                value={firstname}
-                id="first_namePop"
-                type="text"
-                onChange={(e) => {
-                  setFirstName(e.target.value);
-                  setErrors({ ...errors, firstname: null });
-                }}
-              />
-            </div>
-            <span className="err-tag">{errors.firstname ?? ""}</span>
-          </label>
-        </div>
-        <div className="input-fields-wrapper">
-          <label
-            className={
-              errors.lastname
-                ? "upload-profileImg error profile_info  upload-profileImgNewpop"
-                : "upload-profileImg profile_info"
-            }
-            htmlFor="last_name"
-          >
-            <div className="profileinpProfilePop">
-              <label>Last Name</label>
-              <input
-                className="input-style"
-                value={lastname}
-                id="last_namePop"
-                type="text"
-                onChange={(e) => {
-                  setLastName(e.target.value);
-                  setErrors({ ...errors, lastname: null });
-                }}
-              />
-            </div>
-            <span className="err-tag">{errors.lastname ?? ""}</span>
-          </label>
-        </div>
-
-        <div className="input-fields-wrapper">
-          <label className="upload-profileImg profile_info" htmlFor="sub_title">
-            <div className="profileinpProfilePop">
-              <label>Title</label>
-              <input
-                className="input-style"
-                // value={profile_title == null ? "" : profile_title}
-                id="sub_title"
-                type="text"
-                value={sub_title == "null" ? "" : sub_title}
-                onChange={(e) => {
-                  setsub_title(e.target.value);
-                }}
-              />
-            </div>
-            <span className="err-tag">{errors.sub_title ?? ""}</span>
-          </label>
-        </div>
-        <div className="input-fields-wrapper">
-          <label
-            className="upload-profileImg profile_info"
-            htmlFor="profile_title"
-          >
-            <div className="profileinpProfilePop">
-              <label>Sub Title</label>
-              <input
-                className="input-style"
-                value={profile_title == "null" ? "" : profile_title}
-                id="profile_title"
-                type="text"
-                onChange={(e) => {
-                  setProfileTitle(e.target.value);
-                }}
-              />
+            <div className="input-fields-wrapper">
+              <label
+                className={
+                  errors.lastname
+                    ? "upload-profileImg error profile_info  upload-profileImgNewpop"
+                    : "upload-profileImg profile_info"
+                }
+                htmlFor="last_name"
+              >
+                <div className="profileinpProfilePop">
+                  <label>Last Name</label>
+                  <input
+                    className="input-style"
+                    value={lastname}
+                    id="last_namePop"
+                    type="text"
+                    onChange={(e) => {
+                      setLastName(e.target.value);
+                      setErrors({ ...errors, lastname: null });
+                    }}
+                  />
+                </div>
+                <span className="err-tag">{errors.lastname ?? ""}</span>
+              </label>
             </div>
 
-            <span className="err-tag">{errors.profile_title ?? ""}</span>
-          </label>
-        </div>
-        <div className="input-fields-wrapper">
-          <label
-            className="upload-profileImg profile_info  upload-profileImgNewpop upload-profileImgHalfW"
-            htmlFor="last_name"
-          >
-            <div className="profileinpProfilePop">
-              <label className="">Website</label>
-              <input
-                className="input-style"
-                // value={profile_title == null ? "" : profile_title}
-                id="last_namePop"
-                type="text"
-                value={website == "null" ? "" : website}
-                onChange={(e) => {
-                  setWebsite(e.target.value);
-                  // setErrors({ ...errors, website: null });
-                }}
-              />
+            <div className="input-fields-wrapper">
+              <label className="upload-profileImg profile_info" htmlFor="sub_title">
+                <div className="profileinpProfilePop">
+                  <label>Title</label>
+                  <input
+                    className="input-style"
+                    // value={profile_title == null ? "" : profile_title}
+                    id="sub_title"
+                    type="text"
+                    value={sub_title == "null" ? "" : sub_title}
+                    onChange={(e) => {
+                      setsub_title(e.target.value);
+                    }}
+                  />
+                </div>
+                <span className="err-tag">{errors.sub_title ?? ""}</span>
+              </label>
             </div>
-            <span className="err-tag">{errors.website ?? ""}</span>
-          </label>
-        </div>
-        <div className="input-fields-wrapper col-span-2">
-          <label
-            className="upload-profileImg  upload-profileImgNewpop upload-profileImgTenPadding"
-            htmlFor="profile_description"
-          >
-            <label className="AddDescriptionLastLine">Add Description</label>
-            <textarea
-              className="input-style h-auto"
-              // maxLength="300"
-              value={profile_description}
-              rows={5}
-              id="profile_descriptionAbout"
-              onChange={(e) => {
-                setProfileDescription(e.target.value);
-              }}
-            />
-          </label>
-        </div>
-      </div>
-      <Button
-        className="save_profilepic"
-        hidden={doCrop}
-        onClick={(e) => {
-          // !errors && handleClose4(e);
-          validateSubmit(e);
-          // setUpdateButtonClick(true);
-        }}
-      >
-        Save
-      </Button>
-    </>
+            <div className="input-fields-wrapper">
+              <label
+                className="upload-profileImg profile_info"
+                htmlFor="profile_title"
+              >
+                <div className="profileinpProfilePop">
+                  <label>Sub Title</label>
+                  <input
+                    className="input-style"
+                    value={profile_title == "null" ? "" : profile_title}
+                    id="profile_title"
+                    type="text"
+                    onChange={(e) => {
+                      setProfileTitle(e.target.value);
+                    }}
+                  />
+                </div>
+
+                <span className="err-tag">{errors.profile_title ?? ""}</span>
+              </label>
+            </div>
+            <div className="input-fields-wrapper">
+              <label
+                className="upload-profileImg profile_info  upload-profileImgNewpop upload-profileImgHalfW"
+                htmlFor="last_name"
+              >
+                <div className="profileinpProfilePop">
+                  <label className="">Website</label>
+                  <input
+                    className="input-style"
+                    // value={profile_title == null ? "" : profile_title}
+                    id="last_namePop"
+                    type="text"
+                    value={website == "null" ? "" : website}
+                    onChange={(e) => {
+                      setWebsite(e.target.value);
+                      // setErrors({ ...errors, website: null });
+                    }}
+                  />
+                </div>
+                <span className="err-tag">{errors.website ?? ""}</span>
+              </label>
+            </div>
+            <div className="input-fields-wrapper col-span-2">
+              <label
+                className="upload-profileImg  upload-profileImgNewpop upload-profileImgTenPadding"
+                htmlFor="profile_description"
+              >
+                <label className="AddDescriptionLastLine">Add Description</label>
+                <textarea
+                  className="input-style h-auto"
+                  // maxLength="300"
+                  value={profile_description}
+                  rows={5}
+                  id="profile_descriptionAbout"
+                  onChange={(e) => {
+                    setProfileDescription(e.target.value);
+                  }}
+                />
+              </label>
+            </div>
+            <div className="input-fields-wrapper col-span-2 formGroupOneProfilePopD">
+              <label
+                className="upload-profileImg profile_info"
+                htmlFor="portfolio"
+              >
+                <div className="profileinpProfilePop">
+                  <h5 className="PortfoliotitleCreator">
+                    Portfolio
+                  </h5>
+                  <span
+                    className="creatorprofilesec"
+                    {...getRootProps()}
+                  >
+                    <input id="portfolio"  {...getInputProps()} />
+                    <button>Attach File</button>
+                  </span>
+                  <div className="port-images port-imagesPopUp">
+                    {thumbs}
+                  </div>
+                  {fileRejectionItems?.length > 0 && (
+                    <>
+                      <ul className="errorData_drop_zone">
+                        {fileRejectionItems}
+                      </ul>
+                    </>
+                  )}
+                </div>
+              </label>
+            </div>
+          </div>
+        </>
+      }
+
+    />
+
   );
 };
 

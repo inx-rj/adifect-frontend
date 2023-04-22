@@ -5,9 +5,9 @@ import { useSingleEffect, useUpdateEffect } from "react-haiku";
 import swal from "sweetalert";
 
 //import custom component
-import MuiCustomTable from "components/common/muiCustomTable/MuiCustomTable";
-import SearchBar from "common/CustomSearchBar";
-import CustomActionComponent from "common/CustomActionComponent";
+import MuiCustomTable from "components/common/muiTable/MuiTable";
+import SearchBar from "components/common/searchBar/SearchBar";
+import ActionMenuButton from "components/common/actionMenuButton/ActionMenuButton";
 import CustomPopup from "common/CustomPopup";
 import LoadingSpinner from "components/common/loadingSpinner/Loader";
 
@@ -27,7 +27,7 @@ import AddIcon from "@mui/icons-material/Add";
 import {
   TableRowColType,
   TablePaginationType,
-} from "helper/types/muiCustomTable/muiCustomTable";
+} from "helper/types/muiTable/muiTable";
 import { Images } from "helper/images";
 import { formateISODateToLocaleString } from "helper/utility/customFunctions";
 import { API_URL } from "helper/env";
@@ -377,7 +377,7 @@ const AgencyCompanyList = () => {
               </Button>
             ),
             action: (
-              <CustomActionComponent
+              <ActionMenuButton
                 selectedItem={selectedItem}
                 setSelectedItem={setSelectedItem}
                 setAnchorEl={setAnchorEl}

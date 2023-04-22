@@ -4,7 +4,7 @@ import { useSingleEffect } from "react-haiku";
 import { useAppDispatch, useAppSelector } from "redux/store";
 import { GET_INVITE_STATUS } from "redux/actions/inviteUser/inviteUser.actions";
 import { INVITE_USER_LIST } from "redux/reducers/inviteUser/inviteUser.slice";
-import EmailConfirmation from "common/EmailConfirmation";
+import EmailConfirmation from "components/auth/EmailConfirmation";
 
 const InviteStatus = () => {
   const { decodeId, accept_invite_encode, exclusive_decode } = useParams();

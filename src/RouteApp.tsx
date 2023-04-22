@@ -51,7 +51,7 @@ const RouteApp = () => {
 
   if (isPersist)
     AllowedRoutes.push(
-      getAllowedRoutes(COMBINED_ROUTES, [userProfile.data.role])
+      getAllowedRoutes(COMBINED_ROUTES, [userProfile?.data?.role])
     );
   else navigate("/login");
 

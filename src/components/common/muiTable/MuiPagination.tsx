@@ -1,7 +1,7 @@
 import React from 'react'
 import { Pagination, SxProps, Theme } from '@mui/material';
 
-interface CustomPaginationPropsType {
+interface PaginationPropsType {
     sx: SxProps<Theme>;
     count: number;
     rowsPerPage: number;
@@ -10,7 +10,7 @@ interface CustomPaginationPropsType {
 }
 
 // MUI Pagination custom component
-const CustomPagination = (props: CustomPaginationPropsType) => {
+const MuiPagination = (props: PaginationPropsType) => {
     // De-structuring of 'props'
     const { sx, count, rowsPerPage, onPageChange, ...restProps } = props;
 
@@ -24,4 +24,4 @@ const CustomPagination = (props: CustomPaginationPropsType) => {
     )
 }
 
-export default CustomPagination;
+export default MuiPagination;
