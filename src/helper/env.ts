@@ -1,6 +1,6 @@
 export const env = {
   APP_NAME: "Adifect",
-  API_URL: "https://dev-api.adifect.com/",
+  API_URL: process.env["REACT_APP_BACKEND_API_URL"],
   FRONTEND_SITE_URL: process.env["REACT_APP_FRONTEND_SITE_URL"],
 };
 

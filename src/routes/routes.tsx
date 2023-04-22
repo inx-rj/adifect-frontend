@@ -22,12 +22,12 @@ const ResetPassword = lazy(() => import("components/auth/ResetPassword"));
 
 // Profile dropdown pages
 const Profile = lazy(
-  () => import("components/ProfileDropdown/profile/Profile")
+  () => import("components/profileDropdown/profile/Profile")
 );
 
 // Invite Pages and Components
 const InviteUser = lazy(
-  () => import("components/ProfileDropdown/invite/InviteUser")
+  () => import("components/profileDropdown/invite/InviteUser")
 );
 
 // ==> Sidebar pages

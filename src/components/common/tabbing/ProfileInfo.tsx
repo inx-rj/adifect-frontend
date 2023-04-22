@@ -7,7 +7,7 @@ import { useState } from "react";
 import { BorderColorOutlined, StarRounded } from "@mui/icons-material";
 import { Button } from "@mui/material";
 import { Images } from "helper/images";
-import EditProfileForm from "components/ProfileDropdown/profile/editProfile/EditProfileForm";
+import EditProfileForm from "components/profileDropdown/profile/editProfile/EditProfileForm";
 
 interface ProfileDataType {
   profileImg: string;

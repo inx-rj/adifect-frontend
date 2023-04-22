@@ -19,7 +19,7 @@ import { ProfilePageAccess } from "helper/config/config";
 import { AccountCircleOutlined, LanguageOutlined } from "@mui/icons-material";
 
 const UserAbout = lazy(
-  () => import("components/ProfileDropdown/profile/UserAbout")
+  () => import("components/profileDropdown/profile/UserAbout")
 );
 const AgencyCompanyContactInfo = lazy(
   () => import("components/pages/companyProfile/AgencyCompanyContactInfo")
