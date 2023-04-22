@@ -1,7 +1,7 @@
 export const env = {
   APP_NAME: "Adifect",
   API_URL: process.env["REACT_APP_BACKEND_API_URL"],
-  FRONTEND_SITE_URL: process.env["REACT_APP_FRONTEND_SITE_URL"]
+  FRONTEND_SITE_URL: process.env["REACT_APP_FRONTEND_SITE_URL"],
 };
 
 export const BASE_URL = {
@@ -10,6 +10,8 @@ export const BASE_URL = {
   COMPANY: `${env.API_URL}company/`,
   MEMBER: `${env.API_URL}member/`,
   WORKFLOW: `${env.API_URL}workflows/`,
+  SKILLS: `${env.API_URL}skills/`,
+  LEVELS: `${env.API_URL}levels/`,
 };
 
 export const API_URL = {
@@ -36,7 +38,7 @@ export const API_URL = {
     INVITE_USERS: `${BASE_URL.AGENCY}invite-member/`,
     INVITE_MEMBERS_LIST: `${BASE_URL.AGENCY}invite-member-list/`,
     INVITE_USER_REGISTER: `${BASE_URL.AGENCY}register-view-invite/`,
-    INVITE_STATUS: `${BASE_URL.AGENCY}update-invite-member/`
+    INVITE_STATUS: `${BASE_URL.AGENCY}update-invite-member/`,
   },
   HOMEPAGE: {
     JOBS_LIST: `${env.API_URL}jobs/`,
@@ -60,5 +62,12 @@ export const API_URL = {
   WORKFLOW: {
     ADMIN: `${BASE_URL.WORKFLOW}`, //for admin
     WORKFLOW_LIST: `${BASE_URL.AGENCY}works-flow/`, //for agency
+    WORKFLOW_STAGES: `${BASE_URL.AGENCY}works-flow-stages/`, //for agency
   },
+  SKILLS: {
+    SKILLS_LIST: `${BASE_URL.SKILLS}`,
+  },
+  LEVELS: {
+    LEVELS_LIST: `${BASE_URL.LEVELS}`,
+  }
 };

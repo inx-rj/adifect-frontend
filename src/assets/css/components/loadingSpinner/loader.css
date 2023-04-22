@@ -3,13 +3,13 @@
 }
 
 .spinner-container {
-  @apply block absolute left-[calc(50%_-_50px)] top-[calc(50%_-_50px)];
+  @apply absolute w-[65px] h-[65px];
 }
 
 img.loader-svg {
-  @apply w-[65px]
+  @apply w-[65px];
 }
 
 .spinner-container-bg {
-  @apply absolute w-full h-full bg-[#f1f7ff] z-[1000];
+  @apply absolute bg-[#f1f7ff] z-[1000] inset-0 flex justify-center items-center;
 }
