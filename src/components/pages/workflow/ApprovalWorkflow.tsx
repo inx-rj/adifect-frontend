@@ -192,7 +192,7 @@ const ApprovalWorkflow = () => {
           title: "Warning",
           text: "Are you sure you want to delete this stage?",
           className: "errorAlert",
-          icon: Images.LogoRed,
+          icon: Images.ErrorLogo,
           buttons: {
             Cancel: true,
             OK: true,
@@ -528,8 +528,7 @@ const ApprovalWorkflow = () => {
                 title: "Error",
                 text: "Workflow name already exists",
                 className: "errorAlert",
-                icon: Images.LogoRed,
-                // buttons: false,
+                icon: Images.ErrorLogo,
                 buttons: {
                   OK: false,
                 },
@@ -541,8 +540,7 @@ const ApprovalWorkflow = () => {
                 title: "Error",
                 text: res?.data?.message,
                 className: "errorAlert",
-                icon: Images.LogoRed,
-                // buttons: false,
+                icon: Images.ErrorLogo,
                 buttons: {
                   OK: false,
                 },
@@ -568,8 +566,7 @@ const ApprovalWorkflow = () => {
                 title: "Error",
                 text: res?.data?.message,
                 className: "errorAlert",
-                icon: Images.LogoRed,
-                // buttons: false,
+                icon: Images.ErrorLogo,
                 buttons: {
                   OK: false,
                 },
@@ -582,8 +579,7 @@ const ApprovalWorkflow = () => {
               title: "Error",
               text: err.message,
               className: "errorAlert",
-              icon: Images.LogoRed,
-              // buttons: false,
+              icon: Images.ErrorLogo,
               buttons: {
                 OK: false,
               },
@@ -607,11 +603,10 @@ const ApprovalWorkflow = () => {
                 title: "Error",
                 text: "Workflow name already exists",
                 className: "errorAlert",
-                icon: Images.LogoRed,
+                icon: Images.ErrorLogo,
                 buttons: {
                   OK: false,
                 },
-                // buttons: false,
                 timer: 1500,
               });
             } else {
@@ -635,11 +630,10 @@ const ApprovalWorkflow = () => {
               title: "Error",
               text: err.message,
               className: "errorAlert",
-              icon: Images.LogoRed,
+              icon: Images.ErrorLogo,
               buttons: {
                 OK: false,
               },
-              // buttons: false,
               timer: 1500,
             });
             setTimeout(() => {

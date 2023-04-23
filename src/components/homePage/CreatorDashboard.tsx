@@ -166,8 +166,8 @@ const CreatorDashboard = () => {
             title: "Error",
             text: "Image type is not valid",
             className: "errorAlert",
-            icon: "/img/logonew-red.svg",
-            // buttons: false,
+            icon: Images.ErrorLogo,
+            buttons: { visible: false },
             timer: 5000,
           });
         } else if (acceptedFiles[0].size > maxImageFileSize) {
@@ -175,8 +175,8 @@ const CreatorDashboard = () => {
             title: "Error",
             text: "Max file size allowed is 10mb",
             className: "errorAlert",
-            icon: "/img/logonew-red.svg",
-            // buttons: false,
+            icon: Images.ErrorLogo,
+            buttons: { visible: false },
             timer: 5000,
           });
         } else {
@@ -524,8 +524,8 @@ const CreatorDashboard = () => {
             title: "Successfully Complete",
             // text: res.data?.message,
             className: "successAlert-login",
-            icon: "/img/logonew.svg",
-            // buttons: false,
+            icon: Images.Logo,
+            buttons: { visible: false },
             timer: 1500,
           });
           setTimeout(() => {
@@ -539,9 +539,8 @@ const CreatorDashboard = () => {
             title: "Error",
             text: err.response.data.message,
             className: "errorAlert",
-            icon: "/img/logonew-red.svg",
-
-            // buttons: false,
+            icon: Images.ErrorLogo,
+            buttons: { visible: false },
             timer: 2500,
           });
           return;

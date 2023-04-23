@@ -3,9 +3,8 @@ import ProfileApiClient from "services/profile/ProfileApiClient";
 import { 
   SET_PROFILE_COMMUN_DATA, 
   SET_PROFILE_COMMUN_LOADING, 
-  SET_PROFILE_PORTFOLIO_DATA, 
-  SET_PROFILE_PORTFOLIO_LOADING 
 } from "redux/reducers/profile/commun.slice";
+import { SET_PROFILE_PORTFOLIO_DATA, SET_PROFILE_PORTFOLIO_LOADING } from "redux/reducers/profile/userPortfolio.slice";
 
 // Get User Profile communication List
 const TRIGGER_PROFILE_COMMUN_LIST =

@@ -8,6 +8,16 @@ class SkillsApiClient {
   fetchSkillsList = (filters: any) =>
     axiosPrivate.get(`${API_URL.SKILLS.SKILLS_LIST}` + setQueryParams(filters));
 
+
+  //get all skill data with out query parameter
+  getAllSkillsList = () => axiosPrivate.get(API_URL.SKILLS.SKILLS_LIST);
+
+  //get user skill set list
+  getUserSkillSetList = (userId) => axiosPrivate.get(`${API_URL.SKILLS.INDIVIDUAL_USER_SKILL_LIST}?user=${userId}`);
+
+  //Edit user skill set lists
+  addUserrSkillList = (userSkillData) => axiosPrivate.post(API_URL.SKILLS.INDIVIDUAL_USER_SKILL_LIST, userSkillData);
+
 }
 
 export default new SkillsApiClient();

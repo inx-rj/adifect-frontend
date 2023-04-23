@@ -67,6 +67,7 @@ export const API_URL = {
   },
   SKILLS: {
     SKILLS_LIST: `${BASE_URL.SKILLS}`,
+    INDIVIDUAL_USER_SKILL_LIST: `${env.API_URL}user-skills/`
   },
   LEVELS: {
     LEVELS_LIST: `${BASE_URL.LEVELS}`,

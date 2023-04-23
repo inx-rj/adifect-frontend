@@ -91,7 +91,7 @@ export const authSlice = createSlice({
       ...state,
       userProfile: {
         ...state.userProfile,
-        hasData: action.payload,
+        hasData: true,
         data: action.payload,
       },
     }),

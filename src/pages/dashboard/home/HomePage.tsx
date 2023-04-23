@@ -1,5 +1,3 @@
-import React from "react";
-import { lazy, Suspense } from "react";
 import { GET_USER_PROFILE_DATA } from "../../../redux/reducers/auth/auth.slice";
 import { useAppSelector } from "../../../redux/store";
 import { Navigate } from "react-router-dom";

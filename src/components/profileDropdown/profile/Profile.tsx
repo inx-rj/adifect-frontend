@@ -7,8 +7,6 @@ import TabbingLayout from "layouts/TabbingLayout";
 import { ProfilePageAccess } from "helper/config/config";
 import { profileTabHeaders, profileTabTitle } from "helper/config/tabbing";
 import { LanguageOutlined } from "@mui/icons-material";
-import { useSingleEffect, useUpdateEffect } from "react-haiku";
-import { GET_USER_DETAILS } from "redux/actions/auth/auth.actions";
 
 const UserAbout = lazy(
   () => import("components/profileDropdown/profile/UserAbout")

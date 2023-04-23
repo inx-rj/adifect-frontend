@@ -40,9 +40,8 @@ const TRIGGER_LOGIN = (data: EmailPWDType) => async (dispatch: AppDispatch) => {
           title: "Error",
           text: error?.response?.data?.message,
           className: "errorAlert-login",
-          // icon: "/img/logonew-red.svg",
-          icon: Images.Logo,
-          // buttons: false,
+          icon: Images.ErrorLogo,
+          buttons: { visible: false },
           timer: 1500,
         });
       }

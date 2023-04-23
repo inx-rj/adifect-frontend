@@ -7,16 +7,6 @@
   @apply bg-theme;
 }
 
-/* .errorAlert .swal-text, */
-.errorAlert-login .swal-text {
-  @apply text-[#d14f4f];
-}
-
-/* .successAlert .swal-text, */
-.successAlert-login .swal-text {
-  @apply text-[#59cf65];
-}
-
 .errorAlert .swal-title,
 .errorAlert-login .swal-title {
   @apply text-[#d14f4f] tracking-[0.5px];
