@@ -26,7 +26,7 @@ import Business from "@mui/icons-material/Business";
 import { useAppDispatch, useAppSelector } from "redux/store";
 import { GET_USER_PROFILE_DATA } from "redux/reducers/auth/auth.slice";
 import { Images } from "helper/images";
-import CustomPopup from "../customPopup/CustomPopup";
+import MuiPopup from "../muiPopup/MuiPopup";
 import { GET_USER_DETAILS } from "redux/actions/auth/auth.actions";
 import {
   ArrowDropDownOutlined,
@@ -799,7 +799,7 @@ export default function Header(props) {
               </>
             )}
           </li>
-          <CustomPopup
+          <MuiPopup
             dialogTitle="Logout"
             // setShowDropDown={setShowDropdown}
             dialogContent={

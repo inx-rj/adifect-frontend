@@ -5,7 +5,7 @@ import { useAppDispatch, useAppSelector } from "redux/store";
 import { Images } from "helper/images";
 import { ProfilePageAccess } from "helper/config/config";
 
-const Title = lazy(() => import("components/common/PageTitle/Title"));
+const Title = lazy(() => import("components/common/pageTitle/Title"));
 const TabbingBodyTitle = lazy(
   () => import("components/common/tabbing/TabbingBodyTitle")
 );

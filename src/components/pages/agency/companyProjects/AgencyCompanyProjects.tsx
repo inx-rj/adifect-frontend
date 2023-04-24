@@ -4,16 +4,16 @@ import { Link } from "react-router-dom";
 import { useSingleEffect, useUpdateEffect } from "react-haiku";
 import { Button, FormControl, Typography } from "@mui/material";
 import { formateISODateToLocaleString } from "helper/utility/customFunctions";
-import CustomDateRangePicker from "components/common/customDatePicker/CustomDateRangePicker";
-import MuiCustomTable from "components/common/muiCustomTable/MuiCustomTable";
+import CustomDateRangePicker from "components/common/reactDatePicker/ReactDateRangePicker";
+import MuiCustomTable from "components/common/muiTable/MuiTable";
 import {
   GET_COMPANY_PROJECTS_FILTERS_LIST,
   GET_COMPANY_PROJECTS_LIST,
 } from "redux/actions/companies/companies.actions";
 import { useAppDispatch, useAppSelector } from "redux/store";
 import { COMPANY_PROJECTS } from "redux/reducers/companies/companies.slice";
-import DropdownWithSearch from "components/common/muiCustomAutocomplete/DropdownWithSearch";
-import { TableRowColType } from "helper/types/muiCustomTable/muiCustomTable";
+import DropdownWithSearch from "components/common/muiAutocomplete/DropdownWithSearch";
+import { TableRowColType } from "helper/types/muiTable/muiTable";
 import { filterUIOptionsListType } from "helper/types/companies/comapniesType";
 import { Images } from "helper/images";
 

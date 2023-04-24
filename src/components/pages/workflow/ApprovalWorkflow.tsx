@@ -12,12 +12,12 @@ import {
   createFilterOptions,
 } from "@mui/material";
 import axiosPrivate from "api/axios";
-import Title from "components/common/PageTitle/Title";
+import Title from "components/common/pageTitle/Title";
 import LoadingSpinner from "components/common/loadingSpinner/Loader";
 import { Roles } from "helper/config";
 import { API_URL } from "helper/env";
 import { Images } from "helper/images";
-import { TablePaginationType } from "helper/types/muiCustomTable/muiCustomTable";
+import { TablePaginationType } from "helper/types/muiTable/muiTable";
 import React, { useEffect, useRef, useState } from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { useSingleEffect, useUpdateEffect } from "react-haiku";
@@ -192,7 +192,7 @@ const ApprovalWorkflow = () => {
           title: "Warning",
           text: "Are you sure you want to delete this stage?",
           className: "errorAlert",
-          icon: Images.LogoRed,
+          icon: Images.ErrorLogo,
           buttons: {
             Cancel: true,
             Confirm: true,
@@ -528,8 +528,7 @@ const ApprovalWorkflow = () => {
                 title: "Error",
                 text: "Workflow name already exists",
                 className: "errorAlert",
-                icon: Images.LogoRed,
-                // buttons: false,
+                icon: Images.ErrorLogo,
                 buttons: {
                   Confirm: false,
                 },
@@ -541,8 +540,7 @@ const ApprovalWorkflow = () => {
                 title: "Error",
                 text: res?.data?.message,
                 className: "errorAlert",
-                icon: Images.LogoRed,
-                // buttons: false,
+                icon: Images.ErrorLogo,
                 buttons: {
                   Confirm: false,
                 },
@@ -568,8 +566,7 @@ const ApprovalWorkflow = () => {
                 title: "Error",
                 text: res?.data?.message,
                 className: "errorAlert",
-                icon: Images.LogoRed,
-                // buttons: false,
+                icon: Images.ErrorLogo,
                 buttons: {
                   Confirm: false,
                 },
@@ -582,8 +579,7 @@ const ApprovalWorkflow = () => {
               title: "Error",
               text: err.message,
               className: "errorAlert",
-              icon: Images.LogoRed,
-              // buttons: false,
+              icon: Images.ErrorLogo,
               buttons: {
                 Confirm: false,
               },
@@ -607,11 +603,10 @@ const ApprovalWorkflow = () => {
                 title: "Error",
                 text: "Workflow name already exists",
                 className: "errorAlert",
-                icon: Images.LogoRed,
+                icon: Images.ErrorLogo,
                 buttons: {
                   Confirm: false,
                 },
-                // buttons: false,
                 timer: 1500,
               });
             } else {
@@ -635,11 +630,10 @@ const ApprovalWorkflow = () => {
               title: "Error",
               text: err.message,
               className: "errorAlert",
-              icon: Images.LogoRed,
+              icon: Images.ErrorLogo,
               buttons: {
                 Confirm: false,
               },
-              // buttons: false,
               timer: 1500,
             });
             setTimeout(() => {

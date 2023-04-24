@@ -9,10 +9,10 @@ import { profileTabHeaders, profileTabTitle } from "helper/config/tabbing";
 import { LanguageOutlined } from "@mui/icons-material";
 
 const UserAbout = lazy(
-  () => import("components/ProfileDropdown/profile/UserAbout")
+  () => import("components/profileDropdown/profile/UserAbout")
 );
 const UserCommunication = lazy(
-  () => import("components/ProfileDropdown/profile/UserCommunication")
+  () => import("components/profileDropdown/profile/UserCommunication")
 );
 
 const Profile = () => {
@@ -20,6 +20,10 @@ const Profile = () => {
 
   const activeUserTab = useAppSelector(TAB_NAVIGATION_CONFIG);
   const userProfile = useAppSelector(GET_USER_PROFILE_DATA);
+
+  // useUpdateEffect(()=>{
+  //   dispatch(GET_USER_DETAILS());
+  // },[userProfile])
 
   //set initial active tab
   useEffect(() => {

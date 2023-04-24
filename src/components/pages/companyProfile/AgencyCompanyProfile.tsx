@@ -14,12 +14,12 @@ import {
   companyProfileTabHeaders,
   companyProfileTabTitle,
 } from "helper/config/tabbing";
-import { TableRowsType } from "helper/types/muiCustomTable/muiCustomTable";
+import { TableRowsType } from "helper/types/muiTable/muiTable";
 import { ProfilePageAccess } from "helper/config/config";
 import { AccountCircleOutlined, LanguageOutlined } from "@mui/icons-material";
 
 const UserAbout = lazy(
-  () => import("components/ProfileDropdown/profile/UserAbout")
+  () => import("components/profileDropdown/profile/UserAbout")
 );
 const AgencyCompanyContactInfo = lazy(
   () => import("components/pages/companyProfile/AgencyCompanyContactInfo")

@@ -30,7 +30,7 @@ export interface propsType {
   handleSetting?: () => void;
 }
 
-const CustomActionComponent = ({
+const ActionMenuButton = ({
   anchorEl,
   setAnchorEl,
   selectedItem,
@@ -149,4 +149,4 @@ const CustomActionComponent = ({
   );
 };
 
-export default CustomActionComponent;
+export default ActionMenuButton;

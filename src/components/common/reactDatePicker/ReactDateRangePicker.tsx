@@ -2,11 +2,11 @@ import { StartEndDataType } from "helper/types/datePicker/dateRangePicker";
 import React, { useEffect, useState } from "react";
 import Datepicker from "react-tailwindcss-datepicker";
 
-interface CustomDateRangePickerPropsType {
+interface ReactDateRangePickerPropsType {
     handleChange: (dateTitle: string, dateValue: string | null | Date) => void
 }
 
-const CustomDateRangePicker = ({ handleChange }: CustomDateRangePickerPropsType) => {
+const ReactDateRangePicker = ({ handleChange }: ReactDateRangePickerPropsType) => {
     const [value, setValue] = useState<StartEndDataType | null>({ startDate: null, endDate: null });
 
     const handleValueChange = (newValue: StartEndDataType | null) => {
@@ -38,4 +38,4 @@ const CustomDateRangePicker = ({ handleChange }: CustomDateRangePickerPropsType)
     );
 }
 
-export default CustomDateRangePicker;
+export default ReactDateRangePicker;

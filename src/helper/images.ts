@@ -1,5 +1,4 @@
 import Logo from "assets/images/logonew.svg";
-import LogoRed from "assets/images/logonew-red.svg";
 import MiniLogo from "assets/images/mini-logo.png";
 import ErrorLogo from "assets/images/logonew-red.svg";
 import UserAvatar from "assets/images/avataruser.png";
@@ -26,5 +25,4 @@ export const Images = {
   ProfileBG,
   ErrorLogo,
   Loader,
-  LogoRed,
 };

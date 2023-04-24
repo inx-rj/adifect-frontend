@@ -1,7 +1,7 @@
 import { AddOutlined } from "@mui/icons-material";
 import { useState } from "react";
 import { useSingleEffect } from "react-haiku";
-import { TRIGGER_PROFILE_COMMUN_LIST } from "redux/actions/profile/commun.actions";
+import { TRIGGER_PROFILE_COMMUN_LIST } from "redux/actions/profile/profile.actions";
 import { useAppDispatch } from "redux/store";
 
 const UserCommunication = () => {
