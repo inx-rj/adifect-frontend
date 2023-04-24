@@ -1,9 +1,10 @@
 import {
+  CancelRounded,
   Crop,
   DeleteForeverOutlined,
   DriveFileRenameOutlineOutlined,
 } from "@mui/icons-material";
-import { Button } from "@mui/material";
+import { Autocomplete, Button, Pagination, Stack, TextField, createFilterOptions } from "@mui/material";
 import { lastName } from "helper/validations";
 import { firstName } from "helper/validations";
 import { useCallback, useState } from "react";
@@ -18,10 +19,14 @@ import {
 import { useAppDispatch, useAppSelector } from "redux/store";
 import Cropper from "react-easy-crop";
 import swal from "sweetalert";
-import { useUpdateEffect } from "react-haiku";
+import { useSingleEffect, useUpdateEffect } from "react-haiku";
 import { Images } from "helper/images";
 import MuiPopup from "components/common/muiPopup/MuiPopup";
 import { useDropzone } from "react-dropzone";
+import { TRIGGER_PROFILE_PORTFOLIO_LIST } from "redux/actions/profile/profile.actions";
+import { ADD_USER_SKILL_SET_LIST, GET_ALL_SKILLS_LIST } from "redux/actions/skills/skills.action";
+import { ALL_SKILLS_LIST } from "redux/reducers/skills/skills.slice";
+import { GET_PROFILE_PORTFOLIO } from "redux/reducers/profile/userPortfolio.slice";
 
 const EditProfileForm = ({ openPopup, handlePopup }) => {
   const dispatch = useAppDispatch();
@@ -29,6 +34,8 @@ const EditProfileForm = ({ openPopup, handlePopup }) => {
   // Redux State
   const userProfile = useAppSelector(GET_USER_PROFILE_DATA);
   const userData = useAppSelector(GET_USER_DATA);
+  const portfolioDetails = useAppSelector(GET_PROFILE_PORTFOLIO);
+  const skillsData = useAppSelector(ALL_SKILLS_LIST);
 
   // -----Edit profile input form start ---------
   const [errors, setErrors] = useState({
@@ -48,14 +55,18 @@ const EditProfileForm = ({ openPopup, handlePopup }) => {
   const [profile_status, setProfileStatus] = useState("1");
   const [modeOfComm, setModeOfComm] = useState("0");
   const [communication, setCommunication] = useState("");
-  const [portfolioChanged, setPortfolioChanged] = useState(false);
   const [selectedPortfolio, setSelectedPortfolio] = useState([]);
   const [removePortfolio, setRemovePortfolio] = useState([]);
   const [videoChanged, setVideoChanged] = useState(false);
   const [removeVideo, setRemoveVideo] = useState(false);
   const [skills, setSkills] = useState([]);
-  const [showMoreDesc, setShowMoreDesc] = useState(false);
+  // const [showMoreDesc, setShowMoreDesc] = useState(false);
   const [saveLoading, setSaveLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pages, setPages] = useState<number>(0);
+  const [skillset, setSkillset] = useState([]);
+  const [isOpenSkill, setIsOpenSkill] = useState(false);
+  const addedSkill = false;
   // -------Edit profile input form end -------
 
   // -------  Profile image state start------------
@@ -84,9 +95,12 @@ const EditProfileForm = ({ openPopup, handlePopup }) => {
   // ---------Profile image state end--------------
 
   // Get data from redux/API in udpate mode
+  useSingleEffect(() => {
+    dispatch(GET_USER_DETAILS());
+  })
   useUpdateEffect(() => {
     if (userProfile?.hasData || saveLoading) {
-      // setSaveLoading(true);
+      setSaveLoading(true);
 
       setTimeout(() => {
         setSaveLoading(false);
@@ -108,9 +122,9 @@ const EditProfileForm = ({ openPopup, handlePopup }) => {
       userProfile?.hasData ||
       userProfile?.data?.id !== userData?.data?.user?.user_id
     ) {
-      // dispatch(GET_USER_DETAILS());
+      dispatch(GET_USER_DETAILS());
     } else {
-      // user.sub_title == "null" ? "" : user.sub_title;
+      // user.sub_title === "null" ? "" : user.sub_title;
 
       setUsername(userData?.data?.user?.name);
       setEmail(userProfile?.data?.email);
@@ -136,7 +150,7 @@ const EditProfileForm = ({ openPopup, handlePopup }) => {
   }, [userProfile?.hasData]);
 
   // Submit profile form
-  const submitHandler = async () => {
+  const submitHandler = async (e) => {
     // alert("passed");
     const formData = new FormData();
 
@@ -162,10 +176,9 @@ const EditProfileForm = ({ openPopup, handlePopup }) => {
     formData.append("preferred_communication_mode", modeOfComm);
     formData.append("preferred_communication_id", communication);
 
-    if (portfolioChanged) {
-      for (const key of Object.keys(selectedPortfolio)) {
-        formData.append("portfolio", selectedPortfolio[key]);
-      }
+    for (const key of Object.keys(selectedPortfolio)) {
+      console.log(selectedPortfolio[key], "selectedPortfolio[key]")
+      formData.append("portfolio", selectedPortfolio[key]);
     }
     if (removePortfolio) {
       for (const key of Object.keys(removePortfolio)) {
@@ -214,21 +227,21 @@ const EditProfileForm = ({ openPopup, handlePopup }) => {
     // dispatch(updateProfile(formData));
     // setSelectedVideo();  remove
     setRemoveVideo(false);
-    setShowMoreDesc(false);
+    // setShowMoreDesc(false);
     setRemoveProfileImage(false);
     setImageChanged(false);
     setVideoChanged(false);
-    setPortfolioChanged(false);
     setDoCrop(false);
     setSaveLoading(true);
+    handleSaveSkillSet();
 
     //Close edit profile modal
     handlePopup();
   };
 
   // Validate form input
-  const validateSubmit = () => {
-    // e.preventDefault();
+  const validateSubmit = (e) => {
+    e.preventDefault();
     const tempErrors = {
       firstname: firstName(firstname),
       lastname: lastName(lastname),
@@ -244,7 +257,7 @@ const EditProfileForm = ({ openPopup, handlePopup }) => {
     if (Object.values(tempErrors).filter((value) => value).length) {
       return;
     }
-    submitHandler();
+    submitHandler(e);
   };
 
   const removeSelectedImage = () => {
@@ -395,7 +408,7 @@ const EditProfileForm = ({ openPopup, handlePopup }) => {
       });
       return;
     }
-    // MAX FILE SIZE == 2mb
+    // MAX FILE SIZE === 2mb
     if (file?.size > maxImageFileSize) {
       swal({
         title: "",
@@ -422,6 +435,36 @@ const EditProfileForm = ({ openPopup, handlePopup }) => {
   };
 
   // Portfolio upload-drop box 
+  const pageHandler = (gotopage) => {
+    setCurrentPage(gotopage);
+  };
+  const changeHandler = (e, v) => {
+    setSkillset(v);
+  };
+  useUpdateEffect(() => {
+    // dispatch({ type: USER_PORTFOLIO_RESET });
+    console.log("User Profile", userProfile)
+    dispatch(TRIGGER_PROFILE_PORTFOLIO_LIST(userProfile?.data?.id, currentPage));
+    // dispatch(getUserSkillsetDetails());
+  }, [currentPage, userProfile?.hasData]);
+
+  useUpdateEffect(() => {
+    console.log("portfolioDetails", portfolioDetails)
+    if (portfolioDetails?.data?.results?.length > 0) {
+      let numberPages = Math.ceil(portfolioDetails?.data?.count / 4);
+      setPages(numberPages);
+
+      setSelectedPortfolio(
+        portfolioDetails?.data?.results?.map((file) =>
+          Object.assign(file, {
+            preview: file.portfolio_images,
+            title: file.portfolio_name,
+          })
+        )
+      );
+    }
+  }, [userProfile?.hasData]);
+
   const onDrop = useCallback(
     (acceptedFiles) => {
       setSelectedPortfolio([
@@ -463,17 +506,14 @@ const EditProfileForm = ({ openPopup, handlePopup }) => {
   };
 
   const thumbs = selectedPortfolio?.map((file) => (
-    <div className="port-single port-singlecreator" key={file.id}>
+    <div className="port-single port-singlecreator rounded drop-shadow relative overflow-hidden" key={file.id}>
       <img
-        style={{
-          maxWidth: "100px",
-          padding: "5px",
-        }}
         src={file.preview}
+        className="max-w-full w-full h-full object-cover min-h-[170px]"
       />
       <span
         // index={file.id}
-        className="overlayasdasd"
+        className="overlayasdasd absolute top-2 right-2 rounded-full drop-shadow cursor-pointer"
         onClick={() => removeFile(file)}
       >
         <a
@@ -481,14 +521,14 @@ const EditProfileForm = ({ openPopup, handlePopup }) => {
           className="icon_asdsdasd"
           title="Remove"
         >
-          <i className="fa-solid fa-circle-xmark"></i>
+          <CancelRounded className="text-theme bg-white rounded-full" />
         </a>
       </span>
     </div>
   ));
 
   const fileRejectionItems = fileRejections.map(({ file, errors }) => (
-    
+
     <li className="mapDataDiv">
       {`${console.log("FFILE", file)}`}
       <ul className="mapDataDiv2">
@@ -501,13 +541,52 @@ const EditProfileForm = ({ openPopup, handlePopup }) => {
     </li>
   ));
 
+  // Set Add skill data 
+  const handleSaveSkillSet = () => {
+    let skillsForPost = [];
+    console.log("skillset data", skillset)
+    for (let index = 0; index < skillset.length; index++) {
+      skillsForPost.push(skillset[index].id);
+    }
+
+    dispatch(
+      ADD_USER_SKILL_SET_LIST({ skills: skillsForPost, user: userProfile?.data?.id })
+    );
+    setSaveLoading(true);
+    // setOpenSkillset(false);
+    // handleClose6();
+  };
+
+  useUpdateEffect(() => {
+    dispatch(GET_ALL_SKILLS_LIST());
+  }, [addedSkill]);
+
+  useSingleEffect(()=>{
+    dispatch(GET_ALL_SKILLS_LIST());
+  })
+  const handleInputChangeAutocomplete = (event, newInputValue) => {
+    // setSkills(newInputValue);
+    if (newInputValue.length > 0) {
+      setIsOpenSkill(true);
+    } else {
+      setIsOpenSkill(false);
+    }
+  };
+  const filterOptions = createFilterOptions({
+    matchFrom: "start",
+    stringify: (option) => option['skill_name'],
+  });
+
   return (
     <MuiPopup
       dialogTitle="Edit Profile"
       textAlign="left"
       openPopup={openPopup}
       closePopup={handlePopup}
-      mainActionHandler={validateSubmit}
+      mainActionHandler={(e)=> {
+        !errors && handlePopup(e);
+        validateSubmit(e)
+      }}
       mainActionTitle="Create"
       maxWidth="950px"
       dialogContent={
@@ -766,10 +845,10 @@ const EditProfileForm = ({ openPopup, handlePopup }) => {
                   <label>Title</label>
                   <input
                     className="input-style"
-                    // value={profile_title == null ? "" : profile_title}
+                    // value={profile_title === null ? "" : profile_title}
                     id="sub_title"
                     type="text"
-                    value={sub_title == "null" ? "" : sub_title}
+                    value={sub_title === "null" ? "" : sub_title}
                     onChange={(e) => {
                       setsub_title(e.target.value);
                     }}
@@ -787,7 +866,7 @@ const EditProfileForm = ({ openPopup, handlePopup }) => {
                   <label>Sub Title</label>
                   <input
                     className="input-style"
-                    value={profile_title == "null" ? "" : profile_title}
+                    value={profile_title === "null" ? "" : profile_title}
                     id="profile_title"
                     type="text"
                     onChange={(e) => {
@@ -808,10 +887,10 @@ const EditProfileForm = ({ openPopup, handlePopup }) => {
                   <label className="">Website</label>
                   <input
                     className="input-style"
-                    // value={profile_title == null ? "" : profile_title}
+                    // value={profile_title === null ? "" : profile_title}
                     id="last_namePop"
                     type="text"
-                    value={website == "null" ? "" : website}
+                    value={website === "null" ? "" : website}
                     onChange={(e) => {
                       setWebsite(e.target.value);
                       // setErrors({ ...errors, website: null });
@@ -819,6 +898,75 @@ const EditProfileForm = ({ openPopup, handlePopup }) => {
                   />
                 </div>
                 <span className="err-tag">{errors.website ?? ""}</span>
+              </label>
+            </div>
+            <div className="input-fields-wrapper col-span-2">
+              <label
+                className="upload-profileImg profile_info"
+                htmlFor="last_name"
+              >
+                <div className="text-content  Skills Experiencenew_2">
+                  <div className="profileinpProfilePop">
+                    <h5 className=" neededskillnew_29">
+                      Add Skills
+                    </h5>
+                    <div className="Marketing- mt-2-">
+                      <div className="skills-input-container">
+                        <Autocomplete
+                          value={skillset}
+                          multiple
+                          id="tags-outlined"
+                          open={isOpenSkill}
+                          // open={true}
+                          onInputChange={
+                            handleInputChangeAutocomplete
+                          }
+                          filterOptions={filterOptions}
+                          options={skillsData?.data?.results?.filter(
+                            (item) => item.is_active
+                          ) ?? []}
+                          getOptionLabel={(option) =>
+                            option.skill_name
+                          }
+                          onChange={(e, v) => {
+                            changeHandler(e, v);
+                          }}
+                          // inputProps={{
+                          //   "aria-label": "Without label",
+                          // }}
+                          filterSelectedOptions
+                          // hiddenLabel="true"
+                          autoHighlight={true}
+                          renderInput={(params) => (
+                            <TextField
+                              {...params}
+                              fullWidth
+                              placeholder="Type something"
+                            />
+                          )}
+                          isOptionEqualToValue={(option, value) =>
+                            value === undefined ||
+                            value === "" ||
+                            option.id === value.id ||
+                            option.id === value ||
+                            option === value.id
+                          }
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="diverrors44">
+                    <span
+                      style={{
+                        color: "#D14F4F",
+                        opacity: errors.skills ? 1 : 0,
+                      }}
+                    >
+                      {errors.skills ?? "valid"}
+                    </span>
+                  </div>
+                </div>
               </label>
             </div>
             <div className="input-fields-wrapper col-span-2">
@@ -849,13 +997,13 @@ const EditProfileForm = ({ openPopup, handlePopup }) => {
                     Portfolio
                   </h5>
                   <span
-                    className="creatorprofilesec"
+                    className="creatorprofilesec relative w-full inline-block"
                     {...getRootProps()}
                   >
                     <input id="portfolio"  {...getInputProps()} />
-                    <button>Attach File</button>
+                    <button className="border border-theme text-theme rounded text-lg min-h-[80px] w-full" >Attach File</button>
                   </span>
-                  <div className="port-images port-imagesPopUp">
+                  <div className="port-images port-imagesPopUp grid grid-cols-4 gap-3 mt-3">
                     {thumbs}
                   </div>
                   {fileRejectionItems?.length > 0 && (
@@ -868,6 +1016,22 @@ const EditProfileForm = ({ openPopup, handlePopup }) => {
                 </div>
               </label>
             </div>
+            {pages > 1 && (
+              <div className="adminjobpagination paginationAdifect">
+                <Stack spacing={2}>
+                  <Pagination
+                    page={currentPage}
+                    shape="rounded"
+                    size="large"
+                    count={pages}
+                    onChange={(e, page) => {
+                      pageHandler(page);
+                    }}
+                    color="primary"
+                  />
+                </Stack>
+              </div>
+            )}
           </div>
         </>
       }

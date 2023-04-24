@@ -1,6 +1,5 @@
 import { AppDispatch } from "redux/store";
 import CommonApiClient from "services/common/CommonApiClient";
-import { initialNotificationQueryInterface } from "helper/types/common/notification";
 import { SET_NOTIFICATION_DATA } from "redux/reducers/common/notification.slice";
 
 

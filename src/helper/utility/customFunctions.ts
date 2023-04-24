@@ -1,4 +1,3 @@
-import { RouteType, SidebarRoutesTypes } from "helper/types";
 import { initialNotificationQueryInterface } from "helper/types/common/notification";
 import { initialTableConfigInterface } from "helper/types/common/table";
 import { intersection } from "lodash";

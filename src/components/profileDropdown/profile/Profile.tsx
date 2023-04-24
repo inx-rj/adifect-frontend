@@ -21,6 +21,10 @@ const Profile = () => {
   const activeUserTab = useAppSelector(TAB_NAVIGATION_CONFIG);
   const userProfile = useAppSelector(GET_USER_PROFILE_DATA);
 
+  // useUpdateEffect(()=>{
+  //   dispatch(GET_USER_DETAILS());
+  // },[userProfile])
+
   //set initial active tab
   useEffect(() => {
     if (userProfile.data?.role >= 0) {

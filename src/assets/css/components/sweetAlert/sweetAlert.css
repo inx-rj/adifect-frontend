@@ -7,16 +7,6 @@
   @apply bg-theme;
 }
 
-/* .errorAlert .swal-text, */
-.errorAlert-login .swal-text {
-  @apply text-[#d14f4f];
-}
-
-/* .successAlert .swal-text, */
-.successAlert-login .swal-text {
-  @apply text-[#59cf65];
-}
-
 .errorAlert .swal-title,
 .errorAlert-login .swal-title {
   @apply text-[#d14f4f] tracking-[0.5px];
@@ -31,7 +21,7 @@
   @apply text-center;
 }
 .swal-modal.errorAlert .swal-footer .swal-button.swal-button--Cancel {
-  @apply  text-[#555] bg-[#efefef] disabled:bg-dark-100 disabled:text-title-color hover:bg-[#efefef];
+  @apply text-[#555] bg-[#efefef] disabled:bg-dark-100 disabled:text-title-color hover:bg-[#efefef];
 }
 .swal-modal.errorAlert .swal-footer .swal-button.swal-button--OK {
   @apply bg-[#e64942];
@@ -40,8 +30,8 @@
   @apply text-xl pt-0;
 }
 .swal-modal {
-  @apply max-w-[350px] max-h-[210px] w-full h-full bg-white rounded;
+  @apply max-w-[350px] min-h-[210px] w-full bg-white rounded;
 }
 .swal-text {
-  @apply text-center
+  @apply text-center;
 }
