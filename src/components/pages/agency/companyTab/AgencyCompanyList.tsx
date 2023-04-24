@@ -8,7 +8,7 @@ import swal from "sweetalert";
 import MuiCustomTable from "components/common/muiTable/MuiTable";
 import SearchBar from "components/common/searchBar/SearchBar";
 import ActionMenuButton from "components/common/actionMenuButton/ActionMenuButton";
-import CustomPopup from "common/CustomPopup";
+import MuiPopup from "components/common/muiPopup/MuiPopup";
 import LoadingSpinner from "components/common/loadingSpinner/Loader";
 
 //import MUI components and icons
@@ -157,7 +157,7 @@ const AgencyCompanyList = () => {
   const validateSubmit = (e) => {
     e.preventDefault();
     const tempErrors = {
-      company: !formData.company ? "Please enter Tag Name" : null,
+      company: !formData.company ? "Please enter Company Name" : null,
       description: !formData.description ? "Please enter Description" : null,
     };
     setErrors(tempErrors);
@@ -484,7 +484,7 @@ const AgencyCompanyList = () => {
               paginationData={paginationData}
               setPaginationData={setPaginationData}
             />
-            <CustomPopup
+            <MuiPopup
               dialogTitle={
                 isEditMode
                   ? "Edit Company"
@@ -494,7 +494,7 @@ const AgencyCompanyList = () => {
               }
               textAlign="left"
               dialogContent={
-                <div className="mt-5">
+                <>
                   {isSettingMode ? (
                     <div>
                       <h4>Company Status</h4>
@@ -585,7 +585,7 @@ const AgencyCompanyList = () => {
                       />
                     </>
                   )}
-                </div>
+                </>
               }
               openPopup={openModal}
               closePopup={() => {

@@ -9,7 +9,6 @@ import swal from "sweetalert";
 import MuiCustomTable from "components/common/muiTable/MuiTable";
 import SearchBar from "components/common/searchBar/SearchBar";
 import ActionMenuButton from "components/common/actionMenuButton/ActionMenuButton";
-import CustomPopup from "common/CustomPopup";
 
 //import MUI components and icons
 import {
@@ -151,7 +150,7 @@ const WorkFlowList = () => {
   const validateSubmit = (e) => {
     e.preventDefault();
     const tempErrors = {
-      company: !formData.company ? "Please enter Tag Name" : "",
+      company: !formData.company ? "Please enter Company Name" : "",
       description: !formData.description ? "Please enter Description" : "",
     };
     setErrors(tempErrors);

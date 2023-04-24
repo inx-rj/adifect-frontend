@@ -20,10 +20,10 @@ import { GET_COMPANY_LIST } from "redux/actions/companyTab/companyTab.actions";
 
 //import components
 import SearchBar from "components/common/searchBar/SearchBar";
-import CustomPopup from "common/CustomPopup";
 import MuiCustomTable from "components/common/muiTable/MuiTable";
 import ActionMenuButton from "components/common/actionMenuButton/ActionMenuButton";
 import LoadingSpinner from "components/common/loadingSpinner/Loader";
+import MuiPopup from "components/common/muiPopup/MuiPopup";
 
 //import assets
 import SortArrowIcon from "../../../assets/images/sort_arrows.png";
@@ -328,7 +328,7 @@ const InviteUser = () => {
           <button
             type="submit"
             onClick={() => setOpenModal(true)}
-            className="btn btn-primary flex items-center px-4 gap-3"
+            className="flex items-center gap-3 px-4 btn btn-primary"
           >
             <PersonAddAltIcon />
             <span className="btn-label">Invite User</span>
@@ -345,11 +345,11 @@ const InviteUser = () => {
               paginationData={paginationData}
               setPaginationData={setPaginationData}
             />
-            <CustomPopup
+            <MuiPopup
               dialogTitle={isEditMode ? "Edit Invite User" : "Invite User"}
               textAlign="left"
               dialogContent={
-                <div className="mt-5">
+                <>
                   {!isEditMode && (
                     <>
                       <div
@@ -457,7 +457,7 @@ const InviteUser = () => {
                       <span className="err-tag">{errors.level ?? ""}</span>
                     </div>
                   </div>
-                </div>
+                </>
               }
               openPopup={openModal}
               closePopup={() => {
