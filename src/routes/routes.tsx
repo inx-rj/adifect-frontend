@@ -203,9 +203,9 @@ export const WORKFLOW_ROUTES: RouteType[] = [
     ),
   },
 ];
-// MY Projects page routes
+// => MY Projects page routes
 export const MY_PROJECTS_ROUTES: RouteType[] = [];
-// Company(Community) page routes
+// => Company(Community) page routes
 export const COMPANIES_ROUTES: RouteType[] = [
   {
     path: COMPANIES_ROUTE.COMPANY_PROJECTS_DETAILS,
@@ -216,9 +216,9 @@ export const COMPANIES_ROUTES: RouteType[] = [
     ),
   },
 ];
-// Media page routes
+// => Media page routes
 export const MEDIA_ROUTES: RouteType[] = [];
-// Jobs page routes
+// => Jobs page routes
 export const JOBS_ROUTES: RouteType[] = [
   {
     path: MY_JOBS_ROUTE.CREATE_MY_JOB,
@@ -229,22 +229,14 @@ export const JOBS_ROUTES: RouteType[] = [
     ),
   },
 ];
-// Draft jobs routes
+// => Draft jobs routes
 export const DRAFT_JOBS_ROUTES: RouteType[] = [];
-// Template jobs routes
+// => Template jobs routes
 export const TEMPLATES_ROUTES: RouteType[] = [];
-// Company page routes
+// => Company page routes
 export const COMPANY_ROUTES: RouteType[] = [
   {
     path: COMPANY_ROUTE.COMPANY_LIST_DETAILS,
-    component: (
-      <Suspense fallback={""}>
-        <AgencyCompanyProfile />
-      </Suspense>
-    ),
-  },
-  {
-    path: COMPANY_ROUTE.ADMIN_COMPANY_LIST_DETAILS,
     component: (
       <Suspense fallback={""}>
         <AgencyCompanyProfile />

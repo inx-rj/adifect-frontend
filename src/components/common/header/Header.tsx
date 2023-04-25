@@ -159,11 +159,11 @@ export default function Header(props) {
   //     }
   //   }
   // }, [companyData, props.headerCompany, openMenuInProgress]);
-  useSingleEffect(() => {
-    if (!userProfile?.data?.id) {
-      dispatch(GET_USER_DETAILS());
-    }
-  });
+  // useSingleEffect(() => {
+  //   if (!userProfile?.data?.id) {
+  //     dispatch(GET_USER_DETAILS());
+  //   }
+  // });
 
   useUpdateEffect(() => {
     if (userProfile?.data?.id) {

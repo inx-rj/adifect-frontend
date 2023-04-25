@@ -18,6 +18,7 @@ import { useAppSelector } from "redux/store";
 import { IS_PERSISTED } from "redux/reducers/config/app/app.slice";
 import { getAllowedRoutes } from "helper/utility/customFunctions";
 import { GET_USER_PROFILE_DATA } from "redux/reducers/auth/auth.slice";
+import { useSingleEffect } from "react-haiku";
 
 // Import lazy load component
 const AuthLayout = lazy(() => import("layouts/AuthLayout"));
@@ -33,6 +34,7 @@ const RouteApp = () => {
   const isPersist = useAppSelector(IS_PERSISTED);
   const userProfile = useAppSelector(GET_USER_PROFILE_DATA);
 
+  // Combined various pages route list into single
   const COMBINED_ROUTES = [
     ...HEADER_ROUTES,
     ...PAGES_ROUTES,
@@ -46,16 +48,15 @@ const RouteApp = () => {
     ...COMPANY_ROUTES,
   ];
 
-  // RBAC - Code
+  // RBAC(RoleBasedAccessControl) - Code
   const AllowedRoutes = [];
-
-  if (isPersist)
-    AllowedRoutes.push(
-      getAllowedRoutes(COMBINED_ROUTES, [userProfile?.data?.role])
-    );
-  else navigate("/login");
-
-  // console.log(isPersist, COMBINED_ROUTES, AllowedRoutes, 'Allowed');
+  useSingleEffect(() => {
+    if (isPersist) AllowedRoutes.push(getAllowedRoutes(COMBINED_ROUTES, [userProfile?.data?.role]));
+    else {
+      AllowedRoutes.splice(0, AllowedRoutes.length);
+      navigate("/login");
+    }
+  });
 
   return (
     <Routes>
@@ -86,7 +87,6 @@ const RouteApp = () => {
           </Suspense>
         }
       >
-        {/* Agency Routes  */}
         <Route
           element={
             <Suspense fallback={""}>
@@ -107,7 +107,7 @@ const RouteApp = () => {
         </Route>
       </Route>
 
-      {/* Not Found Page  */}
+      {/* Not Found Page (UnKnown Route)  */}
       <Route
         path="*"
         element={

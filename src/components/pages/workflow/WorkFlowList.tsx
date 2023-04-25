@@ -136,7 +136,7 @@ const WorkFlowList = () => {
     //   description: item?.description,
     //   isActive: item?.is_active,
     // });
-    navigate(`edit/${item?.id}`);
+    navigate(`${item?.id}`);
   };
 
   //handle settings action
@@ -402,7 +402,7 @@ const WorkFlowList = () => {
                 setPaginationData={setPaginationData}
                 paginationData={paginationData}
               />
-              <Link to={WORKFLOW_ROUTE.CREATE_WORKFLOW}>
+              <Link to={`${WORKFLOW_ROUTE.HOME}/add`}>
                 <button
                   type="submit"
                   // onClick={() => setOpenModal(true)}

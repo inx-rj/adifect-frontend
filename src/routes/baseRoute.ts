@@ -52,8 +52,8 @@ export const WORKFLOW_ROUTE: Readonly<{
   [key: string]: string;
 }> = Object.freeze({
   HOME: `${PAGE_ROUTE.WORKFLOW}`,
-  CREATE_WORKFLOW: `${PAGE_ROUTE.WORKFLOW}/add`,
-  UPDATE_WORKFLOW: `${PAGE_ROUTE.WORKFLOW}/edit/:workflowId`,
+  CREATE_WORKFLOW: `${PAGE_ROUTE.WORKFLOW}/*`,
+  // UPDATE_WORKFLOW: `${PAGE_ROUTE.WORKFLOW}/edit/:workflowId`,
 });
 
 // Companies Route
@@ -84,9 +84,9 @@ export const TEMPLATES_ROUTE: Readonly<{
 export const COMPANY_ROUTE: Readonly<{
   [key: string]: string;
 }> = Object.freeze({
-  COMPANY_LIST_DETAILS: `${PAGE_ROUTE.COMPANY}/:companyId`,
-  ADMIN_COMPANY_LIST_DETAILS: `${PAGE_ROUTE.COMPANY}/:companyId/:agencyId`,
-  CREATE_COMPANY: `${PAGE_ROUTE.COMPANY}/add`,
+  COMPANY_LIST_DETAILS: `${PAGE_ROUTE.COMPANY}/*`,
+  // ADMIN_COMPANY_LIST_DETAILS: `${PAGE_ROUTE.COMPANY}/:companyId/:agencyId`,
+  // CREATE_COMPANY: `${PAGE_ROUTE.COMPANY}/add`,
 });
 
 // Help Route

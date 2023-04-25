@@ -26,7 +26,10 @@ const AgencyCompanyContactInfo = lazy(
 );
 
 const AgencyCompanyProfile = () => {
-  const { companyId } = useParams();
+  const { "*": companyId } = useParams();
+  const params = useParams();
+  // console.log({ companyId, admin: companyId ?? params?.companyId }); // to be fixed.
+
   const dispatch = useAppDispatch();
   const [currentCompany, setCurrentCompany] = useState<TableRowsType | null>(
     null
@@ -65,13 +68,13 @@ const AgencyCompanyProfile = () => {
 
   //check which company is selected
   useEffect(() => {
-    if (companyList.data.results?.length > 0 && companyId) {
+    if (companyList.data.results?.length > 0 && (companyId ?? params?.companyId)) {
       const currentCompany = companyList.data.results?.find(
-        (item) => item?.id === Number(companyId)
+        (item) => item?.id === Number((companyId ?? params?.companyId))
       );
       setCurrentCompany(currentCompany);
     }
-  }, [companyList.data.results, companyId]);
+  }, [companyList.data.results, (companyId ?? params?.companyId)]);
 
   //prepare the icons list to display on the profile
   const iconList = useMemo(() => {
@@ -118,7 +121,7 @@ const AgencyCompanyProfile = () => {
         tabBodyTitle={activeUserTab?.company_profile?.active}
         tabBodySection={
           activeUserTab?.company_profile?.active ===
-          companyProfileTabTitle.COMPANY_INFO ? (
+            companyProfileTabTitle.COMPANY_INFO ? (
             <AgencyCompanyContactInfo companyData={currentCompany} />
           ) : null
         }

@@ -38,11 +38,12 @@ import {
 import { useAppDispatch, useAppSelector } from "redux/store";
 import { WORKFLOW_ROUTE } from "routes/baseRoute";
 import swal from "sweetalert";
+import { isEmpty } from "helper/utility/customFunctions";
 
 const ApprovalWorkflow = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { workflowId } = useParams();
+  const { '*': workflowId } = useParams();
 
   const companyData = useAppSelector(COMPANY_LIST);
   const userProfile = useAppSelector(GET_USER_PROFILE_DATA);
@@ -696,7 +697,7 @@ const ApprovalWorkflow = () => {
   });
 
   useEffect(() => {
-    if (workflowMainDetails && workflowId) {
+    if (workflowMainDetails && !isNaN(Number(workflowId))) {
       setWorkflowName(workflowMainDetails?.name);
       setcompanyvalue(workflowMainDetails?.company);
 
@@ -714,7 +715,7 @@ const ApprovalWorkflow = () => {
     // if (!workflowId && headerCompany) {
     //   setcompanyvalue(headerCompany);
     // }
-    if (workflowStageDetails && workflowId) {
+    if (workflowStageDetails && !isNaN(Number(workflowId))) {
       if (workflowStageDetails?.data?.results.length > 0) {
         for (let i in workflowStageDetails?.data?.results) {
           const finalNudgeTimeArr = [];
@@ -805,14 +806,21 @@ const ApprovalWorkflow = () => {
     const success = axiosPrivate
       .get(`${API_URL.COMPANY.COMPANY_LIST}?is_active=1`)
       .then((res) => {
-        console.log(res);
-        setcompanydata(res?.data?.data?.results);
+        const responseDestructredData = { ...res?.data?.data };
+        // console.log({ res, responseDestructredData }, 'Res Company');
+
+        // To append company data of selected workflow details
+        if (isEmpty(responseDestructredData?.results?.find((e) => e.company_id == workflowMainDetails?.company))) {
+          responseDestructredData?.results?.push({ id: workflowMainDetails?.company, name: workflowMainDetails?.company_name });
+        }
+        // console.log({ res, results: responseDestructredData?.results });
+        setcompanydata(responseDestructredData?.results);
       })
-      .catch((err) => {});
-  }, []);
+      .catch((err) => { });
+  }, [workflowMainDetails, workflowId]);
 
   //fetch company list when pagination change
-  useUpdateEffect(() => {
+  useEffect(() => {
     if (userProfile?.data?.role === Roles.ADMIN) {
       dispatch(GET_COMPANY_LIST(paginationData, `${API_URL.COMPANY.ADMIN}`));
     } else {
@@ -820,7 +828,7 @@ const ApprovalWorkflow = () => {
         GET_COMPANY_LIST(paginationData, `${API_URL.COMPANY.COMPANY_LIST}`)
       );
     }
-    if (workflowId) {
+    if (!isNaN(Number(workflowId))) {
       dispatch(GET_WORKFLOW_STAGE_DETAILS(workflowId));
       dispatch(GET_WORKFLOW_MAIN_DETAILS(workflowId));
     }
@@ -835,14 +843,14 @@ const ApprovalWorkflow = () => {
           {showbutton ? (
             <div className="flex justify-between">
               <Title title="Edit Approval Workflow" />{" "}
-              <span className="btn btn-outline max-w-[160px] w-full">
-                <Link
-                  to={WORKFLOW_ROUTE.HOME}
-                  className="text-lg font-semibold"
-                >
+              <Link
+                to={WORKFLOW_ROUTE.HOME}
+                className="btn btn-outline max-w-[160px] w-full h-full"
+              >
+                <span className="text-lg font-semibold">
                   Back
-                </Link>
-              </span>
+                </span>
+              </Link>
             </div>
           ) : (
             <div className="workflow-heading">
@@ -882,7 +890,7 @@ const ApprovalWorkflow = () => {
                 }}
                 name="Name"
                 placeholder="Name"
-                // onChange={handlechange}
+              // onChange={handlechange}
               />
               <span
                 className="text-[#D14F4F] flex justify-end"
@@ -1082,7 +1090,7 @@ const ApprovalWorkflow = () => {
                                           showbutton &&
                                           orderDown(e, item.stage_id, index)
                                         }
-                                        // onClick={(e) => setselected(index)}
+                                      // onClick={(e) => setselected(index)}
                                       >
                                         {/* <img src="/img/don.png" /> */}
                                         <PresentToAllOutlined
@@ -1098,9 +1106,9 @@ const ApprovalWorkflow = () => {
                                           ? "disable_up_down"
                                           : ""
                                       }
-                                      // className={
-                                      //   index == 0 ? "disable_up_down" : ""
-                                      // }
+                                    // className={
+                                    //   index == 0 ? "disable_up_down" : ""
+                                    // }
                                     >
                                       <Link to="">
                                         <div
@@ -1108,15 +1116,15 @@ const ApprovalWorkflow = () => {
                                             showbutton &&
                                               (item.stage_id
                                                 ? handleRemoveStage(
-                                                    index,
-                                                    item.stage_id,
-                                                    true
-                                                  )
+                                                  index,
+                                                  item.stage_id,
+                                                  true
+                                                )
                                                 : handleRemoveStage(
-                                                    index,
-                                                    index,
-                                                    true
-                                                  ));
+                                                  index,
+                                                  index,
+                                                  true
+                                                ));
                                           }}
                                         >
                                           <DeleteOutlineOutlined />
@@ -1193,9 +1201,9 @@ const ApprovalWorkflow = () => {
                                         options={
                                           workflowMemberApproversData
                                             ?.inviteMembersList?.data?.length >
-                                          0
+                                            0
                                             ? workflowMemberApproversData
-                                                ?.inviteMembersList?.data
+                                              ?.inviteMembersList?.data
                                             : []
                                         }
                                         getOptionLabel={(option) =>
@@ -1337,7 +1345,7 @@ const ApprovalWorkflow = () => {
                                                 ?.inviteMembersList?.data
                                                 ?.length > 0
                                                 ? workflowMemberApproversData
-                                                    ?.inviteMembersList?.data
+                                                  ?.inviteMembersList?.data
                                                 : []
                                             }
                                             getOptionLabel={(option) =>
@@ -1383,15 +1391,15 @@ const ApprovalWorkflow = () => {
                                                 option.id === value.id
                                               // option.value == value.value
                                             }
-                                            // isOptionEqualToValue={(
-                                            //   option,
-                                            //   value
-                                            // ) =>
-                                            //   value === undefined ||
-                                            //   value === "" ||
-                                            //   option.id === value.id ||
-                                            //   option.value === value.value
-                                            // }
+                                          // isOptionEqualToValue={(
+                                          //   option,
+                                          //   value
+                                          // ) =>
+                                          //   value === undefined ||
+                                          //   value === "" ||
+                                          //   option.id === value.id ||
+                                          //   option.value === value.value
+                                          // }
                                           />
                                         </div>
                                         {!item?.observer?.length ? (
@@ -1604,7 +1612,7 @@ const ApprovalWorkflow = () => {
                                                               el.time === 12
                                                           ) ||
                                                           item.approval_time ==
-                                                            12
+                                                          12
                                                         }
                                                         value={12}
                                                       >
@@ -1740,7 +1748,7 @@ const ApprovalWorkflow = () => {
                   <button
                     className="btn btn-primary font-semibold text-lg w-[160px]"
                     disabled
-                    // type="hidden"
+                  // type="hidden"
                   >
                     Save
                   </button>
