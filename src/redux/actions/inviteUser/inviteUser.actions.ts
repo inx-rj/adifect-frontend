@@ -177,7 +177,6 @@ const GET_INVITE_STATUS = (decodeId: string, inviteCode: string, exclusive: stri
     dispatch(SET_INVITE_USER_LOADING(true));
     InviteUserApiClient.fetchInviteStatus(decodeId, inviteCode, exclusive)
       .then((response) => {
-        console.log("GET_INVITE_STATUS", response)
         if (response.status === 201 || response.status === 200) {
           dispatch(SET_INVITE_USER_LOADING(false));
           resolve(response?.data?.message)

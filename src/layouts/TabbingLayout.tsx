@@ -55,7 +55,7 @@ const TabbingLayout = (props: TabbingLayoutType) => {
           }
         />
       </Suspense>
-      <section className="flex gap-5 pt-0 flex-wrap md:flex-nowrap mt-4">
+      <section className="flex flex-wrap gap-5 pt-0 mt-4 md:flex-nowrap">
         <div className="card tab-head-content custom-scrollbar">
           {tabHeadArr
             .filter((item) => item.permission.includes(userProfile?.data?.role))
@@ -84,12 +84,7 @@ const TabbingLayout = (props: TabbingLayoutType) => {
             <div className="h-[200px] img img-cover absolute inset-0 w-full">
               <img src={Images.ProfileBG} alt="profile" />
             </div>
-            <ProfileInfo
-              profileImg={tabData.profileImg}
-              title={tabData.title}
-              description={tabData.description}
-              countList={tabData.countList}
-            />
+            <ProfileInfo tabData={tabData} navType={navType} />
           </div>
           <div className="p-5 pt-0 -mt-5">
             <div className="card border p-4 z-[1] relative">{children}</div>

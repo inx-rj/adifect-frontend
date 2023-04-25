@@ -31,7 +31,8 @@ export const API_URL = {
   },
   COMPANY: {
     ADMIN: `${BASE_URL.COMPANY}`, //for admin
-    ADMIN_COMPANY_BLOCK: `${env.API_URL}admin-company-block/`, //for status update in admin
+    //for status update in admin
+    ADMIN_COMPANY_BLOCK: `${env.API_URL}admin-company-block/`,
     COMPANY_LIST: `${BASE_URL.AGENCY}company/`, //for agency
   },
   INVITE: {
@@ -71,5 +72,8 @@ export const API_URL = {
   },
   LEVELS: {
     LEVELS_LIST: `${BASE_URL.LEVELS}`,
-  }
+  },
+  INDUSTRY: {
+    INDUSTRY_LIST: `${BASE_URL.AGENCY}industries/`, //for agency
+  },
 };
