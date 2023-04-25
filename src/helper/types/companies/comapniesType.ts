@@ -21,12 +21,13 @@ export interface CompaniesInitialsType extends LoadingType {
   };
 }
 export interface IdNameObjectType {
-  id: number;
-  name: string;
+  [key: string]: any;
 }
 export interface filterUIOptionsListType {
   name: string;
   label: string;
   options: IdNameObjectType[];
+  valueAs?: string;
+  labelAs?: string;
   filterType?: string;
 }

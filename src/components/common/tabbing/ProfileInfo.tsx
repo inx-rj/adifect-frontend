@@ -1,23 +1,29 @@
-// import { useAppSelector } from '../../../../redux/store';
-// import { DASHBOARD_PROJECT_ROUTE } from 'routes/baseRoutes';
-// import { projectOverviewInterface } from '../../../../interface/project/ProjectDetailInterface';
-// import { GET_PROJECT_DETAILS_OVERVIEW } from '../../../../redux/reducers/projects/projectDetail/projectDetailsOverview.slice';
-
-import { useState } from "react";
+import { lazy, useState } from "react";
 import { BorderColorOutlined, StarRounded } from "@mui/icons-material";
 import { Button } from "@mui/material";
 import { Images } from "helper/images";
-import EditProfileForm from "components/profileDropdown/profile/editProfile/EditProfileForm";
+import { ProfilePageAccess } from "helper/config/config";
+
+const EditProfileForm = lazy(
+  () => import("components/profileDropdown/profile/editProfile/EditProfileForm")
+);
+const EditCompanyProfileForm = lazy(
+  () => import("components/pages/companyProfile/EditCompanyProfileForm")
+);
 
 interface ProfileDataType {
-  profileImg: string;
-  title: string;
-  description: string;
-  countList: { title: string; value: string }[];
+  tabData: {
+    profileImg: string;
+    title: string;
+    description: string;
+    countList: { title: string; value: string }[];
+  };
+  navType: string;
 }
 
 const ProfileInfo = (props: ProfileDataType) => {
-  const { profileImg, title, description, countList } = props;
+  const { tabData, navType } = props;
+  const { profileImg, title, description, countList } = tabData;
 
   const [editModal, setEditModal] = useState<boolean>(false);
 
@@ -30,7 +36,7 @@ const ProfileInfo = (props: ProfileDataType) => {
           </div>
           <div className="w-[calc(100%-80px)] xl:w-[calc(100%-90px)]">
             {title && (
-              <h3 className="text-lg  font-bold inline-flex items-center gap-2 text-white  capitalize">
+              <h3 className="inline-flex items-center gap-2 text-lg font-bold text-white capitalize">
                 {title}
                 <span className="bg-theme/[.4] py-1 px-3 text-white text-sm rounded-3xl ml-4 flex items-center gap-1">
                   <StarRounded fontSize="small" />
@@ -53,7 +59,7 @@ const ProfileInfo = (props: ProfileDataType) => {
       </div>
       <div className="right">
         <Button
-          className="btn btn-primary gap-2"
+          className="gap-2 btn btn-primary"
           onClick={() => setEditModal(true)}
         >
           <BorderColorOutlined fontSize="small" />
@@ -61,10 +67,20 @@ const ProfileInfo = (props: ProfileDataType) => {
         </Button>
       </div>
       {editModal && (
-        <EditProfileForm
-          openPopup={editModal}
-          handlePopup={() => setEditModal(false)}
-        />
+        <>
+          {navType === ProfilePageAccess.USER ? (
+            <EditProfileForm
+              openPopup={editModal}
+              handlePopup={() => setEditModal(false)}
+            />
+          ) : (
+            <EditCompanyProfileForm
+              openPopup={editModal}
+              handlePopup={() => setEditModal(false)}
+              tabData={tabData}
+            />
+          )}
+        </>
       )}
     </div>
   );

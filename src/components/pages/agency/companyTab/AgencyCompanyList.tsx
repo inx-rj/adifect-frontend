@@ -1,15 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useState } from "react";
+import { lazy, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useSingleEffect, useUpdateEffect } from "react-haiku";
 import swal from "sweetalert";
-
-//import custom component
-import MuiCustomTable from "components/common/muiTable/MuiTable";
-import SearchBar from "components/common/searchBar/SearchBar";
-import ActionMenuButton from "components/common/actionMenuButton/ActionMenuButton";
-import CustomPopup from "common/CustomPopup";
-import LoadingSpinner from "components/common/loadingSpinner/Loader";
 
 //import MUI components and icons
 import {
@@ -32,6 +25,7 @@ import { Images } from "helper/images";
 import { formateISODateToLocaleString } from "helper/utility/customFunctions";
 import { API_URL } from "helper/env";
 import { singleCompanyPayloadData } from "helper/types/companyTab/comapniesType";
+import { Roles } from "helper/config";
 
 //import redux
 import { useAppDispatch, useAppSelector } from "redux/store";
@@ -45,13 +39,18 @@ import {
 import { COMPANY_LIST } from "redux/reducers/companyTab/companyTab.slice";
 import { GET_USER_PROFILE_DATA } from "redux/reducers/auth/auth.slice";
 
-const ROLES = {
-  ADMIN: 0,
-  CREATOR: 1,
-  AGENCY: 2,
-  MEMBER: 3,
-};
-
+//import custom component
+const MuiCustomTable = lazy(
+  () => import("components/common/muiTable/MuiTable")
+);
+const SearchBar = lazy(() => import("components/common/searchBar/SearchBar"));
+const ActionMenuButton = lazy(
+  () => import("components/common/actionMenuButton/ActionMenuButton")
+);
+const MuiPopup = lazy(() => import("components/common/muiPopup/MuiPopup"));
+const LoadingSpinner = lazy(
+  () => import("components/common/loadingSpinner/Loader")
+);
 const userData = () => JSON.parse(localStorage.getItem("userData") ?? "");
 
 const AgencyCompanyList = () => {
@@ -97,7 +96,7 @@ const AgencyCompanyList = () => {
 
   //fetch initial companies data list
   useSingleEffect(() => {
-    if (userProfile?.data?.role === ROLES.ADMIN) {
+    if (userProfile?.data?.role === Roles.ADMIN) {
       dispatch(GET_COMPANY_LIST(paginationData, `${API_URL.COMPANY.ADMIN}`));
     } else {
       dispatch(GET_COMPANY_LIST(paginationData));
@@ -106,7 +105,7 @@ const AgencyCompanyList = () => {
 
   //fetch company list when pagination change
   useUpdateEffect(() => {
-    if (userProfile?.data?.role === ROLES.ADMIN) {
+    if (userProfile?.data?.role === Roles.ADMIN) {
       dispatch(GET_COMPANY_LIST(paginationData, `${API_URL.COMPANY.ADMIN}`));
     } else {
       dispatch(
@@ -145,7 +144,7 @@ const AgencyCompanyList = () => {
 
   //handle view action
   const handleView = (item) => {
-    if (userProfile?.data?.role === ROLES.ADMIN) {
+    if (userProfile?.data?.role === Roles.ADMIN) {
       navigate(item.agency ? `/company/${item.id}/${item.agency}` : "#");
     } else {
       navigate(`/company/${item.id}`);
@@ -157,7 +156,7 @@ const AgencyCompanyList = () => {
   const validateSubmit = (e) => {
     e.preventDefault();
     const tempErrors = {
-      company: !formData.company ? "Please enter Tag Name" : null,
+      company: !formData.company ? "Please enter Company Name" : null,
       description: !formData.description ? "Please enter Description" : null,
     };
     setErrors(tempErrors);
@@ -177,7 +176,7 @@ const AgencyCompanyList = () => {
       };
       if (isEditMode) {
         // Handle edit option action
-        userProfile?.data?.role === ROLES.ADMIN
+        userProfile?.data?.role === Roles.ADMIN
           ? dispatch(
               PUT_SINGLE_COMPANY(
                 selectedItem.currentId,
@@ -189,7 +188,7 @@ const AgencyCompanyList = () => {
       } else {
         // Handle Add new company action
         payload.agency = userData()?.user.user_id;
-        userProfile?.data?.role === ROLES.ADMIN
+        userProfile?.data?.role === Roles.ADMIN
           ? dispatch(POST_SINGLE_COMPANY(payload, `${API_URL.COMPANY.ADMIN}`))
           : dispatch(POST_SINGLE_COMPANY(payload));
       }
@@ -228,7 +227,7 @@ const AgencyCompanyList = () => {
       dangerMode: true,
     }).then((willDelete) => {
       if (willDelete) {
-        if (userProfile?.data?.role === ROLES.ADMIN) {
+        if (userProfile?.data?.role === Roles.ADMIN) {
           //admin
           dispatch(
             DELETE_SINGLE_COMPANY(
@@ -255,7 +254,7 @@ const AgencyCompanyList = () => {
       dangerMode: true,
     }).then((willDelete) => {
       if (willDelete) {
-        if (userProfile?.data?.role === ROLES.ADMIN) {
+        if (userProfile?.data?.role === Roles.ADMIN) {
           dispatch(
             PUT_SINGLE_COMPANY(
               selectedItem.currentId,
@@ -387,7 +386,7 @@ const AgencyCompanyList = () => {
                 handleSetting={() => handleSetting(item)}
                 handleInactive={handleInactive}
                 handleActive={handleActive}
-                showSetting={userProfile?.data?.role === ROLES.ADMIN}
+                showSetting={userProfile?.data?.role === Roles.ADMIN}
                 showView={true}
                 showEdit={true}
                 showInActive={true}
@@ -400,7 +399,7 @@ const AgencyCompanyList = () => {
       : [];
 
   //Modify table data for the admin user
-  if (userProfile?.data?.role === ROLES.ADMIN) {
+  if (userProfile?.data?.role === Roles.ADMIN) {
     const newCol = {
       id: 2,
       label: (
@@ -484,7 +483,7 @@ const AgencyCompanyList = () => {
               paginationData={paginationData}
               setPaginationData={setPaginationData}
             />
-            <CustomPopup
+            <MuiPopup
               dialogTitle={
                 isEditMode
                   ? "Edit Company"
@@ -494,7 +493,7 @@ const AgencyCompanyList = () => {
               }
               textAlign="left"
               dialogContent={
-                <div className="mt-5">
+                <>
                   {isSettingMode ? (
                     <div>
                       <h4>Company Status</h4>
@@ -585,7 +584,7 @@ const AgencyCompanyList = () => {
                       />
                     </>
                   )}
-                </div>
+                </>
               }
               openPopup={openModal}
               closePopup={() => {

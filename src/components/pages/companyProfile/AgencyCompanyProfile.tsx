@@ -1,8 +1,8 @@
 import { lazy, Suspense, useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useSingleEffect } from "react-haiku";
-import TabbingLayout from "layouts/TabbingLayout";
 
+//import redux
 import { useAppDispatch, useAppSelector } from "redux/store";
 import { TAB_NAVIGATION_CONFIG } from "redux/reducers/config/tabbing/tabbing.slice";
 import { GET_USER_PROFILE_DATA } from "redux/reducers/auth/auth.slice";
@@ -10,6 +10,7 @@ import { COMPANY_LIST } from "redux/reducers/companyTab/companyTab.slice";
 import { GET_COMPANY_LIST } from "redux/actions/companyTab/companyTab.actions";
 import { TRIGGER_NAVIGATION_TAB_CONFIG } from "redux/actions/config/tabbing/tabbing.actions";
 
+//import helper files
 import {
   companyProfileTabHeaders,
   companyProfileTabTitle,
@@ -18,6 +19,8 @@ import { TableRowsType } from "helper/types/muiTable/muiTable";
 import { ProfilePageAccess } from "helper/config/config";
 import { AccountCircleOutlined, LanguageOutlined } from "@mui/icons-material";
 
+//import components
+import TabbingLayout from "layouts/TabbingLayout";
 const UserAbout = lazy(
   () => import("components/profileDropdown/profile/UserAbout")
 );
@@ -31,9 +34,7 @@ const AgencyCompanyProfile = () => {
   // console.log({ companyId, admin: companyId ?? params?.companyId }); // to be fixed.
 
   const dispatch = useAppDispatch();
-  const [currentCompany, setCurrentCompany] = useState<TableRowsType | null>(
-    null
-  );
+  const [currentCompany, setCurrentCompany] = useState<TableRowsType | null>();
 
   const activeUserTab = useAppSelector(TAB_NAVIGATION_CONFIG);
   const userProfile = useAppSelector(GET_USER_PROFILE_DATA);
@@ -105,12 +106,28 @@ const AgencyCompanyProfile = () => {
   //prepare the count list to display on the profile
   const profileData = useMemo(() => {
     return {
+      companyId: currentCompany?.company_id,
       profileImg: currentCompany?.company_profile_img,
       title: currentCompany?.name,
-      description: "",
+      description: currentCompany?.description,
+      companyEmail: currentCompany?.company_email,
+      companyPhone: currentCompany?.company_phone_number,
+      companyWebsite: currentCompany?.company_website,
+      industry: currentCompany?.industry,
+      industryName: currentCompany?.industry_name,
       countList: [{ title: "Total Jobs", value: "368" }],
     };
-  }, [currentCompany?.company_profile_img, currentCompany?.name]);
+  }, [
+    currentCompany?.company_profile_img,
+    currentCompany?.name,
+    currentCompany?.company_id,
+    currentCompany?.company_email,
+    currentCompany?.company_phone_number,
+    currentCompany?.industry,
+    currentCompany?.industry_name,
+    currentCompany?.description,
+    currentCompany?.company_website,
+  ]);
 
   return (
     <Suspense>
@@ -121,8 +138,8 @@ const AgencyCompanyProfile = () => {
         tabBodyTitle={activeUserTab?.company_profile?.active}
         tabBodySection={
           activeUserTab?.company_profile?.active ===
-            companyProfileTabTitle.COMPANY_INFO ? (
-            <AgencyCompanyContactInfo companyData={currentCompany} />
+          companyProfileTabTitle.COMPANY_INFO ? (
+            <AgencyCompanyContactInfo companyData={profileData} />
           ) : null
         }
       >
@@ -195,11 +212,7 @@ const AgencyCompanyProfile = () => {
             }
             return (
               <Suspense fallback="">
-                <UserAbout
-                  title={currentCompany?.name}
-                  description={currentCompany?.description}
-                  iconList={iconList}
-                />
+                <UserAbout iconList={iconList} />
               </Suspense>
             );
           })}

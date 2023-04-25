@@ -15,6 +15,7 @@ import { homePageReducer } from "./reducers/homePage/homePage.reducer";
 import { skillsSlice } from "./reducers/skills/skills.slice";
 import { levelsSlice } from "./reducers/levels/levels.slice";
 import { inHouseUserSlice } from "./reducers/inHouseUser/inHouseUser.slice";
+import { industriesSlice } from "./reducers/industries/industries.slice";
 
 const persistAppConfig = {
   key: "app",
@@ -31,6 +32,7 @@ const appReducer = combineReducers({
   companies: companiesSlice.reducer,
   companiesTags: companiesTagsSlice.reducer,
   inviteUser: inviteUserSlice.reducer,
+  industries: industriesSlice.reducer,
   homePage: homePageReducer,
   workFlowTab: workFlowTabSlice.reducer,
   skillsTab: skillsSlice.reducer,

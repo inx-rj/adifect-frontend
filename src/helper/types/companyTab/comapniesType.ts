@@ -14,10 +14,14 @@ export interface CompanyListInitialsType extends LoadingType {
 }
 
 export interface singleCompanyPayloadData {
-  name?: string;
-  description?: string;
-  is_active?: boolean;
-  company_id?: number;
-  status?: boolean;
-  agency?: number;
+  name?: string,
+  description?: string,
+  is_active?: boolean,
+  company_id?: number
+  status?: boolean,
+  agency?: number
+  company_email?: string,
+  company_phone_number?: string,
+  company_website?: string,
+  industry?: number,
 }
