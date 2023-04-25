@@ -1140,7 +1140,7 @@ const ApprovalWorkflow = () => {
                                       }
                                       // onChange={(e) => handleApproverChnge(e, index)}
                                       // setStages(...stages, { ...item, {item.!item.is_approval })
-                                      checked={item.is_all_approval}
+                                      defaultChecked={item.is_all_approval}
                                       name="is_all_approval"
                                     />
                                     <label
@@ -1163,7 +1163,7 @@ const ApprovalWorkflow = () => {
                                       }
                                       // onChange={(e) => handleApproverChnge(e, index)}
                                       // setStages(...stages, { ...item, {item.!item.is_approval })
-                                      checked={item.is_approval}
+                                      defaultChecked={item.is_approval}
                                       name="is_approval"
                                     />
                                     <label
@@ -1280,7 +1280,7 @@ const ApprovalWorkflow = () => {
                                         <input
                                           disabled={!showbutton}
                                           type="checkbox"
-                                          checked={item.is_observer}
+                                          defaultChecked={item.is_observer}
                                         />
                                         <span
                                           className="slider round"
@@ -1450,7 +1450,7 @@ const ApprovalWorkflow = () => {
                                     }
                                     // onChange={(e) => handleApproverChnge(e, index)}
                                     // setStages(...stages, { ...item, {item.!item.is_approval })
-                                    checked={item.isDeadline}
+                                    defaultChecked={item.isDeadline}
                                     name="isDeadline"
                                   />
                                   <label
@@ -1501,7 +1501,7 @@ const ApprovalWorkflow = () => {
                                           <input
                                             disabled={!showbutton}
                                             type="checkbox"
-                                            checked={item.is_nudge}
+                                            defaultChecked={item.is_nudge}
                                           />
                                           <span
                                             className="slider round"

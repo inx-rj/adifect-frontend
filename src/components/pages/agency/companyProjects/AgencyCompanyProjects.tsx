@@ -264,7 +264,10 @@ const AgencyCompanyProjects = () => {
                     size="small"
                   >
                     {item.filterType === item.name ? (
-                      <CustomDateRangePicker handleChange={handleChange} />
+                      <CustomDateRangePicker
+                        handleChange={handleChange}
+                        containerClassName={"min-w-[250px]"}
+                      />
                     ) : (
                       <DropdownWithSearch
                         filterList={item}

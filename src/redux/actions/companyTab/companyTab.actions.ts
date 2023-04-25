@@ -39,6 +39,13 @@ const GET_COMPANY_LIST =
       });
   };
 
+// Fetch companies list
+const GET_SINGLE_COMPANY_DATA =
+  (headerCompany, endpoint: string = `${API_URL.COMPANY.COMPANY_LIST}`) =>
+  async (dispatch: AppDispatch) => {
+    await CompanyTabApiClient.fetchSingleCompany(headerCompany, endpoint);
+  };
+
 // Add new company to the company list
 const POST_SINGLE_COMPANY =
   (
@@ -239,4 +246,5 @@ export {
   POST_ADMIN_COMPANY,
   PUT_SINGLE_COMPANY,
   DELETE_SINGLE_COMPANY,
+  GET_SINGLE_COMPANY_DATA,
 };

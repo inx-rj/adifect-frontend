@@ -57,4 +57,5 @@ export interface AuthInitialType extends LoadingType {
 export interface appInitialType {
   persist: boolean;
   isMiniSidebar: boolean;
+  headerCompany?: null | number;
 }
