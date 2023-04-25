@@ -57,7 +57,7 @@ const Login = () => {
         text: "Login Success",
         className: "successAlert-login",
         icon: Images.Logo,
-        // buttons: false,
+        buttons: { visible: false },
         timer: 1500,
       });
 

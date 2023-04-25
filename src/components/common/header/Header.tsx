@@ -26,7 +26,7 @@ import Business from "@mui/icons-material/Business";
 import { useAppDispatch, useAppSelector } from "redux/store";
 import { GET_USER_PROFILE_DATA } from "redux/reducers/auth/auth.slice";
 import { Images } from "helper/images";
-import CustomPopup from "../customPopup/CustomPopup";
+import MuiPopup from "../muiPopup/MuiPopup";
 import { GET_USER_DETAILS } from "redux/actions/auth/auth.actions";
 import {
   ArrowDropDownOutlined,
@@ -41,6 +41,11 @@ import { useSingleEffect, useUpdateEffect } from "react-haiku";
 import { GET_NOTIFICATION_DATA } from "redux/reducers/common/notification.slice";
 import { GET_NOTIFICATIONS_LIST } from "redux/actions/common/notification.actions";
 import { Roles } from "helper/config";
+import { GET_COMPANY_LIST } from "redux/actions/companyTab/companyTab.actions";
+import { COMPANY_LIST } from "redux/reducers/companyTab/companyTab.slice";
+import { TRIGGER_HEADER_COMPANY } from "redux/actions/config/app/app.actions";
+import { API_URL } from "helper/env";
+import { TablePaginationType } from "helper/types/muiTable/muiTable";
 
 // Import lazy load component
 const Logo = lazy(() => import("components/common/logo/Logo"));
@@ -103,11 +108,18 @@ export default function Header(props) {
   // );
 
   const notificationData = useAppSelector(GET_NOTIFICATION_DATA);
+  const companyData = useAppSelector(COMPANY_LIST);
   // const { memberInviteAdmin, success: successCompanyList } = useAppSelector(
   //   (state) => state.memberAdminInviteListReducer
   // );
 
   const [rowadd, setrowadd] = useState([]);
+
+  const [paginationData, setPaginationData] = useState<TablePaginationType>({
+    page: 1,
+    rowsPerPage: 10,
+    search: "",
+  });
 
   const removesampleFile = (file) => () => {
     const newfileGallery = [...rowadd];
@@ -159,11 +171,31 @@ export default function Header(props) {
   //     }
   //   }
   // }, [companyData, props.headerCompany, openMenuInProgress]);
+  // useSingleEffect(() => {
+  //   if (!userProfile?.data?.id) {
+  //     dispatch(GET_USER_DETAILS());
+  //   }
+  // });
+
+  //fetch initial companies data list
   useSingleEffect(() => {
-    if (!userProfile?.data?.id) {
-      dispatch(GET_USER_DETAILS());
+    if (userProfile?.data?.role === Roles.ADMIN) {
+      dispatch(GET_COMPANY_LIST(paginationData, `${API_URL.COMPANY.ADMIN}`));
+    } else {
+      dispatch(GET_COMPANY_LIST(paginationData));
     }
   });
+
+  //fetch company list when pagination change
+  useUpdateEffect(() => {
+    if (userProfile?.data?.role === Roles.ADMIN) {
+      dispatch(GET_COMPANY_LIST(paginationData, `${API_URL.COMPANY.ADMIN}`));
+    } else {
+      dispatch(
+        GET_COMPANY_LIST(paginationData, `${API_URL.COMPANY.COMPANY_LIST}`)
+      );
+    }
+  }, [paginationData, userProfile.data?.role]);
 
   useUpdateEffect(() => {
     if (userProfile?.data?.id) {
@@ -273,11 +305,13 @@ export default function Header(props) {
 
   const menuHandleCompany = (event, value, name) => {
     handleCloseCompany();
+    dispatch(TRIGGER_HEADER_COMPANY(value));
     // props.setHeaderCompany(value);
   };
 
   const menuHandleCompanyMember = (event, value, name) => {
     handleCloseCompany();
+    dispatch(TRIGGER_HEADER_COMPANY(value));
     // props.setHeaderCompany(value);
   };
 
@@ -336,6 +370,7 @@ export default function Header(props) {
   //handle logout popup and actinon
   const logoutHandler = () => {
     setOpenLogoutPopup(false);
+    dispatch(TRIGGER_HEADER_COMPANY(null));
     // props.setHeaderCompany(null);
     // dispatch(logout());
     localStorage.removeItem("refresh_token");
@@ -452,21 +487,21 @@ export default function Header(props) {
                   >
                     All Companies
                   </MenuItem>
-                  {/* {companyData?.length > 0 &&
-                      companyData?.map(
-                        (option) =>
-                          option.is_active && (
-                            <MenuItem
-                              key={option.id}
-                              // onClick={menuHandleCompany}
-                              onClick={(e) =>
-                                menuHandleCompany(e, option.id, option.name)
-                              }
-                            >
-                              {option.name}
-                            </MenuItem>
-                          )
-                      )} */}
+                  {companyData?.companyList?.data?.results?.length > 0 &&
+                    companyData?.companyList?.data?.results?.map(
+                      (option) =>
+                        option.is_active && (
+                          <MenuItem
+                            key={option.id}
+                            // onClick={menuHandleCompany}
+                            onClick={(e) =>
+                              menuHandleCompany(e, option.id, option.name)
+                            }
+                          >
+                            {option.name}
+                          </MenuItem>
+                        )
+                    )}
                 </Menu>
               </>
             )}
@@ -799,7 +834,7 @@ export default function Header(props) {
               </>
             )}
           </li>
-          <CustomPopup
+          <MuiPopup
             dialogTitle="Logout"
             // setShowDropDown={setShowDropdown}
             dialogContent={

@@ -1,7 +1,7 @@
 export const env = {
   APP_NAME: "Adifect",
   API_URL: process.env["REACT_APP_BACKEND_API_URL"],
-  FRONTEND_SITE_URL: process.env["REACT_APP_FRONTEND_SITE_URL"]
+  FRONTEND_SITE_URL: process.env["REACT_APP_FRONTEND_SITE_URL"],
 };
 
 export const BASE_URL = {
@@ -10,6 +10,8 @@ export const BASE_URL = {
   COMPANY: `${env.API_URL}company/`,
   MEMBER: `${env.API_URL}member/`,
   WORKFLOW: `${env.API_URL}workflows/`,
+  SKILLS: `${env.API_URL}skills/`,
+  LEVELS: `${env.API_URL}levels/`,
 };
 
 export const API_URL = {
@@ -29,14 +31,15 @@ export const API_URL = {
   },
   COMPANY: {
     ADMIN: `${BASE_URL.COMPANY}`, //for admin
-    ADMIN_COMPANY_BLOCK: `${env.API_URL}admin-company-block/`, //for status update in admin
+    //for status update in admin
+    ADMIN_COMPANY_BLOCK: `${env.API_URL}admin-company-block/`,
     COMPANY_LIST: `${BASE_URL.AGENCY}company/`, //for agency
   },
   INVITE: {
     INVITE_USERS: `${BASE_URL.AGENCY}invite-member/`,
     INVITE_MEMBERS_LIST: `${BASE_URL.AGENCY}invite-member-list/`,
     INVITE_USER_REGISTER: `${BASE_URL.AGENCY}register-view-invite/`,
-    INVITE_STATUS: `${BASE_URL.AGENCY}update-invite-member/`
+    INVITE_STATUS: `${BASE_URL.AGENCY}update-invite-member/`,
   },
   HOMEPAGE: {
     JOBS_LIST: `${env.API_URL}jobs/`,
@@ -51,8 +54,9 @@ export const API_URL = {
     AGENCY_NOTIFICATION: `${BASE_URL.AGENCY}agency-notification/`,
     MEMBER_NOTIFICATION: `${BASE_URL.MEMBER}member-notification/`,
   },
-  PROFILE: {
+  USER_PROFILE: {
     USER_COMMUNICATION: `${env.API_URL}user-communication/`,
+    USER_PORTFOLIO: `${env.API_URL}user-portfolio/`,
   },
   MY_JOBS: {
     AGENCY_JOBS_LIST: `${BASE_URL.AGENCY}agency-jobs/`,
@@ -60,5 +64,20 @@ export const API_URL = {
   WORKFLOW: {
     ADMIN: `${BASE_URL.WORKFLOW}`, //for admin
     WORKFLOW_LIST: `${BASE_URL.AGENCY}works-flow/`, //for agency
+    WORKFLOW_STAGES: `${BASE_URL.AGENCY}works-flow-stages/`, //for agency
+  },
+  SKILLS: {
+    SKILLS_LIST: `${BASE_URL.SKILLS}`,
+    INDIVIDUAL_USER_SKILL_LIST: `${env.API_URL}user-skills/`,
+  },
+  LEVELS: {
+    LEVELS_LIST: `${BASE_URL.LEVELS}`,
+  },
+  IN_HOUSE_USER: {
+    ADMIN_USER_LIST: `${env.API_URL}inhouse-user-list/`,
+    AGENCY_USER_LIST: `${BASE_URL.AGENCY}inhouse-user-list/`,
+  },
+  INDUSTRY: {
+    INDUSTRY_LIST: `${BASE_URL.AGENCY}industries/`, //for agency
   },
 };

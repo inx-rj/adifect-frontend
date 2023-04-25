@@ -1,23 +1,27 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from "react";
+import { lazy, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useSingleEffect, useUpdateEffect } from "react-haiku";
 import { Button, FormControl, Typography } from "@mui/material";
-import { formateISODateToLocaleString } from "helper/utility/customFunctions";
-import CustomDateRangePicker from "components/common/customDatePicker/CustomDateRangePicker";
-import MuiCustomTable from "components/common/muiCustomTable/MuiCustomTable";
 import {
   GET_COMPANY_PROJECTS_FILTERS_LIST,
   GET_COMPANY_PROJECTS_LIST,
 } from "redux/actions/companies/companies.actions";
 import { useAppDispatch, useAppSelector } from "redux/store";
 import { COMPANY_PROJECTS } from "redux/reducers/companies/companies.slice";
-import DropdownWithSearch from "components/common/muiCustomAutocomplete/DropdownWithSearch";
-import { TableRowColType } from "helper/types/muiCustomTable/muiCustomTable";
+import { TableRowColType } from "helper/types/muiTable/muiTable";
 import { filterUIOptionsListType } from "helper/types/companies/comapniesType";
 import { Images } from "helper/images";
-
-// import SharePostToSocialMedia from "../../Common/ShareToSocialMedia/SharePostToSocialMedia";
+import { formateISODateToLocaleString } from "helper/utility/customFunctions";
+const DropdownWithSearch = lazy(
+  () => import("components/common/muiAutocomplete/DropdownWithSearch")
+);
+const CustomDateRangePicker = lazy(
+  () => import("components/common/reactDatePicker/ReactDateRangePicker")
+);
+const MuiCustomTable = lazy(
+  () => import("components/common/muiTable/MuiTable")
+);
 
 const AgencyCompanyProjects = () => {
   const dispatch = useAppDispatch();
@@ -78,16 +82,22 @@ const AgencyCompanyProjects = () => {
           name: "community",
           label: "Community",
           options: companyProjectsFilters.data.community,
+          valueAs: "name",
+          labelAs: "name",
         },
         {
           name: "status",
           label: "Status",
           options: companyProjectsFilters.data.status,
+          valueAs: "name",
+          labelAs: "name",
         },
         {
           name: "tag",
           label: "Tags",
           options: companyProjectsFilters.data.tag,
+          valueAs: "name",
+          labelAs: "name",
         },
         // { name: "Channel", label: "Channel", options: ["Channel"] },
       ];
@@ -247,7 +257,7 @@ const AgencyCompanyProjects = () => {
     <div className="page-container">
       <h2 className="page-title">Company Projects</h2>
 
-      <div className="page-card card p-0">
+      <div className="p-0 page-card card">
         {companyProjectsFilters.loading && filterArr?.length > 0 ? (
           <div className="projectsLoaderCreatsorPage">
             {/* <LoadingSpinner /> */}
@@ -255,7 +265,7 @@ const AgencyCompanyProjects = () => {
           </div>
         ) : (
           <>
-            {companyProjectsList.data.results?.length > 0 && (
+            {filterArr.length > 0 && (
               <div className="flex flex-wrap gap-[15px] p-[15px] pb-5">
                 {filterArr?.map((item, index) => (
                   <FormControl
@@ -264,7 +274,10 @@ const AgencyCompanyProjects = () => {
                     size="small"
                   >
                     {item.filterType === item.name ? (
-                      <CustomDateRangePicker handleChange={handleChange} />
+                      <CustomDateRangePicker
+                        handleChange={handleChange}
+                        containerClassName={"min-w-[250px]"}
+                      />
                     ) : (
                       <DropdownWithSearch
                         filterList={item}

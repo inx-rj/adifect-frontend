@@ -1,5 +1,5 @@
 import { Menu, MenuItem } from "@mui/material";
-import Title from "../../../components/common/PageTitle/Title";
+import Title from "../../common/pageTitle/Title";
 import React, { useState } from "react";
 import { useSingleEffect, useUpdateEffect } from "react-haiku";
 import { Link } from "react-router-dom";

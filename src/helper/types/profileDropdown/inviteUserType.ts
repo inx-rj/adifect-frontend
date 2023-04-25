@@ -1,5 +1,5 @@
 import { LoadingType } from "../../types";
-import { TableRowsType } from "../muiCustomTable/muiCustomTable";
+import { TableRowsType } from "../muiTable/muiTable";
 
 export interface inviteUserPayloadData {
   levels: "" | 1 | 2 | 3 | 4;

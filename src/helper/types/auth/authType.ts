@@ -10,6 +10,11 @@ export interface UserDataType {
   user_level: number;
 }
 
+export interface UserPortfolioType {
+  id: number;
+  portfolio_images: string;
+  user: number;
+}
 export interface UserProfileDetailsType {
   id: number;
   email: string;
@@ -24,7 +29,7 @@ export interface UserProfileDetailsType {
   preferred_communication_mode: string;
   preferred_communication_id: string | null;
   availability: string | null;
-  Portfolio_user: [];
+  Portfolio_user: UserPortfolioType[];
   user_level: number;
   sub_title: string | null;
   Language: string | null;
@@ -52,4 +57,5 @@ export interface AuthInitialType extends LoadingType {
 export interface appInitialType {
   persist: boolean;
   isMiniSidebar: boolean;
+  headerCompany?: null | number;
 }

@@ -1,5 +1,5 @@
 import { Menu, MenuItem } from "@mui/material";
-import Title from "../../components/common/PageTitle/Title";
+import Title from "../common/pageTitle/Title";
 import BadgeUI from "../../components/common/badge/BadgeUI";
 import React, { useState } from "react";
 import { Images } from "../../helper/images";

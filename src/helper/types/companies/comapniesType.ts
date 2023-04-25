@@ -1,5 +1,5 @@
 import { LoadingType } from "..";
-import { TableRowsType } from "../muiCustomTable/muiCustomTable";
+import { TableRowsType } from "../muiTable/muiTable";
 
 export interface CompaniesInitialsType extends LoadingType {
   companyProjectsList: {
@@ -14,16 +14,20 @@ export interface CompaniesInitialsType extends LoadingType {
   companyProjectsFilters: {
     loading: boolean;
     data: {
-      community: string[];
-      tag: string[];
-      status: string[];
+      community: IdNameObjectType[];
+      tag: IdNameObjectType[];
+      status: IdNameObjectType[];
     };
   };
 }
-
+export interface IdNameObjectType {
+  [key: string]: any;
+}
 export interface filterUIOptionsListType {
   name: string;
   label: string;
-  options: string[];
+  options: IdNameObjectType[];
+  valueAs?: string;
+  labelAs?: string;
   filterType?: string;
 }

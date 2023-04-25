@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useParams } from "react-router-dom";
-import EmailConfirmation from "common/EmailConfirmation";
+import EmailConfirmation from "components/auth/EmailConfirmation";
 
 const Thankyou = () => {
   const { successPage } = useParams();
