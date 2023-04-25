@@ -1094,6 +1094,7 @@ const CreatorDashboard = () => {
                                                       handleChange={
                                                         handleChange
                                                       }
+                                                      containerClassName={"min-w-[250px]"}
                                                     />
                                                   </>
                                                   {errors1.date && (

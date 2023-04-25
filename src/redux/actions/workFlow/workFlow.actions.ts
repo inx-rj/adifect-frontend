@@ -203,7 +203,7 @@ const DELETE_SINGLE_WORKFLOW =
             text: response?.data?.message,
             icon: Images.Logo,
             buttons: {
-              OK: false,
+              Confirm: false,
             },
             timer: 5000,
           });

@@ -23,7 +23,7 @@
 .swal-modal.errorAlert .swal-footer .swal-button.swal-button--Cancel {
   @apply text-[#555] bg-[#efefef] disabled:bg-dark-100 disabled:text-title-color hover:bg-[#efefef];
 }
-.swal-modal.errorAlert .swal-footer .swal-button.swal-button--OK {
+.swal-modal.errorAlert .swal-footer .swal-button.swal-button--Confirm {
   @apply bg-[#e64942];
 }
 .swal-title {
