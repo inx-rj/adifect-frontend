@@ -39,17 +39,20 @@ import { useAppDispatch, useAppSelector } from "redux/store";
 import { WORKFLOW_ROUTE } from "routes/baseRoute";
 import swal from "sweetalert";
 import { isEmpty } from "helper/utility/customFunctions";
+import { IS_HEADER_COMPANY } from "redux/reducers/config/app/app.slice";
+import MuiAutoComplete from "components/common/muiAutocomplete/MuiAutoComplete";
 
 const ApprovalWorkflow = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { '*': workflowId } = useParams();
+  const { "*": workflowId } = useParams();
 
   const companyData = useAppSelector(COMPANY_LIST);
   const userProfile = useAppSelector(GET_USER_PROFILE_DATA);
   const workflowMemberApproversData = useAppSelector(INVITE_USER_LIST);
   const workflowMainDetails = useAppSelector(WORKFLOW_MAIN_DETAILS);
   const workflowStageDetails = useAppSelector(WORKFLOW_STAGE_DETAILS);
+  const headerCompany = useAppSelector(IS_HEADER_COMPANY);
 
   const [isLoading, setIsLoading] = useState(true);
   const [showbutton, setshowbutton] = useState(true);
@@ -242,8 +245,10 @@ const ApprovalWorkflow = () => {
     stagesRef.current = list;
   };
 
-  const handleInputChangeAutocomplete1 = (event, newInputValue) => {
+  const handleInputChangeAutocomplete = (event, newInputValue) => {
     // setSkills(newInputValue);
+    console.log("newInputValue", newInputValue, event);
+    // setcompanyvalue(newInputValue);
   };
 
   const changeHandler1 = (e, v, index) => {
@@ -699,7 +704,10 @@ const ApprovalWorkflow = () => {
   useEffect(() => {
     if (workflowMainDetails && !isNaN(Number(workflowId))) {
       setWorkflowName(workflowMainDetails?.name);
-      setcompanyvalue(workflowMainDetails?.company);
+      setcompanyvalue({
+        name: workflowMainDetails?.company_name,
+        id: workflowMainDetails?.company,
+      });
 
       if (workflowMainDetails?.assigned_job == true) {
         setshowbutton(false);
@@ -712,9 +720,10 @@ const ApprovalWorkflow = () => {
   useEffect(() => {
     let finalArr = [];
 
-    // if (!workflowId && headerCompany) {
-    //   setcompanyvalue(headerCompany);
-    // }
+    if (!workflowId && headerCompany) {
+      console.log("headerComapnay", headerCompany);
+      setcompanyvalue(headerCompany);
+    }
     if (workflowStageDetails && !isNaN(Number(workflowId))) {
       if (workflowStageDetails?.data?.results.length > 0) {
         for (let i in workflowStageDetails?.data?.results) {
@@ -810,13 +819,22 @@ const ApprovalWorkflow = () => {
         // console.log({ res, responseDestructredData }, 'Res Company');
 
         // To append company data of selected workflow details
-        if (isEmpty(responseDestructredData?.results?.find((e) => e.company_id == workflowMainDetails?.company))) {
-          responseDestructredData?.results?.push({ id: workflowMainDetails?.company, name: workflowMainDetails?.company_name });
+        if (
+          isEmpty(
+            responseDestructredData?.results?.find(
+              (e) => e.company_id == workflowMainDetails?.company
+            )
+          )
+        ) {
+          responseDestructredData?.results?.push({
+            id: workflowMainDetails?.company,
+            name: workflowMainDetails?.company_name,
+          });
         }
-        // console.log({ res, results: responseDestructredData?.results });
+        console.log({ res, results: responseDestructredData?.results });
         setcompanydata(responseDestructredData?.results);
       })
-      .catch((err) => { });
+      .catch((err) => {});
   }, [workflowMainDetails, workflowId]);
 
   //fetch company list when pagination change
@@ -834,6 +852,13 @@ const ApprovalWorkflow = () => {
     }
   }, [paginationData, userProfile.data?.role]);
 
+  const handleWorkFLowCompanyChange = (e, value) => {
+    setcompanyvalue(value);
+    setErrors({ ...errors, companyvalue: null });
+    dispatch(GET_INVITE_MEMBERS_USERS(value?.company_id, 3));
+  };
+  const [searchText, setSearchText] = useState("");
+
   return (
     <>
       {isLoading ? (
@@ -847,28 +872,36 @@ const ApprovalWorkflow = () => {
                 to={WORKFLOW_ROUTE.HOME}
                 className="btn btn-outline max-w-[160px] w-full h-full"
               >
-                <span className="text-lg font-semibold">
-                  Back
-                </span>
+                <span className="text-lg font-semibold">Back</span>
               </Link>
             </div>
           ) : (
-            <div className="workflow-heading">
-              <h1 className="approvaltitle">
+            <div className="flex justify-between pb-4 items-center">
+              <Title title="Create Approval Workflow" />{" "}
+              <Link
+                to={WORKFLOW_ROUTE.HOME}
+                className="btn btn-outline max-w-[160px] w-full h-full"
+              >
+                {" "}
+                <span className="text-lg font-semibold">Back</span>
+              </Link>
+              {/* <h1 className="approvaltitle">
                 Create Approval Workflow{" "}
                 <span className="backbtnlink">
                   <Link to={WORKFLOW_ROUTE.HOME}>Back</Link>
                 </span>
-              </h1>
+              </h1> */}
             </div>
           )}
           {showbutton == true ? null : (
-            <h6 className="currentlyWorkflow">
+            <h6 className="currentlyWorkflow  bg-[#ffe2ad] rounded-t-lg h-[45px] gap-1 flex items-center justify-center text-[#cf5e00] text-base font-semibold">
               This workflow is currently in use and cannot be edited.{" "}
-              <span className="jobsusing">Jobs using workflow</span>
+              <span className="jobsusing font-bold border-b-2 border-[#cf5e00] text-base">
+                Jobs using workflow
+              </span>
             </h6>
           )}
-          <div className="page-card p-7 AG-Workflow">
+          <div className="page-card p-7 AG-Workflow mt-0">
             <div
               className={
                 errors.workflowName
@@ -890,7 +923,7 @@ const ApprovalWorkflow = () => {
                 }}
                 name="Name"
                 placeholder="Name"
-              // onChange={handlechange}
+                // onChange={handlechange}
               />
               <span
                 className="text-[#D14F4F] flex justify-end"
@@ -915,7 +948,59 @@ const ApprovalWorkflow = () => {
                   Workflow Assign to Company?
                 </h5>{" "}
                 <div className="styled-select Companyname">
-                  <Select
+                  <MuiAutoComplete
+                    placeholder="Type something"
+                    filterList={companydata ?? []}
+                    selectedOption={companyvalue}
+                    setSearchText={setSearchText}
+                    // setSelectedOption={setcompanyvalue}
+                    handleChange={handleWorkFLowCompanyChange}
+                    searchText={searchText}
+                    label={""}
+                    disabled={!showbutton}
+                  />
+                  {/* <Autocomplete
+                    value={companyvalue}
+                    id="tags-outlined"
+                    onInputChange={(e, v) =>
+                      handleInputChangeAutocomplete(e, v)
+                    }
+                    filterOptions={filterOptions}
+                    options={companydata ?? []}
+                    getOptionLabel={(option) => {
+                      console.log(option, "option");
+                      return option.name;
+                    }}
+                    onChange={(e, v) => {
+                      console.log("first", v);
+                      setcompanyvalue(v);
+                      setErrors({ ...errors, companyvalue: null });
+                      // {
+                      //   e.target.value !== null &&
+                      dispatch(GET_INVITE_MEMBERS_USERS(v?.company_id, 3));
+                      //   dispatch(
+                      //     workflowinvitememberlistapprovers(e.target.value)
+                      //   );
+                      // }
+                    }}
+                    autoHighlight={true}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        fullWidth
+                        placeholder="Type something"
+                      />
+                    )}
+                    isOptionEqualToValue={(option, value) =>
+                      value === undefined ||
+                      value === "" ||
+                      option.id === value.id ||
+                      option.id === value ||
+                      option === value.id
+                    }
+                    disabled={!showbutton}
+                  /> */}
+                  {/* <Select
                     className={
                       companyvalue === null
                         ? "selectinputcolor agency-workflow-company-selenium max-w-[500px] w-full "
@@ -955,7 +1040,7 @@ const ApprovalWorkflow = () => {
                         {item?.name}
                       </MenuItem>
                     ))}
-                  </Select>
+                  </Select> */}
                 </div>
               </div>
 
@@ -1090,7 +1175,7 @@ const ApprovalWorkflow = () => {
                                           showbutton &&
                                           orderDown(e, item.stage_id, index)
                                         }
-                                      // onClick={(e) => setselected(index)}
+                                        // onClick={(e) => setselected(index)}
                                       >
                                         {/* <img src="/img/don.png" /> */}
                                         <PresentToAllOutlined
@@ -1106,9 +1191,9 @@ const ApprovalWorkflow = () => {
                                           ? "disable_up_down"
                                           : ""
                                       }
-                                    // className={
-                                    //   index == 0 ? "disable_up_down" : ""
-                                    // }
+                                      // className={
+                                      //   index == 0 ? "disable_up_down" : ""
+                                      // }
                                     >
                                       <Link to="">
                                         <div
@@ -1116,15 +1201,15 @@ const ApprovalWorkflow = () => {
                                             showbutton &&
                                               (item.stage_id
                                                 ? handleRemoveStage(
-                                                  index,
-                                                  item.stage_id,
-                                                  true
-                                                )
+                                                    index,
+                                                    item.stage_id,
+                                                    true
+                                                  )
                                                 : handleRemoveStage(
-                                                  index,
-                                                  index,
-                                                  true
-                                                ));
+                                                    index,
+                                                    index,
+                                                    true
+                                                  ));
                                           }}
                                         >
                                           <DeleteOutlineOutlined />
@@ -1188,22 +1273,18 @@ const ApprovalWorkflow = () => {
                                       <Autocomplete
                                         disabled={!showbutton || !companyvalue}
                                         value={item.approvals}
-                                        // name="approvals"
                                         className="agency-workflow-approvers-selenium"
                                         // value={approvers}
                                         multiple
                                         id="tags-outlined"
                                         // open={isOpenApprovers}
-                                        onInputChange={
-                                          handleInputChangeAutocomplete1
-                                        }
                                         filterOptions={filterOptions}
                                         options={
                                           workflowMemberApproversData
                                             ?.inviteMembersList?.data?.length >
-                                            0
+                                          0
                                             ? workflowMemberApproversData
-                                              ?.inviteMembersList?.data
+                                                ?.inviteMembersList?.data
                                             : []
                                         }
                                         getOptionLabel={(option) =>
@@ -1345,7 +1426,7 @@ const ApprovalWorkflow = () => {
                                                 ?.inviteMembersList?.data
                                                 ?.length > 0
                                                 ? workflowMemberApproversData
-                                                  ?.inviteMembersList?.data
+                                                    ?.inviteMembersList?.data
                                                 : []
                                             }
                                             getOptionLabel={(option) =>
@@ -1391,15 +1472,15 @@ const ApprovalWorkflow = () => {
                                                 option.id === value.id
                                               // option.value == value.value
                                             }
-                                          // isOptionEqualToValue={(
-                                          //   option,
-                                          //   value
-                                          // ) =>
-                                          //   value === undefined ||
-                                          //   value === "" ||
-                                          //   option.id === value.id ||
-                                          //   option.value === value.value
-                                          // }
+                                            // isOptionEqualToValue={(
+                                            //   option,
+                                            //   value
+                                            // ) =>
+                                            //   value === undefined ||
+                                            //   value === "" ||
+                                            //   option.id === value.id ||
+                                            //   option.value === value.value
+                                            // }
                                           />
                                         </div>
                                         {!item?.observer?.length ? (
@@ -1612,7 +1693,7 @@ const ApprovalWorkflow = () => {
                                                               el.time === 12
                                                           ) ||
                                                           item.approval_time ==
-                                                          12
+                                                            12
                                                         }
                                                         value={12}
                                                       >
@@ -1748,7 +1829,7 @@ const ApprovalWorkflow = () => {
                   <button
                     className="btn btn-primary font-semibold text-lg w-[160px]"
                     disabled
-                  // type="hidden"
+                    // type="hidden"
                   >
                     Save
                   </button>
