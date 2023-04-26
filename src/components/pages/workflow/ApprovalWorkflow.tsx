@@ -949,7 +949,7 @@ const ApprovalWorkflow = () => {
                 </h5>{" "}
                 <div className="styled-select Companyname">
                   <MuiAutoComplete
-                    placeholder="Type something"
+                    placeholder="Select Company"
                     filterList={companydata ?? []}
                     selectedOption={companyvalue}
                     setSearchText={setSearchText}
@@ -958,6 +958,7 @@ const ApprovalWorkflow = () => {
                     searchText={searchText}
                     label={""}
                     disabled={!showbutton}
+                    customClass={"rounded outline-none focus:border-theme hover:border-none"}
                   />
                   {/* <Autocomplete
                     value={companyvalue}

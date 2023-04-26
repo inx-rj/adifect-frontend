@@ -11,6 +11,7 @@ const MuiAutoComplete = ({
   searchText,
   handleChange,
   disabled = false,
+  customClass
 }) => {
   return (
     <Autocomplete
@@ -64,6 +65,7 @@ const MuiAutoComplete = ({
           />
         );
       }}
+      className={`${customClass} cursor-pointer custom-scrollbar`}
       options={filterList}
       getOptionLabel={(option) => option.name}
       value={selectedOption}
