@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../../rootReducer";
-import { CompaniesInitialsType } from "helper/types/companies/comapniesType";
+import { CompaniesInitialsType } from "helper/types/companies/companiesType";
 
 const initialState: CompaniesInitialsType = {
   loading: false,

@@ -2,7 +2,7 @@ import WorkFlowTabApiClient from "../../../services/workFlow/workFlowApiClient";
 import swal from "sweetalert";
 import { AppDispatch } from "../../store";
 import { initialTableConfigInterface } from "helper/types/common/table";
-import { singleCompanyPayloadData } from "helper/types/companyTab/comapniesType";
+import { singleCompanyPayloadData } from "helper/types/companyTab/companiesType";
 import { Images } from "helper/images";
 import { API_URL } from "helper/env";
 import {

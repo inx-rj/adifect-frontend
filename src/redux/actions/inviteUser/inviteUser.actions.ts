@@ -27,7 +27,7 @@ const GET_INVITE_USERS =
         dispatch(SET_INVITE_USER_LIST_LOADING(false));
         swal({
           title: "Error",
-          text: error?.response?.data?.message,
+          text: error?.response?.data?.message ?? error?.response?.data?.detail,
           className: "errorAlert-login",
           icon: Images.Logo,
           timer: 5000,
@@ -55,7 +55,7 @@ const GET_INVITE_MEMBERS_USERS =
         dispatch(SET_INVITE_USER_LIST_LOADING(false));
         swal({
           title: "Error",
-          text: error?.response?.data?.message,
+          text: error?.response?.data?.message ?? error?.response?.data?.detail,
           className: "errorAlert-login",
           icon: Images.Logo,
           timer: 5000,
@@ -89,7 +89,7 @@ const POST_INVITE_USER =
         dispatch(SET_INVITE_USER_LIST_LOADING(false));
         swal({
           title: "Error",
-          text: error?.response?.data?.message,
+          text: error?.response?.data?.message ?? error?.response?.data?.detail,
           className: "errorAlert-login",
           icon: Images.Logo,
           timer: 5000,
@@ -124,7 +124,7 @@ const PUT_INVITE_USER =
         dispatch(SET_INVITE_USER_LIST_LOADING(false));
         swal({
           title: "Error",
-          text: error?.response?.data?.message,
+          text: error?.response?.data?.message ?? error?.response?.data?.detail,
           className: "errorAlert-login",
           icon: Images.Logo,
           timer: 5000,
@@ -158,7 +158,7 @@ const DELETE_INVITE_USER =
         dispatch(SET_INVITE_USER_LIST_LOADING(false));
         swal({
           title: "Error",
-          text: error?.response?.data?.message,
+          text: error?.response?.data?.message ?? error?.response?.data?.detail,
           className: "errorAlert-login",
           icon: Images.Logo,
           timer: 5000,
@@ -183,7 +183,7 @@ const GET_INVITE_STATUS = (decodeId: string, inviteCode: string, exclusive: stri
         }
       })
       .catch((error) => {
-        reject(error?.response?.data?.message);
+        reject(error?.response?.data?.message ?? error?.response?.data?.detail);
         dispatch(SET_INVITE_USER_LOADING(false));
       });
   });

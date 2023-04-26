@@ -13,6 +13,9 @@ import { ProfilePageAccess } from "helper/config/config";
 import { profileTabHeaders, profileTabTitle } from "helper/config/tabbing";
 
 import TabbingLayout from "layouts/TabbingLayout";
+const CompaniesTab = lazy(
+  () => import("components/profileDropdown/profile/CompaniesTab")
+);
 const UserAbout = lazy(
   () => import("components/profileDropdown/profile/UserAbout")
 );
@@ -112,7 +115,7 @@ const Profile = () => {
             ) {
               return (
                 <Suspense fallback="">
-                  <p>Companies</p>
+                  <CompaniesTab />
                 </Suspense>
               );
             }

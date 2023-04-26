@@ -37,6 +37,7 @@ import {
   TableRowColType,
 } from "helper/types/muiTable/muiTable";
 import { Images } from "helper/images";
+import { getUserLevel } from "helper/utility/customFunctions";
 
 const InviteUser = () => {
   const dispatch = useAppDispatch();
@@ -82,23 +83,6 @@ const InviteUser = () => {
   useUpdateEffect(() => {
     dispatch(GET_INVITE_USERS(paginationData));
   }, [paginationData]);
-
-  //get user level
-  const getUserLevel = (level) => {
-    if (level === 1) {
-      return "Admin";
-    }
-    if (level === 2) {
-      return "Marketer";
-    }
-    if (level === 3) {
-      return "Approver";
-    }
-    if (level === 4) {
-      return "In-house Designer";
-    }
-    return "";
-  };
 
   //set the edit mode
   const handleEdit = (item) => {

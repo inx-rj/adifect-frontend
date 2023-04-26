@@ -24,7 +24,7 @@ import {
 import { Images } from "helper/images";
 import { formateISODateToLocaleString } from "helper/utility/customFunctions";
 import { API_URL } from "helper/env";
-import { singleCompanyPayloadData } from "helper/types/companyTab/comapniesType";
+import { singleCompanyPayloadData } from "helper/types/companyTab/companiesType";
 import { Roles } from "helper/config";
 
 //import redux

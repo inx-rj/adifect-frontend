@@ -10,7 +10,7 @@ import {
 import { useAppDispatch, useAppSelector } from "redux/store";
 import { COMPANY_PROJECTS } from "redux/reducers/companies/companies.slice";
 import { TableRowColType } from "helper/types/muiTable/muiTable";
-import { filterUIOptionsListType } from "helper/types/companies/comapniesType";
+import { filterUIOptionsListType } from "helper/types/companies/companiesType";
 import { Images } from "helper/images";
 import { formateISODateToLocaleString } from "helper/utility/customFunctions";
 const DropdownWithSearch = lazy(

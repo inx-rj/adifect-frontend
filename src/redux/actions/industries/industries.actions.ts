@@ -30,7 +30,7 @@ const GET_INDUSTRY_LIST =
           dispatch(SET_INDUSTRY_LIST_LOADING(false));
           swal({
             title: "Error",
-            text: error?.response?.data?.message,
+            text: error?.response?.data?.message ?? error?.response?.data?.detail,
             className: "errorAlert-login",
             icon: Images.Logo,
             timer: 5000,
@@ -75,7 +75,7 @@ const POST_SINGLE_INDUSTRY =
             if (error?.response?.data?.industry_name?.length > 0) {
               errMsg = error?.response?.data?.industry_name?.[0];
             } else {
-              errMsg = error?.response?.data?.message;
+              errMsg = error?.response?.data?.message ?? error?.response?.data?.detail;
             }
             reject(errMsg);
             swal({
