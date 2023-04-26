@@ -163,13 +163,17 @@ const InviteUser = () => {
   //handle delete action
   const handleDelete = (item) => {
     swal({
-      title: "",
+      title: "Warning",
       text: "Are you sure you want to remove this user?",
       className: "errorAlert",
-      icon: Images.Logo,
+      icon: Images.ErrorLogo,
+      buttons: {
+        Cancel: true,
+        Confirm: true,
+      },
       dangerMode: true,
     }).then((willDelete) => {
-      if (willDelete) {
+      if (willDelete === "Confirm") {
         dispatch(DELETE_INVITE_USER(item?.id));
       }
     });

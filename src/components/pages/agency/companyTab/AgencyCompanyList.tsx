@@ -220,13 +220,17 @@ const AgencyCompanyList = () => {
   //handle inactive action
   const handleInactive = () => {
     swal({
-      title: "",
-      text: "Are you sure you want to inActive this company?",
+      title: "Warning",
+      text: "Are you sure you want to inactivate this company?",
       className: "errorAlert",
-      icon: Images.Logo,
+      icon: Images.ErrorLogo,
+      buttons: {
+        Cancel: true,
+        Confirm: true,
+      },
       dangerMode: true,
     }).then((willDelete) => {
-      if (willDelete) {
+      if (willDelete === "Confirm") {
         if (userProfile?.data?.role === Roles.ADMIN) {
           //admin
           dispatch(
