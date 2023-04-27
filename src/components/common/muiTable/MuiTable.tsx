@@ -66,6 +66,9 @@ const MuiTable = (props: MuiTablePropsType) => {
             "&.MuiTable-root .MuiTableHead-root .MuiTableCell-head": {
               background: "rgba(227, 227, 227)",
               whiteSpace: "nowrap"
+            },
+            "& .MuiTableCell-body": {
+              whiteSpace: "nowrap"
             }
           }}
         >
@@ -91,26 +94,24 @@ const MuiTable = (props: MuiTablePropsType) => {
                   <TableRow
                     key={index}
                     sx={{
-                      '&.MuiTableRow-root': {
-                        "& .MuiTableCell-root": {
-                          "&::first-chid": {
-                            width: "400px",
-                          }
-                        }
+                      "& .MuiTableCell-root:first-child": {
+                        maxWidth: "300px",
                       }
                     }}
                   >
-                    {Object.values(items).map(val => <TableCell sx={{ px: 3.125, py: 1.25, color: "#71757B" }} >{val}</TableCell>)}
+                    {Object.values(items).map((val, valIndex) => <TableCell sx={{ px: 3.125, py: 1.25, color: "#71757B", }} >{val}</TableCell>)}
                   </TableRow>
                 )
               })}
             {data.rows.length < 1 && (
               <TableRow
+                className="w-full"
                 sx={{
                   display: 'block',
-                  height: '8vh',
+                  height: '50vh',
                   px: 3.125,
-                  pt: 2
+                  pt: 2,
+                  whiteSpace: "nowrap"
                 }}
               >
                 No matching records found
