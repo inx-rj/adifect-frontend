@@ -28,7 +28,7 @@
 }
 
 .card-page-info {
-  @apply text-sm sm:text-base font-normal break-words mb-2 sm:mb-4;
+  @apply text-sm sm:text-base font-normal break-words mb-2 sm:mb-5;
 }
 
 /* To add unique(uni) gap between any of 2 element */

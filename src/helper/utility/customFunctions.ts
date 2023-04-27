@@ -77,3 +77,20 @@ export const isEmpty = (checkValue: any) => {
     Object.keys(checkValue).length === 0
   );
 };
+
+// Get the user type based on the user level
+export const getUserLevel = (level) => {
+  if (level === 1) {
+    return "Admin";
+  }
+  if (level === 2) {
+    return "Marketer";
+  }
+  if (level === 3) {
+    return "Approver";
+  }
+  if (level === 4) {
+    return "In-house Designer";
+  }
+  return "";
+};

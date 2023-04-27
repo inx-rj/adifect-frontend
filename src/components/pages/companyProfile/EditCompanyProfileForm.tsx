@@ -13,7 +13,7 @@ import { INDUSTRY_LIST } from "redux/reducers/industries/industries.slice";
 
 //import helper files
 import { API_URL } from "helper/env";
-import { singleCompanyPayloadData } from "helper/types/companyTab/comapniesType";
+import { singleCompanyPayloadData } from "helper/types/companyTab/companiesType";
 import { isValidPhoneNumber, validateEmail } from "helper/validations";
 
 //import components

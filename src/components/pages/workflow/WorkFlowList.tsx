@@ -42,7 +42,7 @@ import {
 import { COMPANY_LIST } from "redux/reducers/companyTab/companyTab.slice";
 import { GET_USER_PROFILE_DATA } from "redux/reducers/auth/auth.slice";
 import { API_URL } from "helper/env";
-import { singleCompanyPayloadData } from "helper/types/companyTab/comapniesType";
+import { singleCompanyPayloadData } from "helper/types/companyTab/companiesType";
 import { WORKFLOW_LIST } from "redux/reducers/workFlow/workFlow.slice";
 import {
   DELETE_SINGLE_WORKFLOW,
