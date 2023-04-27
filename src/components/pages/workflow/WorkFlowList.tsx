@@ -52,6 +52,7 @@ import {
 } from "redux/actions/workFlow/workFlow.actions";
 import { WORKFLOW_ROUTE } from "routes/baseRoute";
 import LoadingSpinner from "components/common/loadingSpinner/Loader";
+import Title from "components/common/pageTitle/Title";
 
 const ROLES = {
   ADMIN: 0,
@@ -386,7 +387,7 @@ const WorkFlowList = () => {
       ) : (
         <div className="page-container">
           <div className="flex-between">
-            <h1>Workflow List</h1>
+            <Title title="Workflow List" />
             <div className="flex-between gap-[10px] font-sm leading-4 font-medium text-primary">
               <Link to="/">
                 <HomeIcon color="disabled" />

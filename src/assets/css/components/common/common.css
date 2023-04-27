@@ -68,6 +68,15 @@
   @apply bg-[#9abfff];
 }
 
+/** Mui Autocomplete DropDwon Scrollbar */
+.MuiAutocomplete-listbox::-webkit-scrollbar {
+  @apply w-[5px] h-[5px] bg-slate-200;
+}
+
+.MuiAutocomplete-listbox::-webkit-scrollbar {
+  @apply bg-[#9abfff];
+}
+
 .page-title {
   @apply text-xl font-semibold;
 }
