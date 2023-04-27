@@ -6,7 +6,7 @@ import {
 } from "redux/reducers/companyTab/companyTab.slice";
 import CompanyTabApiClient from "services/companyTab/CompanyTabApiClient";
 import { initialTableConfigInterface } from "helper/types/common/table";
-import { singleCompanyPayloadData } from "helper/types/companyTab/comapniesType";
+import { singleCompanyPayloadData } from "helper/types/companyTab/companiesType";
 import { Images } from "helper/images";
 import { API_URL } from "helper/env";
 
@@ -31,7 +31,7 @@ const GET_COMPANY_LIST =
         dispatch(SET_COMPANY_LIST_LOADING(false));
         swal({
           title: "Error",
-          text: error?.response?.data?.message,
+          text: error?.response?.data?.message ?? error?.response?.data?.detail,
           className: "errorAlert-login",
           icon: Images.Logo,
           timer: 5000,
@@ -42,9 +42,9 @@ const GET_COMPANY_LIST =
 // Fetch companies list
 const GET_SINGLE_COMPANY_DATA =
   (headerCompany, endpoint: string = `${API_URL.COMPANY.COMPANY_LIST}`) =>
-  async (dispatch: AppDispatch) => {
-    await CompanyTabApiClient.fetchSingleCompany(headerCompany, endpoint);
-  };
+    async () => {
+      await CompanyTabApiClient.fetchSingleCompany(headerCompany, endpoint);
+    };
 
 // Add new company to the company list
 const POST_SINGLE_COMPANY =
@@ -54,10 +54,8 @@ const POST_SINGLE_COMPANY =
   ) =>
   async (dispatch: AppDispatch) => {
     dispatch(SET_COMPANY_LIST_LOADING(true));
-    console.log("formPayload", formPayload);
     await CompanyTabApiClient.addSingleCompany(formPayload, endpoint)
       .then((response) => {
-        console.log("POST_SINGLE_COMPANY", response);
         if (response.status === 201 || response.status === 200) {
           swal({
             title: "Successfully Complete",
@@ -83,7 +81,7 @@ const POST_SINGLE_COMPANY =
         if (error?.response?.data?.non_field_errors?.length > 0) {
           errMsg = error?.response?.data?.non_field_errors?.[0];
         } else {
-          errMsg = error?.response?.data?.message;
+          errMsg = error?.response?.data?.message  ?? error?.response?.data?.detail ;
         }
         swal({
           title: "Error",
@@ -130,7 +128,7 @@ const POST_ADMIN_COMPANY =
         if (error?.response?.data?.non_field_errors?.length > 0) {
           errMsg = error?.response?.data?.non_field_errors?.[0];
         } else {
-          errMsg = error?.response?.data?.message;
+          errMsg = error?.response?.data?.message  ?? error?.response?.data?.detail;
         }
         swal({
           title: "Error",
@@ -182,7 +180,7 @@ const PUT_SINGLE_COMPANY =
         if (error?.response?.data?.non_field_errors?.length > 0) {
           errMsg = error?.response?.data?.non_field_errors?.[0];
         } else {
-          errMsg = error?.response?.data?.message;
+          errMsg = error?.response?.data?.message  ?? error?.response?.data?.detail;
         }
 
         swal({
@@ -227,7 +225,7 @@ const DELETE_SINGLE_COMPANY =
         if (error?.response?.data?.non_field_errors?.length > 0) {
           errMsg = error?.response?.data?.non_field_errors?.[0];
         } else {
-          errMsg = error?.response?.data?.message;
+          errMsg = error?.response?.data?.message  ?? error?.response?.data?.detail;
         }
         swal({
           title: "Error",

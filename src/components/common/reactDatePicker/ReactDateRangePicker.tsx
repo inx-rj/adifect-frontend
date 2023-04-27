@@ -6,12 +6,14 @@ interface ReactDateRangePickerPropsType {
   handleChange: (dateTitle: string, dateValue: string | null | Date) => void;
   asSingle?: boolean;
   containerClassName?: string;
+  inputClassName?: string;
 }
 
 const ReactDateRangePicker = ({
   handleChange,
   asSingle = false,
   containerClassName,
+  inputClassName = "dr-picker-input"
 }: ReactDateRangePickerPropsType) => {
   const [value, setValue] = useState<StartEndDataType | null>({
     startDate: null,
@@ -39,8 +41,8 @@ const ReactDateRangePicker = ({
       asSingle={asSingle}
       value={value}
       onChange={handleValueChange}
-      containerClassName={`${containerClassName} relative`}
-      inputClassName="border focus:outline-none pr-3 placeholder:text-black/80 placeholder:text-xs"
+      containerClassName={`${containerClassName} relative focus-visible:outline-0`}
+      inputClassName={inputClassName}
       placeholder={"Date Range"}
     />
   );

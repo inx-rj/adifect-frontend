@@ -42,7 +42,7 @@ import {
 import { COMPANY_LIST } from "redux/reducers/companyTab/companyTab.slice";
 import { GET_USER_PROFILE_DATA } from "redux/reducers/auth/auth.slice";
 import { API_URL } from "helper/env";
-import { singleCompanyPayloadData } from "helper/types/companyTab/comapniesType";
+import { singleCompanyPayloadData } from "helper/types/companyTab/companiesType";
 import { WORKFLOW_LIST } from "redux/reducers/workFlow/workFlow.slice";
 import {
   DELETE_SINGLE_WORKFLOW,
@@ -52,6 +52,7 @@ import {
 } from "redux/actions/workFlow/workFlow.actions";
 import { WORKFLOW_ROUTE } from "routes/baseRoute";
 import LoadingSpinner from "components/common/loadingSpinner/Loader";
+import Title from "components/common/pageTitle/Title";
 
 const ROLES = {
   ADMIN: 0,
@@ -386,7 +387,7 @@ const WorkFlowList = () => {
       ) : (
         <div className="page-container">
           <div className="flex-between">
-            <h1>Workflow List</h1>
+            <Title title="Workflow List" />
             <div className="flex-between gap-[10px] font-sm leading-4 font-medium text-primary">
               <Link to="/">
                 <HomeIcon color="disabled" />

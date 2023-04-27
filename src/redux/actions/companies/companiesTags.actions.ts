@@ -53,7 +53,7 @@ const GET_COMPANY_PROJECTS_TAGS_LIST =
         dispatch(SET_COMPANIES_PROJECTS_TAGS_LOADING(false));
         swal({
           title: "Error",
-          text: error?.response?.data?.message,
+          text: error?.response?.data?.message ?? error?.response?.data?.detail,
           className: "errorAlert-login",
           icon: Images.Logo,
           timer: 5000,
@@ -94,7 +94,7 @@ const POST_COMPANY_PROJECTS_TAG =
         } else if (error?.response?.data?.description) {
           errMsg = error?.response?.data?.title?.[0];
         } else {
-          errMsg = error?.response?.data?.message;
+          errMsg = error?.response?.data?.message ?? error?.response?.data?.detail;
         }
         dispatch(SET_COMPANIES_PROJECTS_TAGS_LOADING(false));
         swal({

@@ -77,3 +77,30 @@ export const isEmpty = (checkValue: any) => {
     Object.keys(checkValue).length === 0
   );
 };
+
+// Get the user type based on the user level
+export const getUserLevel = (level) => {
+  if (level === 1) {
+    return "Admin";
+  }
+  if (level === 2) {
+    return "Marketer";
+  }
+  if (level === 3) {
+    return "Approver";
+  }
+  if (level === 4) {
+    return "In-house Designer";
+  }
+  return "";
+};
+
+// Truncate any string using JS
+const truncate = (words: string, maxlength: number) => {
+  return `${words.slice(0, maxlength)} …`;
+};
+
+// Get obj key 'name' by it's respective value (without nested obj)
+function getKeyByValue(object: object, value: string | number | boolean) {
+  return Object.keys(object).find((key) => object[key] === value);
+}

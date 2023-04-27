@@ -3,12 +3,15 @@ import React, { useEffect, useMemo } from "react";
 
 const MuiAutoComplete = ({
   placeholder = "Select Value",
-  label,
+  label = "",
   filterList,
-  setSelectedOption,
+  // setSelectedOption,
   selectedOption,
   setSearchText,
   searchText,
+  handleChange,
+  disabled = false,
+  customClass
 }) => {
   return (
     <Autocomplete
@@ -56,15 +59,22 @@ const MuiAutoComplete = ({
             className="input-style"
             label={label}
             placeholder={placeholder}
-            value={selectedOption?.value ? selectedOption?.value : searchText}
+            value={selectedOption ? selectedOption : searchText}
             onChange={(event) => setSearchText(event.target.value)}
             variant="outlined"
           />
         );
       }}
+      className={`${customClass} cursor-pointer custom-scrollbar`}
       options={filterList}
+      getOptionLabel={(option) => option.name}
       value={selectedOption}
-      onChange={(event, value) => setSelectedOption(value)}
+      onChange={(event, value) => {
+        // console.log("hhhhhhhhhhhhhhhhhhhhh", value, event);
+        // setSelectedOption(value);
+        handleChange(event, value);
+      }}
+      disabled={disabled}
     />
   );
 };

@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useMemo, useState } from "react";
 import { Autocomplete, TextField } from "@mui/material";
-import { filterUIOptionsListType } from "helper/types/companies/comapniesType";
+import { filterUIOptionsListType } from "helper/types/companies/companiesType";
 
 interface DropdownWithSearchPropsType {
   filterList: filterUIOptionsListType;
@@ -54,6 +54,9 @@ const DropdownWithSearch = ({
       <Autocomplete
         sx={{
           "&.MuiAutocomplete-root": {
+            "& .Mui-focused .MuiOutlinedInput-notchedOutline": {
+              borderWidth: '1px'
+            },
             "& .MuiAutocomplete-endAdornment": {
               "& .MuiAutocomplete-clearIndicator": {
                 zIndex: 10,
