@@ -3,14 +3,14 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useSingleEffect, useUpdateEffect } from "react-haiku";
 
-import MuiCustomTable from "components/common/muiCustomTable/MuiCustomTable";
-import CustomPopup from "common/CustomPopup";
+import MuiCustomTable from "components/common/muiTable/MuiTable";
+import MuiPopup from "components/common/muiPopup/MuiPopup";
 import LoadingSpinner from "components/common/loadingSpinner/Loader";
 
 import { Button, Typography } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
 
-import { TableRowColType } from "helper/types/muiCustomTable/muiCustomTable";
+import { TableRowColType } from "helper/types/muiTable/muiTable";
 import { Images } from "helper/images";
 
 import { useAppDispatch, useAppSelector } from "redux/store";
@@ -216,11 +216,11 @@ const AgencyCompanyProjectsTags = () => {
         {companyProjectsTagsList?.data?.results?.map((data) => (
           <>
             {currentCommunity === data?.id && (
-              <CustomPopup
+              <MuiPopup
                 dialogTitle="Add Tag"
                 textAlign="left"
                 dialogContent={
-                  <div className="mt-5">
+                  <>
                     <div
                       className={
                         errors.tagName
@@ -273,7 +273,7 @@ const AgencyCompanyProjectsTags = () => {
                         </span>
                       </div>
                     </div>
-                  </div>
+                  </>
                 }
                 openPopup={showTagModal}
                 closePopup={() => setShowTagModal(false)}

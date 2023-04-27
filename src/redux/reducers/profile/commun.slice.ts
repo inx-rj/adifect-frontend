@@ -15,7 +15,7 @@ export const communicationSlice = createSlice({
   name: "communication",
   initialState,
   reducers: {
-    SET_PROFILE_COOMUN_LOADING: (state, action) => ({
+    SET_PROFILE_COMMUN_LOADING: (state, action) => ({
       ...state,
       communList: {
         ...state.communList,
@@ -32,6 +32,9 @@ export const communicationSlice = createSlice({
   },
 });
 
-export const { SET_PROFILE_COOMUN_LOADING, SET_PROFILE_COMMUN_DATA } = communicationSlice.actions;
+export const { 
+  SET_PROFILE_COMMUN_LOADING, 
+  SET_PROFILE_COMMUN_DATA,
+} = communicationSlice.actions;
 
-export const GET_PROFILE_COMMUN = (state: RootState) => state.profile.commun;
+export const GET_PROFILE_COMMUN = (state: RootState) => state.profile.commun.communList;

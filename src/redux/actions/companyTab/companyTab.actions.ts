@@ -6,7 +6,7 @@ import {
 } from "redux/reducers/companyTab/companyTab.slice";
 import CompanyTabApiClient from "services/companyTab/CompanyTabApiClient";
 import { initialTableConfigInterface } from "helper/types/common/table";
-import { singleCompanyPayloadData } from "helper/types/companyTab/comapniesType";
+import { singleCompanyPayloadData } from "helper/types/companyTab/companiesType";
 import { Images } from "helper/images";
 import { API_URL } from "helper/env";
 
@@ -16,35 +16,46 @@ const GET_COMPANY_LIST =
     tableConfig: initialTableConfigInterface,
     endpoint: string = `${API_URL.COMPANY.COMPANY_LIST}`
   ) =>
-    async (dispatch: AppDispatch) => {
-      dispatch(SET_COMPANY_LIST_LOADING(true));
-      await CompanyTabApiClient.fetchCompanyList(tableConfig, endpoint)
-        .then((response) => {
-          if (response.status === 201 || response.status === 200) {
-            dispatch(SET_COMPANY_LIST_DATA(response?.data?.data));
-            dispatch(SET_COMPANY_LIST_LOADING(false));
-          }
-        })
-        .catch((error) => {
+  async (dispatch: AppDispatch) => {
+    dispatch(SET_COMPANY_LIST_LOADING(true));
+    await CompanyTabApiClient.fetchCompanyList(tableConfig, endpoint)
+      .then((response) => {
+        if (response.status === 201 || response.status === 200) {
+          dispatch(
+            SET_COMPANY_LIST_DATA(response?.data?.data || response?.data)
+          );
           dispatch(SET_COMPANY_LIST_LOADING(false));
-          swal({
-            title: "Error",
-            text: error?.response?.data?.message,
-            className: "errorAlert-login",
-            icon: Images.Logo,
-            timer: 5000,
-          });
+        }
+      })
+      .catch((error) => {
+        dispatch(SET_COMPANY_LIST_LOADING(false));
+        swal({
+          title: "Error",
+          text: error?.response?.data?.message ?? error?.response?.data?.detail,
+          className: "errorAlert-login",
+          icon: Images.Logo,
+          timer: 5000,
         });
+      });
+  };
+
+// Fetch companies list
+const GET_SINGLE_COMPANY_DATA =
+  (headerCompany, endpoint: string = `${API_URL.COMPANY.COMPANY_LIST}`) =>
+    async () => {
+      await CompanyTabApiClient.fetchSingleCompany(headerCompany, endpoint);
     };
 
 // Add new company to the company list
 const POST_SINGLE_COMPANY =
-  (formPayload: singleCompanyPayloadData, endpoint: string = `${API_URL.COMPANY.COMPANY_LIST}`) => async (dispatch: AppDispatch) => {
+  (
+    formPayload: singleCompanyPayloadData,
+    endpoint: string = `${API_URL.COMPANY.COMPANY_LIST}`
+  ) =>
+  async (dispatch: AppDispatch) => {
     dispatch(SET_COMPANY_LIST_LOADING(true));
-    console.log("formPayload", formPayload);
     await CompanyTabApiClient.addSingleCompany(formPayload, endpoint)
       .then((response) => {
-        console.log("POST_SINGLE_COMPANY", response);
         if (response.status === 201 || response.status === 200) {
           swal({
             title: "Successfully Complete",
@@ -54,20 +65,23 @@ const POST_SINGLE_COMPANY =
           });
         }
         dispatch(
-          GET_COMPANY_LIST({
-            page: 1,
-            rowsPerPage: 10,
-          }, endpoint)
+          GET_COMPANY_LIST(
+            {
+              page: 1,
+              rowsPerPage: 10,
+            },
+            endpoint
+          )
         );
         dispatch(SET_COMPANY_LIST_LOADING(false));
       })
       .catch((error) => {
         dispatch(SET_COMPANY_LIST_LOADING(false));
-        let errMsg = ""
+        let errMsg = "";
         if (error?.response?.data?.non_field_errors?.length > 0) {
-          errMsg = error?.response?.data?.non_field_errors?.[0]
+          errMsg = error?.response?.data?.non_field_errors?.[0];
         } else {
-          errMsg = error?.response?.data?.message;
+          errMsg = error?.response?.data?.message  ?? error?.response?.data?.detail ;
         }
         swal({
           title: "Error",
@@ -79,10 +93,13 @@ const POST_SINGLE_COMPANY =
       });
   };
 
-
 // Add new company admin company list
 const POST_ADMIN_COMPANY =
-  (formPayload: singleCompanyPayloadData, endpoint: string = `${API_URL.COMPANY.COMPANY_LIST}`) => async (dispatch: AppDispatch) => {
+  (
+    formPayload: singleCompanyPayloadData,
+    endpoint: string = `${API_URL.COMPANY.COMPANY_LIST}`
+  ) =>
+  async (dispatch: AppDispatch) => {
     dispatch(SET_COMPANY_LIST_LOADING(true));
     await CompanyTabApiClient.addSingleCompany(formPayload, endpoint)
       .then((response) => {
@@ -95,20 +112,23 @@ const POST_ADMIN_COMPANY =
           });
         }
         dispatch(
-          GET_COMPANY_LIST({
-            page: 1,
-            rowsPerPage: 10,
-          }, `${API_URL.COMPANY.ADMIN}`)
+          GET_COMPANY_LIST(
+            {
+              page: 1,
+              rowsPerPage: 10,
+            },
+            `${API_URL.COMPANY.ADMIN}`
+          )
         );
         dispatch(SET_COMPANY_LIST_LOADING(false));
       })
       .catch((error) => {
         dispatch(SET_COMPANY_LIST_LOADING(false));
-        let errMsg = ""
+        let errMsg = "";
         if (error?.response?.data?.non_field_errors?.length > 0) {
-          errMsg = error?.response?.data?.non_field_errors?.[0]
+          errMsg = error?.response?.data?.non_field_errors?.[0];
         } else {
-          errMsg = error?.response?.data?.message;
+          errMsg = error?.response?.data?.message  ?? error?.response?.data?.detail;
         }
         swal({
           title: "Error",
@@ -131,85 +151,91 @@ const PUT_SINGLE_COMPANY =
     },
     endpoint: string = `${API_URL.COMPANY.COMPANY_LIST}`
   ) =>
-    async (dispatch: AppDispatch) => {
-      dispatch(SET_COMPANY_LIST_LOADING(true));
-      await CompanyTabApiClient.updateSingleCompany(id, payloadObj, endpoint)
-        .then((response) => {
-          if (response.status === 201 || response.status === 200) {
-            swal({
-              title: "Successfully Complete",
-              text: response?.data?.message,
-              icon: Images.Logo,
-              timer: 5000,
-            });
-          }
-          dispatch(
-            GET_COMPANY_LIST({
-              page: 1,
-              rowsPerPage: 10,
-            }, endpoint)
-          );
-          dispatch(SET_COMPANY_LIST_LOADING(false));
-        })
-        .catch((error) => {
-          dispatch(SET_COMPANY_LIST_LOADING(false));
-          let errMsg = ""
-          if (error?.response?.data?.non_field_errors?.length > 0) {
-            errMsg = error?.response?.data?.non_field_errors?.[0]
-          } else {
-            errMsg = error?.response?.data?.message;
-          }
-
+  async (dispatch: AppDispatch) => {
+    dispatch(SET_COMPANY_LIST_LOADING(true));
+    await CompanyTabApiClient.updateSingleCompany(id, payloadObj, endpoint)
+      .then((response) => {
+        if (response.status === 201 || response.status === 200) {
           swal({
-            title: "Error",
-            text: errMsg,
-            className: "errorAlert-login",
+            title: "Successfully Complete",
+            text: response?.data?.message,
             icon: Images.Logo,
             timer: 5000,
           });
+        }
+        dispatch(
+          GET_COMPANY_LIST(
+            {
+              page: 1,
+              rowsPerPage: 10,
+            },
+            endpoint
+          )
+        );
+        dispatch(SET_COMPANY_LIST_LOADING(false));
+      })
+      .catch((error) => {
+        dispatch(SET_COMPANY_LIST_LOADING(false));
+        let errMsg = "";
+        if (error?.response?.data?.non_field_errors?.length > 0) {
+          errMsg = error?.response?.data?.non_field_errors?.[0];
+        } else {
+          errMsg = error?.response?.data?.message  ?? error?.response?.data?.detail;
+        }
+
+        swal({
+          title: "Error",
+          text: errMsg,
+          className: "errorAlert-login",
+          icon: Images.Logo,
+          timer: 5000,
         });
-    };
+      });
+  };
 
 // Delete an entry from the company list
 const DELETE_SINGLE_COMPANY =
   (itemId: number, endpoint: string = `${API_URL.COMPANY.COMPANY_LIST}`) =>
-    async (dispatch: AppDispatch) => {
-      dispatch(SET_COMPANY_LIST_LOADING(true));
-      await CompanyTabApiClient.deleteSingleCompany(itemId, endpoint)
-        .then((response) => {
-          if (response.status === 201 || response.status === 200) {
-            swal({
-              title: "Successfully Complete",
-              text: response?.data?.message,
-              icon: Images.Logo,
-              timer: 5000,
-            });
-          }
-          dispatch(
-            GET_COMPANY_LIST({
-              page: 1,
-              rowsPerPage: 10,
-            }, endpoint)
-          );
-          dispatch(SET_COMPANY_LIST_LOADING(false));
-        })
-        .catch((error) => {
-          dispatch(SET_COMPANY_LIST_LOADING(false));
-          let errMsg = ""
-          if (error?.response?.data?.non_field_errors?.length > 0) {
-            errMsg = error?.response?.data?.non_field_errors?.[0]
-          } else {
-            errMsg = error?.response?.data?.message;
-          }
+  async (dispatch: AppDispatch) => {
+    dispatch(SET_COMPANY_LIST_LOADING(true));
+    await CompanyTabApiClient.deleteSingleCompany(itemId, endpoint)
+      .then((response) => {
+        if (response.status === 201 || response.status === 200) {
           swal({
-            title: "Error",
-            text: errMsg,
-            className: "errorAlert-login",
+            title: "Successfully Complete",
+            text: response?.data?.message,
             icon: Images.Logo,
             timer: 5000,
           });
+        }
+        dispatch(
+          GET_COMPANY_LIST(
+            {
+              page: 1,
+              rowsPerPage: 10,
+            },
+            endpoint
+          )
+        );
+        dispatch(SET_COMPANY_LIST_LOADING(false));
+      })
+      .catch((error) => {
+        dispatch(SET_COMPANY_LIST_LOADING(false));
+        let errMsg = "";
+        if (error?.response?.data?.non_field_errors?.length > 0) {
+          errMsg = error?.response?.data?.non_field_errors?.[0];
+        } else {
+          errMsg = error?.response?.data?.message  ?? error?.response?.data?.detail;
+        }
+        swal({
+          title: "Error",
+          text: errMsg,
+          className: "errorAlert-login",
+          icon: Images.Logo,
+          timer: 5000,
         });
-    };
+      });
+  };
 
 // Common auth Config
 export {
@@ -218,4 +244,5 @@ export {
   POST_ADMIN_COMPANY,
   PUT_SINGLE_COMPANY,
   DELETE_SINGLE_COMPANY,
+  GET_SINGLE_COMPANY_DATA,
 };

@@ -1,10 +1,10 @@
 import { LoadingType } from "../../types";
-import { TableRowsType } from "../muiCustomTable/muiCustomTable";
+import { TableRowsType } from "../muiTable/muiTable";
 
 export interface inviteUserPayloadData {
   levels: "" | 1 | 2 | 3 | 4;
-  email: string,
-  company: "" | number,
+  email: string;
+  company: "" | number;
 }
 
 export interface InviteUserInitialType extends LoadingType {
@@ -17,5 +17,8 @@ export interface InviteUserInitialType extends LoadingType {
       results: TableRowsType[];
     };
   };
+  inviteMembersList: {
+    loading: boolean;
+    data: TableRowsType[];
+  };
 }
-

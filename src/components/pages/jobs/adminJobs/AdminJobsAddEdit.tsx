@@ -1,4 +1,10 @@
-import { Add, FileUploadOutlined } from "@mui/icons-material";
+import {
+  Add,
+  BorderColorOutlined,
+  CloseOutlined,
+  Edit,
+  FileUploadOutlined,
+} from "@mui/icons-material";
 import {
   Autocomplete,
   Dialog,
@@ -16,29 +22,40 @@ import {
   ToggleButtonGroup,
   createFilterOptions,
 } from "@mui/material";
-import CustomDateRangePicker from "components/common/customDatePicker/CustomDateRangePicker";
+import CustomDateRangePicker from "components/common/reactDatePicker/ReactDateRangePicker";
+import axiosPrivate from "api/axios";
 import { Roles } from "helper/config";
 import { API_URL } from "helper/env";
-import { TablePaginationType } from "helper/types/muiCustomTable/muiCustomTable";
+import { TablePaginationType } from "helper/types/muiTable/muiTable";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { useSingleEffect, useUpdateEffect } from "react-haiku";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import {
-  Link,
-  useNavigate,
-  useOutletContext,
-  useParams,
-} from "react-router-dom";
-import { GET_COMPANY_LIST } from "redux/actions/companyTab/companyTab.actions";
+  GET_COMPANY_LIST,
+  GET_SINGLE_COMPANY_DATA,
+} from "redux/actions/companyTab/companyTab.actions";
+import { GET_IN_HOUSE_USER_LIST } from "redux/actions/inHouseUser/inHouseUser.actions";
 import { CREATE_JOB } from "redux/actions/jobs/jobs.actions";
+import { GET_LEVELS_LIST } from "redux/actions/levels/levels.action";
+import { GET_SKILLS_LIST } from "redux/actions/skills/skills.action";
 import { GET_WORKFLOW_LIST } from "redux/actions/workFlow/workFlow.actions";
 import { GET_USER_PROFILE_DATA } from "redux/reducers/auth/auth.slice";
 import { COMPANY_PROJECTS_DATA } from "redux/reducers/companies/companies.slice";
-import { COMPANY_LIST } from "redux/reducers/companyTab/companyTab.slice";
+import {
+  COMPANY_LIST,
+  SET_COMPANY_LIST_LOADING,
+} from "redux/reducers/companyTab/companyTab.slice";
 import { GET_JOBS_DETAILS } from "redux/reducers/homePage/jobsList.slice";
+import { IN_HOUSE_USER_LIST } from "redux/reducers/inHouseUser/inHouseUser.slice";
+import { LEVELS_LIST } from "redux/reducers/levels/levels.slice";
+import { SKILLS_LIST } from "redux/reducers/skills/skills.slice";
 import { WORKFLOW_LIST } from "redux/reducers/workFlow/workFlow.slice";
 import { useAppDispatch, useAppSelector } from "redux/store";
 import swal from "sweetalert";
+import ReactDateRangePicker from "components/common/reactDatePicker/ReactDateRangePicker";
+import { IS_HEADER_COMPANY } from "redux/reducers/config/app/app.slice";
+import { Images } from "helper/images";
 
 const thumbsContainer = {
   display: "flex",
@@ -68,88 +85,6 @@ const thumbInner = {
 const AdminJobsAddEdit = () => {
   const [files, setFiles] = useState([]);
 
-  //skills data
-  const skillsData = [
-    {
-      id: 5,
-      created: "2023-04-10T07:52:42.302127Z",
-      modified: "2023-04-10T07:52:42.302149Z",
-      is_trashed: false,
-      skill_name: "css",
-      slug: "css",
-      is_active: true,
-    },
-    {
-      id: 4,
-      created: "2023-04-10T07:52:37.911890Z",
-      modified: "2023-04-10T07:52:37.911911Z",
-      is_trashed: false,
-      skill_name: "html",
-      slug: "html",
-      is_active: true,
-    },
-    {
-      id: 3,
-      created: "2022-11-17T12:19:09.564078Z",
-      modified: "2022-11-17T12:19:09.564094Z",
-      is_trashed: false,
-      skill_name: "Demo",
-      slug: "demo",
-      is_active: true,
-    },
-    {
-      id: 2,
-      created: "2022-11-17T12:19:06.755116Z",
-      modified: "2022-11-17T12:19:06.755136Z",
-      is_trashed: false,
-      skill_name: "Dmeo",
-      slug: "dmeo",
-      is_active: true,
-    },
-    {
-      id: 1,
-      created: "2022-11-17T00:53:45.237803Z",
-      modified: "2022-11-17T00:53:45.237822Z",
-      is_trashed: false,
-      skill_name: "Design",
-      slug: "design",
-      is_active: true,
-    },
-  ];
-
-  //Level Data
-  const levelsData = [
-    {
-      id: 3,
-      created: "2022-11-16T15:32:39.864644Z",
-      modified: "2022-11-16T15:32:39.864664Z",
-      is_trashed: false,
-      level_name: "Expert",
-      slug: "expert",
-      description: "Expert",
-      is_active: true,
-    },
-    {
-      id: 2,
-      created: "2022-11-16T15:32:28.636908Z",
-      modified: "2022-11-16T15:32:28.636927Z",
-      is_trashed: false,
-      level_name: "Intermediate",
-      slug: "intermediate",
-      description: "Intermediate",
-      is_active: true,
-    },
-    {
-      id: 1,
-      created: "2022-11-16T15:32:00.009703Z",
-      modified: "2022-11-16T15:32:00.009723Z",
-      is_trashed: false,
-      level_name: "Beginner",
-      slug: "beginner",
-      description: "Beginner",
-      is_active: true,
-    },
-  ];
   const [isOpen2, setIsOpen2] = useState(false);
   const [isOpen7, setIsOpen7] = useState(false);
   const [isOpen8, setIsOpen8] = useState(false);
@@ -159,7 +94,6 @@ const AdminJobsAddEdit = () => {
 
   const [sampledam, setsampledam] = useState(false);
   const [dam, setdam] = useState(false);
-
 
   const [show, setShow] = useState(false);
 
@@ -216,7 +150,7 @@ const AdminJobsAddEdit = () => {
   const [level, setlevel] = useState(null);
   const [price, setPrice] = useState("");
   const [inHouseUser, setInHouseUser] = useState([]);
-  const [deliveryDate, setDeliveryDate] = useState<any>();
+  const [deliveryDate, setDeliveryDate] = useState<any | Date>(new Date());
   const [divid, setdivid] = useState(4);
   const [alertdate, setalertdate] = useState(false);
   const [tags, setTags] = useState([]);
@@ -236,8 +170,6 @@ const AdminJobsAddEdit = () => {
   const [editJobDocuments, setEditJobDocuments] = useState<any>();
   const [addedSkill, setAddedSkill] = useState(false);
 
-  // const [headerCompany, setHeaderCompany] = useOutletContext<unknown>();
-
   const maxImageFileSize = 10000000;
   const imageMimeType = /image\/(svg|eps|png|jpg|jpeg|gif)/i;
 
@@ -251,11 +183,14 @@ const AdminJobsAddEdit = () => {
     tag: "",
   });
 
+  const headerCompany = useAppSelector(IS_HEADER_COMPANY);
   const jobDetails = useAppSelector(GET_JOBS_DETAILS);
   const { companyList } = useAppSelector(COMPANY_LIST);
   const userProfile = useAppSelector(GET_USER_PROFILE_DATA);
   const WorkFlowData = useAppSelector(WORKFLOW_LIST);
-  console.log("WorkFlowData", WorkFlowData);
+  const skillsData = useAppSelector(SKILLS_LIST);
+  const levelsData = useAppSelector(LEVELS_LIST);
+  const inHouseUserList = useAppSelector(IN_HOUSE_USER_LIST);
 
   // console.log("WorkFlowData", WorkFlowData);
   const dispatch = useAppDispatch();
@@ -302,9 +237,12 @@ const AdminJobsAddEdit = () => {
     if (userProfile?.data?.role === Roles.ADMIN) {
       dispatch(GET_COMPANY_LIST(paginationData, `${API_URL.COMPANY.ADMIN}`));
       dispatch(GET_WORKFLOW_LIST(paginationData, `${API_URL.WORKFLOW.ADMIN}`));
+
+      dispatch(GET_SKILLS_LIST(paginationData));
     } else {
       dispatch(GET_COMPANY_LIST(paginationData));
       dispatch(GET_WORKFLOW_LIST(paginationData));
+      dispatch(GET_SKILLS_LIST(paginationData));
     }
   });
 
@@ -313,6 +251,8 @@ const AdminJobsAddEdit = () => {
     if (userProfile?.data?.role === Roles.ADMIN) {
       dispatch(GET_COMPANY_LIST(paginationData, `${API_URL.COMPANY.ADMIN}`));
       dispatch(GET_WORKFLOW_LIST(paginationData, `${API_URL.WORKFLOW.ADMIN}`));
+      dispatch(GET_SKILLS_LIST(paginationData));
+      dispatch(GET_LEVELS_LIST(paginationData));
     } else {
       dispatch(
         GET_COMPANY_LIST(paginationData, `${API_URL.COMPANY.COMPANY_LIST}`)
@@ -320,6 +260,8 @@ const AdminJobsAddEdit = () => {
       dispatch(
         GET_WORKFLOW_LIST(paginationData, `${API_URL.WORKFLOW.WORKFLOW_LIST}`)
       );
+      dispatch(GET_SKILLS_LIST(paginationData));
+      dispatch(GET_LEVELS_LIST(paginationData));
     }
   }, [paginationData, userProfile.data?.role]);
 
@@ -456,7 +398,7 @@ const AdminJobsAddEdit = () => {
   //Get value
   const getvalue = (e) => {
     setcompanyvalue(e.target.value);
-    setShow(true);
+    // setShow(true);
     // const success = api
     //   .get(`${BACKEND_API_URL}company/${e.target.value}`)
     //   .then((res) => {
@@ -465,45 +407,66 @@ const AdminJobsAddEdit = () => {
     //     setindustryname(res?.data?.industry);
     //   });
 
-    // setErrors({ ...errors, company: null });
-    // // console.log(e.target.value);
-    // if (e.target.value === null) {
-    //   setworkflowdata(null);
-    //   // settemplatedata("1");
-    //   setlevel(null);
-    //   // setJobType("");
-    //   setPrice("");
-    //   setindustryname(null);
-    //   setDeliveryDate();
-    //   setDescription("");
-    //   setSkills([]);
-    //   setTags([]);
-    //   setTemplatename();
-    //   setisfiles(false);
-    //   setissamplefiles(false);
-    //   setInHouseUser([]);
-    // }
-    // if (e.target.value !== null) {
-    //   dispatch(listAdminInHouseUsers(e.target.value));
+    setErrors({ ...errors, company: null });
+    // console.log(e.target.value);
+    if (e.target.value === null) {
+      setworkflowdata(null);
+      // settemplatedata("1");
+      setlevel(null);
+      // setJobType("");
+      setPrice("");
+      setindustryname(null);
+      // setDeliveryDate();
+      setDescription("");
+      setSkills([]);
+      setTags([]);
+      setTemplatename("");
+      setisfiles(false);
+      setissamplefiles(false);
+      setInHouseUser([]);
+    }
+    if (e.target.value !== null) {
+      setShow(true);
 
-    //   dispatch(getAdminRelatedJobs(e.target.value));
-    //   setShow(true);
-    //   const success = api
-    //     .get(`${BACKEND_API_URL}work-flow/?company=${e.target.value}`)
-    //     .then((res) => {
-    //       // console.log(res.data);
-    //       setapivalue(res.data);
-    //     });
-    //   const successTemplateApi = api
-    //     .get(`${BACKEND_API_URL}admin-job-template/?company=${e.target.value}`)
-    //     .then((res) => {
-    //       console.table(res.data);
-    //       // gettemplate(e);
-    //       settemplatevalue(res.data);
-    //     });
-    // } else {
-    //   setShow(false);
-    // }
+      if (userProfile.data.role === Roles.ADMIN) {
+        dispatch(
+          GET_IN_HOUSE_USER_LIST(
+            e.target.value,
+            `${API_URL.IN_HOUSE_USER.ADMIN_USER_LIST}`
+          )
+        );
+        const success = axiosPrivate
+          .get(`${API_URL.WORKFLOW.ADMIN}work-flow/?company=${e.target.value}`)
+          .then((res) => {
+            // console.log(res.data);
+            setapivalue(res.data);
+          });
+      } else {
+        dispatch(GET_IN_HOUSE_USER_LIST(e.target.value));
+        const success = axiosPrivate
+          .get(`${API_URL.WORKFLOW.WORKFLOW_LIST}?company=${e.target.value}`)
+          .then((res) => {
+            // console.log(res.data);
+            setapivalue(res.data);
+          });
+      }
+      // dispatch(getAdminRelatedJobs(e.target.value));
+      // const success = axiosPrivate
+      //   .get(`${API_URL.WORKFLOW}work-flow/?company=${e.target.value}`)
+      //   .then((res) => {
+      //     // console.log(res.data);
+      //     setapivalue(res.data);
+      //   });
+      // const successTemplateApi = api
+      //   .get(`${BACKEND_API_URL}admin-job-template/?company=${e.target.value}`)
+      //   .then((res) => {
+      //     console.table(res.data);
+      //     // gettemplate(e);
+      //     settemplatevalue(res.data);
+      //   });
+    } else {
+      setShow(false);
+    }
   };
 
   const gettemplate = (e) => {
@@ -641,7 +604,7 @@ const AdminJobsAddEdit = () => {
   //Auto complete input change
   const handleInputChangeAutocomplete = (event, newInputValue) => {
     // setSkills(newInputValue);
-    if (newInputValue.length > 0) {
+    if (newInputValue?.length > 0) {
       setIsOpenSkill(true);
     } else {
       setIsOpenSkill(false);
@@ -670,15 +633,18 @@ const AdminJobsAddEdit = () => {
     const filteredCurrentSkills = skills.filter((str) =>
       str.skill_name.toLowerCase().includes(value.toLowerCase().trim())
     );
-    // console.log("filteredCurrentSkills", filteredCurrentSkills);
-    const filteredDatabaseSkills = skillsData.filter((str) => {
-      if (str.skill_name.toLowerCase() === value.toLowerCase().trim()) {
-        return true;
-      }
-      return false;
-    });
+    const filteredDatabaseSkills =
+      skillsData?.skillsList?.data?.results?.filter((str) => {
+        if (str.skill_name.toLowerCase() === value.toLowerCase().trim()) {
+          return true;
+        }
+        return false;
+      });
     // console.log("filteredDatabaseSkills", filteredDatabaseSkills);
-    if (filteredDatabaseSkills.length > 0 && filteredCurrentSkills.length > 0) {
+    if (
+      filteredDatabaseSkills?.length > 0 &&
+      filteredCurrentSkills?.length > 0
+    ) {
       swal({
         title: "Notice",
         text: "Skill already exists",
@@ -689,9 +655,9 @@ const AdminJobsAddEdit = () => {
       });
       return;
     }
-    for (var i = 0; i < skillsData.length; i++) {
+    for (var i = 0; i < skillsData?.skillsList?.data?.results?.length; i++) {
       if (
-        skillsData[i].skill_name
+        skillsData?.skillsList?.data?.results[i].skill_name
           .toLowerCase()
           .indexOf(value.toLowerCase().trim()) > -1
       ) {
@@ -1281,6 +1247,7 @@ const AdminJobsAddEdit = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (inputData.title && taskDueDate) {
+      console.log("inputData", inputData, taskDueDate, itemData);
       const coverter = new Date(taskDueDate).toISOString().slice(0, 10);
       setItemData([
         ...itemData,
@@ -1294,6 +1261,7 @@ const AdminJobsAddEdit = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    console.log("ssssssssssssssssssssssssssssss", name, value);
     setInputData({ ...inputData, [name]: value });
     setErrors({ ...errors, tasks: null });
 
@@ -1308,6 +1276,14 @@ const AdminJobsAddEdit = () => {
     setFilterData((prevState) => {
       return { ...prevState, [name]: value };
     });
+    setDeliveryDate(value);
+  };
+
+  const handleTaskDueDateChange = (name: string, value: any) => {
+    // setFilterData((prevState) => {
+    //   return { ...prevState, [name]: value };
+    // });
+    setTaskDueDate(value);
   };
 
   const handleInputChangeAutocompleteUsers = (e) => {
@@ -1519,26 +1495,26 @@ const AdminJobsAddEdit = () => {
     if (jobId) {
       if (files.length) {
         for (const key of Object.keys(files)) {
-          formData.append("image", files[key]);
+          formData.append("image", JSON.stringify(files[key]));
         }
       }
     } else {
       if (files.length) {
         for (const key of Object.keys(files)) {
-          formData.append("image", files[key]);
+          formData.append("image", JSON.stringify(files[key]));
         }
       }
     }
     if (jobId) {
       if (files.length) {
         for (const key of Object.keys(files)) {
-          formData.append("template_image", files[key]);
+          formData.append("template_image", JSON.stringify(files[key]));
         }
       }
     } else {
       if (files.length) {
         for (const key of Object.keys(files)) {
-          formData.append("template_image", files[key]);
+          formData.append("template_image", JSON.stringify(files[key]));
         }
       }
     }
@@ -1546,30 +1522,32 @@ const AdminJobsAddEdit = () => {
     // console.log("removeJobDocuments---____", removeJobDocuments);
     if (removeJobDocuments.length) {
       for (const key of Object.keys(removeJobDocuments)) {
-        formData.append("remove_image", removeJobDocuments[key]);
+        formData.append(
+          "remove_image",
+          JSON.stringify(removeJobDocuments[key])
+        );
       }
     }
-
-    console.log("formdata", { formData, mediafile });
-    debugger;
 
     if (mediafile.length) {
       {
         mediafile.map((item) => {
           const idget = item.id;
-          formData.append("dam_images", idget);
+          formData.append("dam_images", JSON.stringify(idget));
         });
       }
     }
 
     if (isBudgetNotRequired) {
-      formData.append("is_house_member", isBudgetNotRequired);
+      formData.append("is_house_member", JSON.stringify(isBudgetNotRequired));
 
       if (inHouseUser?.length > 0) {
         for (var i = 0; i < inHouseUser.length; i++) {
           formData.append(
             "house_member",
-            inHouseUser[i].id ? inHouseUser[i].id : inHouseUser[i]
+            inHouseUser[i].id
+              ? JSON.stringify(inHouseUser[i].id)
+              : JSON.stringify(inHouseUser[i])
           );
         }
       }
@@ -1579,7 +1557,7 @@ const AdminJobsAddEdit = () => {
       {
         samplemediafile1.map((item) => {
           const idget = item.id;
-          formData.append("dam_sample_images", idget);
+          formData.append("dam_sample_images", JSON.stringify(idget));
         });
       }
     }
@@ -1588,7 +1566,7 @@ const AdminJobsAddEdit = () => {
       {
         mediafile1.map((item) => {
           const idget = item.id;
-          formData.append("dam_images", idget);
+          formData.append("dam_images", JSON.stringify(idget));
         });
       }
     }
@@ -1597,54 +1575,61 @@ const AdminJobsAddEdit = () => {
       {
         samplemediafile.map((item) => {
           const idget = item.id;
-          formData.append("dam_sample_images", idget);
+          formData.append("dam_sample_images", JSON.stringify(idget));
         });
       }
     }
 
     if (removetaskDocuments.length) {
       for (const key of Object.keys(removetaskDocuments)) {
-        formData.append("task_id", removetaskDocuments[key]);
+        formData.append("task_id", JSON.stringify(removetaskDocuments[key]));
       }
     }
 
     // console.log("removeJobDocuments---____", removeJobDocuments);
     if (removeJobSampleDocuments.length) {
       for (const key of Object.keys(removeJobSampleDocuments)) {
-        formData.append("remove_image", removeJobSampleDocuments[key]);
+        formData.append(
+          "remove_image",
+          JSON.stringify(removeJobSampleDocuments[key])
+        );
       }
     }
     formData.append("title", title);
     // formData.append("tasks_due_date", date);
     formData.append("tasks", JSON.stringify(itemData));
     formData.append("description", description);
-    // formData.append("due_date_index", divid);
-    // formData.append("is_active", true);
+    formData.append("due_date_index", JSON.stringify(divid));
+    formData.append("is_active", "true");
 
-    // formData.append("assigned_to", userData?.user?.user_id);
-    // formData.append("created_by", userData?.user?.user_id);
+    formData.append("assigned_to", JSON.stringify(userProfile?.data?.id));
+    formData.append("created_by", JSON.stringify(userProfile?.data?.id));
 
-    // if (isShown && data == "post") {
-    //   formData.append("status", 1);
-    // } else if (data == "post") {
-    //   formData.append("status", 2);
-    // } else if (data == "draft") {
-    //   formData.append("status", 0);
-    // }
-    // formData.append(
-    //   "expected_delivery_date",
-    //   moment(deliveryDate).format("YYYY-MM-DD")
-    // );
+    if (isShown && data == "post") {
+      formData.append("status", "1");
+    } else if (data == "post") {
+      formData.append("status", "2");
+    } else if (data == "draft") {
+      formData.append("status", "0");
+    }
+    formData.append(
+      "expected_delivery_date",
+      // new Date(deliveryDate).toLocaleDateString().replaceAll("/", "-")
+      deliveryDate
+    );
     for (var i = 0; i < skills.length; i++) {
-      formData.append("skills", skills[i].id ? skills[i].id : skills[i]);
+      formData.append(
+        "skills",
+        skills[i].id ? JSON.stringify(skills[i].id) : JSON.stringify(skills[i])
+      );
     }
     if (isRelatedToPrevJob) {
       if (relatedJobs) {
         // for (var i = 0; i < relatedJobs.length; i++) {
-        formData.append("related_jobs", relatedJobs);
+        formData.append("related_jobs", JSON.stringify(relatedJobs));
         // }
       } else {
-        formData.append("relatedJobs", relatedJobs);
+        formData.append("relatedJobs", JSON.stringify(relatedJobs));
       }
     } else {
       formData.append("relatedJobs", null);
@@ -1653,41 +1638,47 @@ const AdminJobsAddEdit = () => {
     if (jobId) {
       if (fileGallery.length) {
         for (const key of Object.keys(fileGallery)) {
-          formData.append("sample_image", fileGallery[key]);
+          formData.append("sample_image", JSON.stringify(fileGallery[key]));
         }
       }
     } else {
       if (fileGallery.length) {
         for (const key of Object.keys(fileGallery)) {
-          formData.append("sample_image", fileGallery[key]);
+          formData.append("sample_image", JSON.stringify(fileGallery[key]));
         }
       }
     }
     if (jobId) {
       if (fileGallery.length) {
         for (const key of Object.keys(fileGallery)) {
-          formData.append("template_sample_image", fileGallery[key]);
+          formData.append(
+            "template_sample_image",
+            JSON.stringify(fileGallery[key])
+          );
         }
       }
     } else {
       if (fileGallery.length) {
         for (const key of Object.keys(fileGallery)) {
-          formData.append("template_sample_image", fileGallery[key]);
+          formData.append(
+            "template_sample_image",
+            JSON.stringify(fileGallery[key])
+          );
         }
       }
     }
 
     if (formUrls) {
       setFormUrls(formUrls.filter((item) => item));
-      formData.append("image_url", formUrls);
+      formData.append("image_url", JSON.stringify(formUrls));
     }
     if (formSampleUrls.length) {
       setFormSampleUrls(formSampleUrls.filter((item) => item));
-      // formData.append("sample_work_url", formSampleUrls);
+      formData.append("sample_work_url", JSON.stringify(formSampleUrls));
     }
 
     // if (industry) {
-    //   formData.append("industry", industry);
+    //   formData.append("industry", JSON.stringify(industry));
     // }
     if (data == "draft") {
       if (companyvalue) {
@@ -1707,7 +1698,7 @@ const AdminJobsAddEdit = () => {
     if (job_type && !isBudgetNotRequired) {
       formData.append("job_type", job_type);
     }
-    // formData.append("tags", tags);
+    formData.append("tags", JSON.stringify(tags));
     if (templatename) {
       formData.append("template_name", templatename);
     }
@@ -1715,7 +1706,7 @@ const AdminJobsAddEdit = () => {
       formData.append("industry", industryname);
     }
 
-    // formData.append("user", userData.user.user_id);
+    formData.append("user", JSON.stringify(userProfile?.data?.id));
 
     if (Workflowdata != null) {
       formData.append("workflow", Workflowdata);
@@ -1945,7 +1936,16 @@ const AdminJobsAddEdit = () => {
       settextchange(true);
       // dispatch(GET_JOBS_DETAILS(jobId));
       if (jobDetails?.details?.message) {
-        // dispatch(listAdminInHouseUsers(jobDetails?.details.company));
+        if (userProfile?.data?.role === Roles.ADMIN) {
+          dispatch(
+            GET_IN_HOUSE_USER_LIST(
+              jobDetails?.details.company,
+              `${API_URL.IN_HOUSE_USER.ADMIN_USER_LIST}`
+            )
+          );
+        } else {
+          dispatch(GET_IN_HOUSE_USER_LIST(jobDetails?.details.company));
+        }
 
         if (jobDetails?.details.is_house_member) {
           setIsBudgetNotRequired(true);
@@ -2301,58 +2301,105 @@ const AdminJobsAddEdit = () => {
     };
   }, []);
 
-  // useEffect(() => {
-  //   if (headerCompany) {
-  //     setcompanyvalue(headerCompany);
+  useEffect(() => {
+    if (headerCompany) {
+      setcompanyvalue(headerCompany);
+      dispatch(SET_COMPANY_LIST_LOADING(true));
 
-  //     // const success = api
-  //     //   .get(`${BACKEND_API_URL}company/${headerCompany}`)
-  //     //   .then((res) => {
-  //     //     //console.log(res?.data?.industry);
-  //     //     // setapivalue(res.data);
-  //     //     setindustryname(res?.data?.industry);
-  //     //   });
+      if (userProfile?.data?.role === Roles.ADMIN) {
+        dispatch(
+          GET_SINGLE_COMPANY_DATA(headerCompany, `${API_URL.COMPANY.ADMIN}`)
+        )
+          .then((res) => {
+            // setapivalue(res.data);
+            // setindustryname(res?.data?.industry);
+          })
+          .catch((error) => {
+            dispatch(SET_COMPANY_LIST_LOADING(false));
+            swal({
+              title: "Error",
+              text: error?.response?.data?.detail,
+              className: "errorAlert-login",
+              icon: Images.Logo,
+              buttons: {
+                Confirm: false,
+              },
+              timer: 5000,
+            });
+          });
+      } else {
+        dispatch(
+          GET_SINGLE_COMPANY_DATA(
+            headerCompany,
+            `${API_URL.COMPANY.COMPANY_LIST}`
+          )
+        )
+          .then((res) => {
+            // setapivalue(res.data);
+            // setindustryname(res?.data?.industry);
+          })
+          .catch((error) => {
+            dispatch(SET_COMPANY_LIST_LOADING(false));
+            swal({
+              title: "Error",
+              text: error?.response?.data?.detail,
+              className: "errorAlert-login",
+              icon: Images.Logo,
+              buttons: {
+                Confirm: false,
+              },
+              timer: 5000,
+            });
+          });
+      }
+      // const success = api
+      //   .get(`${BACKEND_API_URL}company/${headerCompany}`)
+      //   .then((res) => {
+      //     //console.log(res?.data?.industry);
+      //     // setapivalue(res.data);
+      //     setindustryname(res?.data?.industry);
+      //   });
 
-  //     setErrors({ ...errors, company: null });
-  //     // console.log(e.target.value);
-  //     if (headerCompany === null) {
-  //       setworkflowdata(null);
-  //       // settemplatedata("1");
-  //       setlevel(null);
-  //       // setJobType("");
-  //       setPrice("");
-  //       setindustryname(null);
-  //       // setDeliveryDate();
-  //       setDescription("");
-  //       setSkills([]);
-  //       setTags([]);
-  //       // setTemplatename();
-  //       setisfiles(false);
-  //       setissamplefiles(false);
-  //       setInHouseUser([]);
-  //     }
-  //     if (headerCompany !== null) {
-  //       // dispatch(listAdminInHouseUsers(headerCompany));
-  //       // dispatch(getAdminRelatedJobs(headerCompany));
-  //       // setShow(true);
-  //       // const success = api
-  //       //   .get(`${BACKEND_API_URL}work-flow/?company=${headerCompany}`)
-  //       //   .then((res) => {
-  //       //     // console.log(res.data);
-  //       //     setapivalue(res.data);
-  //       //   });
-  //       // const successTemplateApi = api
-  //       //   .get(`${BACKEND_API_URL}admin-job-template/?company=${headerCompany}`)
-  //       //   .then((res) => {
-  //       //     console.table(res.data);
-  //       //     // gettemplate(e);
-  //       //     settemplatevalue(res.data);
-  //       //   });
-  //     } else {
-  //       setShow(false);
-  //     }
-  //   }
-  // }, [headerCompany]);
+      setErrors({ ...errors, company: null });
+      // console.log(e.target.value);
+      if (headerCompany === null) {
+        setworkflowdata(null);
+        // settemplatedata("1");
+        setlevel(null);
+        // setJobType("");
+        setPrice("");
+        setindustryname(null);
+        // setDeliveryDate();
+        setDescription("");
+        setSkills([]);
+        setTags([]);
+        // setTemplatename();
+        setisfiles(false);
+        setissamplefiles(false);
+        setInHouseUser([]);
+      }
+      if (headerCompany !== null) {
+        // dispatch(listAdminInHouseUsers(headerCompany));
+        // dispatch(getAdminRelatedJobs(headerCompany));
+        // setShow(true);
+        // const success = api
+        //   .get(`${BACKEND_API_URL}work-flow/?company=${headerCompany}`)
+        //   .then((res) => {
+        //     // console.log(res.data);
+        //     setapivalue(res.data);
+        //   });
+        // const successTemplateApi = api
+        //   .get(`${BACKEND_API_URL}admin-job-template/?company=${headerCompany}`)
+        //   .then((res) => {
+        //     console.table(res.data);
+        //     // gettemplate(e);
+        //     settemplatevalue(res.data);
+        //   });
+      } else {
+        setShow(false);
+      }
+    }
+  }, [headerCompany]);
 
   React.useEffect(() => {
     imgRef.current = jobDocuments;
@@ -2885,7 +2932,11 @@ const AdminJobsAddEdit = () => {
                   // open={true}
                   onInputChange={handleInputChangeAutocomplete}
                   filterOptions={filterOptions}
-                  options={skillsData.filter((item) => item.is_active)}
+                  options={
+                    skillsData?.skillsList?.data?.results?.filter(
+                      (item) => item.is_active
+                    ) ?? []
+                  }
                   getOptionLabel={(option) => option.skill_name}
                   // onChange={(event, value) => setSkills(value)}
                   onChange={(e, v) => {
@@ -3588,24 +3639,28 @@ const AdminJobsAddEdit = () => {
                   commercial work.
                 </p>
                 {/* <h4 className="Attachment_new1">Attachment</h4> */}
-                <div className="container containerPad">
-                  <div className="shwo_data">
+                <div className="containerPad">
+                  <div className="shwo_data mt-6">
                     {itemData.map((elem, index) => {
                       return (
                         <div key={index}>
-                          <h3>
-                            <span className="task_title">{elem.title}</span>
-                            <span className="task_due_date">
-                              {elem.due_date}
-                            </span>
+                          <h3 className="flex justify-between gap-2">
+                            <div className="flex justify-between gap-3 max-w-[560px] w-full">
+                              <span className="task_title text-base font-medium  break-all">
+                                {elem.title}
+                              </span>
+                              <span className="task_due_date text-base font-bold text-[#2472fc] max-w-[95px] w-full">
+                                {elem.due_date}
+                              </span>
+                            </div>
                             <button
-                              className="closebutton"
+                              className="flex align-top"
                               onClick={() => {
                                 handleDelte(index);
                                 removetaskdetailDocuments(elem?.id);
                               }}
                             >
-                              x
+                              <CloseOutlined />
                             </button>
                           </h3>
                         </div>
@@ -3620,7 +3675,7 @@ const AdminJobsAddEdit = () => {
                     }
                   >
                     <input
-                      className="tastsinput tastsinputNew"
+                      className="tastsinput tastsinputNew input-style"
                       type="text"
                       name="title"
                       placeholder="Enter task and date"
@@ -3651,24 +3706,32 @@ const AdminJobsAddEdit = () => {
                     </span>
                     <br />
 
-                    <div className="App_date App_datenewdiv20">
-                      <label className="taskDueDate">taskDueDate</label>
-                      <CustomDateRangePicker handleChange={handleDateChange} />
-                      {/* <input
+                    <div className="flex justify-between">
+                      <button
+                        className="text-[#2472fc] text-base font-semibold"
+                        onClick={handleSubmit}
+                        id="adddataButtonHandler"
+                      >
+                        {/* <img src="/img/plus.png" /> */}{" "}
+                        <BorderColorOutlined fontSize="small" color="primary" />{" "}
+                        Add
+                      </button>
+                      <div className="App_date App_datenewdiv20">
+                        <label className="taskDueDate">
+                          <CustomDateRangePicker
+                            handleChange={handleTaskDueDateChange}
+                            asSingle={true}
+                            containerClassName={"min-w-[250px]"}
+                          />
+                        </label>
+                        {/* <input
                             name="due_date"
                             type="date"
                             value={inputData.due_date}
                             onChange={handleChange}
                           />  */}
+                      </div>
                     </div>
-                    <button
-                      className="adddataButton"
-                      onClick={handleSubmit}
-                      id="adddataButtonHandler"
-                    >
-                      {/* <img src="/img/plus.png" /> */}{" "}
-                      <img src="/img/addimg148.png" /> Add
-                    </button>
                   </div>
                 </div>
                 {/* <aside style={thumbsContainer}>{thumbs}</aside> */}
@@ -3790,7 +3853,7 @@ const AdminJobsAddEdit = () => {
                       inputProps={{ "aria-label": "Without label" }}
                     >
                       <MenuItem value="null">Select Level</MenuItem>
-                      {levelsData?.map((item) =>
+                      {levelsData?.levelsList?.data?.results?.map((item) =>
                         item.is_active ? (
                           <MenuItem key={item.id} value={item.id}>
                             {item.level_name}
@@ -3837,7 +3900,28 @@ const AdminJobsAddEdit = () => {
                       )}
                     </h4>
                     <div className="flex gap-4">
-                      <input
+                      <FormControl fullWidth sx={{ m: 1 }}>
+                        <InputLabel htmlFor="outlined-adornment-amount">
+                          Price
+                        </InputLabel>
+                        <OutlinedInput
+                          className="w-full max-w-[130px]"
+                          type="number"
+                          onKeyDown={blockInvalidChar}
+                          // pattern="[0-9]"
+                          value={price}
+                          placeholder="Price"
+                          onChange={(e) => {
+                            setPrice(e.target.value.replace(/[^0-9.]/g, ""));
+                          }}
+                          id="outlined-adornment-amount"
+                          startAdornment={
+                            <InputAdornment position="start">$</InputAdornment>
+                          }
+                          label="Amount"
+                        />
+                      </FormControl>
+                      {/* <input
                         className="input-style w-full max-w-[130px]"
                         type="number"
                         onKeyDown={blockInvalidChar}
@@ -3850,7 +3934,7 @@ const AdminJobsAddEdit = () => {
                       />
                       <span className="pricetag pricetag_A pricetag_A21 dollarCss">
                         $
-                      </span>
+                      </span> */}
                     </div>
                   </div>
                   <div className="diverrors44 diverrors44Space">
@@ -3882,7 +3966,9 @@ const AdminJobsAddEdit = () => {
                   onInputChange={handleInputChangeAutocompleteUsers}
                   filterOptions={filterOptionsUsers}
                   // options={adminInHouseUsers ?? []}
-                  options={skillsData ?? []}
+                  options={
+                    inHouseUserList?.inHouseUserList?.data?.results ?? []
+                  }
                   getOptionLabel={(option) => option?.user_full_name}
                   // onChange={(event, value) => setSkills(value)}
                   onChange={(e, v) => {
@@ -3978,6 +4064,10 @@ const AdminJobsAddEdit = () => {
                   className={divid == 4 ? "fourth_date activ4" : "fourth_date"}
                   onClick={() => handleDiv("4")}
                 >
+                  <CustomDateRangePicker
+                    handleChange={handleDateChange}
+                    asSingle={true}
+                  />
                   {/* <CustomDateRangePicker handleChange={handleChange} /> */}
                   {/* <LocalizationProvider dateAdapter={AdapterDateFns}>
                     <label

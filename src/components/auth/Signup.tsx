@@ -144,7 +144,7 @@ export default function Signup() {
             // text: res.data.message,
             text: "Login success",
             icon: Images.Logo,
-            // buttons: false,
+            buttons: { visible: false },
             timer: 5000,
           });
           //   dispatch(login({ email: email, password }));
@@ -159,7 +159,7 @@ export default function Signup() {
             title: "Successfully Complete",
             // text: res?.data?.message,
             icon: Images.Logo,
-            // buttons: false,
+            buttons: { visible: false },
             timer: 5000,
           });
           setTimeout(() => {

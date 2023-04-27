@@ -9,13 +9,15 @@ class JobsApiClient {
     axiosPrivate.get(`${API_URL.HOMEPAGE.JOBS_LIST}${id}/`);
 
   jobApply = (formData) =>
-    axiosPrivate.post(
-      `${API_URL.HOMEPAGE.JOB_APPLIED}`, formData
-    );
+    axiosPrivate.post(`${API_URL.HOMEPAGE.JOB_APPLIED}`, formData);
 
   //create job
   createApply = (formData) =>
-    axiosPrivate.post(`${API_URL.HOMEPAGE.JOBS_LIST}` ,formData);
+    axiosPrivate.post(`${API_URL.HOMEPAGE.JOBS_LIST}`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
 
   //delete job
   deleteJob = (id) =>

@@ -28,7 +28,7 @@
 }
 
 .card-page-info {
-  @apply text-sm sm:text-base font-normal break-words mb-2 sm:mb-4;
+  @apply text-sm sm:text-base font-normal break-words mb-2 sm:mb-5;
 }
 
 /* To add unique(uni) gap between any of 2 element */
@@ -65,6 +65,15 @@
   @apply w-[5px] h-[5px] bg-slate-200;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb {
+  @apply bg-[#9abfff];
+}
+
+/** Mui Autocomplete DropDwon Scrollbar */
+.MuiAutocomplete-listbox::-webkit-scrollbar {
+  @apply w-[5px] h-[5px] bg-slate-200;
+}
+
+.MuiAutocomplete-listbox::-webkit-scrollbar {
   @apply bg-[#9abfff];
 }
 

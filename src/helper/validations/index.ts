@@ -1,20 +1,3 @@
-export const firstName = (value) => {
-  if (!value) return "First name is required";
-
-  if (!value.match(/^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$/g))
-    return "First Name can only contain characters ";
-
-  return null;
-};
-
-export const validateUsername = (value) => {
-  if (!value) return "Username is required";
-  // if (!value.match(/^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$/g))
-  //   return "First Name can only contain characters ";
-  // if (value > 20) return "You can enter only 20 characters";
-  return null;
-};
-
 export const number = (value) => {
   if (!value) return "Bid Price is required";
   if (value < 5 && value > 0) return "Price should be greater than $5";
@@ -85,50 +68,8 @@ export const level_name = (value) => {
   return null;
 };
 
-export const validateRole = (value) => {
-  if (!value) return "Role is required";
-
-  // if (!value.match(/^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$/g))
-  //   return "First Name can only contain characters ";
-
-  return null;
-};
-
 export const category_name = (value) => {
   if (!value) return "Category name is required";
-  return null;
-};
-
-export const passwordRequired = (value:string) => {
-  if (!value) return "Password is required";
-
-  // if (!value.match(/^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$/g))
-  //   return "First Name can only contain characters ";
-
-  return null;
-};
-
-export const lastName = (value) => {
-  if (!value) return "Last name is required";
-
-  if (!value.match(/^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$/g))
-    return "Last Name can only contain characters ";
-
-  return null;
-};
-
-export const validateEmail = (value) => {
-  if (!value) return "Email is required";
-
-  if (
-    !value
-      .toLowerCase()
-      .match(
-        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-      )
-  )
-    return "Email is not valid";
-
   return null;
 };
 
@@ -147,11 +88,6 @@ export const tags = (value) => {
 
 export const jobImages = (value) => {
   if (!value) return "Please select atleast one image";
-  return null;
-};
-
-export const emailRequired = (value:string) => {
-  if (!value) return "Username/Email is required";
   return null;
 };
 
@@ -197,22 +133,6 @@ export const description = (value) => {
 //     return null;
 //   };
 
-export const validatePassword = (value) => {
-  if (!value) return "Password is required";
-
-  if (value.length < 7) return "Atleast 7 characters required";
-
-  return null;
-};
-
-export const confirmPassword = (password, confirmPassword) => {
-  if (!password) return "Confirm Password is required";
-
-  if (password !== confirmPassword) return "Passwords do not match";
-
-  return null;
-};
-
 //   export const dateOfBirth = (value) => {
 //     if (!value) return "Date of birth is required";
 //     return null;
@@ -232,11 +152,94 @@ export const currPassword = (value) => {
 
   return null;
 };
-export const phoneNumber1 = (value) => {
-  if (!value) return "Phone Number is required";
 
-  if (!String(value).match(/^(\+\d{1,3}[- ]?)?\d{10}$/))
+
+// ------------ Used validations ----------------//
+
+export const emailRequired = (value: string) => {
+  if (!value) return "Username/Email is required";
+  return null;
+};
+
+export const isValidPhoneNumber = (value) => {
+  // if (!value) return "Phone Number is required";
+  if (!String(value).match(/^\d{10}$/))
+    // /^(\+\d{1,3}[- ]?)?\d{10}$/
     return "Phone Number is not valid";
 
+  return null;
+};
+
+export const confirmPassword = (password, confirmPassword) => {
+  if (!password) return "Confirm Password is required";
+
+  if (password !== confirmPassword) return "Passwords do not match";
+
+  return null;
+};
+
+export const validatePassword = (value) => {
+  if (!value) return "Password is required";
+
+  if (value.length < 7) return "Atleast 7 characters required";
+
+  return null;
+};
+
+export const validateEmail = (value) => {
+  if (!value) return "Email is required";
+
+  if (
+    !value
+      .toLowerCase()
+      .match(
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      )
+  )
+    return "Email is not valid";
+
+  return null;
+};
+
+export const lastName = (value) => {
+  if (!value) return "Last name is required";
+
+  if (!value.match(/^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$/g))
+    return "Last Name can only contain characters ";
+
+  return null;
+};
+
+export const firstName = (value) => {
+  if (!value) return "First name is required";
+
+  if (!value.match(/^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$/g))
+    return "First Name can only contain characters ";
+
+  return null;
+};
+
+export const passwordRequired = (value: string) => {
+  if (!value) return "Password is required";
+
+  // if (!value.match(/^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$/g))
+  //   return "First Name can only contain characters ";
+
+  return null;
+};
+export const validateRole = (value) => {
+  if (!value) return "Role is required";
+
+  // if (!value.match(/^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$/g))
+  //   return "First Name can only contain characters ";
+
+  return null;
+};
+
+export const validateUsername = (value) => {
+  if (!value) return "Username is required";
+  // if (!value.match(/^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$/g))
+  //   return "First Name can only contain characters ";
+  // if (value > 20) return "You can enter only 20 characters";
   return null;
 };
