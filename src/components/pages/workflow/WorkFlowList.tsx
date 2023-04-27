@@ -221,11 +221,12 @@ const WorkFlowList = () => {
       icon: Images.Logo,
       buttons: {
         Cancel: true,
-        Confirm: true,
+        OK: true,
       },
       dangerMode: true,
     }).then((willDelete) => {
-      if (willDelete) {
+      //Use the text used in swal button for condition
+      if (willDelete !== "Cancel") {
         dispatch(DELETE_SINGLE_WORKFLOW(item?.id));
       }
     });
@@ -360,11 +361,13 @@ const WorkFlowList = () => {
                 setSelectedItem={setSelectedItem}
                 setAnchorEl={setAnchorEl}
                 anchorEl={anchorEl}
+                handleView={() => handleEdit(item)}
                 handleEdit={() => handleEdit(item)}
                 handleSetting={() => handleSetting(item)}
                 handleDelete={() => handleDelete(item)}
                 showSetting={userProfile?.data?.role === ROLES.ADMIN}
-                showEdit={true}
+                showEdit={!item.assigned_job ? true : false}
+                showView={item.assigned_job ? true : false}
                 showDelete={true}
                 isEditMode={isEditMode}
                 item={{ id: item?.id, isActive: item?.is_active }}

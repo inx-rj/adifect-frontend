@@ -2322,7 +2322,7 @@ const AdminJobsAddEdit = () => {
               className: "errorAlert-login",
               icon: Images.Logo,
               buttons: {
-                Confirm: false,
+                OK: false,
               },
               timer: 5000,
             });
@@ -2346,7 +2346,7 @@ const AdminJobsAddEdit = () => {
               className: "errorAlert-login",
               icon: Images.Logo,
               buttons: {
-                Confirm: false,
+                OK: false,
               },
               timer: 5000,
             });

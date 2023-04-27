@@ -37,7 +37,7 @@ const GET_INVITE_USERS =
 
 // Fetch the invite members list
 const GET_INVITE_MEMBERS_USERS =
-  (tableConfig: initialTableConfigInterface, level) =>
+  (tableConfig, level) =>
   async (dispatch: AppDispatch) => {
     const params = {
       level: level,
