@@ -20,18 +20,24 @@ import {
   CLEAR_JOBS,
   GET_JOBS_DETAILS,
   JOBS_DATA,
+  JOBS_SUCCESS_MESSAGE,
 } from "redux/reducers/homePage/jobsList.slice";
 import { useAppDispatch, useAppSelector } from "redux/store";
 import { GET_USER_PROFILE_DATA } from "redux/reducers/auth/auth.slice";
-import { formateISODateToLocaleString } from "helper/utility/customFunctions";
 import Title from "components/common/pageTitle/Title";
 import { useSingleEffect, useUpdateEffect } from "react-haiku";
 import {
   DELETE_JOB,
   GET_ADMIN_DASHBOARD_IN_PROGRESS_JOBLIST,
-  LIST_ALL_JOBS,
+  GET_DETAIL_JOB_DATA,
 } from "redux/actions/jobs/jobs.actions";
 import BadgeUI from "components/common/badge/BadgeUI";
+import Filters from "./Filters";
+import LoadingSpinner from "components/common/loadingSpinner/Loader";
+import ActionMenuButton from "components/common/actionMenuButton/ActionMenuButton";
+import { Roles } from "helper/config";
+import { IS_HEADER_COMPANY } from "redux/reducers/config/app/app.slice";
+import { Images } from "helper/images";
 
 // const Transition = React.forwardRef(function Transition(props, ref) {
 //   return <Slide direction="left" ref={ref} {...props} />;
@@ -94,8 +100,10 @@ const AdminJobsList = () => {
   const userData = useAppSelector(GET_USER_PROFILE_DATA);
 
   const jobData = useAppSelector(JOBS_DATA);
+  const headerCompany = useAppSelector(IS_HEADER_COMPANY);
 
   const jobDetails = useAppSelector(GET_JOBS_DETAILS);
+  const successMessage = useAppSelector(JOBS_SUCCESS_MESSAGE);
   const [isOpen, setIsOpen] = useState(false);
 
   const [jobId, setJobId] = useState();
@@ -129,6 +137,16 @@ const AdminJobsList = () => {
   // const [page, setPage] = useState(1);
 
   // const { loading } = useSelector((state) => state.loaderReducer);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [selectedItem, setSelectedItem] = useState<{
+    currentTooltip: null | number;
+    currentId: null | number;
+  }>({
+    currentTooltip: null,
+    currentId: null,
+  });
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [isSettingMode, setIsSettingMode] = useState(false);
 
   useSingleEffect(() => {
     console.log("rneder");
@@ -142,20 +160,31 @@ const AdminJobsList = () => {
 
   useUpdateEffect(() => {
     const data = {
-      page: 1,
-      currentPage: currentPage,
+      page: currentPage,
+      // currentPage: currentPage,
       orderingInProgress: orderingInProgress,
     };
     // dispatch(LIST_ALL_JOBS(data));
     dispatch(GET_ADMIN_DASHBOARD_IN_PROGRESS_JOBLIST(data));
-  }, []);
+  }, [
+    successMessage,
+    currentPage,
+    // headerCompany,
+    orderingInProgress,
+    searchfeedback,
+  ]);
   const closePopup = () => {
     setIsOpen(false);
   };
 
+  // Handle Pagination
+  const pageHandler = (gotopage) => {
+    setCurrentPage(gotopage);
+  };
+
   //Open Job openup based on Id
   const openPopup = (item_id) => {
-    dispatch(GET_JOBS_DETAILS(item_id));
+    dispatch(GET_DETAIL_JOB_DATA(item_id));
 
     setNewJobDetails(true);
 
@@ -168,29 +197,34 @@ const AdminJobsList = () => {
       title: "Warning",
       text: "Are you sure you want to delete this job?",
       className: "errorAlert",
-      icon: "/img/logonew-red.svg",
-
-      // buttons: true,
+      icon: Images.ErrorLogo,
+      buttons: {
+        Cancel: true,
+        OK: true,
+      },
       dangerMode: true,
-      timer: 1500,
+      // timer: 1500,
     }).then((willDelete) => {
-      if (willDelete) {
-        dispatch(DELETE_JOB(id));
-        swal({
-          title: "Successfully Complete",
-          text: "Successfully Deleted!",
-          className: "successAlert",
-
-          icon: "/img/logonew.svg",
-          // buttons: false,
-          timer: 1500,
-        });
+      if (willDelete !== "Cancel") {
+        dispatch(DELETE_JOB(id)).then((r) => r);
       }
     });
     // if (window.confirm("Are you sure you want to delete this job?")) {
     //   dispatch(deleteJob(id));
     // }
   };
+
+  useEffect(() => {
+    if (jobData?.JobsListsList) {
+      let numberPages = Math.ceil(jobData?.JobsListsList?.data?.count / 6);
+      setPages(numberPages);
+    }
+  }, [
+    jobData?.JobsListsList,
+    headerCompany,
+    searchfeedback,
+    orderingInProgress,
+  ]);
 
   useEffect(() => {
     if (jobDetails?.details?.job_detail_success) {
@@ -294,92 +328,102 @@ const AdminJobsList = () => {
 
   return (
     <>
-      <div className="pb-5">
-        <Title title="Jobs List" />
-      </div>
-      <div className="bg-white p-5 rounded-xl">
-        <div className="w-full ">
-          {/* <div className="Fresh">
+      {isLoading ? (
+        <>
+          <LoadingSpinner />
+        </>
+      ) : (
+        <>
+          <div className="pb-5">
+            <Title title="Jobs List" />
+          </div>
+          <div className="bg-white p-5 rounded-xl">
+            <div className="w-full ">
+              {/* <div className="Fresh">
                 <h1>
                   Hello {userData.user.first_name} {userData.user.last_name}
                 </h1>
               </div> */}
-          <div className="">
-            <div className="flex items-center justify-between mb-5">
-              <div className="flex gap-4">
-                <input
-                  className="input-style max-w-[300px]"
-                  type="text"
-                  value={searchfeedback}
-                  placeholder="Search job"
-                  onChange={(e) => setSearchfeedback(e.target.value)}
-                />
-                {/* <img className="newSearchLogoPp" src="/img/newSearchIcon.png" /> */}
-                <div className="w-[115px]">
-                  <h6
-                    style={{ cursor: "pointer" }}
-                    onClick={handleClickInProgressSort}
-                  >
-                    <img src="img/Sort.png" alt="" /> {orderingName}
-                  </h6>{" "}
-                  <Menu
-                    id="long-menu"
-                    //   MenuProps={menuProps}
-                    anchorEl={anchorElInProgress}
-                    keepMounted
-                    open={openMenuInProgress}
-                    onClose={handleCloseInProgressSort}
-                  >
-                    {menuOptions.map((option) => (
-                      <MenuItem
-                        className="agencyjobtp"
-                        key={option.id}
-                        onClick={(e) => menuHandleSort(e, option.name)}
+              <div className="">
+                <div className="flex items-center justify-between mb-5">
+                  <div className="flex gap-4">
+                    <input
+                      className="input-style max-w-[300px]"
+                      type="text"
+                      value={searchfeedback}
+                      placeholder="Search job"
+                      onChange={(e) => setSearchfeedback(e.target.value)}
+                    />
+                    {/* <img className="newSearchLogoPp" src="/img/newSearchIcon.png" /> */}
+                    <div className="w-[115px]">
+                      <h6
+                        style={{ cursor: "pointer" }}
+                        onClick={handleClickInProgressSort}
                       >
-                        {option.name}
-                      </MenuItem>
-                    ))}
-                  </Menu>
+                        <img src="img/Sort.png" alt="" /> {orderingName}
+                      </h6>{" "}
+                      <Menu
+                        id="long-menu"
+                        //   MenuProps={menuProps}
+                        anchorEl={anchorElInProgress}
+                        keepMounted
+                        open={openMenuInProgress}
+                        onClose={handleCloseInProgressSort}
+                      >
+                        {menuOptions.map((option) => (
+                          <MenuItem
+                            className="agencyjobtp"
+                            key={option.id}
+                            onClick={(e) => menuHandleSort(e, option.name)}
+                          >
+                            {option.name}
+                          </MenuItem>
+                        ))}
+                      </Menu>
+                    </div>
+                  </div>
+                  <div>
+                    <Link className="btn btn-primary" to={`/jobs/add`}>
+                      {" "}
+                      {/* Create a Job{" "} */}
+                      Add Jobs
+                    </Link>
+                  </div>
                 </div>
               </div>
-              <div>
-                <Link className="btn btn-primary" to={`/jobs/add`}>
-                  {" "}
-                  {/* Create a Job{" "} */}
-                  Add Jobs
-                </Link>
-              </div>
-            </div>
-          </div>
-          {/* {isLoading || job_detail_loading ? (
+              {/* {isLoading || job_detail_loading ? (
             <LoadingSpinner />
           ) : ( */}
-          {/* {isLoading ? (
+              {/* {isLoading ? (
             <LoadingSpinner />
           ) : jobLoading ? (
             <LoadingSpinner />
           ) : ( */}
-          <>
-            <div className="w-full flex gap-4">
-              {/* <input type="button" value="Click to Open Popup" onClick={togglePopup} /> */}
-              <Dialog
-                className="job-custom_popup"
-                open={isOpen}
-                //   TransitionComponent={Transition}
-                keepMounted
-                onClose={closePopup}
-                aria-describedby="alert-dialog-slide-description "
-              >
-                {/* <DialogTitle>{"Use Google's location service?"}</DialogTitle> */}
-                <DialogContent>
-                  <div className="Topallpage">
-                    <div className="MarketingDetails-popup ContentDiv border-radius">
-                      <div className="Marketingcamaign">
-                        <div className="CategorylistName">
-                          <div className="jobdesadminjoblist1">
-                            <h2>{jobDetails?.details?.title}</h2>
-                          </div>
-                          {/* <div className="FreshBtn">
+              <>
+                <div className="w-full flex gap-4">
+                  {/* <input type="button" value="Click to Open Popup" onClick={togglePopup} /> */}
+                  <Dialog
+                    className="job-custom_popup"
+                    open={isOpen}
+                    //   TransitionComponent={Transition}
+                    keepMounted
+                    onClose={closePopup}
+                    aria-describedby="alert-dialog-slide-description "
+                  >
+                    {/* <DialogTitle>{"Use Google's location service?"}</DialogTitle> */}
+                    <DialogContent>
+                      <div className="Topallpage">
+                        <div className="MarketingDetails-popup ContentDiv border-radius">
+                          <div className="Marketingcamaign">
+                            <div className="CategorylistName">
+                              <div className="jobdesadminjoblist1">
+                                {/* <h2>{jobDetails?.details?.title}</h2> */}
+                                <Title
+                                  customClass=""
+                                  title={jobDetails?.details?.title}
+                                />
+                              </div>
+                              {/* <div className="FreshBtn">
                                   <Link
                                     className="MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButtonBase-root  css-1o8ezb2-MuiButtonBase-root-MuiButton-root"
                                     to={`/jobs/apply/${jobId}`}
@@ -387,101 +431,107 @@ const AdminJobsList = () => {
                                     {" "}Submit{" "}
                                   </Link>
                                 </div> */}
-                        </div>
-
-                        <p className="duedate duedate_sec">
-                          Due on: {jobDetails?.details?.expected_delivery_date}
-                        </p>
-                        <div className="jobdetailsInProgress">
-                          <Link className="jobdetailsInProgressBtn" to="#">
-                            In Progress
-                          </Link>
-                        </div>
-                        <p className=" INvehicula">
-                          {jobDetails?.details?.description}
-                        </p>
-                        <h5 className="ProvidedTitle">Provided Media:</h5>
-                        {(jobDocuments?.length > 0 ||
-                          jobvideoDocuments?.length > 0) && (
-                          <>
-                            <h6>Job Documents</h6>
-                          </>
-                        )}
-
-                        <div className="mediaimg Providedmediaimg">
-                          {jobDocuments?.map((item, index) => (
-                            <div key={index}>
-                              <a
-                                //   index_item={index}
-                                target="_blank"
-                                href={`${item}`}
-                                // href={item}
-                              >
-                                <li key={index}>
-                                  <img
-                                    className=""
-                                    src={`${jobDocumentsThumbs[index]}`}
-                                    alt=""
-                                  />
-                                </li>
-                              </a>
                             </div>
-                          ))}
 
-                          {jobvideoDocuments?.map((item, index) => (
-                            <div key={index}>
-                              <video className="videounderagency" controls>
-                                <source
-                                  src={`${jobvideoDocumentsThumbs[index]}`}
-                                  type="video/mp4"
-                                />
-                              </video>
+                            <p className="duedate duedate_sec">
+                              Due on:{" "}
+                              {jobDetails?.details?.expected_delivery_date}
+                            </p>
+                            <div className="jobdetailsInProgress">
+                              <Link className="jobdetailsInProgressBtn" to="#">
+                                In Progress
+                              </Link>
                             </div>
-                          ))}
-                        </div>
+                            <p className=" INvehicula">
+                              {jobDetails?.details?.description}
+                            </p>
+                            <h5 className="ProvidedTitle">Provided Media:</h5>
+                            {(jobDocuments?.length > 0 ||
+                              jobvideoDocuments?.length > 0) && (
+                              <>
+                                <h6>Job Documents</h6>
+                              </>
+                            )}
 
-                        {/* {jobDocuments?.length < 1 && <div>N/A</div>} */}
-                        {(additionalJobDocuments?.length > 0 ||
-                          additionalvideoJobDocuments?.length > 0) && (
-                          <>
-                            <h6>Additional Job Documents</h6>
-                          </>
-                        )}
+                            <div className="mediaimg Providedmediaimg">
+                              {jobDocuments?.map((item, index) => (
+                                <div key={index}>
+                                  <a
+                                    //   index_item={index}
+                                    target="_blank"
+                                    href={`${item}`}
+                                    // href={item}
+                                  >
+                                    <li key={index}>
+                                      <img
+                                        className=""
+                                        src={`${jobDocumentsThumbs[index]}`}
+                                        alt=""
+                                      />
+                                    </li>
+                                  </a>
+                                </div>
+                              ))}
 
-                        <div className="mediaimg Providedmediaimg">
-                          {additionalJobDocuments?.map((item, index) => (
-                            <div key={index}>
-                              <a
-                                //   index_item={index}
-                                target="_blank"
-                                href={`${item}`}
-                                // href={item}
-                              >
-                                <li key={index}>
-                                  <img
-                                    className=""
-                                    src={`${jobSampleDocumentsThumbs[index]}`}
-                                    alt=""
-                                  />
-                                </li>
-                              </a>
+                              {jobvideoDocuments?.map((item, index) => (
+                                <div key={index}>
+                                  <video className="videounderagency" controls>
+                                    <source
+                                      src={`${jobvideoDocumentsThumbs[index]}`}
+                                      type="video/mp4"
+                                    />
+                                  </video>
+                                </div>
+                              ))}
                             </div>
-                          ))}
 
-                          {additionalvideoJobDocuments?.map((item, index) => (
-                            <div key={index}>
-                              <video className="videounderagency" controls>
-                                <source
-                                  src={`${jobSamplevideoDocumentsThumbs[index]}`}
-                                  type="video/mp4"
-                                />
-                              </video>
+                            {/* {jobDocuments?.length < 1 && <div>N/A</div>} */}
+                            {(additionalJobDocuments?.length > 0 ||
+                              additionalvideoJobDocuments?.length > 0) && (
+                              <>
+                                <h6>Additional Job Documents</h6>
+                              </>
+                            )}
+
+                            <div className="mediaimg Providedmediaimg">
+                              {additionalJobDocuments?.map((item, index) => (
+                                <div key={index}>
+                                  <a
+                                    //   index_item={index}
+                                    target="_blank"
+                                    href={`${item}`}
+                                    // href={item}
+                                  >
+                                    <li key={index}>
+                                      <img
+                                        className=""
+                                        src={`${jobSampleDocumentsThumbs[index]}`}
+                                        alt=""
+                                      />
+                                    </li>
+                                  </a>
+                                </div>
+                              ))}
+
+                              {additionalvideoJobDocuments?.map(
+                                (item, index) => (
+                                  <div key={index}>
+                                    <video
+                                      className="videounderagency"
+                                      controls
+                                    >
+                                      <source
+                                        src={`${jobSamplevideoDocumentsThumbs[index]}`}
+                                        type="video/mp4"
+                                      />
+                                    </video>
+                                  </div>
+                                )
+                              )}
                             </div>
-                          ))}
-                        </div>
 
-                        {/* {additionalJobDocuments?.length < 1 && <div>N/A</div>} */}
-                        {/* <div className="mediaimg">
+                            {/* {additionalJobDocuments?.length < 1 && <div>N/A</div>} */}
+                            {/* <div className="mediaimg">
                             {jobDetails?.images?.map((item, index) => (
                               <div key={index}>
                                 {item.job_images
@@ -549,287 +599,279 @@ const AdminJobsList = () => {
                             </div>
                           ))}
                           {!jobDetails?.images?.length && <>N/A</>} */}
-                      </div>
-                      <hr className="b-top" />
-                      <table>
-                        <tr className="Pricetable">
-                          <td>
-                            <h5 className="colortype">Job Type:</h5>
-                          </td>
-                          <td>
-                            <p className="fixedpriceDetail">
-                              {jobDetails?.details?.get_jobType_details}
-                            </p>
-                          </td>
-                          <td>
-                            <h5 className="colortype">Industry:</h5>
-                          </td>
-                          <td>
-                            <p className="fixedpriceDetail">
-                              {jobDetails?.details?.industry?.industry_name}
-                            </p>
-                          </td>
-                        </tr>
-                        {jobDetails?.details?.price && (
-                          <>
-                            <div className="Budget-Title">
-                              <li>
-                                <h5>Budget:</h5>
-                              </li>
-                              <li>
-                                <h5>${jobDetails?.details?.price}</h5>
-                              </li>
-                            </div>
-                            <div className="Budget-Title">
-                              <li>
-                                <h5>Level:</h5>
-                              </li>
-                              <li>
-                                <h5>
-                                  {jobDetails?.details?.level?.level_name}
-                                </h5>
-                              </li>
-                            </div>
-                          </>
-                        )}
-                      </table>
-                      <hr className="b-top" />
-                      <table>
-                        <tr className="Pricetable">
-                          <td>
-                            <h5 className="colortype CompanyName">Company:</h5>
-                          </td>
-                          <td>
-                            <p className="fixedpriceDetail CompanyNameIn">
-                              {jobDetails?.details?.company_name
-                                ? jobDetails?.details?.company_name
-                                : "N/A"}
-                            </p>
-                          </td>
-                        </tr>
-                      </table>
-                      <hr className="b-top" />
-                      {jobDetails?.details?.skills?.length > 0 && (
-                        <>
-                          <div className="Skill Budget-Title">
-                            <h5 className="skillsjobde mb-4">Skills:</h5>
-                            {jobDetails?.details?.skills?.map((item) => (
-                              <li>
-                                <Link to="">{item.skill_name}</Link>
-                              </li>
-                            ))}
                           </div>
-                        </>
-                      )}
-                      {jobDetails?.details?.tags?.length > 0 && (
-                        <>
-                          <div className="Skill Budget-Title">
-                            <h5 className="skillsjobde mb-4 mt-4">Tags:</h5>
-                            {jobDetails?.details?.tags
-                              ?.split(",")
-                              .map((tag, index) => (
-                                <li key={index}>
-                                  <Link to="#">{tag}</Link>
-                                </li>
-                              ))}
-                            {/* {tags.split(",")?.map((tag, index) => (
+                          <hr className="b-top" />
+                          <table>
+                            <tr className="Pricetable">
+                              <td>
+                                <h5 className="colortype">Job Type:</h5>
+                              </td>
+                              <td>
+                                <p className="fixedpriceDetail">
+                                  {jobDetails?.details?.get_jobType_details}
+                                </p>
+                              </td>
+                              <td>
+                                <h5 className="colortype">Industry:</h5>
+                              </td>
+                              <td>
+                                <p className="fixedpriceDetail">
+                                  {jobDetails?.details?.industry?.industry_name}
+                                </p>
+                              </td>
+                            </tr>
+                            {jobDetails?.details?.price && (
+                              <>
+                                <div className="Budget-Title">
+                                  <li>
+                                    <h5>Budget:</h5>
+                                  </li>
+                                  <li>
+                                    <h5>${jobDetails?.details?.price}</h5>
+                                  </li>
+                                </div>
+                                <div className="Budget-Title">
+                                  <li>
+                                    <h5>Level:</h5>
+                                  </li>
+                                  <li>
+                                    <h5>
+                                      {jobDetails?.details?.level?.level_name}
+                                    </h5>
+                                  </li>
+                                </div>
+                              </>
+                            )}
+                          </table>
+                          <hr className="b-top" />
+                          <table>
+                            <tr className="Pricetable">
+                              <td>
+                                <h5 className="colortype CompanyName">
+                                  Company:
+                                </h5>
+                              </td>
+                              <td>
+                                <p className="fixedpriceDetail CompanyNameIn">
+                                  {jobDetails?.details?.company_name
+                                    ? jobDetails?.details?.company_name
+                                    : "N/A"}
+                                </p>
+                              </td>
+                            </tr>
+                          </table>
+                          <hr className="b-top" />
+                          {jobDetails?.details?.skills?.length > 0 && (
+                            <>
+                              <div className="Skill Budget-Title">
+                                <h5 className="skillsjobde mb-4">Skills:</h5>
+                                {jobDetails?.details?.skills?.map((item) => (
+                                  <li>
+                                    <Link to="">{item.skill_name}</Link>
+                                  </li>
+                                ))}
+                              </div>
+                            </>
+                          )}
+                          {jobDetails?.details?.tags?.length > 0 && (
+                            <>
+                              <div className="Skill Budget-Title">
+                                <h5 className="skillsjobde mb-4 mt-4">Tags:</h5>
+                                {jobDetails?.details?.tags
+                                  ?.split(",")
+                                  .map((tag, index) => (
+                                    <li key={index}>
+                                      <Link to="#">{tag}</Link>
+                                    </li>
+                                  ))}
+                                {/* {tags.split(",")?.map((tag, index) => (
                                 <li key={index}>
                                   <Link to="#">{tag}</Link>
                                 </li>
                               ))} */}
-                          </div>
-                        </>
-                      )}
-                    </div>
-                  </div>
-                </DialogContent>
-                <DialogActions>
-                  <Button onClick={closePopup}>Close</Button>
-                </DialogActions>
-              </Dialog>
+                              </div>
+                            </>
+                          )}
+                        </div>
+                      </div>
+                    </DialogContent>
+                    <DialogActions>
+                      <Button onClick={closePopup}>Close</Button>
+                    </DialogActions>
+                  </Dialog>
 
-              {/* {isOpen && (
+                  {/* {isOpen && (
                   <>
                     <div className="job-popup-box" id="popup-box">
                       <div className="job-blocker" onClick={closePopup}></div>
                       <div className="job-box">
                         {/* <span className="close-icon" onClick={closePopup}>x</span> */}
-              {/* {JSON.stringify(jobDetails)} 
+                  {/* {JSON.stringify(jobDetails)} 
                         
 
                       </div>
                     </div>
                   </>
                 )} */}
-              <div className="">
-                <div className="grid grid-cols-1 gap-4">
-                  {jobData?.JobsListsList?.data?.results?.map((item, index) => {
-                    return (
-                      <div className="border border-1 rounded-xl">
-                        <div className="w-full  flex">
-                          <div className="p-5 ">
-                            <img
-                              className="h-[75px] w-[75px] border border-none rounded-xl"
-                              src={item?.image_url}
-                              alt=""
-                            />
-                          </div>
-                          <div className="w-full max-w-[calc(100% - 72px)] py-5 pr-5">
-                            <div className="flex gap-4">
-                              <Title
-                                title={
-                                  item.title.length > 15
-                                    ? item.title.substring(0, 15) + "..."
-                                    : item.title
-                                }
-                              />
-                              {item?.level?.level_name && (
-                                <BadgeUI variant="primary">
-                                  {item?.level?.level_name}
-                                </BadgeUI>
-                              )}
-                            </div>
-                            <div className="text-base font-medium text-[#A0A0A0]">
-                              {item?.description?.length > 300
-                                ? item?.description?.substring(0, 300) + "..."
-                                : item?.description}
-                            </div>
-                            <div className="flex gap-2 my-1">
-                              <span className="text-base font-medium text-[#A0A0A0]">
-                                Skills:{" "}
-                              </span>
-                              {item.skills?.length > 0 ? (
-                                item.skills?.map((item, index) => (
-                                  <BadgeUI variant="primary" key={index}>
-                                    {item?.skill_name}
-                                  </BadgeUI>
-                                ))
-                              ) : (
-                                <>N/A</>
-                              )}
-                            </div>
-                            <div className="flex gap-2 my-1">
-                              <span className="text-base font-medium text-[#A0A0A0]">
-                                Tags:{" "}
-                              </span>
+                  <div className="">
+                    <div className="grid md:grid-cols-2 sm:grid-cols-1 gap-4">
+                      {jobData?.JobsListsList?.data?.results?.map(
+                        (item, index) => {
+                          return (
+                            <div className="border border-1 rounded-xl">
+                              <div className="w-full p-5 flex gap-5">
+                                <div className="">
+                                  {item?.image_url !== "" ? (
+                                    <img
+                                      className="h-[75px] w-[75px] border border-none rounded-xl"
+                                      src={item?.image_url?.split(",")[0]}
+                                      alt=""
+                                    />
+                                  ) : (
+                                    <div className="bg-gray-100 h-[75px] w-[75px] border border-none rounded-xl"></div>
+                                  )}
+                                </div>
+                                <div className="w-full max-w-[calc(100% - 75px)] ">
+                                  <div className="flex gap-4 justify-between">
+                                    <div className="flex gap-4">
+                                      <Title
+                                        title={
+                                          item.title.length > 15
+                                            ? item.title.substring(0, 15) +
+                                              "..."
+                                            : item.title
+                                        }
+                                      />
+                                      {item?.level?.level_name && (
+                                        <BadgeUI variant="primary">
+                                          {item?.level?.level_name}
+                                        </BadgeUI>
+                                      )}
+                                    </div>
+                                    <div>
+                                      <ActionMenuButton
+                                        selectedItem={selectedItem}
+                                        setSelectedItem={setSelectedItem}
+                                        setAnchorEl={setAnchorEl}
+                                        anchorEl={anchorEl}
+                                        handleView={() => openPopup(item?.id)}
+                                        // handleEdit={() => handleEdit(item)}
+                                        // handleSetting={() =>
+                                        //   handleSetting(item)
+                                        // }
+                                        handleDelete={() =>
+                                          deleteHandler(item?.id)
+                                        }
+                                        // showSetting={
+                                        //   userProfile?.data?.role ===
+                                        //   ROLES.ADMIN
+                                        // }
+                                        showEdit={
+                                          userData?.data?.role !== Roles.CREATOR
+                                        }
+                                        showView={
+                                          userData?.data?.role !== Roles.CREATOR
+                                        }
+                                        showDelete={
+                                          userData?.data?.role !== Roles.CREATOR
+                                        }
+                                        isEditMode={isEditMode}
+                                        item={{
+                                          id: item?.id,
+                                          isActive: item?.is_active,
+                                        }}
+                                      />
+                                    </div>
+                                  </div>
+                                  <div className="text-base font-medium text-[#A0A0A0] break-all my-2">
+                                    {item?.description?.length > 300
+                                      ? item?.description?.substring(0, 300) +
+                                        "..."
+                                      : item?.description}
+                                  </div>
+                                  <div className="flex gap-2 my-2">
+                                    <span className="text-base font-medium text-[#A0A0A0]">
+                                      Skills:{" "}
+                                    </span>
+                                    <div className="flex flex-wrap gap-2">
+                                      {item.skills?.length > 0 ? (
+                                        item.skills?.map((item, index) => (
+                                          <BadgeUI
+                                            variant="primary"
+                                            key={index}
+                                          >
+                                            {item?.skill_name}
+                                          </BadgeUI>
+                                        ))
+                                      ) : (
+                                        <>N/A</>
+                                      )}
+                                    </div>
+                                  </div>
+                                  <div className="flex gap-2 my-2">
+                                    <span className="text-base font-medium text-[#A0A0A0]">
+                                      Tags:{" "}
+                                    </span>
 
-                              {item.tags?.length > 0 ? (
-                                item.tags?.split(",")?.map((item, index) => (
-                                  <BadgeUI variant="primary" key={index}>
-                                    {item}
-                                  </BadgeUI>
-                                ))
-                              ) : (
-                                null
-                              )}
+                                    <div className="flex flex-wrap gap-2">
+                                      {item.tags?.length > 0
+                                        ? item.tags
+                                            ?.split(",")
+                                            ?.map((item, index) => (
+                                              <BadgeUI
+                                                variant="primary"
+                                                key={index}
+                                              >
+                                                {item}
+                                              </BadgeUI>
+                                            ))
+                                        : null}
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
                             </div>
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-              {!jobData?.JobsListsList?.data?.results?.length && (
-                <div className=" ">
-                  <h2 className="text-lg font-bold text-center p-5">
-                    NO DATA FOUND
-                  </h2>
-                </div>
-              )}
-
-              <div className="w-full max-w-[308px]">
-                <div className="grid grid-cols-1 gap-4">
-                  <div className="border border-1 rounded-xl p-5">
-                    <h5 className="text-base font-semibold pb-2">Sort by </h5>
-                    <div>
-                      <div className="flex gap-2 items-center">
-                        <input type="checkbox" value="All Jobs" />
-                        <label>All Jobs</label>
-                      </div>
-                      <div className="flex gap-2 items-center">
-                        <input type="checkbox" value="In Progress" />
-                        <label>In Progress</label>
-                      </div>
-                      <div className="flex gap-2 items-center">
-                        <input type="checkbox" value="Expired" />
-                        <label>Expired</label>
-                      </div>
-                      <div className="flex gap-2 items-center">
-                        <input type="checkbox" value="Complete" />
-                        <label>Complete</label>
-                      </div>
+                          );
+                        }
+                      )}
                     </div>
                   </div>
-                  <div className="border border-1 rounded-xl p-5">
-                    <h5 className="text-lg font-semibold pb-2">Filters </h5>
-                    <h5 className="text-base font-semibold pb-2">Salary</h5>
-                    <div>
-                      <div className="flex gap-2 items-center">
-                        <input type="checkbox" value="Any" />
-                        <label>Any</label>
-                      </div>
-                      <div className="flex gap-2 items-center">
-                        <input type="checkbox" value="3000k" />
-                        <label>{">"}3000k</label>
-                      </div>
-                      <div className="flex gap-2 items-center">
-                        <input type="checkbox" value="1000k" />
-                        <label>{">"}1000k</label>
-                      </div>
-                      <div className="flex gap-2 items-center">
-                        <input type="checkbox" value="500k" />
-                        <label>{">"}500k</label>
-                      </div>
-                      <div className="flex gap-2 items-center">
-                        <input type="checkbox" value="100k" />
-                        <label>{">"}100k</label>
-                      </div>
+                  {!jobData?.JobsListsList?.data?.results?.length && (
+                    <div className=" ">
+                      <h2 className="text-lg font-bold text-center p-5">
+                        NO DATA FOUND
+                      </h2>
                     </div>
-                    <h5 className="text-base font-semibold pb-2">
-                      Work Experience:
-                    </h5>
-                    <div>
-                      <div className="flex gap-2 items-center">
-                        <input type="checkbox" value="Any Experience" />
-                        <label>Any Experience</label>
-                      </div>
-                      <div className="flex gap-2 items-center">
-                        <input type="checkbox" value="Beginner Level" />
-                        <label>Beginner Level</label>
-                      </div>
-                      <div className="flex gap-2 items-center">
-                        <input type="checkbox" value="Intermediate level" />
-                        <label>Intermediate level</label>
-                      </div>
-                      <div className="flex gap-2 items-center">
-                        <input type="checkbox" value="Expert Level" />
-                        <label>Expert Level</label>
-                      </div>
+                  )}
+
+                  <div className="w-full max-w-[308px]">
+                    <div className="grid grid-cols-1 gap-4">
+                      {/* <Filters /> */}
                     </div>
                   </div>
                 </div>
-              </div>
+              </>
             </div>
-          </>
-        </div>
-      </div>
-      {/* {pages > 1 && (
-        <div className="adminjobpagination adminpagintionpage">
-          <Stack spacing={2}>
-            <Pagination
-              page={currentPage}
-              shape="rounded"
-              size="large"
-              count={pages}
-              onChange={(e, page) => {
-                pageHandler(page);
-              }}
-              color="primary"
-            />
-          </Stack>
-        </div>
-      )} */}
+            {pages > 1 && (
+              <div className="adminjobpagination adminpagintionpage flex justify-end pt-6">
+                <Stack spacing={2}>
+                  <Pagination
+                    page={currentPage}
+                    shape="rounded"
+                    size="large"
+                    count={pages}
+                    onChange={(e, page) => {
+                      pageHandler(page);
+                    }}
+                    color="primary"
+                  />
+                </Stack>
+              </div>
+            )}
+          </div>
+        </>
+      )}
+
       {/* {pages > 1 && (
             <div className="adminjobpagination">
               <Pagination>

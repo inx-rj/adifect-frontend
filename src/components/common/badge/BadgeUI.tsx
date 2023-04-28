@@ -1,22 +1,26 @@
-import PropTypes from 'prop-types';
-import React from 'react';
+import PropTypes from "prop-types";
+import React from "react";
 
-const BadgeUI = props => {
-  const { variant, customClass = '' } = props;
+const BadgeUI = (props) => {
+  const { variant, customClass = "" } = props;
 
   return (
     <>
-      <span className={`capitalize min-w-[95px] whitespace-nowrap badge badge-${variant} ${customClass}`}>
+      <div className={`capitalize p-2 badge badge-${variant} ${customClass}`}>
         {props.children}
-      </span>
+      </div>
     </>
   );
 };
 
 BadgeUI.propTypes = {
-  children: PropTypes.oneOfType([PropTypes.array, PropTypes.string, PropTypes.element]),
+  children: PropTypes.oneOfType([
+    PropTypes.array,
+    PropTypes.string,
+    PropTypes.element,
+  ]),
   variant: PropTypes.string,
-  customClass: PropTypes.string
+  customClass: PropTypes.string,
 };
 
 export default BadgeUI;

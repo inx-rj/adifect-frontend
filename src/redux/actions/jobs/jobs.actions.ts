@@ -1,3 +1,4 @@
+import { message } from "./../../../helper/validations/index";
 import { AppDispatch } from "redux/store";
 import { initialTableConfigInterface } from "helper/types/common/table";
 
@@ -5,6 +6,7 @@ import HomePageApiClient from "services/homePage/HomePageApiClient";
 import {
   SET_JOBS_DATA,
   SET_JOBS_DETAILS,
+  SET_JOBS_SUCCESS_MESSAGE,
 } from "redux/reducers/homePage/jobsList.slice";
 import { SET_IN_REVIEW_JOBS_DATA } from "redux/reducers/homePage/inReviewJobsList.slice";
 import { SET_FRESHERS_JOBS_DATA } from "redux/reducers/homePage/fresherJobsList.slice";
@@ -12,6 +14,8 @@ import { SET_MEMBERS_APPROVAL_JOBS_DATA } from "redux/reducers/homePage/membersA
 import { SET_MEMBERS_ADMIN_JOBS_DATA } from "redux/reducers/homePage/membersJobListInReview.slice";
 import JobsApiClient from "services/jobs/JobsApiClient";
 import { SET_CREATOR_JOBS_DATA } from "redux/reducers/homePage/creatorJobsList.slice";
+import swal from "sweetalert";
+import { Images } from "helper/images";
 
 // Get Admin In Progress Jobs List
 const GET_ADMIN_DASHBOARD_IN_PROGRESS_JOBLIST =
@@ -95,7 +99,7 @@ const GET_DUPLICATE_MEMBER_ADMIN_JOB_LIST_IN_PROGRESS =
   };
 
 // Fetch Job Details based on Id
-const GET_JOB_DETAILS = (id) => async (dispatch: AppDispatch) => {
+const GET_DETAIL_JOB_DATA = (id) => async (dispatch: AppDispatch) => {
   await JobsApiClient.fetchJobsDetails(id).then((response) => {
     console.log("first response", response);
     dispatch(SET_JOBS_DETAILS(response?.data));
@@ -136,7 +140,37 @@ const LIST_ALL_JOBS = (formData) => async (dispatch: AppDispatch) => {
 
 //Delete Job based on id
 const DELETE_JOB = (id) => async (dispatch: AppDispatch) => {
-  await JobsApiClient.deleteJob(id);
+  await JobsApiClient.deleteJob(id)
+    .then((response) => {
+      if (response?.data?.status === 204) {
+        dispatch(SET_JOBS_SUCCESS_MESSAGE(response?.data?.message));
+        swal({
+          title: "Successfully Complete",
+          text: "Successfully Deleted!",
+          className: "successAlert",
+
+          icon: Images.Logo,
+          buttons: {
+            OK: false,
+          },
+          timer: 1500,
+        });
+      }
+    })
+    .catch((error) => {
+      // console.log("error", error);
+      swal({
+        title: "Error",
+        text: error?.data?.message,
+        className: "successAlert",
+
+        icon: Images.Logo,
+        buttons: {
+          OK: false,
+        },
+        timer: 1500,
+      });
+    });
 };
 
 export {
@@ -147,10 +181,10 @@ export {
   GET_MEMEBERS_APPROVAL_JOBLIST,
   GET_DUPLICATE_MEMBER_ADMIN_JOB_LIST_IN_REVIEW,
   GET_DUPLICATE_MEMBER_ADMIN_JOB_LIST_IN_PROGRESS,
-  GET_JOB_DETAILS,
+  GET_DETAIL_JOB_DATA,
   GET_CREATORS_JOBLIST,
   APPLY_FOR_JOB,
   LIST_ALL_JOBS,
   DELETE_JOB,
-  CREATE_JOB
+  CREATE_JOB,
 };
