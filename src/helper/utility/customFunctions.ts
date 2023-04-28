@@ -94,3 +94,13 @@ export const getUserLevel = (level) => {
   }
   return "";
 };
+
+// Truncate any string using JS
+const truncate = (words: string, maxlength: number) => {
+  return `${words.slice(0, maxlength)} …`;
+};
+
+// Get obj key 'name' by it's respective value (without nested obj)
+function getKeyByValue(object: object, value: string | number | boolean) {
+  return Object.keys(object).find((key) => object[key] === value);
+}

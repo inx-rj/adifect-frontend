@@ -54,6 +54,9 @@ const DropdownWithSearch = ({
       <Autocomplete
         sx={{
           "&.MuiAutocomplete-root": {
+            "& .Mui-focused .MuiOutlinedInput-notchedOutline": {
+              borderWidth: '1px'
+            },
             "& .MuiAutocomplete-endAdornment": {
               "& .MuiAutocomplete-clearIndicator": {
                 zIndex: 10,

@@ -80,6 +80,11 @@
 .page-title {
   @apply text-xl font-semibold;
 }
+
+.dr-picker-input {
+  @apply w-full border border-[#0000003b] rounded hover:border-black focus:border-theme focus-visible:outline-offset-0 focus:outline-0 focus:outline-offset-[unset] focus-visible:outline-0 text-sm placeholder:text-[#0009] py-2.5 pl-4 pr-3 transition-all duration-300;
+}
+
 /* ===================== Need to refactor below classes if possible ===================== */
 .flex-center {
   @apply flex justify-center items-center;
