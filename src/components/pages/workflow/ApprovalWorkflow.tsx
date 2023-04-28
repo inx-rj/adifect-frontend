@@ -960,7 +960,9 @@ const ApprovalWorkflow = () => {
                     searchText={searchText}
                     label={""}
                     disabled={!showbutton}
-                    customClass={"rounded outline-none focus:border-theme hover:border-none"}
+                    customClass={
+                      "rounded outline-none focus:border-theme hover:border-none"
+                    }
                   />
                   {/* <Autocomplete
                     value={companyvalue}
