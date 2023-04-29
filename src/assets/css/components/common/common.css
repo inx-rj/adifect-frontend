@@ -68,6 +68,14 @@
   @apply bg-[#9abfff];
 }
 
+.MuiDialog-container .MuiDialog-paper::-webkit-scrollbar {
+  @apply w-[5px] h-[5px] bg-slate-200;
+}
+
+.MuiDialog-container .MuiDialog-paper::-webkit-scrollbar-thumb {
+  @apply bg-[#9abfff];
+}
+
 /** Mui Autocomplete DropDwon Scrollbar */
 .MuiAutocomplete-listbox::-webkit-scrollbar {
   @apply w-[5px] h-[5px] bg-slate-200;

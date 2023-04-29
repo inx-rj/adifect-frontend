@@ -48,6 +48,7 @@ export const {
 } = companiesTagsSlice.actions;
 
 export const COMPANY_PROJECTS_TAGS_DATA = (state: RootState) =>
-  state.companiesTags.companyProjectsTagsList;
+  state.companies.companiesTags.companyProjectsTagsList;
 
-export const COMPANY_PROJECTS_TAGS = (state: RootState) => state.companiesTags;
+export const COMPANY_PROJECTS_TAGS = (state: RootState) =>
+  state.companies.companiesTags;

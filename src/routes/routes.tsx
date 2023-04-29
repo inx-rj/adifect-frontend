@@ -72,6 +72,8 @@ const AgencyCompanyProfile = lazy(
   () => import("components/pages/companyProfile/AgencyCompanyProfile")
 );
 
+const CommunitySettings = lazy(() => import("components/pages/agency/communitySettings/CommunitySettings"))
+
 // ---------------------------- Define main pages routes ----------------------------
 
 // => Authentication Route
@@ -169,6 +171,14 @@ export const PAGES_ROUTES: RouteType[] = [
     component: (
       <Suspense fallback={""}>
         <AgencyCompanyProjectsTags />
+      </Suspense>
+    ),
+  },
+  {
+    path: COMPANIES_ROUTE.COMMUNITY_SETTINGS,
+    component: (
+      <Suspense fallback={""}>
+        <CommunitySettings />
       </Suspense>
     ),
   },
