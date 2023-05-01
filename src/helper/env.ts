@@ -7,6 +7,7 @@ export const env = {
 export const BASE_URL = {
   COMPANIES: `${env.API_URL}community/`,
   AGENCY: `${env.API_URL}agency/`,
+  CREATOR: `${env.API_URL}creator/`,
   COMPANY: `${env.API_URL}company/`,
   MEMBER: `${env.API_URL}member/`,
   WORKFLOW: `${env.API_URL}workflows/`,
@@ -30,10 +31,10 @@ export const API_URL = {
     AUDIENCES: `${BASE_URL.AGENCY}audience/`,
   },
   COMPANY: {
-    ADMIN: `${BASE_URL.COMPANY}`, //for admin
-    //for status update in admin
-    ADMIN_COMPANY_BLOCK: `${env.API_URL}admin-company-block/`,
-    COMPANY_LIST: `${BASE_URL.AGENCY}company/`, //for agency
+    ADMIN: `${BASE_URL.COMPANY}`, //get admin 
+    ADMIN_COMPANY_BLOCK: `${env.API_URL}admin-company-block/`, //post admin(status)
+    AGENCY_COMPANY_LIST: `${BASE_URL.AGENCY}company/`, //for agency
+    CREATOR_COMPANY_LIST: `${BASE_URL.CREATOR}creator-company-list`, //for creator
   },
   INVITE: {
     INVITE_USERS: `${BASE_URL.AGENCY}invite-member/`,

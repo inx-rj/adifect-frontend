@@ -109,7 +109,10 @@ const AgencyCompanyList = () => {
       dispatch(GET_COMPANY_LIST(paginationData, `${API_URL.COMPANY.ADMIN}`));
     } else {
       dispatch(
-        GET_COMPANY_LIST(paginationData, `${API_URL.COMPANY.COMPANY_LIST}`)
+        GET_COMPANY_LIST(
+          paginationData,
+          `${API_URL.COMPANY.AGENCY_COMPANY_LIST}`
+        )
       );
     }
   }, [paginationData, userProfile.data?.role]);

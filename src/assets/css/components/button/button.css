@@ -16,6 +16,13 @@
   @apply border border-theme text-theme disabled:bg-dark-100 disabled:text-title-color;
 }
 
+.btn.btn-outline.filter-btn {
+  @apply border w-[150px] h-[47px] rounded-lg;
+}
+.btn.btn-outline.filter-btn.active {
+  @apply border w-[150px] h-[47px] rounded-lg bg-theme text-white;
+}
+
 .btn-label {
   @apply font-figtree font-semibold text-sm leading-4 text-center text-white;
 }

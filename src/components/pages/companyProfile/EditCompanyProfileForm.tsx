@@ -303,6 +303,7 @@ const EditCompanyProfileForm = ({ handlePopup, openPopup, tabData }) => {
                     labelAs: "industry_name",
                     valueAs: "id",
                   }}
+                  shrinkLabel={false}
                   currentValue={formData?.industry}
                   handleChange={(name, val) => {
                     if (val) {

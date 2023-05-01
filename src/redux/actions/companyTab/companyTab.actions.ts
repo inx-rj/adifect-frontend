@@ -14,7 +14,7 @@ import { API_URL } from "helper/env";
 const GET_COMPANY_LIST =
   (
     tableConfig: initialTableConfigInterface,
-    endpoint: string = `${API_URL.COMPANY.COMPANY_LIST}`
+    endpoint: string = `${API_URL.COMPANY.AGENCY_COMPANY_LIST}`
   ) =>
   async (dispatch: AppDispatch) => {
     dispatch(SET_COMPANY_LIST_LOADING(true));
@@ -41,7 +41,7 @@ const GET_COMPANY_LIST =
 
 // Fetch companies list
 const GET_SINGLE_COMPANY_DATA =
-  (headerCompany, endpoint: string = `${API_URL.COMPANY.COMPANY_LIST}`) =>
+  (headerCompany, endpoint: string = `${API_URL.COMPANY.AGENCY_COMPANY_LIST}`) =>
     async () => {
       await CompanyTabApiClient.fetchSingleCompany(headerCompany, endpoint);
     };
@@ -50,7 +50,7 @@ const GET_SINGLE_COMPANY_DATA =
 const POST_SINGLE_COMPANY =
   (
     formPayload: singleCompanyPayloadData,
-    endpoint: string = `${API_URL.COMPANY.COMPANY_LIST}`
+    endpoint: string = `${API_URL.COMPANY.AGENCY_COMPANY_LIST}`
   ) =>
   async (dispatch: AppDispatch) => {
     dispatch(SET_COMPANY_LIST_LOADING(true));
@@ -97,7 +97,7 @@ const POST_SINGLE_COMPANY =
 const POST_ADMIN_COMPANY =
   (
     formPayload: singleCompanyPayloadData,
-    endpoint: string = `${API_URL.COMPANY.COMPANY_LIST}`
+    endpoint: string = `${API_URL.COMPANY.AGENCY_COMPANY_LIST}`
   ) =>
   async (dispatch: AppDispatch) => {
     dispatch(SET_COMPANY_LIST_LOADING(true));
@@ -149,7 +149,7 @@ const PUT_SINGLE_COMPANY =
       description?: string;
       is_active?: boolean;
     },
-    endpoint: string = `${API_URL.COMPANY.COMPANY_LIST}`
+    endpoint: string = `${API_URL.COMPANY.AGENCY_COMPANY_LIST}`
   ) =>
   async (dispatch: AppDispatch) => {
     dispatch(SET_COMPANY_LIST_LOADING(true));
@@ -195,7 +195,7 @@ const PUT_SINGLE_COMPANY =
 
 // Delete an entry from the company list
 const DELETE_SINGLE_COMPANY =
-  (itemId: number, endpoint: string = `${API_URL.COMPANY.COMPANY_LIST}`) =>
+  (itemId: number, endpoint: string = `${API_URL.COMPANY.AGENCY_COMPANY_LIST}`) =>
   async (dispatch: AppDispatch) => {
     dispatch(SET_COMPANY_LIST_LOADING(true));
     await CompanyTabApiClient.deleteSingleCompany(itemId, endpoint)

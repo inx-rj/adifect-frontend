@@ -8,6 +8,7 @@ import {
   PAGE_ROUTE,
   WORKFLOW_ROUTE,
 } from "./baseRoute";
+import MyProjects from "components/pages/myProjects/MyProjects";
 
 // ---------------------------- Import lazy load component ----------------------------
 
@@ -204,7 +205,16 @@ export const WORKFLOW_ROUTES: RouteType[] = [
   },
 ];
 // => MY Projects page routes
-export const MY_PROJECTS_ROUTES: RouteType[] = [];
+export const MY_PROJECTS_ROUTES: RouteType[] = [
+  {
+    path: PAGE_ROUTE.MY_PROJECTS,
+    component: (
+      <Suspense fallback={""}>
+        <MyProjects />
+      </Suspense>
+    ),
+  },
+];
 // => Company(Community) page routes
 export const COMPANIES_ROUTES: RouteType[] = [
   {

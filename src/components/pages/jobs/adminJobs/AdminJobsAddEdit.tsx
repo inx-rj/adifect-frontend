@@ -255,7 +255,10 @@ const AdminJobsAddEdit = () => {
       dispatch(GET_LEVELS_LIST(paginationData));
     } else {
       dispatch(
-        GET_COMPANY_LIST(paginationData, `${API_URL.COMPANY.COMPANY_LIST}`)
+        GET_COMPANY_LIST(
+          paginationData,
+          `${API_URL.COMPANY.AGENCY_COMPANY_LIST}`
+        )
       );
       dispatch(
         GET_WORKFLOW_LIST(paginationData, `${API_URL.WORKFLOW.WORKFLOW_LIST}`)
@@ -2331,7 +2334,7 @@ const AdminJobsAddEdit = () => {
         dispatch(
           GET_SINGLE_COMPANY_DATA(
             headerCompany,
-            `${API_URL.COMPANY.COMPANY_LIST}`
+            `${API_URL.COMPANY.AGENCY_COMPANY_LIST}`
           )
         )
           .then((res) => {
