@@ -132,6 +132,7 @@ const initialState = {
     loading: false,
     details: null,
   },
+  successMessage: "",
 };
 
 export const jobsListSlice = createSlice({
@@ -166,6 +167,11 @@ export const jobsListSlice = createSlice({
       },
     }),
 
+    SET_JOBS_SUCCESS_MESSAGE: (state, action) => ({
+      ...state,
+      successMessage: action.payload,
+    }),
+
     CLEAR_JOBS: () => ({
       ...initialState,
     }),
@@ -177,6 +183,7 @@ export const {
   SET_JOBS_LIST_LOADING,
   SET_JOBS_DATA,
   SET_JOBS_DETAILS,
+  SET_JOBS_SUCCESS_MESSAGE,
   CLEAR_JOBS,
 } = jobsListSlice.actions;
 
@@ -188,4 +195,4 @@ export const GET_JOBS_DETAILS = (state: RootState) =>
 // export const COMPANY_PROJECTS_FILTERS_DATA = (state: RootState) =>
 //   state.homePage.JobsListsFilters;
 
-export const COMPANY_PROJECTS = (state: RootState) => state.homePage;
+export const JOBS_SUCCESS_MESSAGE = (state: RootState) => state.homePage.jobsList.successMessage;

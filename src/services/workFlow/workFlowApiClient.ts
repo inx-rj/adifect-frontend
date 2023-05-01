@@ -31,6 +31,11 @@ class WorkFlowTabApiClient {
   deleteSingleWorkFlow = (id: number, endpoint: string) => {
     return axiosPrivate.delete(`${endpoint}${id}/`);
   };
+
+  //Delete a workflow stage entry
+  deleteSingleWorkFlowStage = (id: number, endpoint: string) => {
+    return axiosPrivate.delete(`${endpoint}${id}/`);
+  };
 }
 
 export default new WorkFlowTabApiClient();

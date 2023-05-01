@@ -56,6 +56,8 @@ import swal from "sweetalert";
 import ReactDateRangePicker from "components/common/reactDatePicker/ReactDateRangePicker";
 import { IS_HEADER_COMPANY } from "redux/reducers/config/app/app.slice";
 import { Images } from "helper/images";
+import { GET_INDUSTRY_LIST } from "redux/actions/industries/industries.actions";
+import { INDUSTRY_LIST } from "redux/reducers/industries/industries.slice";
 
 const thumbsContainer = {
   display: "flex",
@@ -191,6 +193,7 @@ const AdminJobsAddEdit = () => {
   const skillsData = useAppSelector(SKILLS_LIST);
   const levelsData = useAppSelector(LEVELS_LIST);
   const inHouseUserList = useAppSelector(IN_HOUSE_USER_LIST);
+  const { industriesList } = useAppSelector(INDUSTRY_LIST);
 
   // console.log("WorkFlowData", WorkFlowData);
   const dispatch = useAppDispatch();
@@ -244,6 +247,12 @@ const AdminJobsAddEdit = () => {
       dispatch(GET_WORKFLOW_LIST(paginationData));
       dispatch(GET_SKILLS_LIST(paginationData));
     }
+    dispatch(
+      GET_INDUSTRY_LIST({
+        page: 1,
+        rowsPerPage: 10,
+      })
+    );
   });
 
   //fetch company list when pagination change
@@ -1673,11 +1682,11 @@ const AdminJobsAddEdit = () => {
 
     if (formUrls) {
       setFormUrls(formUrls.filter((item) => item));
-      formData.append("image_url", JSON.stringify(formUrls));
+      formData.append("image_url", formUrls.toString());
     }
     if (formSampleUrls.length) {
       setFormSampleUrls(formSampleUrls.filter((item) => item));
-      formData.append("sample_work_url", JSON.stringify(formSampleUrls));
+      formData.append("sample_work_url", formSampleUrls.toString());
     }
 
     // if (industry) {
@@ -1701,7 +1710,7 @@ const AdminJobsAddEdit = () => {
     if (job_type && !isBudgetNotRequired) {
       formData.append("job_type", job_type);
     }
-    formData.append("tags", JSON.stringify(tags));
+    formData.append("tags", tags.toString());
     if (templatename) {
       formData.append("template_name", templatename);
     }
@@ -1790,8 +1799,10 @@ const AdminJobsAddEdit = () => {
             title: "Successfully Complete",
             text: "Successfully Created",
             className: "successAlert",
-            icon: "/img/logonew.svg",
-            // buttons: false,
+            icon: Images.Logo,
+            buttons: {
+              OK: false,
+            },
             timer: 5000,
           });
           if (data == "draft") {
@@ -1807,8 +1818,10 @@ const AdminJobsAddEdit = () => {
             title: "Error",
             text: "Template Already Exists",
             className: "errorAlert",
-            icon: "/img/logonew-red.svg",
-            // buttons: false,
+            icon: Images.ErrorLogo,
+            buttons: {
+              OK: false,
+            },
             timer: 5000,
           });
           setIsLoading(false);
@@ -2325,7 +2338,7 @@ const AdminJobsAddEdit = () => {
               className: "errorAlert-login",
               icon: Images.Logo,
               buttons: {
-                Confirm: false,
+                OK: false,
               },
               timer: 5000,
             });
@@ -2349,7 +2362,7 @@ const AdminJobsAddEdit = () => {
               className: "errorAlert-login",
               icon: Images.Logo,
               buttons: {
-                Confirm: false,
+                OK: false,
               },
               timer: 5000,
             });
@@ -2762,13 +2775,13 @@ const AdminJobsAddEdit = () => {
                     value={industryname}
                     onChange={(e) => {
                       setindustryname(e.target.value);
-                      // setErrors({ ...errors, level: null });
+                      setErrors({ ...errors, level: null });
                     }}
                     displayEmpty
                     inputProps={{ "aria-label": "Without label" }}
                   >
                     <MenuItem value={null}>Select Industry</MenuItem>
-                    {industryvalue?.map((item) =>
+                    {industriesList?.data?.results?.map((item) =>
                       item.is_active ? (
                         <MenuItem key={item.id} value={item.id}>
                           {item?.industry_name}

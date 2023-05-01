@@ -203,7 +203,7 @@ const DELETE_SINGLE_WORKFLOW =
             text: response?.data?.message,
             icon: Images.Logo,
             buttons: {
-              Confirm: false,
+              OK: false,
             },
             timer: 5000,
           });
@@ -217,6 +217,44 @@ const DELETE_SINGLE_WORKFLOW =
             endpoint
           )
         );
+        dispatch(SET_WORKFLOW_LIST_LOADING(false));
+      })
+      .catch((error) => {
+        dispatch(SET_WORKFLOW_LIST_LOADING(false));
+        let errMsg = "";
+        if (error?.response?.data?.non_field_errors?.length > 0) {
+          errMsg = error?.response?.data?.non_field_errors?.[0];
+        } else {
+          errMsg = error?.response?.data?.message;
+        }
+        swal({
+          title: "Error",
+          text: errMsg,
+          className: "errorAlert-login",
+          icon: Images.Logo,
+          timer: 5000,
+        });
+      });
+  };
+
+// Delete an entry from the workflow stage
+const DELETE_SINGLE_WORKFLOW_STAGE =
+  (itemId: number, endpoint: string = `${API_URL.WORKFLOW.WORKFLOW_STAGES}`) =>
+  async (dispatch: AppDispatch) => {
+    dispatch(SET_WORKFLOW_LIST_LOADING(true));
+    await WorkFlowTabApiClient.deleteSingleWorkFlowStage(itemId, endpoint)
+      .then((response) => {
+        if (response.status === 204 || response.status === 200) {
+          swal({
+            title: "Successfully Deleted",
+            text: response?.data?.message,
+            icon: Images.Logo,
+            buttons: {
+              OK: false,
+            },
+            timer: 5000,
+          });
+        }
         dispatch(SET_WORKFLOW_LIST_LOADING(false));
       })
       .catch((error) => {
@@ -297,4 +335,5 @@ export {
   DELETE_SINGLE_WORKFLOW,
   GET_WORKFLOW_MAIN_DETAILS,
   GET_WORKFLOW_STAGE_DETAILS,
+  DELETE_SINGLE_WORKFLOW_STAGE,
 };

@@ -25,6 +25,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { GET_COMPANY_LIST } from "redux/actions/companyTab/companyTab.actions";
 import { GET_INVITE_MEMBERS_USERS } from "redux/actions/inviteUser/inviteUser.actions";
 import {
+  DELETE_SINGLE_WORKFLOW_STAGE,
   GET_WORKFLOW_MAIN_DETAILS,
   GET_WORKFLOW_STAGE_DETAILS,
 } from "redux/actions/workFlow/workFlow.actions";
@@ -199,16 +200,17 @@ const ApprovalWorkflow = () => {
           icon: Images.ErrorLogo,
           buttons: {
             Cancel: true,
-            Confirm: true,
+            OK: true,
           },
           dangerMode: true,
         }).then((willDelete) => {
-          if (willDelete) {
+          //Use the text used in swal button for condition
+          if (willDelete !== "Cancel") {
             newValues.splice(id, 1);
 
             // setNowDeleted(true);
             setDeleteStageIds((prev) => [...prev, newid]);
-            // dispatch(workflowStageDelete(id));
+            // dispatch(DELETE_SINGLE_WORKFLOW_STAGE(newid ? newid : id));
             // swal({
             //   title: "Successfully Complete",
             //   text: "Successfully Deleted!",
@@ -417,7 +419,6 @@ const ApprovalWorkflow = () => {
 
   const validateSubmit = (e) => {
     e.preventDefault();
-
     const tempErrors: any = {
       workflowName: !workflowName && "This field cannot be empty",
       companyvalue: !companyvalue && "This field is required",
@@ -517,7 +518,7 @@ const ApprovalWorkflow = () => {
     if (isEmpty) {
       if (deleteStageIds.length) {
         for (let i = 0; i < deleteStageIds.length; i++) {
-          // dispatch(workflowStageDelete(deleteStageIds[i]));
+          dispatch(DELETE_SINGLE_WORKFLOW_STAGE(deleteStageIds[i]));
         }
       }
       if (workflowId) {
@@ -526,7 +527,7 @@ const ApprovalWorkflow = () => {
             agency: userProfile.data.id,
             name: workflowName,
             stage: newArr,
-            company: companyvalue,
+            company: companyvalue?.id,
           })
           .then((res) => {
             if (res.data.message == "error") {
@@ -536,7 +537,7 @@ const ApprovalWorkflow = () => {
                 className: "errorAlert",
                 icon: Images.ErrorLogo,
                 buttons: {
-                  Confirm: false,
+                  OK: false,
                 },
                 timer: 2000,
               });
@@ -548,7 +549,7 @@ const ApprovalWorkflow = () => {
                 className: "errorAlert",
                 icon: Images.ErrorLogo,
                 buttons: {
-                  Confirm: false,
+                  OK: false,
                 },
                 timer: 2000,
               });
@@ -562,7 +563,7 @@ const ApprovalWorkflow = () => {
                 icon: Images.Logo,
                 // buttons: false,
                 buttons: {
-                  Confirm: false,
+                  OK: false,
                 },
                 timer: 1500,
               });
@@ -574,7 +575,7 @@ const ApprovalWorkflow = () => {
                 className: "errorAlert",
                 icon: Images.ErrorLogo,
                 buttons: {
-                  Confirm: false,
+                  OK: false,
                 },
                 timer: 1500,
               });
@@ -587,7 +588,7 @@ const ApprovalWorkflow = () => {
               className: "errorAlert",
               icon: Images.ErrorLogo,
               buttons: {
-                Confirm: false,
+                OK: false,
               },
               timer: 1500,
             });
@@ -611,7 +612,7 @@ const ApprovalWorkflow = () => {
                 className: "errorAlert",
                 icon: Images.ErrorLogo,
                 buttons: {
-                  Confirm: false,
+                  OK: false,
                 },
                 timer: 1500,
               });
@@ -623,7 +624,7 @@ const ApprovalWorkflow = () => {
                 className: "successAlert-login",
                 icon: Images.Logo,
                 buttons: {
-                  Confirm: false,
+                  OK: false,
                 },
                 // buttons: false,
                 timer: 1500,
@@ -638,7 +639,7 @@ const ApprovalWorkflow = () => {
               className: "errorAlert",
               icon: Images.ErrorLogo,
               buttons: {
-                Confirm: false,
+                OK: false,
               },
               timer: 1500,
             });
@@ -849,6 +850,7 @@ const ApprovalWorkflow = () => {
     if (!isNaN(Number(workflowId))) {
       dispatch(GET_WORKFLOW_STAGE_DETAILS(workflowId));
       dispatch(GET_WORKFLOW_MAIN_DETAILS(workflowId));
+      dispatch(GET_INVITE_MEMBERS_USERS(workflowMainDetails?.company, 3));
     }
   }, [paginationData, userProfile.data?.role]);
 
@@ -866,7 +868,7 @@ const ApprovalWorkflow = () => {
       ) : (
         <>
           {showbutton ? (
-            <div className="flex justify-between">
+            <div className="flex justify-between pb-4 items-center">
               <Title title="Edit Approval Workflow" />{" "}
               <Link
                 to={WORKFLOW_ROUTE.HOME}
@@ -958,7 +960,9 @@ const ApprovalWorkflow = () => {
                     searchText={searchText}
                     label={""}
                     disabled={!showbutton}
-                    customClass={"rounded outline-none focus:border-theme hover:border-none"}
+                    customClass={
+                      "rounded outline-none focus:border-theme hover:border-none"
+                    }
                   />
                   {/* <Autocomplete
                     value={companyvalue}
@@ -1000,7 +1004,7 @@ const ApprovalWorkflow = () => {
                       option === value.id
                     }
                     disabled={!showbutton}
-                  /> */}
+                  />
                   {/* <Select
                     className={
                       companyvalue === null
@@ -1082,7 +1086,7 @@ const ApprovalWorkflow = () => {
           </div>
           <div id="items" className="">
             <DragDropContext onDragEnd={handleOnDragEnd}>
-              <Droppable droppableId="characters">
+              <Droppable droppableId={"characters"}>
                 {(provided) => (
                   <ul {...provided.droppableProps} ref={provided.innerRef}>
                     {stagesRef?.current?.map((item, index) => {
@@ -1091,12 +1095,12 @@ const ApprovalWorkflow = () => {
                         <Draggable
                           isDragDisabled={!showbutton}
                           key={index}
-                          // draggableId={String(index)}
-                          draggableId={
-                            item.stage_id != ""
-                              ? String(item.stage_id)
-                              : String(index)
-                          }
+                          draggableId={String(index)}
+                          // draggableId={
+                          //   item.stage_id != ""
+                          //     ? String(item.stage_id)
+                          //     : String(index)
+                          // }
                           index={index}
                         >
                           {(provided) => (
@@ -1146,21 +1150,23 @@ const ApprovalWorkflow = () => {
 
                                   <div className="Stage1_right_Workflow w-full max-w-[102px] flex gap-2">
                                     <div
+                                      onClick={(e) =>
+                                        showbutton &&
+                                        orderUp(e, item.stage_id, index)
+                                      }
+                                      // onClick={(e) => setselected(index)}
                                       className={
-                                        index == 0 ? "disable_up_down" : ""
+                                        index == 0
+                                          ? "disable_up_down opacity-40"
+                                          : ""
                                       }
                                     >
-                                      <Link
-                                        to=""
-                                        onClick={(e) =>
-                                          showbutton &&
-                                          orderUp(e, item.stage_id, index)
-                                        }
-                                        // onClick={(e) => setselected(index)}
-                                        className="up"
-                                      >
-                                        <PresentToAllOutlined />
-                                      </Link>
+                                      <PresentToAllOutlined
+                                        style={{
+                                          color: "GrayText",
+                                          fontSize: "25px",
+                                        }}
+                                      />
                                     </div>
                                     <div
                                       className={
@@ -1168,23 +1174,20 @@ const ApprovalWorkflow = () => {
                                           ? "disable_up_down"
                                           : ""
                                       }
+                                      onClick={(e) =>
+                                        showbutton &&
+                                        orderDown(e, item.stage_id, index)
+                                      }
+                                      // onClick={(e) => setselected(index)}
                                     >
-                                      <Link
-                                        to=""
-                                        className="down"
-                                        onClick={(e) =>
-                                          showbutton &&
-                                          orderDown(e, item.stage_id, index)
-                                        }
-                                        // onClick={(e) => setselected(index)}
-                                      >
-                                        {/* <img src="/img/don.png" /> */}
-                                        <PresentToAllOutlined
-                                          style={{
-                                            transform: "rotate(180deg)",
-                                          }}
-                                        />
-                                      </Link>
+                                      {/* <img src="/img/don.png" /> */}
+                                      <PresentToAllOutlined
+                                        style={{
+                                          transform: "rotate(180deg)",
+                                          color: "GrayText",
+                                          fontSize: "25px",
+                                        }}
+                                      />
                                     </div>
                                     <div
                                       className={
@@ -1192,30 +1195,27 @@ const ApprovalWorkflow = () => {
                                           ? "disable_up_down"
                                           : ""
                                       }
-                                      // className={
-                                      //   index == 0 ? "disable_up_down" : ""
-                                      // }
+                                      onClick={(e) => {
+                                        showbutton &&
+                                          (item.stage_id
+                                            ? handleRemoveStage(
+                                                index,
+                                                item.stage_id,
+                                                true
+                                              )
+                                            : handleRemoveStage(
+                                                index,
+                                                index,
+                                                true
+                                              ));
+                                      }}
                                     >
-                                      <Link to="">
-                                        <div
-                                          onClick={(e) => {
-                                            showbutton &&
-                                              (item.stage_id
-                                                ? handleRemoveStage(
-                                                    index,
-                                                    item.stage_id,
-                                                    true
-                                                  )
-                                                : handleRemoveStage(
-                                                    index,
-                                                    index,
-                                                    true
-                                                  ));
-                                          }}
-                                        >
-                                          <DeleteOutlineOutlined />
-                                        </div>
-                                      </Link>
+                                      <DeleteOutlineOutlined
+                                        style={{
+                                          color: "GrayText",
+                                          fontSize: "25px",
+                                        }}
+                                      />
                                     </div>
                                   </div>
                                 </div>

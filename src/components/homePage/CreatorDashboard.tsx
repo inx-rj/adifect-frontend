@@ -23,7 +23,7 @@ import swal from "sweetalert";
 import { Images } from "helper/images";
 import {
   APPLY_FOR_JOB,
-  GET_JOB_DETAILS,
+  GET_DETAIL_JOB_DATA,
   GET_MEMEBERS_FRESHERS_JOBLIST,
   GET_MEMEBERS_FRESHERS_LATEST_JOBLIST,
 } from "redux/actions/jobs/jobs.actions";
@@ -210,7 +210,7 @@ const CreatorDashboard = () => {
     setOpen(true);
     setNewJobDetails(true);
     // dispatch({ type: JOB_DETAILS_RESET });
-    dispatch(GET_JOB_DETAILS(item_id));
+    dispatch(GET_DETAIL_JOB_DATA(item_id));
     // if (job_detail_success) {
     //   setJobId(item_id);
     //   setTitle(jobDetails.title);
@@ -394,7 +394,7 @@ const CreatorDashboard = () => {
       setIsPopupLoading(false);
     }, 1200);
 
-    dispatch(GET_JOB_DETAILS(item_id));
+    dispatch(GET_DETAIL_JOB_DATA(item_id));
     // return () => clearTimeout(timer);
   };
 
@@ -1094,7 +1094,9 @@ const CreatorDashboard = () => {
                                                       handleChange={
                                                         handleChange
                                                       }
-                                                      containerClassName={"min-w-[250px]"}
+                                                      containerClassName={
+                                                        "min-w-[250px]"
+                                                      }
                                                     />
                                                   </>
                                                   {errors1.date && (
