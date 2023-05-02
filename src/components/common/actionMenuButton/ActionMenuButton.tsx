@@ -28,6 +28,7 @@ export interface propsType {
   handleInactive?: () => void;
   handleActive?: () => void;
   handleSetting?: () => void;
+  handleChannelPopoverClose?: () => void | boolean;
 }
 
 const ActionMenuButton = ({
@@ -48,6 +49,7 @@ const ActionMenuButton = ({
   showInActive = false,
   isEditMode = false,
   item,
+  handleChannelPopoverClose,
 }: propsType) => {
   const menuItemStyle = {
     "&.MuiMenuItem-root": {
@@ -67,6 +69,7 @@ const ActionMenuButton = ({
         onClick={(e) => {
           setAnchorEl(anchorEl ? null : e.currentTarget);
           setSelectedItem({ currentId: item?.id, currentTooltip: item?.id });
+          handleChannelPopoverClose && handleChannelPopoverClose();
         }}
       />
       <Menu

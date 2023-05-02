@@ -8,6 +8,18 @@ class CommunitySettingsApiClient {
     axiosPrivate.get(
       `${API_URL.COMPANIES.COMMUNITY_SETTINGS}` + setQueryParams(filters)
     );
+
+  // Create Community Settings data
+  createCommunitySettingsData = (formData: any) =>
+    axiosPrivate.post(`${API_URL.COMPANIES.COMMUNITY_SETTINGS}`, formData);
+
+  // Edit Community Settings data
+  updateCommunitySettingsData = (id: number, formData: any) =>
+    axiosPrivate.put(`${API_URL.COMPANIES.COMMUNITY_SETTINGS}${id}/`, formData);
+
+  // Delete Community Settings data
+  deleteCommunitySettingsData = (id: number) =>
+    axiosPrivate.delete(`${API_URL.COMPANIES.COMMUNITY_SETTINGS}${id}/`);
 }
 
 export default new CommunitySettingsApiClient();

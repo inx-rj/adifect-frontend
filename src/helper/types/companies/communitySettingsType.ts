@@ -7,4 +7,9 @@ export interface CommunitySettingsInitialType extends LoadingType {
     loading: boolean;
     data: TableDataResponseType;
   };
+  response: {
+    add: null | string;
+    update: null | string;
+    delete: null | string;
+  };
 }

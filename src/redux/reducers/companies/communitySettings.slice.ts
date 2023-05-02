@@ -13,6 +13,11 @@ const initialState: CommunitySettingsInitialType = {
       results: [],
     },
   },
+  response: {
+    add: null,
+    update: null,
+    delete: null,
+  },
 };
 
 export const communitySettingsSlice = createSlice({
@@ -39,6 +44,21 @@ export const communitySettingsSlice = createSlice({
       },
     }),
 
+    SET_CREATE_COMMUNITY_SETTINGS: (state, action) => ({
+      ...state,
+      response: { ...state.response, add: action.payload },
+    }),
+
+    SET_COMMUNITY_SETTINGS_EDIT_DATA: (state, action) => ({
+      ...state,
+      response: { ...state.response, update: action.payload },
+    }),
+
+    SET_DELETE_COMMUNITY_SETTINGS: (state, action) => ({
+      ...state,
+      response: { ...state.response, delete: action.payload },
+    }),
+
     CLEAR_COMMUNITY_SETTINGS: () => ({
       ...initialState,
     }),
@@ -50,6 +70,9 @@ export const {
   SET_COMMUNITY_SETTINGS_DATA_LOADING,
   SET_COMMUNITY_SETTINGS_DATA,
   CLEAR_COMMUNITY_SETTINGS,
+  SET_CREATE_COMMUNITY_SETTINGS,
+  SET_COMMUNITY_SETTINGS_EDIT_DATA,
+  SET_DELETE_COMMUNITY_SETTINGS,
 } = communitySettingsSlice.actions;
 
 export const COMMUNITY_SETTINGS_DATA = (state: RootState) =>
@@ -57,3 +80,6 @@ export const COMMUNITY_SETTINGS_DATA = (state: RootState) =>
 
 export const COMMUNITY_SETTINGS = (state: RootState) =>
   state.companies.communitySettings;
+
+export const COMMUNITY_SETTINGS_RESPONSE = (state: RootState) =>
+  state.companies.communitySettings.response;

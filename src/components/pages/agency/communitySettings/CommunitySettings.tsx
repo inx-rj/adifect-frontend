@@ -2,13 +2,22 @@
 import React, { useEffect, useState } from "react";
 import { Box, Typography } from "@mui/material";
 import CustomAddModal from "./CustomAddModal/CustomAddModal";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
 import swal from "sweetalert";
 import { useAppDispatch, useAppSelector } from "redux/store";
-import { COMMUNITY_SETTINGS_DATA } from "redux/reducers/companies/communitySettings.slice";
+import {
+  COMMUNITY_SETTINGS_DATA,
+  COMMUNITY_SETTINGS_RESPONSE,
+  SET_COMMUNITY_SETTINGS_EDIT_DATA,
+  SET_CREATE_COMMUNITY_SETTINGS,
+} from "redux/reducers/companies/communitySettings.slice";
 import ChannelPopoverCard from "./ChannelPopoverCard/ChannelPopoverCard";
 import { useSingleEffect, useUpdateEffect } from "react-haiku";
-import { GET_COMMUNITY_SETTINGS_LIST } from "redux/actions/communitySettings/communitySettings.actions";
+import {
+  CREATE_COMMUNITY_SETTINGS_LIST,
+  DELETE_COMMUNITY_SETTINGS_LIST,
+  GET_COMMUNITY_SETTINGS_LIST,
+  UPDATE_COMMUNITY_SETTINGS_LIST,
+} from "redux/actions/communitySettings/communitySettings.actions";
 import { GET_COMPANY_PROJECTS_FILTERS_LIST } from "redux/actions/companies/companies.actions";
 import { COMPANY_PROJECTS_FILTERS_DATA } from "redux/reducers/companies/companies.slice";
 import SharePostToSocialMedia from "components/common/ShareToSocialMedia/SharePostToSocialMedia";
@@ -21,6 +30,7 @@ import MuiTable from "components/common/muiTable/MuiTable";
 import { Images } from "helper/images";
 import { Add } from "@mui/icons-material";
 import LoadingSpinner from "components/common/loadingSpinner/Loader";
+import ActionMenuButton from "components/common/actionMenuButton/ActionMenuButton";
 
 export default function Agency_community_settings() {
   const dispatch = useAppDispatch();
@@ -37,6 +47,7 @@ export default function Agency_community_settings() {
   const agencyCompanyProjectsFiltersList = useAppSelector(
     COMPANY_PROJECTS_FILTERS_DATA
   );
+  const success = useAppSelector(COMMUNITY_SETTINGS_RESPONSE);
 
   // React states
   const [paginationData, setPaginationData] = useState({
@@ -74,6 +85,14 @@ export default function Agency_community_settings() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [selectedRowId, setSelectedRowId] = useState(null);
 
+  // Action Menu button states
+  const [anchorActionEl, setAnchorActionEl] = React.useState(null);
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [selectedItem, setSelectedItem] = useState({
+    currentTooltip: null,
+    currentId: null,
+  });
+
   // Community, Story, Tag fetch list API call
   useSingleEffect(() => {
     dispatch(GET_COMPANY_PROJECTS_FILTERS_LIST());
@@ -87,6 +106,51 @@ export default function Agency_community_settings() {
   useUpdateEffect(() => {
     dispatch(GET_COMMUNITY_SETTINGS_LIST({ ...paginationData, ...filterData }));
   }, [paginationData, filterData]);
+
+  //set the edit mode
+  const handleEdit = (item) => {
+    setShowTagModal(true);
+    setIsEditMode(true);
+    setErrors({ ...errors, community: null });
+    setSelectedItem({ ...selectedItem, currentId: item?.id });
+    setSelectedOption({
+      name: item?.community?.name,
+      id: item?.community?.id,
+    });
+    const fbChannelData = item?.community_channels?.find(
+      (channel) => channel?.channel_data?.id == "1"
+    );
+    const openSesameChannelData = item?.community_channels?.find(
+      (channel) => channel?.channel_data?.id == "2"
+    );
+    setFormData({
+      fbApiKey: fbChannelData?.api_key,
+      fbUrl: fbChannelData?.url,
+      opnUrl: openSesameChannelData?.api_key,
+      opnApiKey: openSesameChannelData?.url,
+    });
+  };
+
+  //handle delete action
+  const handleDelete = (item) => {
+    swal({
+      title: "Warning",
+      text: `Are you sure you want to remove this ${item?.community?.name}?`,
+      className: "errorAlert",
+      icon: Images.ErrorLogo,
+      buttons: {
+        Cancel: true,
+        OK: true,
+      },
+      dangerMode: true,
+    }).then((willDelete) => {
+      if (willDelete !== "Cancel") {
+        dispatch(DELETE_COMMUNITY_SETTINGS_LIST(item?.id)).then((r: void) => r);
+      }
+    });
+    setAnchorActionEl(null);
+    setSelectedItem({ currentId: null, currentTooltip: null });
+  };
 
   // To handle filter change
   const handleFilterChange = ({ target: { name, value } }) => {
@@ -168,18 +232,18 @@ export default function Agency_community_settings() {
                   {item?.community_channels?.map((channel_item) => (
                     <>
                       <Typography
-                        key={`${item.id}_${channel_item.channel}`}
-                        id={`${item.id}_${channel_item.channel}`}
+                        key={`${item.id}_${channel_item.channel_data.id}`}
+                        id={`${item.id}_${channel_item.channel_data.id}`}
                         aria-owns={
                           open
-                            ? `${item.id}_${channel_item.channel}`
+                            ? `${item.id}_${channel_item.channel_data.id}`
                             : undefined
                         }
                         aria-haspopup="true"
                         onMouseEnter={(event) =>
                           handlePopoverOpen(
                             event,
-                            `${item.id}_${channel_item.channel}`
+                            `${item.id}_${channel_item.channel_data.id}`
                           )
                         }
                         sx={{
@@ -216,11 +280,12 @@ export default function Agency_community_settings() {
                         </Typography>
                       </Typography>
                       <MuiPopoverTooltip
-                        id={`${item.id}_${channel_item.channel}`}
+                        id={`${item.id}_${channel_item.channel_data.id}`}
                         anchorEl={anchorEl}
                         openPopover={
                           open &&
-                          selectedRowId === `${item.id}_${channel_item.channel}`
+                          selectedRowId ===
+                            `${item.id}_${channel_item.channel_data.id}`
                         }
                         handlePopoverClose={handlePopoverClose}
                       >
@@ -239,7 +304,19 @@ export default function Agency_community_settings() {
 
               action: (
                 <div>
-                  <MoreVertIcon />
+                  <ActionMenuButton
+                    handleChannelPopoverClose={handlePopoverClose}
+                    selectedItem={selectedItem}
+                    setSelectedItem={setSelectedItem}
+                    setAnchorEl={setAnchorActionEl}
+                    anchorEl={anchorActionEl}
+                    handleEdit={() => handleEdit(item)}
+                    handleDelete={() => handleDelete(item)}
+                    showDelete={true}
+                    showEdit={true}
+                    isEditMode={isEditMode}
+                    item={{ id: item?.id, isActive: item?.is_active }}
+                  />
                 </div>
               ),
             };
@@ -352,43 +429,82 @@ export default function Agency_community_settings() {
       );
 
       // API call
-      axiosPrivate
-        .post(
-          `${BASE_URL.COMPANIES}community-setting/`,
-          communitySettingsPayload
+      if (isEditMode) {
+        dispatch(
+          UPDATE_COMMUNITY_SETTINGS_LIST(
+            selectedItem?.currentId,
+            communitySettingsPayload
+          )
         )
-        .then((res) => {
-          swal({
-            title: "Successfully Complete",
-            text: "Successfully Saved!",
-            className: "successAlert-login",
-            icon: Images.Logo,
-            buttons: {
-              OK: false,
-            },
-            timer: 1500,
+          .then((res) => {
+            swal({
+              title: "Successfully Complete",
+              text: "Successfully Saved!",
+              className: "successAlert-login",
+              icon: Images.Logo,
+              buttons: {
+                OK: false,
+              },
+              timer: 1500,
+            });
+            dispatch(SET_COMMUNITY_SETTINGS_EDIT_DATA(res?.data?.message));
+            resetModalData();
+          })
+          .catch((err) => {
+            swal({
+              title: "Error",
+              text: err.response.data.message.length
+                ? err.response.data.message
+                : err.response.data.message,
+              className: "errorAlert",
+              icon: Images.ErrorLogo,
+              buttons: {
+                OK: false,
+              },
+              timer: 5000,
+            });
           });
-          dispatch(
-            GET_COMMUNITY_SETTINGS_LIST({ ...paginationData, ...filterData })
-          );
-          resetModalData();
-        })
-        .catch((err) => {
-          swal({
-            title: "Error",
-            text: err.response.data.message.length
-              ? err.response.data.message
-              : err.response.data.message,
-            className: "errorAlert",
-            icon: Images.ErrorLogo,
-            buttons: {
-              OK: false,
-            },
-            timer: 5000,
+      } else {
+        dispatch(CREATE_COMMUNITY_SETTINGS_LIST(communitySettingsPayload))
+          .then((res) => {
+            swal({
+              title: "Successfully Complete",
+              text: "Successfully Saved!",
+              className: "successAlert-login",
+              icon: Images.Logo,
+              buttons: {
+                OK: false,
+              },
+              timer: 1500,
+            });
+            dispatch(SET_CREATE_COMMUNITY_SETTINGS(res?.data?.message));
+            resetModalData();
+          })
+          .catch((err) => {
+            swal({
+              title: "Error",
+              text: err.response.data.message.length
+                ? err.response.data.message
+                : err.response.data.message,
+              className: "errorAlert",
+              icon: Images.ErrorLogo,
+              buttons: {
+                OK: false,
+              },
+              timer: 5000,
+            });
           });
-        });
+      }
     }
   };
+
+  useUpdateEffect(() => {
+    if (success.add || success.update || success.delete) {
+      dispatch(
+        GET_COMMUNITY_SETTINGS_LIST({ ...paginationData, ...filterData })
+      );
+    }
+  }, [success]);
 
   // Clears the error when the community dropdown option is selected
   useUpdateEffect(() => {
