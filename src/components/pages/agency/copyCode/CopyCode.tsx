@@ -394,7 +394,7 @@ const CopyCode = () => {
               >
                 {" "}
                 <Add />
-                Add
+                Add Copy Code
               </button>
             </div>
           </div>

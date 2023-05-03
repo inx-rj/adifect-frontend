@@ -346,7 +346,7 @@ export default function Programs() {
 
             <div className="savebtn Categorybtn ml-auto">
               <button
-                className="addanewmail w-full h-full"
+                className="btn btn-primary"
                 type="button"
                 onClick={(e) => {
                   setShowTagModal(true);
@@ -354,7 +354,7 @@ export default function Programs() {
                 // disabled={true}
               >
                 {" "}
-                <Add /> Add
+                <Add /> Add Program
               </button>
             </div>
           </div>
