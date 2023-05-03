@@ -16,6 +16,7 @@ import { skillsSlice } from "./reducers/skills/skills.slice";
 import { levelsSlice } from "./reducers/levels/levels.slice";
 import { inHouseUserSlice } from "./reducers/inHouseUser/inHouseUser.slice";
 import { industriesSlice } from "./reducers/industries/industries.slice";
+import { companiesReducer } from "./reducers/companies/companies.reducer";
 
 const persistAppConfig = {
   key: "app",
@@ -29,8 +30,7 @@ const appReducer = combineReducers({
   auth: authSlice.reducer,
   common: commonReducer,
   companyTab: companyTabSlice.reducer,
-  companies: companiesSlice.reducer,
-  companiesTags: companiesTagsSlice.reducer,
+  companies: companiesReducer,
   inviteUser: inviteUserSlice.reducer,
   industries: industriesSlice.reducer,
   homePage: homePageReducer,

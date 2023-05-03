@@ -3,7 +3,7 @@ import { Box, Card, Grid, Typography } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import { formateISODateToLocaleString } from 'helper/utility/customFunctions';
 import { useAppSelector } from 'redux/store';
-import { COMPANY_PROJECTS } from 'redux/reducers/companies/companies.slice';
+import { COMPANY_PROJECTS, COMPANY_PROJECTS_DATA, COMPANY_PROJECTS_FILTERS_DATA } from 'redux/reducers/companies/companies.slice';
 
 
 const AgencyCompanyProjectsDetails = () => {
@@ -11,7 +11,8 @@ const AgencyCompanyProjectsDetails = () => {
     const { communityId } = useParams();
 
     // const { agencyCompanyProjectsList } = useSelector((state) => state.AgencyCompanyProjectsReducer);
-    const { companyProjectsList, companyProjectsFilters } = useAppSelector(COMPANY_PROJECTS);
+    const companyProjectsList = useAppSelector(COMPANY_PROJECTS_DATA);
+    const companyProjectsFilters = useAppSelector(COMPANY_PROJECTS_FILTERS_DATA);
 
     // useEffect(() => {
     //     const details = agencyCompanyProjectsList.filter((e) => e.id == communityId);

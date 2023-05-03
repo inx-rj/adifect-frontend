@@ -62,6 +62,8 @@ export const COMPANIES_ROUTE: Readonly<{
 }> = Object.freeze({
   COMPANY_PROJECTS_DETAILS: `${PAGE_ROUTE.COMPANY_PROJECTS}/:communityId`,
   TAGS: `${PAGE_ROUTE.HOME}company-project/tags`,
+  COMMUNITY_SETTINGS: `${PAGE_ROUTE.HOME}company-project/community-settings`,
+  COPY_CODE: `${PAGE_ROUTE.HOME}company-project/copy-code`,
 });
 
 // My Jobs Route
@@ -133,6 +135,16 @@ export const SIDEBAR_ROUTES: SidebarRoutesTypes[] = [
       {
         name: "Tags",
         path: COMPANIES_ROUTE.TAGS,
+        children: [],
+      },
+      {
+        name: "Community Settings",
+        path: COMPANIES_ROUTE.COMMUNITY_SETTINGS,
+        children: [],
+      },
+      {
+        name: "Copy Code",
+        path: COMPANIES_ROUTE.COPY_CODE,
         children: [],
       },
       // {

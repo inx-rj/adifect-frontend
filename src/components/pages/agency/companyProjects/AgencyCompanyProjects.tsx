@@ -8,7 +8,11 @@ import {
   GET_COMPANY_PROJECTS_LIST,
 } from "redux/actions/companies/companies.actions";
 import { useAppDispatch, useAppSelector } from "redux/store";
-import { COMPANY_PROJECTS } from "redux/reducers/companies/companies.slice";
+import {
+  COMPANY_PROJECTS,
+  COMPANY_PROJECTS_DATA,
+  COMPANY_PROJECTS_FILTERS_DATA,
+} from "redux/reducers/companies/companies.slice";
 import { TableRowColType } from "helper/types/muiTable/muiTable";
 import { filterUIOptionsListType } from "helper/types/companies/companiesType";
 import { Images } from "helper/images";
@@ -27,8 +31,8 @@ const AgencyCompanyProjects = () => {
   const dispatch = useAppDispatch();
 
   // Redux states
-  const { companyProjectsList, companyProjectsFilters } =
-    useAppSelector(COMPANY_PROJECTS);
+  const companyProjectsList = useAppSelector(COMPANY_PROJECTS_DATA);
+  const companyProjectsFilters = useAppSelector(COMPANY_PROJECTS_FILTERS_DATA);
 
   // React states
   const [filterData, setFilterData] = useState<{ [key: string]: string }>({
@@ -186,71 +190,71 @@ const AgencyCompanyProjects = () => {
     rows:
       companyProjectsList.data.results.length > 0
         ? companyProjectsList.data.results.map((data, index) => {
-          return {
-            name: (
-              <Link to={`${data.id}`} key={index}>
-                <Typography
-                  className="truncate max-w-full"
+            return {
+              name: (
+                <Link to={`${data.id}`} key={index}>
+                  <Typography
+                    className="truncate max-w-full"
+                    sx={{
+                      "&.MuiTypography-root": {
+                        display: "inline-block",
+                        cursor: "pointer",
+                        color: "rgba(39, 90, 208, 1)",
+                        fontSize: "14px",
+                        fontWeight: 400,
+                        p: 0,
+                        fontFamily: '"Figtree", sans-serif',
+                      },
+                    }}
+                  >
+                    {data.title}
+                    {/* {data?.community?.name} */}
+                  </Typography>
+                </Link>
+              ),
+              community: data?.community?.name,
+              // community: data?.title,
+              pURL: data.p_url,
+              publishedDate: formateISODateToLocaleString(
+                data.story_metadata.published_at ?? ""
+              ),
+              updatedDate: formateISODateToLocaleString(
+                data.story_metadata.updated_at ?? ""
+              ),
+              status: (
+                <Button
+                  variant="contained"
+                  disableRipple
+                  disableFocusRipple
+                  disableElevation
                   sx={{
-                    "&.MuiTypography-root": {
-                      display: "inline-block",
-                      cursor: "pointer",
-                      color: "rgba(39, 90, 208, 1)",
-                      fontSize: "14px",
-                      fontWeight: 400,
-                      p: 0,
-                      fontFamily: '"Figtree", sans-serif',
+                    width: "80px",
+                    padding: "7px 5px",
+                    background:
+                      data.status !== "Published"
+                        ? "rgba(250, 45, 32, 0.08)"
+                        : "rgba(32, 161, 68, 0.08)",
+                    color:
+                      data.status !== "Published"
+                        ? "rgba(250, 45, 32, 1)"
+                        : "#20A144",
+                    fontSize: "12px",
+                    textTransform: "capitalize",
+                    "&:hover": {
+                      background: "rgba(32, 161, 68, 0.08)",
                     },
                   }}
                 >
-                  {data.title}
-                  {/* {data?.community?.name} */}
-                </Typography>
-              </Link>
-            ),
-            community: data?.community?.name,
-            // community: data?.title,
-            pURL: data.p_url,
-            publishedDate: formateISODateToLocaleString(
-              data.story_metadata.published_at ?? ""
-            ),
-            updatedDate: formateISODateToLocaleString(
-              data.story_metadata.updated_at ?? ""
-            ),
-            status: (
-              <Button
-                variant="contained"
-                disableRipple
-                disableFocusRipple
-                disableElevation
-                sx={{
-                  width: "80px",
-                  padding: "7px 5px",
-                  background:
-                    data.status !== "Published"
-                      ? "rgba(250, 45, 32, 0.08)"
-                      : "rgba(32, 161, 68, 0.08)",
-                  color:
-                    data.status !== "Published"
-                      ? "rgba(250, 45, 32, 1)"
-                      : "#20A144",
-                  fontSize: "12px",
-                  textTransform: "capitalize",
-                  "&:hover": {
-                    background: "rgba(32, 161, 68, 0.08)",
-                  },
-                }}
-              >
-                {data.status}
-              </Button>
-            ),
-            channel: (
-              <div className="flex gap-1.5 text-[#71757b99]">
-                {/* <SharePostToSocialMedia /> */}
-              </div>
-            ),
-          };
-        })
+                  {data.status}
+                </Button>
+              ),
+              channel: (
+                <div className="flex gap-1.5 text-[#71757b99]">
+                  {/* <SharePostToSocialMedia /> */}
+                </div>
+              ),
+            };
+          })
         : [],
   };
 

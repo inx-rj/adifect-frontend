@@ -79,9 +79,9 @@ export const {
 } = companiesSlice.actions;
 
 export const COMPANY_PROJECTS_DATA = (state: RootState) =>
-  state.companies.companyProjectsList;
+  state.companies.companyProjects.companyProjectsList;
 
 export const COMPANY_PROJECTS_FILTERS_DATA = (state: RootState) =>
-  state.companies.companyProjectsFilters;
+  state.companies.companyProjects.companyProjectsFilters;
 
 export const COMPANY_PROJECTS = (state: RootState) => state.companies;
