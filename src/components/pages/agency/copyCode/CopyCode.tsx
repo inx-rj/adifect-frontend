@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Box } from "@mui/material";
 import swal from "sweetalert";
 import { useAppDispatch, useAppSelector } from "redux/store";
@@ -26,6 +26,7 @@ import {
 import { useSingleEffect, useUpdateEffect } from "react-haiku";
 import { Images } from "helper/images";
 import { Add } from "@mui/icons-material";
+import { TableRowsType } from "helper/types/muiTable/muiTable";
 
 const CopyCode = () => {
   const dispatch = useAppDispatch();
@@ -34,9 +35,9 @@ const CopyCode = () => {
   const agencyCompanyProjectsFiltersList = useAppSelector(
     COMPANY_PROJECTS_FILTERS_DATA
   );
-
   const programsList = useAppSelector(COPY_CODE_DATA);
   const success = useAppSelector(COPY_CODE_RESPONSE);
+
   // React states
   const [paginationData, setPaginationData] = useState({
     page: 1,
@@ -78,7 +79,7 @@ const CopyCode = () => {
   });
 
   //set the edit mode
-  const handleEdit = (item) => {
+  const handleEdit = (item: TableRowsType) => {
     setShowTagModal(true);
     setIsEditMode(true);
     setErrors({
@@ -102,7 +103,7 @@ const CopyCode = () => {
   };
 
   //handle delete action
-  const handleDelete = (item) => {
+  const handleDelete = (item: TableRowsType) => {
     swal({
       title: "Warning",
       text: `Are you sure you want to remove this ${item?.title}?`,
@@ -191,7 +192,7 @@ const CopyCode = () => {
 
     rows:
       programsList?.data?.results?.length > 0
-        ? programsList?.data?.results?.map((item, index) => {
+        ? programsList?.data?.results?.map((item: TableRowsType, index) => {
             return {
               tite: item.title ?? "",
 
@@ -222,7 +223,7 @@ const CopyCode = () => {
         : [],
   };
 
-  // Programs fetch list API call
+  // Copy code fetch list API call
   useUpdateEffect(() => {
     dispatch(GET_COPY_CODE_LIST({ ...paginationData, ...filterData }));
   }, [paginationData, filterData]);
@@ -264,7 +265,7 @@ const CopyCode = () => {
     }
     submitHandler();
   };
-  // Submit the 'Add Program' modal
+  // Submit the 'Add Copy Code' modal
   const submitHandler = () => {
     if (formData.title) {
       // API call
@@ -337,7 +338,7 @@ const CopyCode = () => {
   };
 
   // Clears the error when the community dropdown option is selected
-  useEffect(() => {
+  useUpdateEffect(() => {
     if (!isEmpty(selectedOption?.["label"] || selectedOption)) {
       setErrors({
         title: null,
@@ -348,6 +349,7 @@ const CopyCode = () => {
     }
   }, [selectedOption]);
 
+  // Fetch Copy Code updated List on Add, Edit and Delete
   useUpdateEffect(() => {
     if (success.add || success.update || success.delete) {
       dispatch(GET_COPY_CODE_LIST({ ...paginationData, ...filterData }));

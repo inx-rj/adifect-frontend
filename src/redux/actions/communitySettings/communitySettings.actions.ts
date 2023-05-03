@@ -22,7 +22,7 @@ const GET_COMMUNITY_SETTINGS_LIST =
 
 // Create Community Settings List
 const CREATE_COMMUNITY_SETTINGS_LIST =
-  (formData) => async (dispatch: AppDispatch) => {
+  (formData: { [key: string]: any }) => async (dispatch: AppDispatch) => {
     await dispatch(SET_COMMUNITY_SETTINGS_LOADING(true));
     return await CommunitySettingsApiClient.createCommunitySettingsData(
       formData
@@ -31,7 +31,8 @@ const CREATE_COMMUNITY_SETTINGS_LIST =
 
 // Update Community Settings List
 const UPDATE_COMMUNITY_SETTINGS_LIST =
-  (id: number, formData) => async (dispatch: AppDispatch) => {
+  (id: number, formData: { [key: string]: any }) =>
+  async (dispatch: AppDispatch) => {
     await dispatch(SET_COMMUNITY_SETTINGS_LOADING(true));
     return await CommunitySettingsApiClient.updateCommunitySettingsData(
       id,

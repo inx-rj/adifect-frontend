@@ -23,7 +23,7 @@ import { COMPANY_PROJECTS_FILTERS_DATA } from "redux/reducers/companies/companie
 import SharePostToSocialMedia from "components/common/ShareToSocialMedia/SharePostToSocialMedia";
 import { isEmpty } from "helper/utility/customFunctions";
 import axiosPrivate from "api/axios";
-import { API_URL, BASE_URL } from "helper/env";
+import { BASE_URL } from "helper/env";
 import MuiPopup from "components/common/muiPopup/MuiPopup";
 import MuiPopoverTooltip from "components/common/muiPopoverTooltip/muiPopoverTooltip";
 import MuiTable from "components/common/muiTable/MuiTable";
@@ -31,18 +31,12 @@ import { Images } from "helper/images";
 import { Add } from "@mui/icons-material";
 import LoadingSpinner from "components/common/loadingSpinner/Loader";
 import ActionMenuButton from "components/common/actionMenuButton/ActionMenuButton";
+import { TableRowsType } from "helper/types/muiTable/muiTable";
 
-export default function Agency_community_settings() {
+const AgencyCommunitySettings = () => {
   const dispatch = useAppDispatch();
 
   // Redux states
-  //   const {
-  //     loading: loadingagencyCommunitySettingsData,
-  //     agencyCommunitySettingsData,
-  //   } = useSelector((state) => state.AgencyCommunitySettingsReducer);
-  //   const { agencyCompanyProjectsFiltersList } = useSelector(
-  //     (state) => state.AgencyCompanyProjectsFiltersReducer
-  //   );
   const agencyCommunitySettingsData = useAppSelector(COMMUNITY_SETTINGS_DATA);
   const agencyCompanyProjectsFiltersList = useAppSelector(
     COMPANY_PROJECTS_FILTERS_DATA
@@ -54,7 +48,7 @@ export default function Agency_community_settings() {
     page: 1,
     rowsPerPage: 10,
   }); // pagination params state
-  const [filterData, setFilterData] = useState({
+  const [filterData, setFilterData] = useState<{ [key: string]: string }>({
     from_date: "",
     to_date: "",
     community: "",
@@ -63,7 +57,7 @@ export default function Agency_community_settings() {
     search: "",
   }); // filter params state
   const [showTagModal, setShowTagModal] = useState(false); // Add Community Settings modal state
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<{ [key: string]: string }>({
     fbUrl: undefined,
     fbApiKey: undefined,
     opnUrl: undefined,
@@ -108,7 +102,7 @@ export default function Agency_community_settings() {
   }, [paginationData, filterData]);
 
   //set the edit mode
-  const handleEdit = (item) => {
+  const handleEdit = (item: TableRowsType) => {
     setShowTagModal(true);
     setIsEditMode(true);
     setErrors({ ...errors, community: null });
@@ -118,10 +112,10 @@ export default function Agency_community_settings() {
       id: item?.community?.id,
     });
     const fbChannelData = item?.community_channels?.find(
-      (channel) => channel?.channel_data?.id == "1"
+      (channel) => channel?.channel_data?.id === 1
     );
     const openSesameChannelData = item?.community_channels?.find(
-      (channel) => channel?.channel_data?.id == "2"
+      (channel) => channel?.channel_data?.id === 2
     );
     setFormData({
       fbApiKey: fbChannelData?.api_key,
@@ -132,7 +126,7 @@ export default function Agency_community_settings() {
   };
 
   //handle delete action
-  const handleDelete = (item) => {
+  const handleDelete = (item: TableRowsType) => {
     swal({
       title: "Warning",
       text: `Are you sure you want to remove this ${item?.community?.name}?`,
@@ -203,124 +197,126 @@ export default function Agency_community_settings() {
 
     rows:
       agencyCommunitySettingsData?.data?.results?.length > 0
-        ? agencyCommunitySettingsData?.data?.results?.map((item, index) => {
-            return {
-              community: (
-                <Typography
-                  sx={{
-                    "&.MuiTypography-root": {
-                      // display: "inline-block",
-                      // cursor: "pointer",
-                      color: "#71757B",
-                      fontSize: "14px",
-                      fontWeight: 400,
-                      p: 0,
-                      fontFamily: '"Figtree", sans-serif',
-                    },
-                  }}
-                  key={index}
-                >
-                  {item.community.name}
-                </Typography>
-              ),
+        ? agencyCommunitySettingsData?.data?.results?.map(
+            (item: TableRowsType, index) => {
+              return {
+                community: (
+                  <Typography
+                    sx={{
+                      "&.MuiTypography-root": {
+                        // display: "inline-block",
+                        // cursor: "pointer",
+                        color: "#71757B",
+                        fontSize: "14px",
+                        fontWeight: 400,
+                        p: 0,
+                        fontFamily: '"Figtree", sans-serif',
+                      },
+                    }}
+                    key={index}
+                  >
+                    {item.community.name}
+                  </Typography>
+                ),
 
-              channel: item?.["community_channels"]?.length ? (
-                <div
-                  className="flex gap-1.5 text-[#71757b99] [&>:not(:first-child)]:border-l-2 [&>:not(:first-child)]:border-solid [&>:not(:first-child)]:border-[#71757b99] [&>.MuiTypography-root:not(:first-child)]:pl-2"
-                  key={`${item.community.name}_${index}`}
-                >
-                  {item?.community_channels?.map((channel_item) => (
-                    <>
-                      <Typography
-                        key={`${item.id}_${channel_item.channel_data.id}`}
-                        id={`${item.id}_${channel_item.channel_data.id}`}
-                        aria-owns={
-                          open
-                            ? `${item.id}_${channel_item.channel_data.id}`
-                            : undefined
-                        }
-                        aria-haspopup="true"
-                        onMouseEnter={(event) =>
-                          handlePopoverOpen(
-                            event,
-                            `${item.id}_${channel_item.channel_data.id}`
-                          )
-                        }
-                        sx={{
-                          "&.MuiTypography-root": {
-                            position: "relative",
-                            display: "inline-block",
-                            cursor: "pointer",
-                            // color: 'rgba(39, 90, 208, 1)',
-                            color: "#71757b99",
-                            fontSize: "14px",
-                            fontWeight: 400,
-                            p: 0,
-                            fontFamily: '"Figtree", sans-serif',
-                            "& .MuiTypography-channelName": {
-                              color: "#71757B",
-                              pl: 0.5,
+                channel: item?.["community_channels"]?.length ? (
+                  <div
+                    className="flex gap-1.5 text-[#71757b99] [&>:not(:first-child)]:border-l-2 [&>:not(:first-child)]:border-solid [&>:not(:first-child)]:border-[#71757b99] [&>.MuiTypography-root:not(:first-child)]:pl-2"
+                    key={`${item.community.name}_${index}`}
+                  >
+                    {item?.community_channels?.map((channel_item) => (
+                      <>
+                        <Typography
+                          key={`${item.id}_${channel_item.channel_data.id}`}
+                          id={`${item.id}_${channel_item.channel_data.id}`}
+                          aria-owns={
+                            open
+                              ? `${item.id}_${channel_item.channel_data.id}`
+                              : undefined
+                          }
+                          aria-haspopup="true"
+                          onMouseEnter={(event) =>
+                            handlePopoverOpen(
+                              event,
+                              `${item.id}_${channel_item.channel_data.id}`
+                            )
+                          }
+                          sx={{
+                            "&.MuiTypography-root": {
+                              position: "relative",
+                              display: "inline-block",
+                              cursor: "pointer",
+                              // color: 'rgba(39, 90, 208, 1)',
+                              color: "#71757b99",
+                              fontSize: "14px",
+                              fontWeight: 400,
+                              p: 0,
+                              fontFamily: '"Figtree", sans-serif',
+                              "& .MuiTypography-channelName": {
+                                color: "#71757B",
+                                pl: 0.5,
+                              },
                             },
-                          },
-                        }}
-                      >
-                        <SharePostToSocialMedia
-                          facebook={
-                            channel_item?.channel_data?.name?.toLowerCase() ===
-                            "facebook"
-                          }
-                          sms={
-                            channel_item?.channel_data?.name?.toLowerCase() ===
-                            "opnsesame"
-                          }
-                        />
-                        {/* @ts-ignore */}
-                        <Typography variant="channelName" component="span">
-                          {channel_item.channel_data.name}
+                          }}
+                        >
+                          <SharePostToSocialMedia
+                            facebook={
+                              channel_item?.channel_data?.name?.toLowerCase() ===
+                              "facebook"
+                            }
+                            sms={
+                              channel_item?.channel_data?.name?.toLowerCase() ===
+                              "opnsesame"
+                            }
+                          />
+                          {/* @ts-ignore */}
+                          <Typography variant="channelName" component="span">
+                            {channel_item.channel_data.name}
+                          </Typography>
                         </Typography>
-                      </Typography>
-                      <MuiPopoverTooltip
-                        id={`${item.id}_${channel_item.channel_data.id}`}
-                        anchorEl={anchorEl}
-                        openPopover={
-                          open &&
-                          selectedRowId ===
-                            `${item.id}_${channel_item.channel_data.id}`
-                        }
-                        handlePopoverClose={handlePopoverClose}
-                      >
-                        <ChannelPopoverCard
-                          urlTitle={`${channel_item?.channel_data?.name} URL: `}
-                          urlApiValue={channel_item}
-                          apiTitle={`${channel_item?.channel_data?.name} API Key: `}
-                        />
-                      </MuiPopoverTooltip>
-                    </>
-                  ))}
-                </div>
-              ) : (
-                ""
-              ),
+                        <MuiPopoverTooltip
+                          id={`${item.id}_${channel_item.channel_data.id}`}
+                          anchorEl={anchorEl}
+                          openPopover={
+                            open &&
+                            selectedRowId ===
+                              `${item.id}_${channel_item.channel_data.id}`
+                          }
+                          handlePopoverClose={handlePopoverClose}
+                        >
+                          <ChannelPopoverCard
+                            urlTitle={`${channel_item?.channel_data?.name} URL: `}
+                            urlApiValue={channel_item}
+                            apiTitle={`${channel_item?.channel_data?.name} API Key: `}
+                          />
+                        </MuiPopoverTooltip>
+                      </>
+                    ))}
+                  </div>
+                ) : (
+                  ""
+                ),
 
-              action: (
-                <div>
-                  <ActionMenuButton
-                    handleChannelPopoverClose={handlePopoverClose}
-                    selectedItem={selectedItem}
-                    setSelectedItem={setSelectedItem}
-                    setAnchorEl={setAnchorActionEl}
-                    anchorEl={anchorActionEl}
-                    handleEdit={() => handleEdit(item)}
-                    handleDelete={() => handleDelete(item)}
-                    showDelete={true}
-                    showEdit={true}
-                    isEditMode={isEditMode}
-                    item={{ id: item?.id, isActive: item?.is_active }}
-                  />
-                </div>
-              ),
-            };
-          })
+                action: (
+                  <div>
+                    <ActionMenuButton
+                      handleChannelPopoverClose={handlePopoverClose}
+                      selectedItem={selectedItem}
+                      setSelectedItem={setSelectedItem}
+                      setAnchorEl={setAnchorActionEl}
+                      anchorEl={anchorActionEl}
+                      handleEdit={() => handleEdit(item)}
+                      handleDelete={() => handleDelete(item)}
+                      showDelete={true}
+                      showEdit={true}
+                      isEditMode={isEditMode}
+                      item={{ id: item?.id, isActive: item?.is_active }}
+                    />
+                  </div>
+                ),
+              };
+            }
+          )
         : [],
   };
 
@@ -605,4 +601,6 @@ export default function Agency_community_settings() {
       </div>
     </>
   );
-}
+};
+
+export default AgencyCommunitySettings;

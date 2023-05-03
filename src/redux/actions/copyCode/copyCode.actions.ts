@@ -22,14 +22,16 @@ const GET_COPY_CODE_LIST =
   };
 
 // Create Copy Code List
-const CREATE_COPY_CODE_LIST = (formData) => async (dispatch: AppDispatch) => {
-  await dispatch(SET_COPY_CODE_LOADING(true));
-  return await CopyCodeApiClient.createCopyCodeData(formData);
-};
+const CREATE_COPY_CODE_LIST =
+  (formData: { [key: string]: string }) => async (dispatch: AppDispatch) => {
+    await dispatch(SET_COPY_CODE_LOADING(true));
+    return await CopyCodeApiClient.createCopyCodeData(formData);
+  };
 
 // Update Copy Code List
 const UPDATE_COPY_CODE_LIST =
-  (id: number, formData) => async (dispatch: AppDispatch) => {
+  (id: number, formData: { [key: string]: string }) =>
+  async (dispatch: AppDispatch) => {
     await dispatch(SET_COPY_CODE_LOADING(true));
     return await CopyCodeApiClient.updateCopyCodeData(id, formData);
   };

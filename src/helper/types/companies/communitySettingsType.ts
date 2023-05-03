@@ -1,6 +1,5 @@
 import { LoadingType } from "..";
-import { TableDataResponseType, TableRowsType } from "../muiTable/muiTable";
-import { IdNameObjectType } from "./companiesType";
+import { TableDataResponseType } from "../muiTable/muiTable";
 
 export interface CommunitySettingsInitialType extends LoadingType {
   communitySettingsList: {
