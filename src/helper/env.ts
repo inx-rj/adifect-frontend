@@ -29,6 +29,8 @@ export const API_URL = {
     COMMUNITY_SETTINGS: `${BASE_URL.COMPANIES}community-setting/`,
     AUDIENCES: `${BASE_URL.AGENCY}audience/`,
     COPY_CODE: `${BASE_URL.COMPANIES}copy-code/`,
+    CREATIVE_CODE: `${BASE_URL.COMPANIES}creative-code/`,
+    PROGRAMS: `${BASE_URL.COMPANIES}program/`,
   },
   COMPANY: {
     ADMIN: `${BASE_URL.COMPANY}`, //for admin

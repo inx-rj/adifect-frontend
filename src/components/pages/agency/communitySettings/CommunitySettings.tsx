@@ -29,7 +29,6 @@ import MuiPopoverTooltip from "components/common/muiPopoverTooltip/muiPopoverToo
 import MuiTable from "components/common/muiTable/MuiTable";
 import { Images } from "helper/images";
 import { Add } from "@mui/icons-material";
-import LoadingSpinner from "components/common/loadingSpinner/Loader";
 import ActionMenuButton from "components/common/actionMenuButton/ActionMenuButton";
 import { TableRowsType } from "helper/types/muiTable/muiTable";
 
@@ -583,20 +582,14 @@ const AgencyCommunitySettings = () => {
             mainActionTitle="Save"
           />
 
-          {agencyCommunitySettingsData?.loading ? (
-            <div className="projectsLoaderCreatorPage">
-              <LoadingSpinner />
-            </div>
-          ) : (
-            <MuiTable
-              loader={agencyCommunitySettingsData?.loading}
-              data={data}
-              allData={agencyCommunitySettingsData?.data}
-              paginationData={paginationData}
-              setPaginationData={setPaginationData}
-              handlePopoverClose={handlePopoverClose}
-            />
-          )}
+          <MuiTable
+            loader={agencyCommunitySettingsData?.loading}
+            data={data}
+            allData={agencyCommunitySettingsData?.data}
+            paginationData={paginationData}
+            setPaginationData={setPaginationData}
+            handlePopoverClose={handlePopoverClose}
+          />
         </div>
       </div>
     </>

@@ -9,10 +9,16 @@ import {
   TablePagination,
   TableContainer,
   LabelDisplayedRowsArgs,
+  Box,
 } from "@mui/material";
 import CustomPagination from "./MuiPagination";
 import { OnChangeFiledValueType, UseStateType } from "helper/types";
-import { TableDataResponseType, TablePaginationType, TableRowColType } from "helper/types/muiTable/muiTable";
+import {
+  TableDataResponseType,
+  TablePaginationType,
+  TableRowColType,
+} from "helper/types/muiTable/muiTable";
+import LoadingSpinner from "../loadingSpinner/Loader";
 
 interface MuiTablePropsType {
   loader: boolean;
@@ -26,13 +32,26 @@ interface MuiTablePropsType {
 const MuiTable = (props: MuiTablePropsType) => {
   // De-structuring of 'props'
   // debugger;
-  const { loader, data, allData, paginationData, setPaginationData, ...restProps } = props;
+  const {
+    loader,
+    data,
+    allData,
+    paginationData,
+    setPaginationData,
+    ...restProps
+  } = props;
 
   // Constans
   const selectRowsOptions = [10, 20, 50, 100]; // Options of the rows per page select field
 
   // To set selected page number when the page is changed
-  const handlePageChange = (event: React.MouseEvent<HTMLButtonElement> | null | React.ChangeEvent<unknown>, newPage: number) => {
+  const handlePageChange = (
+    event:
+      | React.MouseEvent<HTMLButtonElement>
+      | null
+      | React.ChangeEvent<unknown>,
+    newPage: number
+  ) => {
     setPaginationData({
       ...paginationData,
       page: newPage,
@@ -59,17 +78,22 @@ const MuiTable = (props: MuiTablePropsType) => {
         boxShadow: "none",
       }}
     >
+      {loader && (
+        <Box className="w-full [&>.spinner-container-bg]:backdrop-blur-sm [&>.spinner-container-bg]:bg-white/30">
+          <LoadingSpinner />
+        </Box>
+      )}
       <TableContainer sx={{ maxHeight: "668px" }}>
         <Table
           stickyHeader
           sx={{
             "&.MuiTable-root .MuiTableHead-root .MuiTableCell-head": {
               background: "rgba(227, 227, 227)",
-              whiteSpace: "nowrap"
+              whiteSpace: "nowrap",
             },
             "& .MuiTableCell-body": {
-              whiteSpace: "nowrap"
-            }
+              whiteSpace: "nowrap",
+            },
           }}
         >
           <TableHead>
@@ -79,7 +103,7 @@ const MuiTable = (props: MuiTablePropsType) => {
                   sx={{ px: 3.125, py: 1.25, minWidth: arrEle.width }}
                   width={arrEle.width}
                   key={`${arrEle.id}_${index}`}
-                // sortDirection={orderBy === arrEle.id ? order : none}
+                  // sortDirection={orderBy === arrEle.id ? order : none}
                 >
                   {arrEle.label}
                 </TableCell>
@@ -96,22 +120,26 @@ const MuiTable = (props: MuiTablePropsType) => {
                     sx={{
                       "& .MuiTableCell-root:first-child": {
                         maxWidth: "300px",
-                      }
+                      },
                     }}
                   >
-                    {Object.values(items).map((val, valIndex) => <TableCell sx={{ px: 3.125, py: 1.25, color: "#71757B", }} >{val}</TableCell>)}
+                    {Object.values(items).map((val, valIndex) => (
+                      <TableCell sx={{ px: 3.125, py: 1.25, color: "#71757B" }}>
+                        {val}
+                      </TableCell>
+                    ))}
                   </TableRow>
-                )
+                );
               })}
-            {data.rows.length < 1 && (
+            {!loader && data.rows.length < 1 && (
               <TableRow
                 className="w-full"
                 sx={{
-                  display: 'block',
-                  height: '50vh',
+                  display: "block",
+                  height: "50vh",
                   px: 3.125,
                   pt: 2,
-                  whiteSpace: "nowrap"
+                  whiteSpace: "nowrap",
                 }}
               >
                 No matching records found
@@ -125,7 +153,7 @@ const MuiTable = (props: MuiTablePropsType) => {
         sx={{
           "&.MuiTablePagination-root": {
             "& .MuiTablePagination-toolbar": {
-              p: '34px 25px 30px',
+              p: "34px 25px 30px",
               "& .MuiTablePagination-spacer": {
                 display: "none",
               },
@@ -133,7 +161,7 @@ const MuiTable = (props: MuiTablePropsType) => {
                 border: "1px solid rgba(113, 117, 123, 0.2)",
                 borderRadius: "5px",
                 textAlign: "center",
-                padding: "0.5rem 2rem 0.5rem 1rem"
+                padding: "0.5rem 2rem 0.5rem 1rem",
               },
               "& .MuiTablePagination-actions": { marginLeft: "auto" },
             },
@@ -153,7 +181,10 @@ const MuiTable = (props: MuiTablePropsType) => {
               {...subProps}
               sx={{
                 "&.MuiTablePagination-actions": {
-                  "& .Mui-selected": { backgroundColor: "#2472FC", color: "white" },
+                  "& .Mui-selected": {
+                    backgroundColor: "#2472FC",
+                    color: "white",
+                  },
                   "& .MuiButtonBase-root": {
                     // "&.MuiPaginationItem-previousNext": {
                     //   backgroundColor: "#2472FC",
@@ -166,15 +197,15 @@ const MuiTable = (props: MuiTablePropsType) => {
                       borderRadius: 1.25,
                       border: "none",
                       "&.MuiPaginationItem-previousNext": {
-                        background: "#e2ecff"
+                        background: "#e2ecff",
                       },
                       "&.Mui-disabled": {
                         backgroundColor: "#00000014",
-                        "&.MuiPaginationItem-root": { color: "#71757B" }
+                        "&.MuiPaginationItem-root": { color: "#71757B" },
                       },
                     },
                   },
-                }
+                },
               }}
               variant="outlined"
               shape="rounded"

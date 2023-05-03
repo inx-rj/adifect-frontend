@@ -1,43 +1,41 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState } from "react";
 import { Box } from "@mui/material";
-import swal from "sweetalert";
 import { useAppDispatch, useAppSelector } from "redux/store";
 import { COMPANY_PROJECTS_FILTERS_DATA } from "redux/reducers/companies/companies.slice";
 import { GET_COMPANY_PROJECTS_FILTERS_LIST } from "redux/actions/companies/companies.actions";
+import {
+  CREATE_PROGRAMS_LIST,
+  DELETE_PROGRAMS_LIST,
+  GET_PROGRAMS_LIST,
+  UPDATE_PROGRAMS_LIST,
+} from "redux/actions/programs/programs.actions";
+import { useSingleEffect, useUpdateEffect } from "react-haiku";
+import swal from "sweetalert";
 import ActionMenuButton from "components/common/actionMenuButton/ActionMenuButton";
 import { isEmpty } from "helper/utility/customFunctions";
-import MuiTable from "components/common/muiTable/MuiTable";
-import CustomAddCopyCodeModal from "./CustomAddModal/CustomAddCopyCodeModal";
-import MuiPopup from "components/common/muiPopup/MuiPopup";
 import {
-  CREATE_COPY_CODE_LIST,
-  DELETE_COPY_CODE_LIST,
-  GET_COPY_CODE_LIST,
-  UPDATE_COPY_CODE_LIST,
-} from "redux/actions/copyCode/copyCode.actions";
-import {
-  COPY_CODE_DATA,
-  COPY_CODE_RESPONSE,
-  SET_COPY_CODE_EDIT_DATA,
-  SET_COPY_CODE_LOADING,
-  SET_CREATE_COPY_CODE,
-} from "redux/reducers/companies/copyCode.slice";
-import { useSingleEffect, useUpdateEffect } from "react-haiku";
+  PROGRAMS_DATA,
+  PROGRAMS_RESPONSE,
+  SET_CREATE_PROGRAMS,
+  SET_PROGRAMS_EDIT_DATA,
+  SET_PROGRAMS_LOADING,
+} from "redux/reducers/companies/programs.slice";
 import { Images } from "helper/images";
+import MuiPopup from "components/common/muiPopup/MuiPopup";
+import CustomAddProgramModal from "./customAddModal/CustomAddProgramModal";
+import MuiTable from "components/common/muiTable/MuiTable";
 import { Add } from "@mui/icons-material";
-import { TableRowsType } from "helper/types/muiTable/muiTable";
 
-const CopyCode = () => {
+export default function Programs() {
   const dispatch = useAppDispatch();
 
   // Redux states
   const agencyCompanyProjectsFiltersList = useAppSelector(
     COMPANY_PROJECTS_FILTERS_DATA
   );
-  const programsList = useAppSelector(COPY_CODE_DATA);
-  const success = useAppSelector(COPY_CODE_RESPONSE);
-
+  const programsList = useAppSelector(PROGRAMS_DATA);
+  const success = useAppSelector(PROGRAMS_RESPONSE);
   // React states
   const [paginationData, setPaginationData] = useState({
     page: 1,
@@ -46,20 +44,16 @@ const CopyCode = () => {
   const [filterData, setFilterData] = useState({ search: "" }); // filter params state
   const [showTagModal, setShowTagModal] = useState(false); // Add Programs modal state
   const [formData, setFormData] = useState({
-    title: undefined,
-    subject_line: undefined,
-    body: undefined,
-    notes: undefined,
+    title: "",
+    community: { label: "", value: "" },
   }); // Add Program modal fields state
   const [errors, setErrors] = useState({
     title: null,
-    subject_line: null,
-    body: null,
-    notes: null,
+    community: null,
   }); // Add Program modal fields error state
   const [selectedOption, setSelectedOption] = useState({
-    label: "",
-    value: "",
+    id: "",
+    name: "",
   }); // Community dropdown state for 'Add Program' modal
   const [searchText, setSearchText] = useState(""); // Community dropdown search state
 
@@ -74,40 +68,36 @@ const CopyCode = () => {
   // Community, Story, Tag fetch list API call
   useSingleEffect(() => {
     dispatch(GET_COMPANY_PROJECTS_FILTERS_LIST());
-    dispatch(GET_COPY_CODE_LIST({ ...paginationData, ...filterData }));
+    dispatch(GET_PROGRAMS_LIST({ ...paginationData, ...filterData }));
   });
 
   //set the edit mode
-  const handleEdit = (item: TableRowsType) => {
+  const handleEdit = (item) => {
     setShowTagModal(true);
     setIsEditMode(true);
     setErrors({
       title: null,
-      subject_line: null,
-      body: null,
-      notes: null,
+      community: null,
     });
     setSelectedItem({ ...selectedItem, currentId: item?.id });
     setSelectedOption({
-      label: item?.community?.name,
-      value: item?.community?.id,
+      name: item?.community?.name,
+      id: item?.community?.id,
     });
 
     setFormData({
+      ...formData,
       title: item?.title,
-      subject_line: item?.subject_line,
-      body: item?.body,
-      notes: item?.notes,
     });
   };
 
   //handle delete action
-  const handleDelete = (item: TableRowsType) => {
+  const handleDelete = (item) => {
     swal({
       title: "Warning",
       text: `Are you sure you want to remove this ${item?.title}?`,
       className: "errorAlert",
-      icon: Images.ErrorLogo,
+      icon: "/img/logonew-red.svg",
       buttons: {
         Cancel: true,
         OK: true,
@@ -115,7 +105,7 @@ const CopyCode = () => {
       dangerMode: true,
     }).then((willDelete) => {
       if (willDelete !== "Cancel") {
-        dispatch(DELETE_COPY_CODE_LIST(item?.id)).then((r: void) => r);
+        dispatch(DELETE_PROGRAMS_LIST(item?.id)).then((r: void) => r);
       }
     });
     setAnchorEl(null);
@@ -136,7 +126,7 @@ const CopyCode = () => {
         id: 1,
         label: (
           <label className="flex items-center">
-            Title
+            Programs Title
             <img className="ml-1" src={Images.SortArrows} alt="Title" />
           </label>
         ),
@@ -148,40 +138,16 @@ const CopyCode = () => {
         id: 2,
         label: (
           <label className="flex items-center">
-            Subject Line
+            Community
             <img className="ml-1" src={Images.SortArrows} alt="Title" />
           </label>
         ),
-        field: "subLine",
-        sort: "asc",
-        width: 300,
-      },
-      {
-        id: 3,
-        label: (
-          <label className="flex items-center">
-            Body
-            <img className="ml-1" src={Images.SortArrows} alt="Title" />
-          </label>
-        ),
-        field: "body",
+        field: "community",
         sort: "asc",
         width: 300,
       },
       {
         id: 4,
-        label: (
-          <label className="flex items-center">
-            Notes
-            <img className="ml-1" src={Images.SortArrows} alt="Title" />
-          </label>
-        ),
-        field: "notes",
-        sort: "asc",
-        width: 300,
-      },
-      {
-        id: 5,
         label: "Action",
         field: "action",
         sort: "asc",
@@ -191,18 +157,15 @@ const CopyCode = () => {
 
     rows:
       programsList?.data?.results?.length > 0
-        ? programsList?.data?.results?.map((item: TableRowsType, index) => {
+        ? programsList?.data?.results?.map((item, index) => {
             return {
               tite: item.title ?? "",
 
-              subLine: item.subject_line ?? "",
-
-              body: item.body ?? "",
-
-              notes: item.notes ?? "",
+              community: item.community.name ?? "",
 
               action: (
                 <div>
+                  {/* <MoreVertIcon /> */}
                   <ActionMenuButton
                     selectedItem={selectedItem}
                     setSelectedItem={setSelectedItem}
@@ -222,24 +185,20 @@ const CopyCode = () => {
         : [],
   };
 
-  // Copy code fetch list API call
+  // Programs fetch list API call
   useUpdateEffect(() => {
-    dispatch(GET_COPY_CODE_LIST({ ...paginationData, ...filterData }));
+    dispatch(GET_PROGRAMS_LIST({ ...paginationData, ...filterData }));
   }, [paginationData, filterData]);
 
   // Reset modal fields and errors state
   const resetModalData = () => {
     setErrors({
       title: null,
-      subject_line: null,
-      body: null,
-      notes: null,
+      community: null,
     });
     setFormData({
       title: undefined,
-      subject_line: undefined,
-      body: undefined,
-      notes: undefined,
+      community: undefined,
     });
     setShowTagModal(!showTagModal);
     setSelectedOption(null);
@@ -249,12 +208,10 @@ const CopyCode = () => {
   const validateSubmit = (e) => {
     e.preventDefault();
     const tempErrors = {
-      title: isEmpty(formData.title) ? "Title is required" : "",
-      subject_line: isEmpty(formData.subject_line)
-        ? "Subject line is required"
+      title: isEmpty(formData?.title) ? "Program title is required" : "",
+      community: isEmpty(selectedOption?.["name"])
+        ? "Community is required"
         : "",
-      body: isEmpty(formData.body) ? "Body is required" : "",
-      notes: isEmpty(formData.notes) ? "Notes is required" : "",
     };
     setErrors(tempErrors);
 
@@ -263,12 +220,18 @@ const CopyCode = () => {
     }
     submitHandler();
   };
-  // Submit the 'Add Copy Code' modal
+  // Submit the 'Add Program' modal
   const submitHandler = () => {
-    if (formData.title) {
+    if (formData?.title) {
+      // Payload
+      const programPayload = {
+        title: formData?.title,
+        community: selectedOption?.["id"],
+      };
+
       // API call
       if (isEditMode) {
-        dispatch(UPDATE_COPY_CODE_LIST(selectedItem?.currentId, formData))
+        dispatch(UPDATE_PROGRAMS_LIST(selectedItem?.currentId, programPayload))
           .then((res) => {
             swal({
               title: "Successfully Complete",
@@ -280,8 +243,8 @@ const CopyCode = () => {
               },
               timer: 1500,
             });
-            dispatch(SET_COPY_CODE_EDIT_DATA(res?.data?.message));
-            dispatch(SET_COPY_CODE_LOADING(false));
+            dispatch(SET_PROGRAMS_EDIT_DATA(res?.data?.message));
+            dispatch(SET_PROGRAMS_LOADING(false));
             resetModalData();
           })
           .catch((err) => {
@@ -297,10 +260,10 @@ const CopyCode = () => {
               },
               timer: 5000,
             });
-            dispatch(SET_COPY_CODE_LOADING(false));
+            dispatch(SET_PROGRAMS_LOADING(false));
           });
       } else {
-        dispatch(CREATE_COPY_CODE_LIST(formData))
+        dispatch(CREATE_PROGRAMS_LIST(programPayload))
           .then((res) => {
             swal({
               title: "Successfully Complete",
@@ -312,8 +275,8 @@ const CopyCode = () => {
               },
               timer: 1500,
             });
-            dispatch(SET_CREATE_COPY_CODE(res?.data?.message));
-            dispatch(SET_COPY_CODE_LOADING(false));
+            dispatch(SET_CREATE_PROGRAMS(res?.data?.message));
+            dispatch(SET_PROGRAMS_LOADING(false));
             resetModalData();
           })
           .catch((err) => {
@@ -329,7 +292,7 @@ const CopyCode = () => {
               },
               timer: 5000,
             });
-            dispatch(SET_COPY_CODE_LOADING(false));
+            dispatch(SET_PROGRAMS_LOADING(false));
           });
       }
     }
@@ -337,27 +300,25 @@ const CopyCode = () => {
 
   // Clears the error when the community dropdown option is selected
   useUpdateEffect(() => {
-    if (!isEmpty(selectedOption?.["label"] || selectedOption)) {
+    if (!isEmpty(selectedOption?.["name"] || selectedOption)) {
       setErrors({
         title: null,
-        subject_line: null,
-        body: null,
-        notes: null,
+        community: null,
       });
     }
   }, [selectedOption]);
 
-  // Fetch Copy Code updated List on Add, Edit and Delete
+  // Fetch Programs updated List on Add, Edit and Delete
   useUpdateEffect(() => {
     if (success.add || success.update || success.delete) {
-      dispatch(GET_COPY_CODE_LIST({ ...paginationData, ...filterData }));
+      dispatch(GET_PROGRAMS_LIST({ ...paginationData, ...filterData }));
     }
   }, [success]);
 
   return (
     <>
       <div className="page-container">
-        <h1 className="page-title">Copy Code</h1>
+        <h1 className="page-title">Programs</h1>
 
         <div className="page-card new-card p-0">
           <div className="flex flex-wrap p-[15px] pb-[20px]">
@@ -385,7 +346,7 @@ const CopyCode = () => {
 
             <div className="savebtn Categorybtn ml-auto">
               <button
-                className="btn btn-primary"
+                className="addanewmail w-full h-full"
                 type="button"
                 onClick={(e) => {
                   setShowTagModal(true);
@@ -393,17 +354,16 @@ const CopyCode = () => {
                 // disabled={true}
               >
                 {" "}
-                <Add />
-                Add
+                <Add /> Add
               </button>
             </div>
           </div>
 
           <MuiPopup
-            dialogTitle="Add Copy Code"
+            dialogTitle="Add Program"
             textAlign="left"
             dialogContent={
-              <CustomAddCopyCodeModal
+              <CustomAddProgramModal
                 communityOptions={
                   agencyCompanyProjectsFiltersList?.data?.community
                     ? agencyCompanyProjectsFiltersList
@@ -436,6 +396,4 @@ const CopyCode = () => {
       </div>
     </>
   );
-};
-
-export default CopyCode;
+}

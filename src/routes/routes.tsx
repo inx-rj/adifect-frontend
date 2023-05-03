@@ -76,8 +76,16 @@ const CommunitySettings = lazy(
   () => import("components/pages/agency/communitySettings/CommunitySettings")
 );
 
+const Programs = lazy(
+  () => import("components/pages/agency/programs/Programs")
+);
+
 const CopyCode = lazy(
   () => import("components/pages/agency/copyCode/CopyCode")
+);
+
+const CreativeCode = lazy(
+  () => import("components/pages/agency/creativeCode/CreativeCode")
 );
 
 // ---------------------------- Define main pages routes ----------------------------
@@ -189,10 +197,26 @@ export const PAGES_ROUTES: RouteType[] = [
     ),
   },
   {
+    path: COMPANIES_ROUTE.PROGRAMS,
+    component: (
+      <Suspense fallback={""}>
+        <Programs />
+      </Suspense>
+    ),
+  },
+  {
     path: COMPANIES_ROUTE.COPY_CODE,
     component: (
       <Suspense fallback={""}>
         <CopyCode />
+      </Suspense>
+    ),
+  },
+  {
+    path: COMPANIES_ROUTE.CREATIVE_CODE,
+    component: (
+      <Suspense fallback={""}>
+        <CreativeCode />
       </Suspense>
     ),
   },

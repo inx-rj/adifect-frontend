@@ -63,7 +63,9 @@ export const COMPANIES_ROUTE: Readonly<{
   COMPANY_PROJECTS_DETAILS: `${PAGE_ROUTE.COMPANY_PROJECTS}/:communityId`,
   TAGS: `${PAGE_ROUTE.HOME}company-project/tags`,
   COMMUNITY_SETTINGS: `${PAGE_ROUTE.HOME}company-project/community-settings`,
+  PROGRAMS: `${PAGE_ROUTE.HOME}company-project/programs`,
   COPY_CODE: `${PAGE_ROUTE.HOME}company-project/copy-code`,
+  CREATIVE_CODE: `${PAGE_ROUTE.HOME}company-project/creative-code`,
 });
 
 // My Jobs Route
@@ -143,8 +145,18 @@ export const SIDEBAR_ROUTES: SidebarRoutesTypes[] = [
         children: [],
       },
       {
+        name: "Programs",
+        path: COMPANIES_ROUTE.PROGRAMS,
+        children: [],
+      },
+      {
         name: "Copy Code",
         path: COMPANIES_ROUTE.COPY_CODE,
+        children: [],
+      },
+      {
+        name: "Creative Code",
+        path: COMPANIES_ROUTE.CREATIVE_CODE,
         children: [],
       },
       // {
