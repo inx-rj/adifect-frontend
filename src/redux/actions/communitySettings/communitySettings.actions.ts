@@ -2,6 +2,7 @@ import { AppDispatch } from "redux/store";
 import { initialTableConfigInterface } from "helper/types/common/table";
 import {
   SET_COMMUNITY_SETTINGS_DATA,
+  SET_COMMUNITY_SETTINGS_DATA_LOADING,
   SET_COMMUNITY_SETTINGS_LOADING,
   SET_DELETE_COMMUNITY_SETTINGS,
 } from "redux/reducers/companies/communitySettings.slice";
@@ -13,10 +14,12 @@ import swal from "sweetalert";
 const GET_COMMUNITY_SETTINGS_LIST =
   (tableConfig: initialTableConfigInterface) =>
   async (dispatch: AppDispatch) => {
+    dispatch(SET_COMMUNITY_SETTINGS_DATA_LOADING(true));
     await CommunitySettingsApiClient.fetchCommunitySettingsList(
       tableConfig
     ).then((response) => {
       dispatch(SET_COMMUNITY_SETTINGS_DATA(response?.data?.data));
+      dispatch(SET_COMMUNITY_SETTINGS_DATA_LOADING(false));
     });
   };
 

@@ -1,42 +1,41 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState } from "react";
-import { Box } from "@mui/material";
-import swal from "sweetalert";
+import { Box, Typography } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "redux/store";
 import { COMPANY_PROJECTS_FILTERS_DATA } from "redux/reducers/companies/companies.slice";
 import { GET_COMPANY_PROJECTS_FILTERS_LIST } from "redux/actions/companies/companies.actions";
+import {
+  CREATE_CREATIVE_CODE_LIST,
+  DELETE_CREATIVE_CODE_LIST,
+  GET_CREATIVE_CODE_LIST,
+  UPDATE_CREATIVE_CODE_LIST,
+} from "redux/actions/creativeCode/creativeCode.actions";
+import { useSingleEffect, useUpdateEffect } from "react-haiku";
+import swal from "sweetalert";
 import ActionMenuButton from "components/common/actionMenuButton/ActionMenuButton";
 import { isEmpty } from "helper/utility/customFunctions";
-import MuiTable from "components/common/muiTable/MuiTable";
-import CustomAddCopyCodeModal from "./CustomAddModal/CustomAddCopyCodeModal";
-import MuiPopup from "components/common/muiPopup/MuiPopup";
-import {
-  CREATE_COPY_CODE_LIST,
-  DELETE_COPY_CODE_LIST,
-  GET_COPY_CODE_LIST,
-  UPDATE_COPY_CODE_LIST,
-} from "redux/actions/copyCode/copyCode.actions";
-import {
-  COPY_CODE_DATA,
-  COPY_CODE_RESPONSE,
-  SET_COPY_CODE_EDIT_DATA,
-  SET_COPY_CODE_LOADING,
-  SET_CREATE_COPY_CODE,
-} from "redux/reducers/companies/copyCode.slice";
-import { useSingleEffect, useUpdateEffect } from "react-haiku";
 import { Images } from "helper/images";
+import {
+  CREATIVE_CODE_DATA,
+  CREATIVE_CODE_RESPONSE,
+  SET_CREATE_CREATIVE_CODE,
+  SET_CREATIVE_CODE_EDIT_DATA,
+  SET_CREATIVE_CODE_LOADING,
+} from "redux/reducers/companies/creativeCode.slice";
+import MuiPopup from "components/common/muiPopup/MuiPopup";
+import CustomAddCreativeCodeModal from "./customAddModal/CustomAddCreativeCodeModal";
+import MuiTable from "components/common/muiTable/MuiTable";
 import { Add } from "@mui/icons-material";
-import { TableRowsType } from "helper/types/muiTable/muiTable";
 
-const CopyCode = () => {
+export default function CreativeCode() {
   const dispatch = useAppDispatch();
 
   // Redux states
   const agencyCompanyProjectsFiltersList = useAppSelector(
     COMPANY_PROJECTS_FILTERS_DATA
   );
-  const programsList = useAppSelector(COPY_CODE_DATA);
-  const success = useAppSelector(COPY_CODE_RESPONSE);
+  const creativeCodeList = useAppSelector(CREATIVE_CODE_DATA);
+  const success = useAppSelector(CREATIVE_CODE_RESPONSE);
 
   // React states
   const [paginationData, setPaginationData] = useState({
@@ -44,22 +43,32 @@ const CopyCode = () => {
     rowsPerPage: 10,
   }); // pagination params state
   const [filterData, setFilterData] = useState({ search: "" }); // filter params state
-  const [showTagModal, setShowTagModal] = useState(false); // Add Programs modal state
+  const [showTagModal, setShowTagModal] = useState(false); // Add Creative Code modal state
   const [formData, setFormData] = useState({
     title: undefined,
-    subject_line: undefined,
-    body: undefined,
+    file_name: undefined,
+    format: undefined,
+    creative_theme: undefined,
+    horizontal_pixel: undefined,
+    vertical_pixel: undefined,
+    duration: undefined,
+    link: undefined,
     notes: undefined,
   }); // Add Program modal fields state
   const [errors, setErrors] = useState({
     title: null,
-    subject_line: null,
-    body: null,
+    file_name: null,
+    format: null,
+    creative_theme: null,
+    horizontal_pixel: null,
+    vertical_pixel: null,
+    duration: null,
+    link: null,
     notes: null,
   }); // Add Program modal fields error state
   const [selectedOption, setSelectedOption] = useState({
-    label: "",
-    value: "",
+    name: "",
+    id: "",
   }); // Community dropdown state for 'Add Program' modal
   const [searchText, setSearchText] = useState(""); // Community dropdown search state
 
@@ -74,40 +83,47 @@ const CopyCode = () => {
   // Community, Story, Tag fetch list API call
   useSingleEffect(() => {
     dispatch(GET_COMPANY_PROJECTS_FILTERS_LIST());
-    dispatch(GET_COPY_CODE_LIST({ ...paginationData, ...filterData }));
+    dispatch(GET_CREATIVE_CODE_LIST({ ...paginationData, ...filterData }));
   });
 
   //set the edit mode
-  const handleEdit = (item: TableRowsType) => {
+  const handleEdit = (item) => {
     setShowTagModal(true);
     setIsEditMode(true);
     setErrors({
+      ...errors,
       title: null,
-      subject_line: null,
-      body: null,
+      file_name: null,
+      format: null,
+      creative_theme: null,
+      horizontal_pixel: null,
+      vertical_pixel: null,
+      duration: null,
+      link: null,
       notes: null,
     });
     setSelectedItem({ ...selectedItem, currentId: item?.id });
-    setSelectedOption({
-      label: item?.community?.name,
-      value: item?.community?.id,
-    });
 
     setFormData({
       title: item?.title,
-      subject_line: item?.subject_line,
-      body: item?.body,
+      file_name: item?.file_name,
+      format: item?.format,
+      creative_theme: item?.creative_theme,
+      horizontal_pixel: item?.horizontal_pixel,
+      vertical_pixel: item?.vertical_pixel,
+      duration: item?.duration,
+      link: item?.link,
       notes: item?.notes,
     });
   };
 
   //handle delete action
-  const handleDelete = (item: TableRowsType) => {
+  const handleDelete = (item) => {
     swal({
       title: "Warning",
       text: `Are you sure you want to remove this ${item?.title}?`,
       className: "errorAlert",
-      icon: Images.ErrorLogo,
+      icon: "/img/logonew-red.svg",
       buttons: {
         Cancel: true,
         OK: true,
@@ -115,7 +131,7 @@ const CopyCode = () => {
       dangerMode: true,
     }).then((willDelete) => {
       if (willDelete !== "Cancel") {
-        dispatch(DELETE_COPY_CODE_LIST(item?.id)).then((r: void) => r);
+        dispatch(DELETE_CREATIVE_CODE_LIST(item?.id)).then((r: void) => r);
       }
     });
     setAnchorEl(null);
@@ -140,36 +156,96 @@ const CopyCode = () => {
             <img className="ml-1" src={Images.SortArrows} alt="Title" />
           </label>
         ),
-        field: "programTitle",
+        field: "creativeCodeTitle",
         sort: "asc",
-        width: 300,
+        width: 100,
       },
       {
         id: 2,
         label: (
           <label className="flex items-center">
-            Subject Line
+            File Name
             <img className="ml-1" src={Images.SortArrows} alt="Title" />
           </label>
         ),
-        field: "subLine",
+        field: "fileName",
         sort: "asc",
-        width: 300,
+        width: 50,
       },
       {
         id: 3,
         label: (
           <label className="flex items-center">
-            Body
+            Format
             <img className="ml-1" src={Images.SortArrows} alt="Title" />
           </label>
         ),
-        field: "body",
+        field: "format",
         sort: "asc",
-        width: 300,
+        width: 50,
       },
       {
         id: 4,
+        label: (
+          <label className="flex items-center">
+            Creative Theme
+            <img className="ml-1" src={Images.SortArrows} alt="Title" />
+          </label>
+        ),
+        field: "creativeTheme",
+        sort: "asc",
+        width: 100,
+      },
+      {
+        id: 5,
+        label: (
+          <label className="flex items-center">
+            Horizontal
+            <img className="ml-1" src={Images.SortArrows} alt="Title" />
+          </label>
+        ),
+        field: "horizontalPx",
+        sort: "asc",
+        width: 50,
+      },
+      {
+        id: 6,
+        label: (
+          <label className="flex items-center">
+            Vertical
+            <img className="ml-1" src={Images.SortArrows} alt="Title" />
+          </label>
+        ),
+        field: "verticalPx",
+        sort: "asc",
+        width: 50,
+      },
+      {
+        id: 7,
+        label: (
+          <label className="flex items-center">
+            Duration
+            <img className="ml-1" src={Images.SortArrows} alt="Title" />
+          </label>
+        ),
+        field: "duration",
+        sort: "asc",
+        width: 50,
+      },
+      {
+        id: 8,
+        label: (
+          <label className="flex items-center">
+            Link
+            <img className="ml-1" src={Images.SortArrows} alt="Title" />
+          </label>
+        ),
+        field: "link",
+        sort: "asc",
+        width: 100,
+      },
+      {
+        id: 9,
         label: (
           <label className="flex items-center">
             Notes
@@ -178,28 +254,70 @@ const CopyCode = () => {
         ),
         field: "notes",
         sort: "asc",
-        width: 300,
+        width: 100,
       },
       {
-        id: 5,
+        id: 4,
         label: "Action",
         field: "action",
         sort: "asc",
-        width: 100,
+        width: 50,
       },
     ],
 
     rows:
-      programsList?.data?.results?.length > 0
-        ? programsList?.data?.results?.map((item: TableRowsType, index) => {
+      creativeCodeList?.data?.results?.length > 0
+        ? creativeCodeList?.data?.results?.map((item, index) => {
             return {
-              tite: item.title ?? "",
+              creativeCodeTitle: item.title ?? "",
 
-              subLine: item.subject_line ?? "",
+              fileName: item.file_name ?? "",
 
-              body: item.body ?? "",
+              format: item.format ?? "",
 
-              notes: item.notes ?? "",
+              creativeTheme: item.creative_theme ?? "",
+
+              horizontalPx: item.horizontal_pixel ?? "",
+
+              verticalPx: item.vertical_pixel ?? "",
+
+              duration: item.duration ?? "",
+
+              link: (
+                <Typography
+                  key={index}
+                  className="truncate w-max-full"
+                  sx={{
+                    "&.MuiTypography-root": {
+                      color: "#71757B",
+                      fontSize: "14px",
+                      fontWeight: 400,
+                      p: 0,
+                      fontFamily: '"Figtree", sans-serif',
+                    },
+                  }}
+                >
+                  {item.link ?? ""}
+                </Typography>
+              ),
+
+              notes: (
+                <Typography
+                  key={index}
+                  className="truncate w-3/4"
+                  sx={{
+                    "&.MuiTypography-root": {
+                      color: "#71757B",
+                      fontSize: "14px",
+                      fontWeight: 400,
+                      p: 0,
+                      fontFamily: '"Figtree", sans-serif',
+                    },
+                  }}
+                >
+                  {item.notes ?? ""}
+                </Typography>
+              ),
 
               action: (
                 <div>
@@ -222,23 +340,34 @@ const CopyCode = () => {
         : [],
   };
 
-  // Copy code fetch list API call
+  // Creative Code fetch list API call
   useUpdateEffect(() => {
-    dispatch(GET_COPY_CODE_LIST({ ...paginationData, ...filterData }));
+    dispatch(GET_CREATIVE_CODE_LIST({ ...paginationData, ...filterData }));
   }, [paginationData, filterData]);
 
   // Reset modal fields and errors state
   const resetModalData = () => {
     setErrors({
+      ...errors,
       title: null,
-      subject_line: null,
-      body: null,
+      file_name: null,
+      format: null,
+      creative_theme: null,
+      horizontal_pixel: null,
+      vertical_pixel: null,
+      duration: null,
+      link: null,
       notes: null,
     });
     setFormData({
       title: undefined,
-      subject_line: undefined,
-      body: undefined,
+      file_name: undefined,
+      format: undefined,
+      creative_theme: undefined,
+      horizontal_pixel: undefined,
+      vertical_pixel: undefined,
+      duration: undefined,
+      link: undefined,
       notes: undefined,
     });
     setShowTagModal(!showTagModal);
@@ -250,11 +379,21 @@ const CopyCode = () => {
     e.preventDefault();
     const tempErrors = {
       title: isEmpty(formData.title) ? "Title is required" : "",
-      subject_line: isEmpty(formData.subject_line)
-        ? "Subject line is required"
+      file_name: isEmpty(formData.file_name) ? "File name is required" : "",
+      format: isEmpty(formData.format) ? "Format is required" : "",
+      creative_theme: isEmpty(formData.creative_theme)
+        ? "Creative Theme is required"
         : "",
-      body: isEmpty(formData.body) ? "Body is required" : "",
+      horizontal_pixel: isEmpty(formData.horizontal_pixel)
+        ? "Horizontal pixel is required"
+        : "",
+      vertical_pixel: isEmpty(formData.vertical_pixel)
+        ? "Vertical Pixel is required"
+        : "",
+      duration: isEmpty(formData.duration) ? "Duration is required" : "",
+      link: isEmpty(formData.link) ? "Link is required" : "",
       notes: isEmpty(formData.notes) ? "Notes is required" : "",
+      // community: isEmpty(selectedOption?.['name'], 'Community is required'),
     };
     setErrors(tempErrors);
 
@@ -263,12 +402,13 @@ const CopyCode = () => {
     }
     submitHandler();
   };
-  // Submit the 'Add Copy Code' modal
+  // Submit the 'Add Program' modal
   const submitHandler = () => {
+    // console.log({ formData }, "formData");
     if (formData.title) {
       // API call
       if (isEditMode) {
-        dispatch(UPDATE_COPY_CODE_LIST(selectedItem?.currentId, formData))
+        dispatch(UPDATE_CREATIVE_CODE_LIST(selectedItem?.currentId, formData))
           .then((res) => {
             swal({
               title: "Successfully Complete",
@@ -280,8 +420,8 @@ const CopyCode = () => {
               },
               timer: 1500,
             });
-            dispatch(SET_COPY_CODE_EDIT_DATA(res?.data?.message));
-            dispatch(SET_COPY_CODE_LOADING(false));
+            dispatch(SET_CREATIVE_CODE_EDIT_DATA(res?.data?.message));
+            dispatch(SET_CREATIVE_CODE_LOADING(false));
             resetModalData();
           })
           .catch((err) => {
@@ -297,10 +437,10 @@ const CopyCode = () => {
               },
               timer: 5000,
             });
-            dispatch(SET_COPY_CODE_LOADING(false));
+            dispatch(SET_CREATIVE_CODE_LOADING(false));
           });
       } else {
-        dispatch(CREATE_COPY_CODE_LIST(formData))
+        dispatch(CREATE_CREATIVE_CODE_LIST(formData))
           .then((res) => {
             swal({
               title: "Successfully Complete",
@@ -312,8 +452,8 @@ const CopyCode = () => {
               },
               timer: 1500,
             });
-            dispatch(SET_CREATE_COPY_CODE(res?.data?.message));
-            dispatch(SET_COPY_CODE_LOADING(false));
+            dispatch(SET_CREATE_CREATIVE_CODE(res?.data?.message));
+            dispatch(SET_CREATIVE_CODE_LOADING(false));
             resetModalData();
           })
           .catch((err) => {
@@ -329,7 +469,7 @@ const CopyCode = () => {
               },
               timer: 5000,
             });
-            dispatch(SET_COPY_CODE_LOADING(false));
+            dispatch(SET_CREATIVE_CODE_LOADING(false));
           });
       }
     }
@@ -337,27 +477,33 @@ const CopyCode = () => {
 
   // Clears the error when the community dropdown option is selected
   useUpdateEffect(() => {
-    if (!isEmpty(selectedOption?.["label"] || selectedOption)) {
+    if (!isEmpty(selectedOption?.["name"] || selectedOption)) {
       setErrors({
+        ...errors,
         title: null,
-        subject_line: null,
-        body: null,
+        file_name: null,
+        format: null,
+        creative_theme: null,
+        horizontal_pixel: null,
+        vertical_pixel: null,
+        duration: null,
+        link: null,
         notes: null,
       });
     }
   }, [selectedOption]);
 
-  // Fetch Copy Code updated List on Add, Edit and Delete
+  // Fetch Creative Code updated List on Add, Edit and Delete
   useUpdateEffect(() => {
     if (success.add || success.update || success.delete) {
-      dispatch(GET_COPY_CODE_LIST({ ...paginationData, ...filterData }));
+      dispatch(GET_CREATIVE_CODE_LIST({ ...paginationData, ...filterData }));
     }
   }, [success]);
 
   return (
     <>
       <div className="page-container">
-        <h1 className="page-title">Copy Code</h1>
+        <h1 className="page-title">Creative Code</h1>
 
         <div className="page-card new-card p-0">
           <div className="flex flex-wrap p-[15px] pb-[20px]">
@@ -393,17 +539,16 @@ const CopyCode = () => {
                 // disabled={true}
               >
                 {" "}
-                <Add />
-                Add Copy Code
+                <Add /> Add Creative Code
               </button>
             </div>
           </div>
 
           <MuiPopup
-            dialogTitle="Add Copy Code"
+            dialogTitle="Add Creative Code"
             textAlign="left"
             dialogContent={
-              <CustomAddCopyCodeModal
+              <CustomAddCreativeCodeModal
                 communityOptions={
                   agencyCompanyProjectsFiltersList?.data?.community
                     ? agencyCompanyProjectsFiltersList
@@ -426,9 +571,9 @@ const CopyCode = () => {
           />
 
           <MuiTable
-            loader={programsList?.loading}
+            loader={creativeCodeList?.loading}
             data={data}
-            allData={programsList?.data}
+            allData={creativeCodeList?.data}
             paginationData={paginationData}
             setPaginationData={setPaginationData}
           />
@@ -436,6 +581,4 @@ const CopyCode = () => {
       </div>
     </>
   );
-};
-
-export default CopyCode;
+}
