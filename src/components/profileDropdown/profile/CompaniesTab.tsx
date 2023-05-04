@@ -48,7 +48,7 @@ const CompaniesTab = () => {
   //fetch company list when pagination change
   useUpdateEffect(() => {
     dispatch(
-      GET_COMPANY_LIST(paginationData, `${API_URL.COMPANY.COMPANY_LIST}`)
+      GET_COMPANY_LIST(paginationData, `${API_URL.COMPANY.AGENCY_COMPANY_LIST}`)
     );
   }, [paginationData]);
 

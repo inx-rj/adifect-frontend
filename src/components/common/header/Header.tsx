@@ -192,7 +192,7 @@ export default function Header(props) {
       dispatch(GET_COMPANY_LIST(paginationData, `${API_URL.COMPANY.ADMIN}`));
     } else {
       dispatch(
-        GET_COMPANY_LIST(paginationData, `${API_URL.COMPANY.COMPANY_LIST}`)
+        GET_COMPANY_LIST(paginationData, `${API_URL.COMPANY.AGENCY_COMPANY_LIST}`)
       );
     }
   }, [paginationData, userProfile.data?.role]);
@@ -783,7 +783,7 @@ export default function Header(props) {
             ref={menuRef}
             onClick={() => setShowDropdown(!showDropdown)}
           >
-            <Link className="LoginName dropdown flex items-center" to="#">
+            <Link className="flex items-center LoginName dropdown" to="#">
               <span className="header-profile-pic max-w-[40px] w-full h-[40px] img img-cover rounded-full overflow-hidden drop-shadow-md border-2 border-white">
                 <img
                   src={
@@ -794,7 +794,7 @@ export default function Header(props) {
                   alt=""
                 />
               </span>
-              <span className="loginName ml-1">
+              <span className="ml-1 loginName">
                 {userProfile?.data?.first_name ?? "Invalid First Name"}{" "}
                 {userProfile?.data?.last_name ?? "Invalid Last Name"}
               </span>
@@ -806,7 +806,7 @@ export default function Header(props) {
                   <li>
                     <Link
                       to="/profile"
-                      className="flex items-center text-dark-400 hover:text-theme py-2"
+                      className="flex items-center py-2 text-dark-400 hover:text-theme"
                     >
                       <Person className="mr-2" />
                       Profile
@@ -817,7 +817,7 @@ export default function Header(props) {
                       <li>
                         <Link
                           to="/invite"
-                          className="flex items-center text-dark-400 hover:text-theme py-2"
+                          className="flex items-center py-2 text-dark-400 hover:text-theme"
                         >
                           <DescriptionOutlined className="mr-2" /> Invite
                         </Link>
@@ -825,7 +825,7 @@ export default function Header(props) {
                     </>
                   )}
                   <li onClick={handleOpenLogoutPopup}>
-                    <div className="flex items-center text-dark-400 hover:text-theme py-2 cursor-pointer">
+                    <div className="flex items-center py-2 cursor-pointer text-dark-400 hover:text-theme">
                       <PowerSettingsNewOutlined className="mr-2" />
                       Logout
                     </div>
@@ -845,7 +845,7 @@ export default function Header(props) {
                   alt="logout"
                 />
                 <div>
-                  <h4 className="mb-3 font-semibold text-lg">Are you Sure?</h4>
+                  <h4 className="mb-3 text-lg font-semibold">Are you Sure?</h4>
                   <p className="max-w-[350px] w-full mx-auto text-base">
                     Do you really want to logout this account? This process
                     cannot be undone.

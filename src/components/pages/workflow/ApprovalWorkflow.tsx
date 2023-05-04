@@ -814,7 +814,7 @@ const ApprovalWorkflow = () => {
 
   useEffect(() => {
     const success = axiosPrivate
-      .get(`${API_URL.COMPANY.COMPANY_LIST}?is_active=1`)
+      .get(`${API_URL.COMPANY.AGENCY_COMPANY_LIST}?is_active=1`)
       .then((res) => {
         const responseDestructredData = { ...res?.data?.data };
         // console.log({ res, responseDestructredData }, 'Res Company');
@@ -844,7 +844,7 @@ const ApprovalWorkflow = () => {
       dispatch(GET_COMPANY_LIST(paginationData, `${API_URL.COMPANY.ADMIN}`));
     } else {
       dispatch(
-        GET_COMPANY_LIST(paginationData, `${API_URL.COMPANY.COMPANY_LIST}`)
+        GET_COMPANY_LIST(paginationData, `${API_URL.COMPANY.AGENCY_COMPANY_LIST}`)
       );
     }
     if (!isNaN(Number(workflowId))) {
@@ -878,7 +878,7 @@ const ApprovalWorkflow = () => {
               </Link>
             </div>
           ) : (
-            <div className="flex justify-between pb-4 items-center">
+            <div className="flex items-center justify-between pb-4">
               <Title title="Create Approval Workflow" />{" "}
               <Link
                 to={WORKFLOW_ROUTE.HOME}
@@ -903,7 +903,7 @@ const ApprovalWorkflow = () => {
               </span>
             </h6>
           )}
-          <div className="page-card p-7 AG-Workflow mt-0">
+          <div className="mt-0 page-card p-7 AG-Workflow">
             <div
               className={
                 errors.workflowName
@@ -1114,8 +1114,8 @@ const ApprovalWorkflow = () => {
                                 // key={index}
                                 className="services servicesworkflow page-card p-7"
                               >
-                                <div className="Stage1 flex justify-between">
-                                  <div className="Stage1_left_Workflow flex gap-2 items-center w-full">
+                                <div className="flex justify-between Stage1">
+                                  <div className="flex items-center w-full gap-2 Stage1_left_Workflow">
                                     <label>
                                       <h2 className="text-2xl font-bold">
                                         Stage {index + 1}
@@ -1223,7 +1223,7 @@ const ApprovalWorkflow = () => {
                                   <h4 className="text-[#1b4ea8] text-lg font-bold mt-5 mb-2.5">
                                     Approvers
                                   </h4>
-                                  <div className="related-jobs-check-box flex items-center gap-2">
+                                  <div className="flex items-center gap-2 related-jobs-check-box">
                                     <input
                                       className="checkbox"
                                       type="checkbox"
@@ -1246,7 +1246,7 @@ const ApprovalWorkflow = () => {
                                       will move to the next stage
                                     </label>
                                   </div>
-                                  <div className="related-jobs-check-box secondAllApprover flex items-center gap-2">
+                                  <div className="flex items-center gap-2 related-jobs-check-box secondAllApprover">
                                     <input
                                       className="checkbox"
                                       type="checkbox"
@@ -1365,7 +1365,7 @@ const ApprovalWorkflow = () => {
                                     )}
                                   </div>
                                   <div className="switch_Agency">
-                                    <div className="Observers flex gap-3">
+                                    <div className="flex gap-3 Observers">
                                       <label className="switch">
                                         <input
                                           disabled={!showbutton}
@@ -1528,7 +1528,7 @@ const ApprovalWorkflow = () => {
                                 </div>
                                 <div
                                   style={{ marginTop: "10px" }}
-                                  className="related-jobs-check-box flex items-center gap-2"
+                                  className="flex items-center gap-2 related-jobs-check-box"
                                 >
                                   <input
                                     className="checkbox"
@@ -1554,7 +1554,7 @@ const ApprovalWorkflow = () => {
                                 {item?.isDeadline && (
                                   <>
                                     <div className="deadlineWorkflow">
-                                      <h5 className="Deadlinetitle mt-5 mb-3 font-semibold text-base">
+                                      <h5 className="mt-5 mb-3 text-base font-semibold Deadlinetitle">
                                         {/* Deadline for approval */}
                                         Deadline for approval - Approver will
                                         have the assigned time below to approve
@@ -1586,7 +1586,7 @@ const ApprovalWorkflow = () => {
                                       </Select>
                                     </div>
                                     <div className="switch_Agency">
-                                      <div className="Observers mt-4 flex gap-3">
+                                      <div className="flex gap-3 mt-4 Observers">
                                         <label className="switch">
                                           <input
                                             disabled={!showbutton}
@@ -1615,7 +1615,7 @@ const ApprovalWorkflow = () => {
                                       <>
                                         <div className="Observersskillssec">
                                           <div className="skills-input-container">
-                                            <h5 className="Deadlinetitle mt-5 mb-3 font-semibold text-base">
+                                            <h5 className="mt-5 mb-3 text-base font-semibold Deadlinetitle">
                                               Nudge Time
                                             </h5>
                                             {item?.nudge_time?.map(
@@ -1809,7 +1809,7 @@ const ApprovalWorkflow = () => {
             </div>
 
             <div className="workflow-heading stage-action-btn-right">
-              <div className="AWokflowButton AWokflowButtonbtn flex gap-4">
+              <div className="flex gap-4 AWokflowButton AWokflowButtonbtn">
                 <button
                   className="btn btn-outline font-semibold text-lg w-[160px] "
                   style={{ cursor: "pointer" }}

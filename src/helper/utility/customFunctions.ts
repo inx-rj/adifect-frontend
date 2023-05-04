@@ -4,13 +4,7 @@ import { intersection } from "lodash";
 
 // SET API URL Query params
 export const setQueryParams = (config: initialTableConfigInterface) => {
-  let queryParams = `?page=${config.page}&page_size=${
-    config.rowsPerPage
-  }&from_date=${config.from_date ?? ""}&to_date=${
-    config.to_date ?? ""
-  }&community=${config.community ?? ""}&status=${config.status ?? ""}&tag=${
-    config.tag ?? ""
-  }&search=${config.search ?? ""}`;
+  let queryParams = `?page=${config.page}&page_size=${config.rowsPerPage}&from_date=${config.from_date ?? ""}&to_date=${config.to_date ?? ""}&community=${config.community ?? ""}&status=${config.status ?? ""}&tag=${config.tag ?? ""}&search=${config.search ?? ""}&job__company=${config.company ?? ""}&ordering=${config.ordering ?? ""}`;
   return queryParams;
 };
 
@@ -48,13 +42,11 @@ export const setNotificationQueryParams = (
   let notifiQueryParams: any;
 
   if (queryParams?.companyId) {
-    notifiQueryParams = `?user=${queryParams?.id ?? 0}&company=${
-      queryParams?.companyId ?? 0
-    }&ordering=-created&offset=${queryParams?.offsetid ?? 0}`;
+    notifiQueryParams = `? user = ${queryParams?.id ?? 0}& company=${queryParams?.companyId ?? 0
+      }& ordering=-created & offset=${queryParams?.offsetid ?? 0} `;
   } else {
-    notifiQueryParams = `?user=${
-      queryParams?.id ?? 0
-    }&ordering=-created&offset=${queryParams?.offsetid ?? 0}`;
+    notifiQueryParams = `? user = ${queryParams?.id ?? 0
+      }& ordering=-created & offset=${queryParams?.offsetid ?? 0} `;
   }
   return notifiQueryParams;
 };
