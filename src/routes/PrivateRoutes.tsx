@@ -3,6 +3,7 @@ import { Link, Navigate, matchPath, useLocation, useMatch, useNavigate } from 'r
 import { getAllowedRoutes, isLoggedIn } from 'helper/utility/customFunctions';
 import { Button } from '@mui/material';
 import { AUTH_ROUTES } from './routes';
+import { SIDEBAR_ROUTES } from './baseRoute';
 
 const NavBar = ({ routes, prefix, className }) => {
 	const navigate = useNavigate();
@@ -33,7 +34,7 @@ const PrivateRoutes = () => {
 	console.log({ match, allowedRoutes }, 'PVT_Logs');
 
 
-	if (isLoggedIn()) allowedRoutes = getAllowedRoutes(AUTH_ROUTES);
+	if (isLoggedIn()) allowedRoutes = getAllowedRoutes(SIDEBAR_ROUTES, [2]);
 	else return <Navigate to="/" />;
 
 	return (

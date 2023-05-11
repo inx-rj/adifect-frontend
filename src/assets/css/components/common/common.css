@@ -1,20 +1,157 @@
-/* Card Css */
+/* Better to follow the sequence of property*/
+/* Ex: @apply <display> <alignments> <position> <h/w/> <bg> <border> <font - size, weight, color, align, ...so on> 
+<p/m/spacing> <shadow> <animation> */
+
+.login-signup-wrapper {
+  @apply flex items-center justify-center min-h-screen p-5 my-0 mx-auto;
+}
+
+/* Image Css  */
+.img img {
+  @apply w-full h-full;
+}
+.img-cover img {
+  @apply object-cover;
+}
+.img-contain img {
+  @apply object-contain;
+}
+
+/* Card general styling class */
 .card {
-    @apply w-full shadow-[0_1px_5px_#0d6efd45] bg-white border rounded p-5;
+  @apply w-full bg-white rounded p-5 drop-shadow;
+}
+
+/* Title header text style for both card and page */
+.card-page-title {
+  @apply text-lg sm:text-2xl font-semibold mb-2 sm:mb-4;
+}
+
+.card-page-info {
+  @apply text-sm sm:text-base font-normal break-words mb-2 sm:mb-5;
+}
+
+/* To add unique(uni) gap between any of 2 element */
+.mt-uni-gap {
+  @apply mt-2 sm:mt-4;
 }
 
 .input-fields-wrapper {
-    @apply h-[100px] w-full;
+  @apply w-full;
+}
+
+.input-fields-wrapper label {
+  @apply block text-base font-medium mb-0.5;
 }
 
 .input-style {
-    @apply h-12 w-full py-px pl-3.5 pr-0.5 border border-[#0000001a] rounded outline-none focus:border-theme;
+  @apply h-12 w-full border border-[#0000001a] rounded outline-none focus:border-theme py-px pl-3.5 pr-0.5;
 }
 
-.error-style {
-    @apply mb-1 text-sm text-danger block text-right
+.styled-select textarea {
+  @apply h-40 py-px pt-2 pl-3.5 pr-0.5 bg-[#f9fbfc];
 }
 
+.input-err-style {
+  @apply border-danger;
+}
+
+.err-tag {
+  @apply block h-5 text-sm text-danger text-right;
+}
+
+/* Custom scrollbar design css */
+.custom-scrollbar::-webkit-scrollbar {
+  @apply w-[5px] h-[5px] bg-slate-200;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  @apply bg-[#9abfff];
+}
+
+.MuiDialog-container .MuiDialog-paper::-webkit-scrollbar {
+  @apply w-[5px] h-[5px] bg-slate-200;
+}
+
+.MuiDialog-container .MuiDialog-paper::-webkit-scrollbar-thumb {
+  @apply bg-[#9abfff];
+}
+
+/** Mui Autocomplete DropDwon Scrollbar */
+.MuiAutocomplete-listbox::-webkit-scrollbar {
+  @apply w-[5px] h-[5px] bg-slate-200;
+}
+
+.MuiAutocomplete-listbox::-webkit-scrollbar {
+  @apply bg-[#9abfff];
+}
+
+/** Mui Table Scrollbar */
+.MuiTableContainer-root::-webkit-scrollbar {
+  @apply w-[5px] h-[5px] bg-slate-200;
+}
+
+.MuiTableContainer-root::-webkit-scrollbar {
+  @apply bg-[#9abfff];
+}
+
+.page-title {
+  @apply text-xl font-semibold;
+}
+
+.dr-picker-input {
+  @apply w-full border border-[#0000003b] rounded hover:border-black focus:border-theme focus-visible:outline-offset-0 focus:outline-0 focus:outline-offset-[unset] focus-visible:outline-0 text-sm placeholder:text-[#0009] py-2.5 pl-4 pr-3 transition-all duration-300;
+}
+
+/* ===================== Need to refactor below classes if possible ===================== */
+.flex-center {
+  @apply flex justify-center items-center;
+}
+
+.flex-between {
+  @apply flex justify-between items-center;
+}
+body .MuiTypography-root {
+  font-family: Figtree, sans-serif;
+}
+
+/* Select Menu */
+/* .MuiMenu-list li {
+  @apply text-base pt-3 px-2.5 pb-3;
+}
+
+ul.MuiMenu-list {
+  @apply py-0;
+} */
 .text-danger .input-style {
-    @apply border-danger
+  @apply border-danger;
+}
+
+.tableHead {
+  @apply flex items-center;
+}
+
+.tableHead img {
+  @apply ml-1;
+}
+
+/* modal */
+.modalTitle {
+  @apply font-figtree flex justify-between items-center font-medium text-xl leading-6 text-black border border-[#71757b4d];
+}
+
+/* Select input mui */
+.styled-select {
+  @apply w-full pt-1;
+}
+
+.styled-select .MuiInputBase-root {
+  @apply bg-[#f9fbfc] h-12 w-full rounded text-[#71757B];
+}
+
+.styled-select .MuiInputBase-root fieldset {
+  @apply border-[#71757b4d];
+}
+
+.error-style .styled-select .MuiInputBase-root fieldset {
+  @apply border-danger -top-[11px];
 }

@@ -1,3 +1,14 @@
-/* All CSS will import above this  */
+@import "./loadingSpinner/loader.css";
+@import "./common/rightSidepages.css";
 @import "./common/common.css";
+/* All CSS will import below this  */
+
+@import "./sidebar/sidebar.css";
 @import "./button/button.css";
+@import "./header/header.css";
+@import "./badge/badge.css";
+@import "./sweetAlert/sweetAlert.css";
+
+@import "./tabbing/tabbing.css";
+@import "./jobs/applyJob.css";
+@import "./workflow/workflow.css";

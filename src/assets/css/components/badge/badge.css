@@ -1,0 +1,15 @@
+.badge {
+  @apply px-4 text-xs py-1 rounded min-w-[80px] inline-flex justify-center;
+}
+
+.badge.badge-progress {
+  @apply border rounded-2xl border-none text-[#C315FF]/80 bg-[#C315FF]/10;
+}
+
+.badge.badge-primary {
+  @apply border rounded-2xl border-none text-[#2472FC]/80 bg-[#2472FC]/10;
+}
+
+.badge.badge-review {
+  @apply border rounded-2xl border-none text-[#D99836]/80 bg-[#D99836]/10;
+}

@@ -1,0 +1,37 @@
+.swal-modal .swal-icon,
+.swal-modal .swal-icon.swal-icon--custom {
+  @apply w-full max-w-[150px];
+}
+.swal-modal .swal-button,
+.swal-modal .swal-button:not([disabled]):hover {
+  @apply bg-theme;
+}
+
+.errorAlert .swal-title,
+.errorAlert-login .swal-title {
+  @apply text-[#d14f4f] tracking-[0.5px];
+}
+
+.successAlert .swal-title,
+.successAlert-login .swal-title {
+  @apply text-[#59cf65] tracking-[0.5px];
+}
+
+.swal-modal.errorAlert .swal-footer {
+  @apply text-center;
+}
+.swal-modal.errorAlert .swal-footer .swal-button.swal-button--Cancel {
+  @apply text-[#555] bg-[#efefef] disabled:bg-dark-100 disabled:text-title-color hover:bg-[#efefef];
+}
+.swal-modal.errorAlert .swal-footer .swal-button.swal-button--OK {
+  @apply bg-[#e64942];
+}
+.swal-title {
+  @apply text-xl pt-0;
+}
+.swal-modal {
+  @apply max-w-[350px] min-h-[210px] w-full bg-white rounded;
+}
+.swal-text {
+  @apply text-center;
+}

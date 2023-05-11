@@ -1,0 +1,15 @@
+.loading-spinner {
+  @apply rounded-[50%] animate-spin;
+}
+
+.spinner-container {
+  @apply absolute w-[65px] h-[65px];
+}
+
+img.loader-svg {
+  @apply w-[65px];
+}
+
+.spinner-container-bg {
+  @apply absolute bg-[#f1f7ff] z-[1000] inset-0 flex justify-center items-center;
+}
