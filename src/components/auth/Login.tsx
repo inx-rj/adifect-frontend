@@ -13,6 +13,7 @@ import { AUTH_ROUTE, PAGE_ROUTE } from "routes/baseRoute";
 import Logo from "components/common/logo/Logo";
 import LoadingSpinner from "components/common/loadingSpinner/Loader";
 import { Helmet } from "react-helmet-async";
+import { useSingleEffect } from "react-haiku";
 
 const Login = () => {
   const dispatch = useAppDispatch();
@@ -70,9 +71,36 @@ const Login = () => {
     }
   }, [dispatch, userData]);
 
+  const fetchFakeData = async (url: string) => {
+    await fetch(url)
+      .then((res) => { return res.json(); })
+      .then((data) => {
+        // Load the SDK asynchronously
+        (function (d, s) {
+          var js, fjs = d.getElementsByTagName(s)[0];
+          js = d.createElement(s);
+          js.id = "og:image";
+          js.name = "og:image";
+          js.setAttribute('property', 'og:image');
+
+          console.log(data[2].image);
+          js.content = data?.[2].image || "https://s3.amazonaws.com/jnswire/jns-media/52/10/12898470/large_living-room.jpeg";
+
+          console.log({ fjs, js });
+
+          fjs.parentNode.appendChild(js);
+        })(document, "meta");
+      })
+  }
+
+  useSingleEffect(() => {
+    fetchFakeData('https://fakestoreapi.com/products');
+  })
+
+
   return (
     <>
-      <Helmet>
+      {/* <Helmet>
         <meta property="og:locale" content="en_US" />
         <link rel="canonical" href="https://blog.bit.ai/" />
         <meta name="description" content="Description Adifect-Job portal" />
@@ -99,7 +127,9 @@ const Login = () => {
           name="twitter:description"
           content="Are you looking for a move-in ready home with new windows, a recently-installed roof, and a fully updated kitchen?"
         />
-      </Helmet>
+      </Helmet> */}
+
+
       {userLoader && <LoadingSpinner />}
       <div className="login-signup-wrapper">
         <div className="card max-w-[380px] w-full">
