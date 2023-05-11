@@ -48,11 +48,6 @@ const AgencyCompanyProjectsDetails = () => {
                   <meta property="og:locale" content="en_US" />
                   <link rel="canonical" href={window.location.origin} />
                   <meta name="description" content={item?.lede} />
-                  {/* <meta property="og:title" content="Adifect Frontend title" />
-        <meta
-          property="og:description"
-          content="Description Adifect-Job portal"
-        /> */}
                   <meta property="og:type" content="website" />
                   <meta property="og:site_name" content="Job Portal" />
                   <meta property="og:url" content={window.location.href} />
