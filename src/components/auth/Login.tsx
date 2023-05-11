@@ -12,6 +12,7 @@ import swal from "sweetalert";
 import { AUTH_ROUTE, PAGE_ROUTE } from "routes/baseRoute";
 import Logo from "components/common/logo/Logo";
 import LoadingSpinner from "components/common/loadingSpinner/Loader";
+import { Helmet } from "react-helmet-async";
 
 const Login = () => {
   const dispatch = useAppDispatch();
@@ -71,6 +72,34 @@ const Login = () => {
 
   return (
     <>
+      <Helmet>
+        <meta property="og:locale" content="en_US" />
+        <link rel="canonical" href="https://blog.bit.ai/" />
+        <meta name="description" content="Description Adifect-Job portal" />
+        <meta property="og:title" content="Adifect Frontend title" />
+        <meta
+          property="og:description"
+          content="Are you looking for a move-in ready home with new windows, a recently-installed roof, and a fully updated kitchen?"
+        />
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="Job Portal" />
+        <meta
+          property="og:url"
+          content="https://adifect-frontend.vercel.app/company-projects/507598"
+        />
+        <meta
+          property="og:image"
+          content="https://s3.amazonaws.com/jnswire/jns-media/52/10/12898470/large_living-room.jpeg"
+        />
+
+        <meta name="twitter:creator" content="Adifect Frontend team" />
+        <meta name="twitter:card" content="Card Title" />
+        <meta name="twitter:title" content="Adifect Frontend title" />
+        <meta
+          name="twitter:description"
+          content="Are you looking for a move-in ready home with new windows, a recently-installed roof, and a fully updated kitchen?"
+        />
+      </Helmet>
       {userLoader && <LoadingSpinner />}
       <div className="login-signup-wrapper">
         <div className="card max-w-[380px] w-full">
