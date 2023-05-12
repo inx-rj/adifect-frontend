@@ -72,12 +72,14 @@ const Login = () => {
   }, [dispatch, userData]);
 
   const fetchFakeData = async (url: string) => {
-    
+
     (function (d, s) {
       var js, fjs = d.getElementsByTagName(s)[0];
       js = d.createElement(s);
       js.setAttribute('property', 'og:url');
-      js.content = "https://fakestoreapi.com/products ";
+      js.setAttribute('name', 'og:url');
+      js.name = 'og:url';
+      js.content = "https://fakestoreapi.com/products";
       console.log({ fjs, js });
       fjs.parentNode.appendChild(js);
     })(document, "meta");
@@ -90,7 +92,7 @@ const Login = () => {
           var js, fjs = d.getElementsByTagName(s)[0];
           js = d.createElement(s);
           // js.id = "og:image";
-          // js.name = "og:image";
+          js.name = "og:image";
           js.setAttribute('property', 'og:image');
 
           console.log(data[2].image);
@@ -100,10 +102,11 @@ const Login = () => {
 
           fjs.parentNode.prepend(js);
         })(document, "meta");
-        
+
         (function (d, s) {
           var js, fjs = d.getElementsByTagName(s)[0];
           js = d.createElement(s);
+          js.name = 'og:image:secure_url';
           js.setAttribute('property', 'og:image:secure_url');
 
           console.log(data[2].image);
@@ -119,7 +122,6 @@ const Login = () => {
   useSingleEffect(() => {
     fetchFakeData('https://fakestoreapi.com/products');
   })
-
 
   return (
     <>
