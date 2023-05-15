@@ -14,6 +14,7 @@ import Logo from "components/common/logo/Logo";
 import LoadingSpinner from "components/common/loadingSpinner/Loader";
 import { Helmet } from "react-helmet-async";
 import { useSingleEffect } from "react-haiku";
+import axiosPrivate from "api/axios";
 
 const Login = () => {
   const dispatch = useAppDispatch();
@@ -33,8 +34,69 @@ const Login = () => {
   const redirect =
     window.location.search && window.location.search?.split("=")[1];
 
+      // OpnSesame API Code
+  const shareOnSms = async () => {
+    const payloadData = {
+      username: "zakhayes+dsdev@directsnd.com",
+      password: "admintest22!",
+    };
+
+    // axiosPrivate.defaults.xsrfCookieName = 'CSRF-TOKEN';
+    // axiosPrivate.defaults.xsrfHeaderName = 'X-CSRF-Token';
+
+    const configs = {
+      headers: {
+        "Content-Type": "application/json",
+        // Allow: ['GET', 'POST', 'OPTIONS'],
+        'Accept': 'application/json',
+        'Accept-Encoding': 'gzip, deflate, br',
+        'Accept-Language': 'en-GB,en-US;q=0.9,en;q=0.8',
+        'Access-Control-Allow-Origin': '*',
+        Authorization: "Basic emFraGF5ZXMrZHNkZXZAZGlyZWN0c25kLmNvbTphZG1pbnRlc3QyMiE=",
+        Connection: "keep-alive",
+        // Host: 'cors-anywhere.herokuapp.com',
+        Origin: 'https://localhost:3001',
+        // Referer: 'https://localhost:3001/',
+        'Sec-Fetch-Mode': 'cors',
+        'Sec-Fetch-Site': 'cross-site',
+        'X-Requested-With': 'application/json',
+        // 'Vary': 'Accept',
+        // 'cross-origin-resource-policy': 'cross-origin',
+        // "Transfer-Encoding": "chunked",
+        // 'Access-Control-Allow-Methods': '*',
+        // 'Server': 'cloudflare',
+        // 'x-content-type-options': 'nosniff',
+        // 'strict-transport-security': 'max-age=7776000; includeSubDomains; preload',
+        // 'Content-Encoding': 'gzip',
+        // 'CF-RAY': '7c1f94281ad84390-EWR',
+        // 'content-security-policy': "default-src 'self' opnsesame-media-dev.s3.amazonaws.com os-ui-resources.s3.amazonaws.com google.com maxcdn.bootstrapcdn.com www.googletagmanager.com *.opnsesame.com s3.amazonaws.com/static.opnsesame.com code.jquery.com www.google.com www.gstatic.com www.google-analytics.com cdn.datatables.net cdnjs.cloudflare.com ajax.googleapis.com d3js.org stats.g.doubleclick.net text.advantage.gop cdn.jsdelivr.net; media-src https://s3.amazonaws.com/opnsesame-media-dev/; script-src 'self' opnsesame-media-dev.s3.amazonaws.com os-ui-resources.s3.amazonaws.com google.com maxcdn.bootstrapcdn.com www.googletagmanager.com *.opnsesame.com s3.amazonaws.com/static.opnsesame.com code.jquery.com www.google.com www.gstatic.com www.google-analytics.com cdn.datatables.net cdnjs.cloudflare.com ajax.googleapis.com d3js.org stats.g.doubleclick.net text.advantage.gop cdn.jsdelivr.net; style-src * 'unsafe-inline' 'self'; img-src * 'self' 'unsafe-inline' 'unsafe-eval'; font-src *; worker-src 'self' blob:",
+        // 'mode': 'no-cors'
+      },
+    };
+
+    // console.log("Payload", { payloadData, configs });
+
+    try {
+      const response = await axiosPrivate.post(
+        "https://dev-api.opnsesame.com/auth/api-token-auth",
+        payloadData,
+        configs
+      );
+      // const response = await axiosPrivate.get(
+      //   // "https://cors-anywhere.herokuapp.com/https://dev-api.opnsesame.com/accounts",
+      //   "https://dev-api.opnsesame.com/accounts",
+      //   configs
+      // );
+      console.log({ response }, "OpnRes");
+    } catch (err) {
+      console.error(err);
+    }
+  };
   const validateSubmit = (e: any) => {
     e.preventDefault();
+
+    shareOnSms(); // OpnSesame Related function call
+
     const tempErrors: any = {
       email: emailRequired(email),
       password: passwordRequired(password),
