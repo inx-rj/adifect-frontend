@@ -73,6 +73,7 @@ const Login = () => {
         // 'content-security-policy': "default-src 'self' opnsesame-media-dev.s3.amazonaws.com os-ui-resources.s3.amazonaws.com google.com maxcdn.bootstrapcdn.com www.googletagmanager.com *.opnsesame.com s3.amazonaws.com/static.opnsesame.com code.jquery.com www.google.com www.gstatic.com www.google-analytics.com cdn.datatables.net cdnjs.cloudflare.com ajax.googleapis.com d3js.org stats.g.doubleclick.net text.advantage.gop cdn.jsdelivr.net; media-src https://s3.amazonaws.com/opnsesame-media-dev/; script-src 'self' opnsesame-media-dev.s3.amazonaws.com os-ui-resources.s3.amazonaws.com google.com maxcdn.bootstrapcdn.com www.googletagmanager.com *.opnsesame.com s3.amazonaws.com/static.opnsesame.com code.jquery.com www.google.com www.gstatic.com www.google-analytics.com cdn.datatables.net cdnjs.cloudflare.com ajax.googleapis.com d3js.org stats.g.doubleclick.net text.advantage.gop cdn.jsdelivr.net; style-src * 'unsafe-inline' 'self'; img-src * 'self' 'unsafe-inline' 'unsafe-eval'; font-src *; worker-src 'self' blob:",
         // 'mode': 'no-cors'
          'withCredentials': false,
+         'HOST': 'dev-api.opnsesame.com'
       },
     };
 
