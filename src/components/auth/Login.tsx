@@ -45,6 +45,7 @@ const Login = () => {
     // axiosPrivate.defaults.xsrfHeaderName = 'X-CSRF-Token';
 
     const configs = {
+      withCredentials: false,
       headers: {
         "Content-Type": "application/json",
         // Allow: ['GET', 'POST', 'OPTIONS'],
@@ -52,7 +53,7 @@ const Login = () => {
         // 'Accept-Encoding': 'gzip, deflate, br',
         // 'Accept-Language': 'en-GB,en-US;q=0.9,en;q=0.8',
         'Access-Control-Allow-Origin': '*',
-        Authorization: "Basic emFraGF5ZXMrZHNkZXZAZGlyZWN0c25kLmNvbTphZG1pbnRlc3QyMiE=",
+        // Authorization: "Basic emFraGF5ZXMrZHNkZXZAZGlyZWN0c25kLmNvbTphZG1pbnRlc3QyMiE=",
         // Connection: "keep-alive",
         // Host: 'cors-anywhere.herokuapp.com',
         // Origin: 'https://localhost:3001',
@@ -63,7 +64,7 @@ const Login = () => {
         // 'Vary': 'Accept',
         // 'cross-origin-resource-policy': 'cross-origin',
         // "Transfer-Encoding": "chunked",
-        // 'Access-Control-Allow-Methods': '*',
+        'Access-Control-Allow-Methods': '*',
         // 'Server': 'cloudflare',
         // 'x-content-type-options': 'nosniff',
         // 'strict-transport-security': 'max-age=7776000; includeSubDomains; preload',
@@ -71,6 +72,7 @@ const Login = () => {
         // 'CF-RAY': '7c1f94281ad84390-EWR',
         // 'content-security-policy': "default-src 'self' opnsesame-media-dev.s3.amazonaws.com os-ui-resources.s3.amazonaws.com google.com maxcdn.bootstrapcdn.com www.googletagmanager.com *.opnsesame.com s3.amazonaws.com/static.opnsesame.com code.jquery.com www.google.com www.gstatic.com www.google-analytics.com cdn.datatables.net cdnjs.cloudflare.com ajax.googleapis.com d3js.org stats.g.doubleclick.net text.advantage.gop cdn.jsdelivr.net; media-src https://s3.amazonaws.com/opnsesame-media-dev/; script-src 'self' opnsesame-media-dev.s3.amazonaws.com os-ui-resources.s3.amazonaws.com google.com maxcdn.bootstrapcdn.com www.googletagmanager.com *.opnsesame.com s3.amazonaws.com/static.opnsesame.com code.jquery.com www.google.com www.gstatic.com www.google-analytics.com cdn.datatables.net cdnjs.cloudflare.com ajax.googleapis.com d3js.org stats.g.doubleclick.net text.advantage.gop cdn.jsdelivr.net; style-src * 'unsafe-inline' 'self'; img-src * 'self' 'unsafe-inline' 'unsafe-eval'; font-src *; worker-src 'self' blob:",
         // 'mode': 'no-cors'
+         'withCredentials': false,
       },
     };
 
