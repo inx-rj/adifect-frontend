@@ -43,7 +43,7 @@ const AgencyCompanyProjectsDetails = () => {
                 sx={{ width: "100%", py: 2, pl: 2, pr: 3.125 }}
                 key={item.id}
               >
-                <Helmet>
+                {/* <Helmet>
                   <title>{item?.title}</title>
                   <meta property="og:locale" content="en_US" />
                   <link rel="canonical" href={window.location.origin} />
@@ -56,7 +56,7 @@ const AgencyCompanyProjectsDetails = () => {
                     property="og:image:secure_url"
                     content={item?.image[0]}
                   />
-                </Helmet>
+                </Helmet> */}
                 <Grid container>
                   <Grid xs={8} p={2} pr={6}>
                     <Typography variant="h4">{item.title}</Typography>
