@@ -79,12 +79,17 @@ app.get('/*', async (req, res, next) => {
         // res.status(500).send('Something went wrong');
     }
 });
-// listening...
-app.listen(PORT, (error) => {
-    if (error) {
-        return console.log('Error during app startup', error);
-    }
-    console.log("listening on " + PORT + "...");
+// // listening...
+// app.listen(PORT, (error) => {
+//     if (error) {
+//         return console.log('Error during app startup', error);
+//     }
+//     console.log("listening on " + PORT + "...");
+// });
+// Error handling middleware
+app.use((err, req, res, next) => {
+    console.error(err);
+    res.status(500).send('Internal Server Error');
 });
 
 module.exports = app;
