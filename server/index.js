@@ -36,11 +36,7 @@ app.get('/*', async (req, res, next) => {
                         console.error('Error during file reading', err);
                         return res.status(404).end();
                     }
-                    // get post info
-                    // const postId = req.query.id;
-                    // const post = getPostById(postId);
-                    // console.log({ reqQuery: req.query, res, err, htmlData, postId, post })
-
+                    
                     if (!data) return res.status(404).send("Post not found");
 
                     // inject meta tags
