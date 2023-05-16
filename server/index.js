@@ -4,7 +4,7 @@ const fs = require("fs");
 const { getPostById } = require('./stub/posts');
 const app = express();
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 const indexPath = path.resolve(__dirname, '..', 'build', 'index.html');
 
 // console.log({ __dirname, path, indexPath }, '__dirname');
@@ -36,7 +36,7 @@ app.get('/*', async (req, res, next) => {
                         console.error('Error during file reading', err);
                         return res.status(404).end();
                     }
-                    
+
                     if (!data) return res.status(404).send("Post not found");
 
                     // inject meta tags
@@ -86,3 +86,5 @@ app.listen(PORT, (error) => {
     }
     console.log("listening on " + PORT + "...");
 });
+
+module.exports = app;
