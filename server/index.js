@@ -4,16 +4,17 @@ const fs = require("fs");
 const { getPostById } = require('./stub/posts');
 const app = express();
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 const indexPath = path.resolve(__dirname, '..', 'build', 'index.html');
 
-// console.log({ __dirname, path, indexPath }, '__dirname');
+// console.log({ __dirname, path, indexPath, PORT }, '__dirname');
 
 // static resources should just be served as they are
 app.use(express.static(
     path.resolve(__dirname, '..', 'build'),
     { maxAge: '30d' },
 ));
+
 // here we serve the index.html page
 app.get('/*', async (req, res, next) => {
 
@@ -73,6 +74,7 @@ app.get('/*', async (req, res, next) => {
                 return res.send(htmlData);
             });
         }
+
     } catch (error) {
         console.error('Error:', error);
         // res.status(500).send('Something went wrong');

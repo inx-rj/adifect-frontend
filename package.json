@@ -3,8 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "main": "index.tsx",
+  "homepage": "https://adifect-frontend.vercel.app",
   "scripts": {
-    "start": "react-scripts start",
+    "start": "react-scripts start port=3000",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
