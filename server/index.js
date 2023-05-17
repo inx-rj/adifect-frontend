@@ -4,7 +4,7 @@ const fs = require("fs");
 const { getPostById } = require('./stub/posts');
 const app = express();
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3000;
 const indexPath = path.resolve(__dirname, '..', 'build', 'index.html');
 
 // console.log({ __dirname, path, indexPath }, '__dirname');
@@ -73,23 +73,19 @@ app.get('/*', async (req, res, next) => {
                 return res.send(htmlData);
             });
         }
-
     } catch (error) {
         console.error('Error:', error);
         // res.status(500).send('Something went wrong');
     }
 });
-// // listening...
-// app.listen(PORT, (error) => {
-//     if (error) {
-//         return console.log('Error during app startup', error);
-//     }
-//     console.log("listening on " + PORT + "...");
-// });
+
 // Error handling middleware
 app.use((err, req, res, next) => {
     console.error(err);
     res.status(500).send('Internal Server Error');
 });
+
+// listening...
+app.listen(PORT, (error) => console.log("listening on " + PORT + "..."));
 
 module.exports = app;
