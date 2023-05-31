@@ -80,7 +80,7 @@ const ForgotPassword = () => {
               <div className="login-content">
                 <div className="ForgotPgae">
                   <div className="logo-content">
-                    <img src="img/logonew.svg" className="login-logo" alt="" />
+                    <img src={Images.Logo} className="login-logo" alt="" />
                   </div>
                   <form className="forgotpass mb-5">
                     <div

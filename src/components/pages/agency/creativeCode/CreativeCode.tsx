@@ -123,7 +123,7 @@ export default function CreativeCode() {
       title: "Warning",
       text: `Are you sure you want to remove this ${item?.title}?`,
       className: "errorAlert",
-      icon: "/img/logonew-red.svg",
+      icon: Images.ErrorLogo,
       buttons: {
         Cancel: true,
         OK: true,

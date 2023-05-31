@@ -1,6 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "redux/rootReducer";
-import { CompanyListInitialsType } from "helper/types/companyTab/companiesType";
 
 const initialState = {
   loading: false,

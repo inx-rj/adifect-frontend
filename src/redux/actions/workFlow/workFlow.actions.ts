@@ -1,7 +1,7 @@
 import WorkFlowTabApiClient from "../../../services/workFlow/workFlowApiClient";
 import swal from "sweetalert";
 import { AppDispatch } from "../../store";
-import { initialTableConfigInterface } from "helper/types/common/table";
+import { initialTableConfigInterface } from "helper/types/common/tableType";
 import { singleCompanyPayloadData } from "helper/types/companyTab/companiesType";
 import { Images } from "helper/images";
 import { API_URL } from "helper/env";
@@ -231,7 +231,10 @@ const DELETE_SINGLE_WORKFLOW =
           title: "Error",
           text: errMsg,
           className: "errorAlert-login",
-          icon: Images.Logo,
+          icon: Images.ErrorLogo,
+          buttons: {
+            OK: false,
+          },
           timer: 5000,
         });
       });

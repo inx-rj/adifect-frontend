@@ -19,6 +19,10 @@ export interface CompaniesInitialsType extends LoadingType {
       status: IdNameObjectType[];
     };
   };
+  storyDetailsList: {
+    loading: boolean;
+    data: TableRowsType;
+  };
 }
 export interface IdNameObjectType {
   [key: string]: any;

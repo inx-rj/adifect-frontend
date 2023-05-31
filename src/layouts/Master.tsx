@@ -5,6 +5,7 @@ import { Navigate, Outlet } from "react-router-dom";
 import { SET_USER_PROFILE_DATA } from "redux/reducers/auth/auth.slice";
 import { IS_PERSISTED } from "redux/reducers/config/app/app.slice";
 import { useAppDispatch, useAppSelector } from "redux/store";
+import { AUTH_ROUTE } from "routes/baseRoute";
 
 const Master = () => {
   //Hooks
@@ -13,6 +14,8 @@ const Master = () => {
 
   // Redux states
   const isPersist = useAppSelector(IS_PERSISTED);
+
+  console.log({ isPersist }, 'InMaster');
 
   // To retrive user profile data on refresh
   useSingleEffect(() => {
@@ -30,7 +33,7 @@ const Master = () => {
       <Outlet />
     </div>
   ) : (
-    <Navigate to={"/login"} />
+    <Navigate to={AUTH_ROUTE.LOGIN} />
   );
 };
 

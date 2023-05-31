@@ -7,14 +7,12 @@ interface DropdownWithSearchPropsType {
   filterList: filterUIOptionsListType;
   handleChange: (filedName: string, value: any) => void;
   currentValue?: number;
-  shrinkLabel?: boolean;
 }
 
 const DropdownWithSearch = ({
   filterList,
   handleChange,
   currentValue,
-  shrinkLabel = true,
 }: DropdownWithSearchPropsType) => {
   const [selectedOption, setSelectedOption] = useState<{
     label: string;
@@ -57,7 +55,7 @@ const DropdownWithSearch = ({
         sx={{
           "&.MuiAutocomplete-root": {
             "& .Mui-focused .MuiOutlinedInput-notchedOutline": {
-              borderWidth: "1px",
+              borderWidth: '1px'
             },
             "& .MuiAutocomplete-endAdornment": {
               "& .MuiAutocomplete-clearIndicator": {
@@ -97,8 +95,7 @@ const DropdownWithSearch = ({
           return (
             <TextField
               {...params}
-              label={!selectedOption ? filterList?.label : ""}
-              InputLabelProps={{ shrink: shrinkLabel }}
+              label={filterList?.label}
               value={selectedOption ? selectedOption : searchText}
               onChange={(event) => setSearchText(event.target.value)}
               variant="outlined"

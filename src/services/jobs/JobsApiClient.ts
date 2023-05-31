@@ -19,6 +19,14 @@ class JobsApiClient {
       },
     });
 
+  //update job
+  updateJob = (id, formData) =>
+    axiosPrivate.put(`${API_URL.HOMEPAGE.JOBS_LIST}${id}/`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+
   //delete job
   deleteJob = (id) =>
     axiosPrivate.delete(`${API_URL.HOMEPAGE.JOBS_LIST}${id}/`);

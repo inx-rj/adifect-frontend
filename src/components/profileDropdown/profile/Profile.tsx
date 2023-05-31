@@ -1,9 +1,7 @@
-import { lazy, Suspense, useEffect, useMemo } from "react";
+import { lazy, Suspense, useMemo } from "react";
 import { useUpdateEffect } from "react-haiku";
 
 import { useAppDispatch, useAppSelector } from "redux/store";
-import { USER_SKILL_SET_LIST } from "redux/reducers/skills/skills.slice";
-import { GET_USER_SKILL_SET_LIST } from "redux/actions/skills/skills.action";
 import { TAB_NAVIGATION_CONFIG } from "redux/reducers/config/tabbing/tabbing.slice";
 import { GET_USER_PROFILE_DATA } from "redux/reducers/auth/auth.slice";
 import { TRIGGER_NAVIGATION_TAB_CONFIG } from "redux/actions/config/tabbing/tabbing.actions";
@@ -13,6 +11,8 @@ import { ProfilePageAccess } from "helper/config/config";
 import { profileTabHeaders, profileTabTitle } from "helper/config/tabbing";
 
 import TabbingLayout from "layouts/TabbingLayout";
+import UserAccount from "./UserAccount";
+
 const CompaniesTab = lazy(
   () => import("components/profileDropdown/profile/CompaniesTab")
 );
@@ -28,15 +28,9 @@ const Profile = () => {
 
   const activeUserTab = useAppSelector(TAB_NAVIGATION_CONFIG);
   const userProfile = useAppSelector(GET_USER_PROFILE_DATA);
-  const userskillsetDetails = useAppSelector(USER_SKILL_SET_LIST);
-
-  useUpdateEffect(() => {
-    if (userProfile?.data?.id)
-      dispatch(GET_USER_SKILL_SET_LIST(userProfile?.data?.id));
-  }, [userProfile?.data?.id]);
 
   //set initial active tab
-  useEffect(() => {
+  useUpdateEffect(() => {
     if (userProfile.data?.role >= 0) {
       const initialActiveTab = profileTabHeaders?.find((item) =>
         item?.permission.includes(userProfile.data?.role)
@@ -99,13 +93,13 @@ const Profile = () => {
               item?.name === activeUserTab?.user_profile?.active &&
               item?.permission.includes(userProfile?.data?.role)
           )
-          ?.map((item) => {
+          ?.map((item, index) => {
             if (
               activeUserTab?.user_profile?.active ===
               profileTabTitle.COMMUNICATION
             ) {
               return (
-                <Suspense fallback="">
+                <Suspense fallback="" key={index}>
                   <UserCommunication />
                 </Suspense>
               );
@@ -114,7 +108,7 @@ const Profile = () => {
               activeUserTab?.user_profile?.active === profileTabTitle.COMPANIES
             ) {
               return (
-                <Suspense fallback="">
+                <Suspense fallback="" key={index}>
                   <CompaniesTab />
                 </Suspense>
               );
@@ -124,19 +118,16 @@ const Profile = () => {
               profileTabTitle.ACCOUNT_SETTINGS
             ) {
               return (
-                <Suspense fallback="">
-                  <p>Account</p>
+                <Suspense fallback="" key={index}>
+                  <UserAccount />
                 </Suspense>
               );
             }
             return (
-              <Suspense fallback="">
+              <Suspense fallback="" key={index}>
                 <UserAbout
-                  subTitle={userProfile?.data?.sub_title}
-                  profileDescription={userProfile?.data?.profile_description}
+                  userProfile={userProfile?.data}
                   iconList={iconList}
-                  skillSet={userskillsetDetails?.data?.results}
-                  portfolioUsers={userProfile?.data?.Portfolio_user}
                 />
               </Suspense>
             );

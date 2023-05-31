@@ -5,6 +5,7 @@ import { communitySettingsSlice } from "./communitySettings.slice";
 import { copyCodeSlice } from "./copyCode.slice";
 import { creativeCodeSlice } from "./creativeCode.slice";
 import { programsSlice } from "./programs.slice";
+import { audienceSlice } from "./audience.slice";
 
 export const companiesReducer = combineReducers({
   companyProjects: companiesSlice.reducer,
@@ -13,4 +14,5 @@ export const companiesReducer = combineReducers({
   copyCode: copyCodeSlice.reducer,
   creativeCode: creativeCodeSlice.reducer,
   programs: programsSlice.reducer,
+  audience: audienceSlice.reducer,
 });

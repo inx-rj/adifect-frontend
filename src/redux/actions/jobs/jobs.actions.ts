@@ -1,19 +1,18 @@
-import { message } from "./../../../helper/validations/index";
 import { AppDispatch } from "redux/store";
-import { initialTableConfigInterface } from "helper/types/common/table";
+import { initialTableConfigInterface } from "helper/types/common/tableType";
 
 import HomePageApiClient from "services/homePage/HomePageApiClient";
 import {
   SET_JOBS_DATA,
   SET_JOBS_DETAILS,
   SET_JOBS_SUCCESS_MESSAGE,
-} from "redux/reducers/homePage/jobsList.slice";
-import { SET_IN_REVIEW_JOBS_DATA } from "redux/reducers/homePage/inReviewJobsList.slice";
-import { SET_FRESHERS_JOBS_DATA } from "redux/reducers/homePage/fresherJobsList.slice";
-import { SET_MEMBERS_APPROVAL_JOBS_DATA } from "redux/reducers/homePage/membersApprovalJobsList.slice";
-import { SET_MEMBERS_ADMIN_JOBS_DATA } from "redux/reducers/homePage/membersJobListInReview.slice";
+} from "redux/reducers/jobs/jobsList.slice";
+import { SET_IN_REVIEW_JOBS_DATA } from "redux/reducers/jobs/inReviewJobsList.slice";
+import { SET_FRESHERS_JOBS_DATA } from "redux/reducers/jobs/fresherJobsList.slice";
+import { SET_MEMBERS_APPROVAL_JOBS_DATA } from "redux/reducers/jobs/membersApprovalJobsList.slice";
+import { SET_MEMBERS_ADMIN_JOBS_DATA } from "redux/reducers/jobs/membersJobListInReview.slice";
 import JobsApiClient from "services/jobs/JobsApiClient";
-import { SET_CREATOR_JOBS_DATA } from "redux/reducers/homePage/creatorJobsList.slice";
+import { SET_CREATOR_JOBS_DATA } from "redux/reducers/jobs/creatorJobsList.slice";
 import swal from "sweetalert";
 import { Images } from "helper/images";
 
@@ -120,10 +119,10 @@ const CREATE_JOB = (formData) => async (dispatch: AppDispatch) => {
 const LIST_ALL_JOBS = (formData) => async (dispatch: AppDispatch) => {
   console.log("formData", formData);
 
-  let page = formData.get("currentPage");
-  let companyId = formData.get("headerCompany");
+  // let page = formData.get("currentPage");
+  // let companyId = formData.get("headerCompany");
   let filter = formData.get("filter");
-  let search = formData.get("search");
+  // let search = formData.get("search");
 
   if (filter === "In Progress") {
     filter = `progress=True`;
@@ -136,6 +135,11 @@ const LIST_ALL_JOBS = (formData) => async (dispatch: AppDispatch) => {
   }
 
   await JobsApiClient.fetchAllJobsList(formData);
+};
+
+// Update Job based on id
+const UPDATE_JOB = (id, formData) => async (dispatch: AppDispatch) => {
+  await JobsApiClient.updateJob(id, formData);
 };
 
 //Delete Job based on id
@@ -186,5 +190,6 @@ export {
   APPLY_FOR_JOB,
   LIST_ALL_JOBS,
   DELETE_JOB,
+  UPDATE_JOB,
   CREATE_JOB,
 };

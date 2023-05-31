@@ -1,6 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "redux/rootReducer";
-import { WorkFlowInitialsType } from "helper/types/workFlow/workFlowTypes";
 
 const initialState = {
   loading: false,
@@ -13,6 +12,7 @@ const initialState = {
       results: [],
     },
   },
+  success: null,
 };
 
 export const inHouseUserSlice = createSlice({
@@ -41,6 +41,13 @@ export const inHouseUserSlice = createSlice({
         },
       };
     },
+
+    SET_IN_HOUSE_USER_SUCCESS_MESSAGE: (state, action) => {
+      return {
+        ...state,
+        success: action.payload,
+      };
+    },
   },
 });
 
@@ -48,6 +55,10 @@ export const {
   SET_IN_HOUSE_USER_LOADING,
   SET_IN_HOUSE_USER_LIST_LOADING,
   SET_IN_HOUSE_USER_LIST_DATA,
+  SET_IN_HOUSE_USER_SUCCESS_MESSAGE,
 } = inHouseUserSlice.actions;
 
 export const IN_HOUSE_USER_LIST = (state: RootState) => state.inHouseUser;
+
+export const IN_HOUSE_USER_SUCCESS = (state: RootState) =>
+  state.inHouseUser.success;

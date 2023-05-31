@@ -4,11 +4,15 @@ import {
   AUTH_ROUTE,
   COMPANIES_ROUTE,
   COMPANY_ROUTE,
+  DRAFT_JOBS_ROUTE,
   MY_JOBS_ROUTE,
   PAGE_ROUTE,
+  TEMPLATES_ROUTE,
   WORKFLOW_ROUTE,
 } from "./baseRoute";
-import MyProjects from "components/pages/myProjects/MyProjects";
+import Templates from "components/pages/templates/Templates";
+import EditTemplate from "components/pages/templates/EditTemplate";
+import { Roles } from "helper/config";
 
 // ---------------------------- Import lazy load component ----------------------------
 
@@ -44,6 +48,11 @@ const ApprovalWorkflow = lazy(
   () => import("components/pages/workflow/ApprovalWorkflow")
 );
 
+// MyProjects Pages and Components
+const MyProjects = lazy(
+  () => import("components/pages/myProjects/MyProjects")
+);
+
 // Company Projects(Communities) Pages and Components
 const AgencyCompanyProjects = lazy(
   () => import("components/pages/agency/companyProjects/AgencyCompanyProjects")
@@ -64,6 +73,7 @@ const AdminJobsList = lazy(() => import("components/pages/jobs/AdminJobsList"));
 const AdminJobsAddEdit = lazy(
   () => import("components/pages/jobs/adminJobs/AdminJobsAddEdit")
 );
+const DraftJobs = lazy(() => import("components/pages/draftJobs/DraftJobs"));
 
 // Company Pages and Components
 const AgencyCompanyList = lazy(
@@ -87,6 +97,10 @@ const CopyCode = lazy(
 
 const CreativeCode = lazy(
   () => import("components/pages/agency/creativeCode/CreativeCode")
+);
+
+const Audience = lazy(
+  () => import("components/pages/agency/audience/Audience")
 );
 
 // ---------------------------- Define main pages routes ----------------------------
@@ -164,6 +178,7 @@ export const PAGES_ROUTES: RouteType[] = [
         <HomePage />
       </Suspense>
     ),
+    permission: [],
   },
   {
     path: WORKFLOW_ROUTE.HOME,
@@ -172,6 +187,7 @@ export const PAGES_ROUTES: RouteType[] = [
         <WorkFlowList />
       </Suspense>
     ),
+    permission: [Roles.AGENCY,],
   },
   {
     path: PAGE_ROUTE.COMPANY_PROJECTS,
@@ -222,6 +238,14 @@ export const PAGES_ROUTES: RouteType[] = [
     ),
   },
   {
+    path: COMPANIES_ROUTE.AUDIENCE,
+    component: (
+      <Suspense fallback={""}>
+        <Audience />
+      </Suspense>
+    ),
+  },
+  {
     path: MY_JOBS_ROUTE.HOME,
     component: (
       <Suspense fallback={""}>
@@ -250,6 +274,7 @@ export const WORKFLOW_ROUTES: RouteType[] = [
         <ApprovalWorkflow />
       </Suspense>
     ),
+    permission: [Roles.AGENCY,]
   },
 ];
 // => MY Projects page routes
@@ -288,9 +313,43 @@ export const JOBS_ROUTES: RouteType[] = [
   },
 ];
 // => Draft jobs routes
-export const DRAFT_JOBS_ROUTES: RouteType[] = [];
+export const DRAFT_JOBS_ROUTES: RouteType[] = [
+  {
+    path: DRAFT_JOBS_ROUTE.HOME,
+    component: (
+      <Suspense fallback={""}>
+        <DraftJobs />
+      </Suspense>
+    ),
+  },
+  {
+    path: MY_JOBS_ROUTE.UPDATE_MY_JOB,
+    component: (
+      <Suspense fallback={""}>
+        <AdminJobsAddEdit />
+      </Suspense>
+    ),
+  },
+];
 // => Template jobs routes
-export const TEMPLATES_ROUTES: RouteType[] = [];
+export const TEMPLATES_ROUTES: RouteType[] = [
+  {
+    path: TEMPLATES_ROUTE.HOME,
+    component: (
+      <Suspense fallback={""}>
+        <Templates />
+      </Suspense>
+    ),
+  },
+  {
+    path: TEMPLATES_ROUTE.UPDATE_TEMPLATE,
+    component: (
+      <Suspense fallback={""}>
+        <EditTemplate />
+      </Suspense>
+    ),
+  },
+];
 // => Company page routes
 export const COMPANY_ROUTES: RouteType[] = [
   {

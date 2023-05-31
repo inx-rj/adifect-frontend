@@ -1,5 +1,5 @@
 import { AppDispatch } from "redux/store";
-import { initialTableConfigInterface } from "helper/types/common/table";
+import { initialTableConfigInterface } from "helper/types/common/tableType";
 import swal from "sweetalert";
 import { Images } from "helper/images";
 import {
@@ -13,13 +13,13 @@ import ProgramsApiClient from "services/companies/ProgramsApiClient";
 // Get Programs List
 const GET_PROGRAMS_LIST =
   (tableConfig: initialTableConfigInterface) =>
-  async (dispatch: AppDispatch) => {
-    dispatch(SET_PROGRAMS_DATA_LOADING(true));
-    await ProgramsApiClient.fetchProgramsList(tableConfig).then((response) => {
-      dispatch(SET_PROGRAMS_DATA(response?.data?.data));
-      dispatch(SET_PROGRAMS_DATA_LOADING(false));
-    });
-  };
+    async (dispatch: AppDispatch) => {
+      dispatch(SET_PROGRAMS_DATA_LOADING(true));
+      await ProgramsApiClient.fetchProgramsList(tableConfig).then((response) => {
+        dispatch(SET_PROGRAMS_DATA(response?.data?.data));
+        dispatch(SET_PROGRAMS_DATA_LOADING(false));
+      });
+    };
 
 // Create Programs List
 const CREATE_PROGRAMS_LIST =
@@ -31,10 +31,10 @@ const CREATE_PROGRAMS_LIST =
 // Update Programs List
 const UPDATE_PROGRAMS_LIST =
   (id: number, formData: { [key: string]: string }) =>
-  async (dispatch: AppDispatch) => {
-    await dispatch(SET_PROGRAMS_LOADING(true));
-    return await ProgramsApiClient.updateProgramsData(id, formData);
-  };
+    async (dispatch: AppDispatch) => {
+      await dispatch(SET_PROGRAMS_LOADING(true));
+      return await ProgramsApiClient.updateProgramsData(id, formData);
+    };
 
 // Delete Programs List
 const DELETE_PROGRAMS_LIST = (id: number) => async (dispatch: AppDispatch) => {

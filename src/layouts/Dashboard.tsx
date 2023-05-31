@@ -16,6 +16,8 @@ import React from "react";
 const Dashboard = () => {
   // const isSidebarCollapsed = useAppSelector(IS_SIDEBAR_COLLAPSED);
 
+  console.log('At Home');
+
   return (
     <div className={`relative `}>
       <Suspense fallback={''}>

@@ -11,6 +11,10 @@ export interface CompanyListInitialsType extends LoadingType {
       results: TableRowsType[];
     };
   };
+  singleCompany: {
+    loading: boolean;
+    data: TableRowsType;
+  };
 }
 
 export interface singleCompanyPayloadData {

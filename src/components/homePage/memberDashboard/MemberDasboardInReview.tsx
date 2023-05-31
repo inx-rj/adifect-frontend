@@ -9,7 +9,7 @@ import { GET_DUPLICATE_MEMBER_ADMIN_JOB_LIST_IN_REVIEW } from "redux/actions/job
 import {
   CLEAR_MEMBERS_ADMIN_JOBS,
   MEMBERS_ADMIN_JOBS_DATA,
-} from "redux/reducers/homePage/membersJobListInReview.slice";
+} from "redux/reducers/jobs/membersJobListInReview.slice";
 import { useAppDispatch, useAppSelector } from "redux/store";
 
 const MemberDasboardInReview = () => {

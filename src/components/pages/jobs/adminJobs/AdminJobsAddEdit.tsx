@@ -36,9 +36,12 @@ import {
   GET_SINGLE_COMPANY_DATA,
 } from "redux/actions/companyTab/companyTab.actions";
 import { GET_IN_HOUSE_USER_LIST } from "redux/actions/inHouseUser/inHouseUser.actions";
-import { CREATE_JOB } from "redux/actions/jobs/jobs.actions";
+import { CREATE_JOB, UPDATE_JOB } from "redux/actions/jobs/jobs.actions";
 import { GET_LEVELS_LIST } from "redux/actions/levels/levels.action";
-import { GET_SKILLS_LIST } from "redux/actions/skills/skills.action";
+import {
+  ADD_SKILL_SET_LIST,
+  GET_SKILLS_LIST,
+} from "redux/actions/skills/skills.action";
 import { GET_WORKFLOW_LIST } from "redux/actions/workFlow/workFlow.actions";
 import { GET_USER_PROFILE_DATA } from "redux/reducers/auth/auth.slice";
 import { COMPANY_PROJECTS_DATA } from "redux/reducers/companies/companies.slice";
@@ -46,7 +49,7 @@ import {
   COMPANY_LIST,
   SET_COMPANY_LIST_LOADING,
 } from "redux/reducers/companyTab/companyTab.slice";
-import { GET_JOBS_DETAILS } from "redux/reducers/homePage/jobsList.slice";
+import { GET_JOBS_DETAILS } from "redux/reducers/jobs/jobsList.slice";
 import { IN_HOUSE_USER_LIST } from "redux/reducers/inHouseUser/inHouseUser.slice";
 import { LEVELS_LIST } from "redux/reducers/levels/levels.slice";
 import { SKILLS_LIST } from "redux/reducers/skills/skills.slice";
@@ -58,6 +61,10 @@ import { IS_HEADER_COMPANY } from "redux/reducers/config/app/app.slice";
 import { Images } from "helper/images";
 import { GET_INDUSTRY_LIST } from "redux/actions/industries/industries.actions";
 import { INDUSTRY_LIST } from "redux/reducers/industries/industries.slice";
+import { UPDATE_DRAFT_JOBS_LIST } from "redux/actions/draftJobs/draftJobs.action";
+import { GET_DETAIL_JOB_DATA } from "redux/actions/jobs/jobs.actions";
+import MuiAutoComplete from "components/common/muiAutocomplete/MuiAutoComplete";
+import { isEmpty } from "helper/utility/customFunctions";
 
 const thumbsContainer = {
   display: "flex",
@@ -98,6 +105,8 @@ const AdminJobsAddEdit = () => {
   const [dam, setdam] = useState(false);
 
   const [show, setShow] = useState(false);
+  const [searchText, setSearchText] = useState("");
+  const [companydata, setcompanydata] = useState([]);
 
   const [title, setTitle] = useState("");
   const [companyvalue, setcompanyvalue] = useState(null);
@@ -194,7 +203,6 @@ const AdminJobsAddEdit = () => {
   const levelsData = useAppSelector(LEVELS_LIST);
   const inHouseUserList = useAppSelector(IN_HOUSE_USER_LIST);
   const { industriesList } = useAppSelector(INDUSTRY_LIST);
-
   // console.log("WorkFlowData", WorkFlowData);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -235,16 +243,16 @@ const AdminJobsAddEdit = () => {
     search: "",
   });
 
+  const [searchType, setSearchType] = useState("");
+
   //fetch initial companies data list
   useSingleEffect(() => {
     if (userProfile?.data?.role === Roles.ADMIN) {
       dispatch(GET_COMPANY_LIST(paginationData, `${API_URL.COMPANY.ADMIN}`));
-      dispatch(GET_WORKFLOW_LIST(paginationData, `${API_URL.WORKFLOW.ADMIN}`));
 
       dispatch(GET_SKILLS_LIST(paginationData));
     } else {
       dispatch(GET_COMPANY_LIST(paginationData));
-      dispatch(GET_WORKFLOW_LIST(paginationData));
       dispatch(GET_SKILLS_LIST(paginationData));
     }
     dispatch(
@@ -258,20 +266,25 @@ const AdminJobsAddEdit = () => {
   //fetch company list when pagination change
   useUpdateEffect(() => {
     if (userProfile?.data?.role === Roles.ADMIN) {
-      dispatch(GET_COMPANY_LIST(paginationData, `${API_URL.COMPANY.ADMIN}`));
-      dispatch(GET_WORKFLOW_LIST(paginationData, `${API_URL.WORKFLOW.ADMIN}`));
+      if (searchType === "companySearch") {
+        dispatch(GET_COMPANY_LIST(paginationData, `${API_URL.COMPANY.ADMIN}`));
+      } else if (searchType === "workflowCompanySearch") {
+        dispatch(
+          GET_WORKFLOW_LIST(paginationData, `${API_URL.WORKFLOW.ADMIN}`)
+        );
+      }
       dispatch(GET_SKILLS_LIST(paginationData));
       dispatch(GET_LEVELS_LIST(paginationData));
     } else {
-      dispatch(
-        GET_COMPANY_LIST(
-          paginationData,
-          `${API_URL.COMPANY.AGENCY_COMPANY_LIST}`
-        )
-      );
-      dispatch(
-        GET_WORKFLOW_LIST(paginationData, `${API_URL.WORKFLOW.WORKFLOW_LIST}`)
-      );
+      if (searchType === "companySearch") {
+        dispatch(
+          GET_COMPANY_LIST(paginationData, `${API_URL.COMPANY.COMPANY_LIST}`)
+        );
+      } else if (searchType === "workflowCompanySearch") {
+        dispatch(
+          GET_WORKFLOW_LIST(paginationData, `${API_URL.WORKFLOW.WORKFLOW_LIST}`)
+        );
+      }
       dispatch(GET_SKILLS_LIST(paginationData));
       dispatch(GET_LEVELS_LIST(paginationData));
     }
@@ -322,7 +335,7 @@ const AdminJobsAddEdit = () => {
         //     title: "Error",
         //     text: "Image type is not valid",
         //     className: "errorAlert",
-        //     icon: "/img/logonew-red.svg",
+        //     icon: Images.ErrorLogo,
         //     buttons: false,
         //     timer: 5000,
         //   });
@@ -331,7 +344,7 @@ const AdminJobsAddEdit = () => {
         //     title: "Error",
         //     text: "Max file size allowed is 10mb",
         //     className: "errorAlert",
-        //     icon: "/img/logonew-red.svg",
+        //     icon: Images.ErrorLogo,
         //     buttons: false,
         //     timer: 5000,
         //   });
@@ -370,7 +383,7 @@ const AdminJobsAddEdit = () => {
         //     title: "Error",
         //     text: "Image type is not valid",
         //     className: "errorAlert",
-        //     icon: "/img/logonew-red.svg",
+        //     icon: Images.ErrorLogo,
         //     buttons: false,
         //     timer: 5000,
         //   });
@@ -379,7 +392,7 @@ const AdminJobsAddEdit = () => {
         //     title: "Error",
         //     text: "Max file size allowed is 10mb",
         //     className: "errorAlert",
-        //     icon: "/img/logonew-red.svg",
+        //     icon: Images.ErrorLogo,
         //     buttons: false,
         //     timer: 5000,
         //   });
@@ -407,9 +420,26 @@ const AdminJobsAddEdit = () => {
     disableScrollLock: true,
   };
 
+  const handleWorkflowChange = (e, value) => {
+    setworkflowdata(value);
+    setErrors({ ...errors, workflow: null });
+  };
+
+  //search workflow associated with selected company
+  const handleWorkFlowCompanySearch = (e, value) => {
+    setPaginationData({ ...paginationData, search: value });
+    setSearchType("workflowCompanySearch");
+  };
+
+  //search company
+  const handleCompanySearch = (e, value) => {
+    setPaginationData({ ...paginationData, search: value });
+    setSearchType("companySearch");
+  };
+
   //Get value
-  const getvalue = (e) => {
-    setcompanyvalue(e.target.value);
+  const getvalue = (e, value) => {
+    setcompanyvalue(value);
     // setShow(true);
     // const success = api
     //   .get(`${BACKEND_API_URL}company/${e.target.value}`)
@@ -448,18 +478,18 @@ const AdminJobsAddEdit = () => {
           )
         );
         const success = axiosPrivate
-          .get(`${API_URL.WORKFLOW.ADMIN}work-flow/?company=${e.target.value}`)
+          .get(`${API_URL.WORKFLOW.ADMIN}work-flow/?company=${value?.id}`)
           .then((res) => {
             // console.log(res.data);
-            setapivalue(res.data);
+            setapivalue(res?.data?.data?.results);
           });
       } else {
-        dispatch(GET_IN_HOUSE_USER_LIST(e.target.value));
+        dispatch(GET_IN_HOUSE_USER_LIST(value?.id));
         const success = axiosPrivate
-          .get(`${API_URL.WORKFLOW.WORKFLOW_LIST}?company=${e.target.value}`)
+          .get(`${API_URL.WORKFLOW.WORKFLOW_LIST}?company=${value?.id}`)
           .then((res) => {
-            // console.log(res.data);
-            setapivalue(res.data);
+            // console.log(res.data, "res");
+            setapivalue(res?.data?.data?.results);
           });
       }
       // dispatch(getAdminRelatedJobs(e.target.value));
@@ -623,11 +653,6 @@ const AdminJobsAddEdit = () => {
     }
   };
 
-  const filterOptions = createFilterOptions({
-    matchFrom: "start",
-    // stringify: (option) => option?.skill_name,
-  });
-
   //Set skills value
   const changeHandler = (e, v) => {
     setSkills(v);
@@ -642,17 +667,23 @@ const AdminJobsAddEdit = () => {
     if (e.key !== "Enter") return;
     const value = e.target.value;
     if (!value.trim()) return;
-    const filteredCurrentSkills = skills.filter((str) =>
-      str.skill_name.toLowerCase().includes(value.toLowerCase().trim())
+
+    const filteredCurrentSkills = skills?.filter((str) =>
+      str.skills_name.toLowerCase().includes(value?.toLowerCase().trim())
     );
-    const filteredDatabaseSkills =
-      skillsData?.skillsList?.data?.results?.filter((str) => {
-        if (str.skill_name.toLowerCase() === value.toLowerCase().trim()) {
+
+    const filteredDatabaseSkills = skillsData?.skillsList?.data?.results?.map(
+      (str) => {
+        // console.log("str", str);
+        if (str.skill_name.toLowerCase() == value.toLowerCase().trim()) {
           return true;
         }
         return false;
-      });
-    // console.log("filteredDatabaseSkills", filteredDatabaseSkills);
+      }
+    );
+    //     str.skill_name.toLowerCase() == value.toLowerCase()
+    // );
+    console.log("filteredDatabaseSkills", filteredDatabaseSkills);
     if (
       filteredDatabaseSkills?.length > 0 &&
       filteredCurrentSkills?.length > 0
@@ -661,8 +692,11 @@ const AdminJobsAddEdit = () => {
         title: "Notice",
         text: "Skill already exists",
         className: "errorAlert-login",
-        icon: "/img/logonew-red.svg",
+        icon: Images.ErrorLogo,
         // buttons: false,
+        buttons: {
+          OK: false,
+        },
         timer: 3000,
       });
       return;
@@ -679,6 +713,12 @@ const AdminJobsAddEdit = () => {
         return;
       }
     }
+    setSkills([...skills, value]);
+    const skillData = {
+      skill_name: value,
+      is_active: true,
+    };
+    // dispatch(ADD_SKILL_SET_LIST(skillData));
     // const config = {
     //   headers: {
     //     "Content-Type": "multipart/form-data",
@@ -686,22 +726,19 @@ const AdminJobsAddEdit = () => {
     //   },
     // };
 
-    // axios
-    //   .post(
-    //     `${BACKEND_API_URL}skills/`,
-    //     {
-    //       skill_name: value,
-    //       is_active: true,
-    //     },
-    //     config
-    //   )
-    //   .then((res) => {
-    //     // console.log("keys", res);
-    //     setAddedSkill(true);
-    //     setAddedSkill(false);
-    //     const addedSkill = skillsData.filter((item) => item.id === value);
-    //     // setSkills([...skills, res.data]);
-    //   });
+    dispatch(ADD_SKILL_SET_LIST(skillData))
+      .then((res) => {
+        // console.log("keys", res);
+        setAddedSkill(true);
+        setAddedSkill(false);
+        const addedSkill = skillsData?.skillsList?.data?.results.filter(
+          (item) => item?.id === value
+        );
+        // setSkills([...skills, res.data]);
+      })
+      .catch((error) => {
+        console.log("error", error);
+      });
     e.target.value = "";
   };
 
@@ -836,7 +873,7 @@ const AdminJobsAddEdit = () => {
             title: "Notice",
             text: "Url already added",
             className: "errorAlert-login",
-            icon: "/img/logonew-red.svg",
+            icon: Images.ErrorLogo,
             // buttons: false,
             timer: 3000,
           });
@@ -879,7 +916,7 @@ const AdminJobsAddEdit = () => {
             title: "Notice",
             text: "Url already added",
             className: "errorAlert-login",
-            icon: "/img/logonew-red.svg",
+            icon: Images.ErrorLogo,
             // buttons: false,
             timer: 3000,
           });
@@ -1157,7 +1194,7 @@ const AdminJobsAddEdit = () => {
             title: "Notice",
             text: "Tag already added",
             className: "errorAlert-login",
-            icon: "/img/logonew-red.svg",
+            icon: Images.ErrorLogo,
             // buttons: false,
             timer: 3000,
           });
@@ -1204,7 +1241,7 @@ const AdminJobsAddEdit = () => {
             title: "Notice",
             text: "Url already added",
             className: "errorAlert-login",
-            icon: "/img/logonew-red.svg",
+            icon: Images.ErrorLogo,
             // buttons: false,
             timer: 3000,
           });
@@ -1361,7 +1398,7 @@ const AdminJobsAddEdit = () => {
         title: "Notice",
         text: "Tag already added",
         className: "errorAlert-login",
-        icon: "/img/logonew-red.svg",
+        icon: Images.ErrorLogo,
         // buttons: false,
         timer: 3000,
       });
@@ -1384,7 +1421,7 @@ const AdminJobsAddEdit = () => {
         title: "Notice",
         text: "Tag already added",
         className: "errorAlert-login",
-        icon: "/img/logonew-red.svg",
+        icon: Images.ErrorLogo,
         // buttons: false,
         timer: 3000,
       });
@@ -1694,10 +1731,10 @@ const AdminJobsAddEdit = () => {
     // }
     if (data == "draft") {
       if (companyvalue) {
-        formData.append("company", companyvalue);
+        formData.append("company", companyvalue?.id);
       }
     } else {
-      formData.append("company", companyvalue);
+      formData.append("company", companyvalue?.id);
     }
 
     if (price && !isBudgetNotRequired) {
@@ -1721,7 +1758,7 @@ const AdminJobsAddEdit = () => {
     formData.append("user", JSON.stringify(userProfile?.data?.id));
 
     if (Workflowdata != null) {
-      formData.append("workflow", Workflowdata);
+      formData.append("workflow", Workflowdata?.id);
     }
 
     // console.log("submittedData--", formData);
@@ -1733,62 +1770,68 @@ const AdminJobsAddEdit = () => {
     //   },
     // };
     if (jobId && data == "post" && !isShown) {
-      // const create_job = await axios
-      //   .put(`${BACKEND_API_URL}jobs/${jobId}/`, formData, config)
-      //   .then((res) => {
-      //     // console.log("EDITTTT");
-      //     swal({
-      //       title: "Successfully Complete",
-      //       text: "Successfully Saved Job",
-      //       className: "successAlert",
-      //       icon: "/img/logonew.svg",
-      //       buttons: false,
-      //       timer: 5000,
-      //     });
-      //     if (data == "draft") {
-      //       navigate(`/draft-jobs`);
-      //     } else {
-      //       navigate(`/jobs/list`);
-      //     }
-      //   })
-      //   .catch((err) => {
-      //     swal({
-      //       title: "Error",
-      //       text: err.response.data.message,
-      //       className: "errorAlert",
-      //       icon: "/img/logonew-red.svg",
-      //       // buttons: false,
-      //       timer: 5000,
-      //     });
-      //     setIsLoading(false);
-      //   });
+      dispatch(UPDATE_JOB(jobId, formData))
+        // const create_job = await axios
+        //   .put(`${BACKEND_API_URL}jobs/${jobId}/`, formData, config)
+        .then((res) => {
+          // console.log("EDITTTT");
+          swal({
+            title: "Successfully Complete",
+            text: "Successfully Saved Job",
+            className: "successAlert",
+            icon: Images.Logo,
+            buttons: {
+              OK: false,
+            },
+            timer: 5000,
+          });
+          if (data == "draft") {
+            navigate(`/draft-jobs`);
+          } else {
+            navigate(`/jobs/list`);
+          }
+        })
+        .catch((err) => {
+          swal({
+            title: "Error",
+            text: err.response.data.message,
+            className: "errorAlert",
+            icon: Images.ErrorLogo,
+            buttons: {
+              OK: false,
+            },
+            timer: 5000,
+          });
+          setIsLoading(false);
+        });
       // if (imageChanged) {
     } else if (jobId && data == "draft" && !isShown) {
       // console.log("DRAFTTTT");
       // const create_job = await axios
       //   .put(`${BACKEND_API_URL}jobs/${jobId}/`, formData, config)
-      //   .then((res) => {
-      //     swal({
-      //       title: "Successfully Complete",
-      //       text: "Successfully Created",
-      //       className: "successAlert",
-      //       icon: "/img/logonew.svg",
-      //       // buttons: false,
-      //       timer: 5000,
-      //     });
-      //     navigate(`/draft-jobs`);
-      //   })
-      //   .catch((err) => {
-      //     swal({
-      //       title: "Error",
-      //       text: err.response.data.message,
-      //       className: "errorAlert",
-      //       icon: "/img/logonew-red.svg",
-      //       // buttons: false,
-      //       timer: 5000,
-      //     });
-      //     setIsLoading(false);
-      //   });
+      dispatch(UPDATE_DRAFT_JOBS_LIST(jobId, formData))
+        .then((res) => {
+          swal({
+            title: "Successfully Complete",
+            text: "Successfully Created",
+            className: "successAlert",
+            icon: Images.Logo,
+            // buttons: false,
+            timer: 5000,
+          });
+          navigate(`/draft-jobs`);
+        })
+        .catch((err) => {
+          swal({
+            title: "Error",
+            text: err.response.data.message,
+            className: "errorAlert",
+            icon: Images.ErrorLogo,
+            // buttons: false,
+            timer: 5000,
+          });
+          setIsLoading(false);
+        });
     } else {
       // const update_job = await axios
       //   .post(`${BACKEND_API_URL}jobs/`, formData, config)
@@ -1854,6 +1897,75 @@ const AdminJobsAddEdit = () => {
 
     submitHandler(data);
   };
+
+  useEffect(() => {
+    axiosPrivate
+      .get(`${API_URL.COMPANY.COMPANY_LIST}?is_active=1`)
+      .then((res) => {
+        const responseDestructredData = { ...res?.data?.data };
+        // console.log({ res, responseDestructredData }, 'Res Company');
+
+        // To append company data of selected workflow details
+        if (
+          isEmpty(
+            responseDestructredData?.results?.find(
+              (e) => e.company_id === jobDetails?.details?.company
+            )
+          )
+        ) {
+          responseDestructredData?.results?.push({
+            id: jobDetails?.details?.company,
+            name: jobDetails?.details?.company_name,
+          });
+        }
+        console.log({ res, results: responseDestructredData?.results });
+        setcompanydata(responseDestructredData?.results);
+      })
+      .catch((err) => {});
+
+    axiosPrivate
+      .get(
+        `${API_URL.WORKFLOW.WORKFLOW_LIST}?company=${jobDetails?.details?.company}`
+      )
+      .then((response) => {
+        const destructuredWorkflowData = { ...response?.data?.data };
+
+        if (
+          isEmpty(
+            destructuredWorkflowData?.results?.find(
+              (e) => e?.id === jobDetails?.details?.workflow
+            )
+          )
+        ) {
+          destructuredWorkflowData?.results?.push({
+            id: jobDetails?.details?.workflow,
+            name: jobDetails?.details?.workflow_name,
+          });
+        }
+      })
+      .catch((error) => {});
+  }, [jobDetails, jobId]);
+
+  useUpdateEffect(() => {
+    setcompanydata(
+      companyList?.data?.results?.map((company) => {
+        return {
+          id: company?.id,
+          name: company?.name,
+        };
+      })
+    );
+    if (WorkFlowData?.workFlowList?.data?.results?.length) {
+      setapivalue(
+        WorkFlowData?.workFlowList?.data?.results?.map((workflow) => {
+          return {
+            id: workflow?.id,
+            name: workflow?.name,
+          };
+        })
+      );
+    }
+  }, [companyList?.data?.results, WorkFlowData?.workFlowList?.data?.results]);
 
   useEffect(() => {
     let useimage = localStorage.getItem("useimage");
@@ -1945,13 +2057,24 @@ const AdminJobsAddEdit = () => {
   //   }
   // }, []);
 
+  useSingleEffect(() => {
+    if (jobId) {
+      dispatch(GET_DETAIL_JOB_DATA(jobId));
+    }
+  });
+
+  useUpdateEffect(() => {
+    dispatch(GET_DETAIL_JOB_DATA(jobId));
+  }, [jobId]);
   useEffect(() => {
     if (jobId) {
       setShow(true);
       // setShowdraft(false);
       settextchange(true);
-      // dispatch(GET_JOBS_DETAILS(jobId));
-      if (jobDetails?.details?.message) {
+      // dispatch(GET_DETAIL_JOB_DATA(jobId));
+      // console.log("jobId", jobId, jobDetails);
+
+      if (jobDetails?.details) {
         if (userProfile?.data?.role === Roles.ADMIN) {
           dispatch(
             GET_IN_HOUSE_USER_LIST(
@@ -1962,6 +2085,7 @@ const AdminJobsAddEdit = () => {
         } else {
           dispatch(GET_IN_HOUSE_USER_LIST(jobDetails?.details.company));
         }
+        // console.log("jobId", jobId, jobDetails);
 
         if (jobDetails?.details.is_house_member) {
           setIsBudgetNotRequired(true);
@@ -1984,39 +2108,57 @@ const AdminJobsAddEdit = () => {
           setlevel(null);
           setJobType("0");
         } else {
-          setPrice(jobDetails?.details?.details.price);
-          setlevel(jobDetails?.details?.details.level?.id);
-          setJobType(jobDetails?.details?.details.job_type);
+          setPrice(jobDetails?.details?.price);
+          setlevel(jobDetails?.details?.level?.id);
+          setJobType(jobDetails?.details?.job_type);
         }
-        if (jobDetails?.details?.details.status != 0) {
+        if (jobDetails?.details?.status != 0) {
           setShowdraft(false);
         }
-        setTitle(jobDetails?.details?.details.title);
-        setDescription(jobDetails?.details?.details.description);
+        setTitle(jobDetails?.details?.title);
+        setDescription(jobDetails?.details?.description);
         // setFiles(jobDetails.images);
         // setJobSampleDocuments(jobDetails.images)
-        setDeliveryDate(jobDetails?.details?.details.expected_delivery_date);
-        setSkills(jobDetails?.details?.details.skills);
-        setindustryname(jobDetails?.details?.details.industry);
-        setdivid(jobDetails?.details?.details.due_date_index);
-        // const success = api.get(`${BACKEND_API_URL}job-draft`).then((res) => {
-        //   const success = api
-        //     .get(`${BACKEND_API_URL}work-flow/?company=${jobDetails?.details?.company}`)
-        //     .then((res) => {
-        //       setapivalue(res.data);
-        //     });
-        // });
-        // const successTemplateApi = api
-        //   .get(
-        //     `${BACKEND_API_URL}admin-job-template/?company=${jobDetails?.details?.company}`
-        //   )
-        //   .then((res) => {
-        //     settemplatevalue(res.data);
-        //   });
-        setworkflowdata(jobDetails?.details?.workflow);
+        setDeliveryDate(jobDetails?.details?.expected_delivery_date);
+        setSkills(jobDetails?.details?.skills);
+        setindustryname(jobDetails?.details?.industry);
+        setdivid(jobDetails?.details?.due_date_index);
+        const success = axiosPrivate
+          .get(`${API_URL.DRAFT_JOBS.DRAFT_JOBS_LIST}`)
+          .then((res) => {
+            const success = axiosPrivate
+              .get(
+                `${API_URL.WORKFLOW.WORKFLOW_LIST}?company=${jobDetails?.details?.company}`
+              )
+              .then((res) => {
+                setapivalue(res.data?.data?.results);
+              });
+          });
+        if (userProfile?.data?.role === Roles.ADMIN) {
+          const successTemplateApi = axiosPrivate
+            .get(
+              `${API_URL}admin-job-template/?company=${jobDetails?.details?.company}`
+            )
+            .then((res) => {
+              settemplatevalue(res.data);
+            });
+        } else {
+          const successTemplateApi = axiosPrivate
+            .get(`${API_URL}job-template/?company=${headerCompany}`)
+            .then((res) => {
+              settemplatevalue(res.data);
+            });
+        }
+        setworkflowdata({
+          id: jobDetails?.details?.workflow,
+          name: jobDetails?.details?.workflow_name,
+        });
         // dispatch(getAdminRelatedJobs(jobDetails?.details?.company));
         setRelatedJobs(jobDetails?.details?.related_jobs);
-        setcompanyvalue(jobDetails?.details?.company);
+        setcompanyvalue({
+          id: jobDetails?.details?.company,
+          name: jobDetails?.details?.company_name,
+        });
         setItemData(jobDetails?.details?.jobtasks_job);
         setTemplatename(jobDetails?.details?.template_name);
 
@@ -2064,7 +2206,7 @@ const AdminJobsAddEdit = () => {
             setTags(tagsList);
           }
         }
-        if (jobDetails?.details?.images) {
+        if (jobDetails?.details?.images?.length) {
           let newImages = jobDetails?.details?.images;
           newImages = newImages.filter((item) => item);
           setJobDocuments(newImages);
@@ -2100,7 +2242,7 @@ const AdminJobsAddEdit = () => {
           setFileNameDisplay(s);
           setFileExtension(fileext);
         }
-        if (jobDetails?.details?.images) {
+        if (jobDetails?.details?.images?.length) {
           let newImages = jobDetails?.details.images;
           newImages = newImages.filter((item) => item);
           setJobSampleDocuments(newImages);
@@ -2273,7 +2415,7 @@ const AdminJobsAddEdit = () => {
     setEditFileSampleExtension([]);
     setEditFileExtension([]);
     // }, [success, successAgencyInHouseUsers]);
-  }, []);
+  }, [jobDetails]);
 
   useEffect(() => {
     // dispatch(listAllCategories());
@@ -2347,7 +2489,7 @@ const AdminJobsAddEdit = () => {
         dispatch(
           GET_SINGLE_COMPANY_DATA(
             headerCompany,
-            `${API_URL.COMPANY.AGENCY_COMPANY_LIST}`
+            `${API_URL.COMPANY.COMPANY_LIST}`
           )
         )
           .then((res) => {
@@ -2457,7 +2599,7 @@ const AdminJobsAddEdit = () => {
           title: "Error",
           text: "Image type is not valid",
           className: "errorAlert",
-          icon: "/img/logonew-red.svg",
+          icon: Images.ErrorLogo,
           // buttons: false,
           timer: 5000,
         });
@@ -2467,7 +2609,7 @@ const AdminJobsAddEdit = () => {
           title: "Error",
           text: "Image type is not valid",
           className: "errorAlert",
-          icon: "/img/logonew-red.svg",
+          icon: Images.ErrorLogo,
           // buttons: false,
           timer: 5000,
         });
@@ -2477,7 +2619,7 @@ const AdminJobsAddEdit = () => {
           title: "Error",
           text: "Max file size allowed is 10mb",
           className: "errorAlert",
-          icon: "/img/logonew-red.svg",
+          icon: Images.ErrorLogo,
           // buttons: false,
           timer: 5000,
         });
@@ -2530,7 +2672,7 @@ const AdminJobsAddEdit = () => {
           title: "Error",
           text: "Image type is not valid",
           className: "errorAlert",
-          icon: "/img/logonew-red.svg",
+          icon: Images.ErrorLogo,
           // buttons: false,
           timer: 5000,
         });
@@ -2539,7 +2681,7 @@ const AdminJobsAddEdit = () => {
           title: "Error",
           text: "Max file size allowed is 10mb",
           className: "errorAlert",
-          icon: "/img/logonew-red.svg",
+          icon: Images.ErrorLogo,
           // buttons: false,
           timer: 5000,
         });
@@ -2628,34 +2770,27 @@ const AdminJobsAddEdit = () => {
               )}
             </h4>{" "}
             <div className="">
-              <Select
-                className={`${
-                  companyvalue == "" || companyvalue == null
-                    ? "text-[#939393] hover:border-[#939393] "
-                    : "text-[#000]"
-                } bg-[rgb(249_251_252)] rounded w-full h-12 mb-1`}
-                open={isOpen9}
-                onOpen={() => {
-                  setIsOpen9(true);
-                }}
-                onClose={() => {
-                  setIsOpen9(false);
-                }}
-                // MenuProps={menuProps}
-                value={companyvalue}
-                onChange={getvalue}
-                displayEmpty
-                inputProps={{ "aria-label": "Without label" }}
-              >
-                <MenuItem value={null}>Select Company</MenuItem>
-                {companyList?.data?.results?.map((item) =>
-                  item.is_active ? (
-                    <MenuItem key={item.id} value={item.id}>
-                      {item?.name}
-                    </MenuItem>
-                  ) : null
-                )}
-              </Select>
+              <MuiAutoComplete
+                placeholder="Select Company"
+                filterList={companydata ?? []}
+                selectedOption={companyvalue}
+                setSearchText={setSearchText}
+                // setSelectedOption={setcompanyvalue}
+                handleChange={getvalue}
+                handleSearchChange={handleCompanySearch}
+                searchText={searchText}
+                label={""}
+                // disabled={!showbutton}
+                customClass={
+                  // "rounded outline-none focus:border-theme hover:border-none"
+                  `${
+                    companyvalue == "" || companyvalue == null
+                      ? "text-[#939393] hover:border-[#939393] "
+                      : "text-[#000]"
+                  } bg-[rgb(249_251_252)] rounded w-full h-12 mb-1`
+                }
+              />
+
               <span className="text-[#D14F4F] flex justify-end">
                 {errors.company ?? ""}
               </span>
@@ -2683,37 +2818,27 @@ const AdminJobsAddEdit = () => {
                   </Link>
                 </h4>{" "}
                 <div className="input-fields-wrapper ">
-                  <Select
-                    className={`${
-                      Workflowdata == "" || Workflowdata == null
-                        ? "!text-[#939393] hover:border-[#939393] "
-                        : "text-[#000] "
-                    } bg-[rgb(249_251_252)] rounded w-full h-12 mb-1`}
-                    open={isOpen8}
-                    onOpen={() => {
-                      setIsOpen8(true);
-                    }}
-                    onClose={() => {
-                      setIsOpen8(false);
-                    }}
-                    // MenuProps={menuProps}
-                    value={Workflowdata}
-                    onChange={(e) => {
-                      setworkflowdata(e.target.value);
-                      setErrors({ ...errors, workflow: null });
-                    }}
-                    displayEmpty
-                    inputProps={{ "aria-label": "Without label" }}
-                  >
-                    <MenuItem value={null}>Select Workflow</MenuItem>
-                    {WorkFlowData?.workFlowList?.data?.results?.map((item) =>
-                      item.is_active ? (
-                        <MenuItem key={item.id} value={item.id}>
-                          {item?.name}
-                        </MenuItem>
-                      ) : null
-                    )}
-                  </Select>
+                  <MuiAutoComplete
+                    placeholder="Select Workflow"
+                    filterList={apivalue ?? []}
+                    selectedOption={Workflowdata}
+                    setSearchText={setSearchText}
+                    // setSelectedOption={setcompanyvalue}
+                    handleChange={handleWorkflowChange}
+                    handleSearchChange={handleWorkFlowCompanySearch}
+                    searchText={searchText}
+                    label={""}
+                    // disabled={!showbutton}
+                    customClass={
+                      // "rounded outline-none focus:border-theme hover:border-none"
+                      `${
+                        Workflowdata == "" || Workflowdata == null
+                          ? "!text-[#939393] hover:border-[#939393] "
+                          : "text-[#000] "
+                      } bg-[rgb(249_251_252)] rounded w-full h-12 mb-1`
+                    }
+                  />
+
                   <span className="text-[#D14F4F]">
                     {errors.workflow ?? ""}
                   </span>
@@ -2941,33 +3066,33 @@ const AdminJobsAddEdit = () => {
                 {/* {JSON.stringify(skills)} */}
                 <Autocomplete
                   className="bg-[rgb(249_251_252)] rounded w-full h-12"
-                  value={skills}
+                  // value={skills ?? []}
                   multiple
                   id="tags-outlined"
-                  open={isOpenSkill}
-                  // open={true}
-                  onInputChange={handleInputChangeAutocomplete}
-                  filterOptions={filterOptions}
+                  // onInputChange={handleInputChangeAutocomplete}
                   options={
-                    skillsData?.skillsList?.data?.results?.filter(
-                      (item) => item.is_active
-                    ) ?? []
+                    // skillsData?.skillsList?.data?.results?.filter(
+                    //   (item) => item.is_active
+                    // ) ?? []
+                    skillsData?.skillsList?.data?.results
+                      ?.filter((item) => item.is_active)
+                      ?.map((it) => {
+                        return {
+                          skills_name: it?.skill_name,
+                          id: it?.id,
+                        };
+                      }) ?? []
                   }
-                  getOptionLabel={(option) => option.skill_name}
+                  getOptionLabel={(option) => option?.skills_name}
                   // onChange={(event, value) => setSkills(value)}
                   onChange={(e, v) => {
                     changeHandler(e, v);
-                    // setErrors({ ...errors, skills: null });
+                    setErrors({ ...errors, skills: null });
                   }}
-                  // defaultValue={skills ?? []}
-                  // inputValue={skills}
-                  // inputProps={{ "aria-label": "Without label" }}
-                  filterSelectedOptions
+                  // filterSelectedOptions
                   noOptionsText={
                     "Press enter to add this skill and select again"
                   }
-                  // hiddenLabel="true"
-                  // open={false}
                   onKeyDown={handleKeyDownSkills}
                   autoHighlight={true}
                   renderInput={(params) => (
@@ -2978,11 +3103,6 @@ const AdminJobsAddEdit = () => {
                       className="bg-[rgb(249_251_252)] rounded w-full h-12 mb-1"
                     />
                   )}
-                  isOptionEqualToValue={(option, value) =>
-                    value === undefined ||
-                    value === "" ||
-                    option.id === value.id
-                  }
                 />
                 {/* <Autocomplete
                           multiple
@@ -3169,7 +3289,7 @@ const AdminJobsAddEdit = () => {
                                               >
                                                 <img src="/img/assertbin.png" />
                                               </button>
-                                              {item?.job_image_name}
+                                              {/* {item?.job_image_name} */}
                                             </div>
                                           </div>
                                         </>
@@ -4374,3 +4494,6 @@ const AdminJobsAddEdit = () => {
 };
 
 export default AdminJobsAddEdit;
+function setdraftid(id: any) {
+  throw new Error("Function not implemented.");
+}

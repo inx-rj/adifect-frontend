@@ -43,7 +43,7 @@ import { GET_NOTIFICATIONS_LIST } from "redux/actions/common/notification.action
 import { Roles } from "helper/config";
 import { GET_COMPANY_LIST } from "redux/actions/companyTab/companyTab.actions";
 import { COMPANY_LIST } from "redux/reducers/companyTab/companyTab.slice";
-import { TRIGGER_HEADER_COMPANY } from "redux/actions/config/app/app.actions";
+import { TRIGGER_HEADER_COMPANY, TRIGGER_PERSIST_MODE } from "redux/actions/config/app/app.actions";
 import { API_URL } from "helper/env";
 import { TablePaginationType } from "helper/types/muiTable/muiTable";
 
@@ -55,6 +55,8 @@ const SidebarToggle = lazy(
 
 export default function Header(props) {
   const dispatch = useAppDispatch();
+
+  // React states
   const [count, setcount] = useState("");
   const [notificationId, setNotificationId] = useState("");
   const [showDropdown, setShowDropdown] = useState(false);
@@ -192,7 +194,7 @@ export default function Header(props) {
       dispatch(GET_COMPANY_LIST(paginationData, `${API_URL.COMPANY.ADMIN}`));
     } else {
       dispatch(
-        GET_COMPANY_LIST(paginationData, `${API_URL.COMPANY.AGENCY_COMPANY_LIST}`)
+        GET_COMPANY_LIST(paginationData, `${API_URL.COMPANY.COMPANY_LIST}`)
       );
     }
   }, [paginationData, userProfile.data?.role]);
@@ -371,13 +373,11 @@ export default function Header(props) {
   const logoutHandler = () => {
     setOpenLogoutPopup(false);
     dispatch(TRIGGER_HEADER_COMPANY(null));
-    // props.setHeaderCompany(null);
-    // dispatch(logout());
+    dispatch(TRIGGER_PERSIST_MODE(false)).then((r) => r);
     localStorage.removeItem("refresh_token");
     localStorage.removeItem("access_token");
     localStorage.removeItem("userData");
     dispatch({ type: ActionTypes.DESTROY_SESSION });
-    // navigate(MAIN_ROUTE.HOME, { replace: true, state: true });
   };
 
   const handleOpenLogoutPopup = () => {
@@ -783,7 +783,7 @@ export default function Header(props) {
             ref={menuRef}
             onClick={() => setShowDropdown(!showDropdown)}
           >
-            <Link className="flex items-center LoginName dropdown" to="#">
+            <Link className="LoginName dropdown flex items-center" to="#">
               <span className="header-profile-pic max-w-[40px] w-full h-[40px] img img-cover rounded-full overflow-hidden drop-shadow-md border-2 border-white">
                 <img
                   src={
@@ -794,9 +794,9 @@ export default function Header(props) {
                   alt=""
                 />
               </span>
-              <span className="ml-1 loginName">
-                {userProfile?.data?.first_name ?? "Invalid First Name"}{" "}
-                {userProfile?.data?.last_name ?? "Invalid Last Name"}
+              <span className="loginName ml-1 truncate min-w-[100px]">
+                {userProfile?.data?.first_name ?? "First Name"}{" "}
+                {userProfile?.data?.last_name ?? "Last Name"}
               </span>
               <ArrowDropDownOutlined />
             </Link>
@@ -806,7 +806,7 @@ export default function Header(props) {
                   <li>
                     <Link
                       to="/profile"
-                      className="flex items-center py-2 text-dark-400 hover:text-theme"
+                      className="flex items-center text-dark-400 hover:text-theme py-2"
                     >
                       <Person className="mr-2" />
                       Profile
@@ -817,7 +817,7 @@ export default function Header(props) {
                       <li>
                         <Link
                           to="/invite"
-                          className="flex items-center py-2 text-dark-400 hover:text-theme"
+                          className="flex items-center text-dark-400 hover:text-theme py-2"
                         >
                           <DescriptionOutlined className="mr-2" /> Invite
                         </Link>
@@ -825,7 +825,7 @@ export default function Header(props) {
                     </>
                   )}
                   <li onClick={handleOpenLogoutPopup}>
-                    <div className="flex items-center py-2 cursor-pointer text-dark-400 hover:text-theme">
+                    <div className="flex items-center text-dark-400 hover:text-theme py-2 cursor-pointer">
                       <PowerSettingsNewOutlined className="mr-2" />
                       Logout
                     </div>
@@ -845,7 +845,7 @@ export default function Header(props) {
                   alt="logout"
                 />
                 <div>
-                  <h4 className="mb-3 text-lg font-semibold">Are you Sure?</h4>
+                  <h4 className="mb-3 font-semibold text-lg">Are you Sure?</h4>
                   <p className="max-w-[350px] w-full mx-auto text-base">
                     Do you really want to logout this account? This process
                     cannot be undone.

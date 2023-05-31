@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import {
   CLEAR_JOBS,
   JOBS_DATA,
-} from "../../../redux/reducers/homePage/jobsList.slice";
+} from "../../../redux/reducers/jobs/jobsList.slice";
 import { useAppDispatch, useAppSelector } from "../../../redux/store";
 import { Images } from "../../../helper/images";
 import BadgeUI from "../../../components/common/badge/BadgeUI";

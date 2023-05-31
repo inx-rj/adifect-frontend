@@ -7,6 +7,7 @@ export type UseStateType<DataType> = Dispatch<SetStateAction<DataType>>;
 export interface RouteType {
   path: string;
   component: JSX.Element;
+  permission?: number[];
 }
 
 export interface EmailType {

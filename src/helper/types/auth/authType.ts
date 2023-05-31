@@ -16,26 +16,32 @@ export interface UserPortfolioType {
   user: number;
 }
 export interface UserProfileDetailsType {
-  id: number;
-  email: string;
-  first_name: string;
-  last_name: string;
-  profile_title: string | null;
-  profile_description: string | null;
-  role: number;
-  video: string | null;
-  profile_img: string | null;
-  profile_status: string;
-  preferred_communication_mode: string;
-  preferred_communication_id: string | null;
-  availability: string | null;
-  Portfolio_user: UserPortfolioType[];
-  user_level: number;
-  sub_title: string | null;
-  Language: string | null;
-  website: string | null;
-  portfolio: [];
+  id?: number;
+  email?: string;
+  name?: string;
+  first_name?: string;
+  last_name?: string;
+  profile_title?: string | null;
+  profile_description?: string | null;
+  role?: number;
+  video?: [];
+  remove_video?: string;
+  profile_img?: string | null;
+  remove_image?: string;
+  profile_status?: string;
+  preferred_communication_mode?: string;
+  preferred_communication_id?: string | null;
+  availability?: string | null;
+  Portfolio_user?: UserPortfolioType[];
+  user_level?: number;
+  sub_title?: string | null;
+  Language?: string | null;
+  website?: string | null;
+  portfolio?: [];
+  remove_portfolio?: [];
+  skills?: [];
 }
+
 export interface AuthInitialType extends LoadingType {
   user: {
     loading: boolean;
@@ -49,7 +55,7 @@ export interface AuthInitialType extends LoadingType {
   };
   userProfile: {
     loading: false;
-    hasData: boolean;
+    hasData: UserProfileDetailsType;
     data: UserProfileDetailsType;
   };
 }

@@ -5,7 +5,7 @@ import {
 } from "../../../helper/types/auth/authType";
 import { RootState } from "../../rootReducer";
 
-const userProfileDetails: UserProfileDetailsType = {
+export const userProfileDetails: UserProfileDetailsType = {
   id: null,
   email: "",
   first_name: "",
@@ -49,7 +49,7 @@ const initialState: AuthInitialType = {
   },
   userProfile: {
     loading: false,
-    hasData: false,
+    hasData: userProfileDetails,
     data: userProfileDetails
   }
 };
@@ -91,7 +91,7 @@ export const authSlice = createSlice({
       ...state,
       userProfile: {
         ...state.userProfile,
-        hasData: true,
+        hasData: action.payload,
         data: action.payload,
       },
     }),

@@ -9,7 +9,7 @@ import { GET_DUPLICATE_MEMBER_ADMIN_JOB_LIST_IN_PROGRESS } from "redux/actions/j
 import {
   CLEAR_MEMBERS_ADMIN_IN_PROGRESS_JOBS,
   MEMBERS_ADMIN_JOBS_IN_PROGRESS_DATA,
-} from "redux/reducers/homePage/membersJobsListInProgress.slice";
+} from "redux/reducers/jobs/membersJobsListInProgress.slice";
 import { useAppDispatch, useAppSelector } from "redux/store";
 
 const MemeberDashBoardInProgress = () => {

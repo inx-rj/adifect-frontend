@@ -5,12 +5,7 @@ import { RootState } from "redux/rootReducer";
 const initialState = {
   portfolioList: {
     loading: false,
-    data: {
-      count: 0,
-      next: "",
-      previous: "",
-      results: []
-    },
+    data: [],
   },
 };
 

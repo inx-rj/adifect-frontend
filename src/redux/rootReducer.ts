@@ -11,12 +11,16 @@ import { ActionTypes } from "helper/actions";
 import { commonReducer } from "redux/reducers/common/common.reducer";
 import { profileReducer } from "redux/reducers/profile/profile.reducer";
 import { companyTabSlice } from "./reducers/companyTab/companyTab.slice";
-import { homePageReducer } from "./reducers/homePage/homePage.reducer";
+import { homePageReducer } from "./reducers/jobs/homePage.reducer";
 import { skillsSlice } from "./reducers/skills/skills.slice";
 import { levelsSlice } from "./reducers/levels/levels.slice";
 import { inHouseUserSlice } from "./reducers/inHouseUser/inHouseUser.slice";
 import { industriesSlice } from "./reducers/industries/industries.slice";
 import { companiesReducer } from "./reducers/companies/companies.reducer";
+import { draftJobsSlice } from "./reducers/draftJobs/draftJobs.slice";
+import { templatesSlice } from "./reducers/templates/templates.slice";
+import { mediaReducer } from "./reducers/media/media.reducer";
+import { AUTH_ROUTE } from "routes/baseRoute";
 
 const persistAppConfig = {
   key: "app",
@@ -39,14 +43,17 @@ const appReducer = combineReducers({
   levels: levelsSlice.reducer,
   inHouseUser: inHouseUserSlice.reducer,
   profile: profileReducer,
+  draftJobs: draftJobsSlice.reducer,
+  templates: templatesSlice.reducer,
+  media: mediaReducer,
 });
 
 export const rootReducer = (state, action) => {
   // Clear all data in redux store to initial.
   if (action.type === ActionTypes.DESTROY_SESSION) {
     storage.removeItem("persist:app");
-    state = undefined;
-    window.location.reload();
+    state = null;
+    window.location.replace(AUTH_ROUTE.LOGIN);
   }
 
   return appReducer(state, action);

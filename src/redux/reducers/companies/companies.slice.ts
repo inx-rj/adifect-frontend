@@ -21,6 +21,10 @@ const initialState: CompaniesInitialsType = {
       tag: [],
     },
   },
+  storyDetailsList: {
+    loading: false,
+    data: {},
+  },
 };
 
 export const companiesSlice = createSlice({
@@ -63,6 +67,22 @@ export const companiesSlice = createSlice({
       },
     }),
 
+    SET_STORY_DETAILS_LOADING: (state, action) => ({
+      ...state,
+      storyDetailsList: {
+        ...state.storyDetailsList,
+        loading: action.payload,
+      },
+    }),
+
+    SET_STORY_DETAILS_DATA: (state, action) => ({
+      ...state,
+      storyDetailsList: {
+        ...state.storyDetailsList,
+        data: action.payload,
+      },
+    }),
+
     CLEAR_COMPANIES: () => ({
       ...initialState,
     }),
@@ -75,6 +95,8 @@ export const {
   SET_COMPANIES_PROJECTS_DATA,
   SET_COMPANIES_PROJECTS_FILTERS_LOADING,
   SET_COMPANIES_PROJECTS_FILTERS_DATA,
+  SET_STORY_DETAILS_LOADING,
+  SET_STORY_DETAILS_DATA,
   CLEAR_COMPANIES,
 } = companiesSlice.actions;
 
@@ -83,5 +105,8 @@ export const COMPANY_PROJECTS_DATA = (state: RootState) =>
 
 export const COMPANY_PROJECTS_FILTERS_DATA = (state: RootState) =>
   state.companies.companyProjects.companyProjectsFilters;
+
+export const COMPANY_PROJECTS_STORY_DETAILS_DATA = (state: RootState) =>
+  state.companies.companyProjects.storyDetailsList;
 
 export const COMPANY_PROJECTS = (state: RootState) => state.companies;

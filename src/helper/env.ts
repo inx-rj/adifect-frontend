@@ -1,7 +1,10 @@
+export const BACKEND_API_URL = process.env["REACT_APP_BACKEND_API_URL"];
+export const FRONTEND_API_URL = process.env["REACT_APP_FRONTEND_SITE_URL"];
+
 export const env = {
   APP_NAME: "Adifect",
-  API_URL: process.env["REACT_APP_BACKEND_API_URL"],
-  FRONTEND_SITE_URL: process.env["REACT_APP_FRONTEND_SITE_URL"],
+  API_URL: `https://${BACKEND_API_URL}/`,
+  FRONTEND_SITE_URL: `https://${BACKEND_API_URL}/`,
 };
 
 export const BASE_URL = {
@@ -13,6 +16,8 @@ export const BASE_URL = {
   WORKFLOW: `${env.API_URL}workflows/`,
   SKILLS: `${env.API_URL}skills/`,
   LEVELS: `${env.API_URL}levels/`,
+  TEMPLATES: `${env.API_URL}job-template/`,
+  MEDIA: `${env.API_URL}`,
 };
 
 export const API_URL = {
@@ -27,16 +32,20 @@ export const API_URL = {
     COMPANY_PROJECTS: `${BASE_URL.COMPANIES}stories/`,
     FILTERS: `${BASE_URL.COMPANIES}list-community-status-tag-data/`,
     TAGS: `${BASE_URL.COMPANIES}tags/`,
+    STORY_TAGS: `${BASE_URL.COMPANIES}story-tag/`,
     COMMUNITY_SETTINGS: `${BASE_URL.COMPANIES}community-setting/`,
     AUDIENCES: `${BASE_URL.AGENCY}audience/`,
+    COMMUNITY_AUDIENCES: `${BASE_URL.AGENCY}community-audience/`,
     COPY_CODE: `${BASE_URL.COMPANIES}copy-code/`,
     CREATIVE_CODE: `${BASE_URL.COMPANIES}creative-code/`,
     PROGRAMS: `${BASE_URL.COMPANIES}program/`,
+    CHANNEL: `${BASE_URL.COMPANIES}channel/`,
   },
   COMPANY: {
-    ADMIN: `${BASE_URL.COMPANY}`, //get admin 
-    ADMIN_COMPANY_BLOCK: `${env.API_URL}admin-company-block/`, //post admin(status)
-    AGENCY_COMPANY_LIST: `${BASE_URL.AGENCY}company/`, //for agency
+    ADMIN: `${BASE_URL.COMPANY}`, //for admin
+    //for status update in admin
+    ADMIN_COMPANY_BLOCK: `${env.API_URL}admin-company-block/`,
+    COMPANY_LIST: `${BASE_URL.AGENCY}company/`, //for agency
     CREATOR_COMPANY_LIST: `${BASE_URL.CREATOR}creator-company-list`, //for creator
   },
   INVITE: {
@@ -53,6 +62,7 @@ export const API_URL = {
     MEMBERS_JOBS_LIST: `${env.API_URL}members/member-job-list/`,
     CREATOR_JOBS_LIST: `${env.API_URL}creator/my-jobs/`,
     JOB_APPLIED: `${env.API_URL}job-applied/`,
+    JOB_TASK: `${env.API_URL}job-task/`,
   },
   NOTIFICATION: {
     AGENCY_NOTIFICATION: `${BASE_URL.AGENCY}agency-notification/`,
@@ -61,6 +71,9 @@ export const API_URL = {
   USER_PROFILE: {
     USER_COMMUNICATION: `${env.API_URL}user-communication/`,
     USER_PORTFOLIO: `${env.API_URL}user-portfolio/`,
+    USER_EMAIL_CHANGE: `${env.API_URL}email-change/`,
+    USER_PASSWORD_CHANGE: `${env.API_URL}profile-password-change/`,
+    USER_CLOSE_ACCOUNT: `${env.API_URL}authentication/close-account/`,
   },
   MY_JOBS: {
     AGENCY_JOBS_LIST: `${BASE_URL.AGENCY}agency-jobs/`,
@@ -83,5 +96,14 @@ export const API_URL = {
   },
   INDUSTRY: {
     INDUSTRY_LIST: `${BASE_URL.AGENCY}industries/`, //for agency
+  },
+  DRAFT_JOBS: {
+    DRAFT_JOBS_LIST: `${BASE_URL.AGENCY}draft-jobs/`,
+  },
+  TEMPLATES: {
+    TEMPLATES_LIST: `${BASE_URL.TEMPLATES}`,
+  },
+  MEDIA: {
+    DAM_MEDIA: `${BASE_URL.AGENCY}dam-media/`,
   },
 };

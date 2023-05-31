@@ -1,5 +1,5 @@
 import React, { lazy, Suspense } from "react";
-import { Route, Routes, useNavigate } from "react-router-dom";
+import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import { RouteType } from "./helper/types";
 import {
   AUTH_ROUTES,
@@ -18,7 +18,7 @@ import { useAppSelector } from "redux/store";
 import { IS_PERSISTED } from "redux/reducers/config/app/app.slice";
 import { getAllowedRoutes } from "helper/utility/customFunctions";
 import { GET_USER_PROFILE_DATA } from "redux/reducers/auth/auth.slice";
-import { useSingleEffect } from "react-haiku";
+import { useSingleEffect, useUpdateEffect } from "react-haiku";
 
 // Import lazy load component
 const AuthLayout = lazy(() => import("layouts/AuthLayout"));
@@ -27,9 +27,6 @@ const NotFound = lazy(() => import("pages/error/NotFound"));
 const DashLayout = lazy(() => import("layouts/DashLayout"));
 
 const RouteApp = () => {
-  // Router hook
-  let navigate = useNavigate();
-
   // Redux states
   const isPersist = useAppSelector(IS_PERSISTED);
   const userProfile = useAppSelector(GET_USER_PROFILE_DATA);
@@ -49,14 +46,23 @@ const RouteApp = () => {
   ];
 
   // RBAC(RoleBasedAccessControl) - Code
-  const AllowedRoutes = [];
-  useSingleEffect(() => {
-    if (isPersist) AllowedRoutes.push(getAllowedRoutes(COMBINED_ROUTES, [userProfile?.data?.role]));
-    else {
-      AllowedRoutes.splice(0, AllowedRoutes.length);
-      navigate("/login");
-    }
-  });
+  let ALLOWED_ROUTES = [];
+
+  if (isPersist)
+    ALLOWED_ROUTES = getAllowedRoutes(COMBINED_ROUTES, [userProfile?.data?.role]);
+
+  // useUpdateEffect(() => {
+  //   if (isPersist)
+  //     ALLOWED_ROUTES.push(
+  //       getAllowedRoutes(COMBINED_ROUTES, [userProfile?.data?.role])
+  //     );
+  //   else {
+  //     ALLOWED_ROUTES.splice(0, ALLOWED_ROUTES.length);
+  //     // navigate("/login");
+  //   }
+  // }, [userProfile?.data?.role, isPersist, COMBINED_ROUTES]);
+
+  console.log({ ALLOWED_ROUTES, AUTH_ROUTES, COMBINED_ROUTES }, [userProfile?.data?.role], 'ALLOWED_ROUTES');
 
   return (
     <Routes>
@@ -95,7 +101,7 @@ const RouteApp = () => {
           }
         >
           {/* Pages Route  */}
-          {COMBINED_ROUTES?.map((pageItem: RouteType, pageIndex: number) => {
+          {COMBINED_ROUTES.map((pageItem: RouteType, pageIndex: number) => {
             return (
               <Route
                 key={pageIndex}

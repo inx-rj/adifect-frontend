@@ -7,11 +7,11 @@ import { useAppDispatch, useAppSelector } from "redux/store";
 import { GET_USER_PROFILE_DATA } from "redux/reducers/auth/auth.slice";
 import { useSingleEffect, useUpdateEffect } from "react-haiku";
 
-import { FRESHERS_JOBS_DATA } from "redux/reducers/homePage/fresherJobsList.slice";
+import { FRESHERS_JOBS_DATA } from "redux/reducers/jobs/fresherJobsList.slice";
 import {
   CLEAR_MEMBERS_APPROVAL_JOBS,
   MEMBERS_APPROVAL_JOBS_DATA,
-} from "redux/reducers/homePage/membersApprovalJobsList.slice";
+} from "redux/reducers/jobs/membersApprovalJobsList.slice";
 import { formateISODateToLocaleString } from "helper/utility/customFunctions";
 import {
   GET_MEMEBERS_APPROVAL_JOBLIST,

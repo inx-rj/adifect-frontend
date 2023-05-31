@@ -5,7 +5,6 @@ export interface initialTableConfigInterface {
   from_date?: string;
   to_date?: string;
   ordering?: string;
-  company?: string;
   community?: string;
   status?: string;
   tag?: string;

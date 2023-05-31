@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 import {
   CLEAR_IN_REVIEW_JOBS,
   IN_REVIEW_JOBS_DATA,
-} from "../../../redux/reducers/homePage/inReviewJobsList.slice";
+} from "../../../redux/reducers/jobs/inReviewJobsList.slice";
 import { useAppDispatch, useAppSelector } from "./../../../redux/store";
 import { GET_ADMIN_DASHBOARD_IN_REVIEW_JOBLIST } from "redux/actions/jobs/jobs.actions";
 

@@ -5,7 +5,6 @@ import { API_URL } from "../../helper/env";
 
 class CommonApiClient {
   // Fetch all notification
-
   fetchAllNotifications = (filters, userRole) => {
     if (userRole === Roles?.MEMBER) {
       return axiosPrivate.get(
@@ -17,6 +16,10 @@ class CommonApiClient {
       );
     }
   }
+
+  // get all channel list
+  fetchChannelList = () =>
+    axiosPrivate.get(API_URL.COMPANIES.CHANNEL);
 
 }
 export default new CommonApiClient();

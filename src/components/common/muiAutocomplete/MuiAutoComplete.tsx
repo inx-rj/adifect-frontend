@@ -11,7 +11,8 @@ const MuiAutoComplete = ({
   searchText,
   handleChange,
   disabled = false,
-  customClass
+  customClass = "",
+  ...props
 }) => {
   return (
     <Autocomplete
@@ -70,11 +71,13 @@ const MuiAutoComplete = ({
       getOptionLabel={(option) => option.name}
       value={selectedOption}
       onChange={(event, value) => {
-        // console.log("hhhhhhhhhhhhhhhhhhhhh", value, event);
-        // setSelectedOption(value);
         handleChange(event, value);
       }}
+      onInputChange={(event, value) => {
+        props.handleSearchChange(event, value);
+      }}
       disabled={disabled}
+      {...props}
     />
   );
 };

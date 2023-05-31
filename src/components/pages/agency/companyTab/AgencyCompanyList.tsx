@@ -48,9 +48,6 @@ const ActionMenuButton = lazy(
   () => import("components/common/actionMenuButton/ActionMenuButton")
 );
 const MuiPopup = lazy(() => import("components/common/muiPopup/MuiPopup"));
-const LoadingSpinner = lazy(
-  () => import("components/common/loadingSpinner/Loader")
-);
 const userData = () => JSON.parse(localStorage.getItem("userData") ?? "");
 
 const AgencyCompanyList = () => {
@@ -109,10 +106,7 @@ const AgencyCompanyList = () => {
       dispatch(GET_COMPANY_LIST(paginationData, `${API_URL.COMPANY.ADMIN}`));
     } else {
       dispatch(
-        GET_COMPANY_LIST(
-          paginationData,
-          `${API_URL.COMPANY.AGENCY_COMPANY_LIST}`
-        )
+        GET_COMPANY_LIST(paginationData, `${API_URL.COMPANY.COMPANY_LIST}`)
       );
     }
   }, [paginationData, userProfile.data?.role]);
@@ -229,11 +223,11 @@ const AgencyCompanyList = () => {
       icon: Images.ErrorLogo,
       buttons: {
         Cancel: true,
-        Confirm: true,
+        OK: true,
       },
       dangerMode: true,
     }).then((willDelete) => {
-      if (willDelete === "Confirm") {
+      if (willDelete === "OK") {
         if (userProfile?.data?.role === Roles.ADMIN) {
           //admin
           dispatch(
@@ -455,7 +449,7 @@ const AgencyCompanyList = () => {
   return (
     <div className="page-container">
       <div className="flex-between">
-        <h1>Company</h1>
+        <h4 className="font-bold text-xl">Company</h4>
         <div className="flex-between gap-[10px] font-sm leading-4 font-medium text-primary">
           <Link to="/">
             <HomeIcon color="disabled" />
@@ -479,10 +473,7 @@ const AgencyCompanyList = () => {
             <span className="btn-label">Add Company</span>
           </button>
         </div>
-        {companyList?.loading ? (
-          <LoadingSpinner positionClass="left-[calc(40%_-_50px)] top-[calc(40%_-_50px)" />
-        ) : (
-          <>
+       
             <MuiCustomTable
               loader={companyList?.loading}
               data={data}
@@ -607,8 +598,7 @@ const AgencyCompanyList = () => {
               }
               mainActionTitle={"Save"}
             />
-          </>
-        )}
+         
       </div>
     </div>
   );

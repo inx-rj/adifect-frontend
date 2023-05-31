@@ -11,14 +11,7 @@ import SearchBar from "components/common/searchBar/SearchBar";
 import ActionMenuButton from "components/common/actionMenuButton/ActionMenuButton";
 
 //import MUI components and icons
-import {
-  Button,
-  Checkbox,
-  FormControlLabel,
-  MenuItem,
-  Select,
-  Typography,
-} from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
 import AddIcon from "@mui/icons-material/Add";
 
@@ -28,44 +21,33 @@ import {
   TablePaginationType,
 } from "helper/types/muiTable/muiTable";
 import { Images } from "helper/images";
-import { formateISODateToLocaleString } from "helper/utility/customFunctions";
 
 //import redux
 import { useAppDispatch, useAppSelector } from "redux/store";
-import {
-  DELETE_SINGLE_COMPANY,
-  GET_COMPANY_LIST,
-  POST_ADMIN_COMPANY,
-  POST_SINGLE_COMPANY,
-  PUT_SINGLE_COMPANY,
-} from "redux/actions/companyTab/companyTab.actions";
-import { COMPANY_LIST } from "redux/reducers/companyTab/companyTab.slice";
 import { GET_USER_PROFILE_DATA } from "redux/reducers/auth/auth.slice";
 import { API_URL } from "helper/env";
-import { singleCompanyPayloadData } from "helper/types/companyTab/companiesType";
 import { WORKFLOW_LIST } from "redux/reducers/workFlow/workFlow.slice";
 import {
   DELETE_SINGLE_WORKFLOW,
   GET_WORKFLOW_LIST,
-  POST_SINGLE_WORKFLOW,
-  PUT_SINGLE_WORKFLOW,
 } from "redux/actions/workFlow/workFlow.actions";
 import { WORKFLOW_ROUTE } from "routes/baseRoute";
 import LoadingSpinner from "components/common/loadingSpinner/Loader";
 import Title from "components/common/pageTitle/Title";
-
-const ROLES = {
-  ADMIN: 0,
-  CREATOR: 1,
-  AGENCY: 2,
-  MEMBER: 3,
-};
+import { Roles } from "helper/config";
 
 const userData = () => JSON.parse(localStorage.getItem("userData") ?? "");
 
-const WorkFlowList = () => {
+interface workFlowListProps {
+  headerTitle?: boolean;
+  companyInfoPage?: boolean;
+}
+
+const WorkFlowList = (props: workFlowListProps) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+
+  const { headerTitle, companyInfoPage } = props;
 
   // Redux states
   //   const { companyList } = useAppSelector(COMPANY_LIST);
@@ -73,7 +55,6 @@ const WorkFlowList = () => {
   const userProfile = useAppSelector(GET_USER_PROFILE_DATA);
 
   // React states
-  const [openModal, setOpenModal] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedItem, setSelectedItem] = useState<{
     currentTooltip: null | number;
@@ -83,22 +64,7 @@ const WorkFlowList = () => {
     currentId: null,
   });
   const [isEditMode, setIsEditMode] = useState(false);
-  const [isSettingMode, setIsSettingMode] = useState(false);
-  const [companyStatus, setCompanyStatus] = useState(false);
 
-  const [formData, setFormData] = useState<{
-    company: string;
-    description: string;
-    isActive: boolean;
-  }>({
-    company: "",
-    description: "",
-    isActive: false,
-  });
-  const [errors, setErrors] = useState({
-    company: "",
-    description: "",
-  });
   const [paginationData, setPaginationData] = useState<TablePaginationType>({
     page: 1,
     rowsPerPage: 10,
@@ -107,7 +73,7 @@ const WorkFlowList = () => {
 
   //fetch initial companies data list
   useSingleEffect(() => {
-    if (userProfile?.data?.role === ROLES.ADMIN) {
+    if (userProfile?.data?.role === Roles.ADMIN) {
       dispatch(GET_WORKFLOW_LIST(paginationData, `${API_URL.WORKFLOW.ADMIN}`));
     } else {
       dispatch(GET_WORKFLOW_LIST(paginationData));
@@ -116,7 +82,7 @@ const WorkFlowList = () => {
 
   //fetch workflow list when pagination change
   useUpdateEffect(() => {
-    if (userProfile?.data?.role === ROLES.ADMIN) {
+    if (userProfile?.data?.role === Roles.ADMIN) {
       dispatch(GET_WORKFLOW_LIST(paginationData, `${API_URL.WORKFLOW.ADMIN}`));
     } else {
       dispatch(
@@ -127,89 +93,8 @@ const WorkFlowList = () => {
 
   //handle edit action
   const handleEdit = (item) => {
-    // setOpenModal(true);
-    // setIsEditMode(true);
-    // setErrors({ company: "", description: "" });
-    // setSelectedItem({ ...selectedItem, currentId: item?.id });
-    // setFormData({
-    //   company: item?.name,
-    //   description: item?.description,
-    //   isActive: item?.is_active,
-    // });
+    setIsEditMode(true);
     navigate(`${item?.id}`);
-  };
-
-  //handle settings action
-  const handleSetting = (item) => {
-    setOpenModal(true);
-    setIsSettingMode(true);
-    setSelectedItem({ ...selectedItem, currentId: item?.id });
-    setCompanyStatus(item?.is_blocked);
-  };
-
-  //validate inputs
-  const validateSubmit = (e) => {
-    e.preventDefault();
-    const tempErrors = {
-      company: !formData.company ? "Please enter Company Name" : "",
-      description: !formData.description ? "Please enter Description" : "",
-    };
-    setErrors(tempErrors);
-    if (Object.values(tempErrors).filter((value) => value)?.length) {
-      return;
-    }
-    handleFormSubmit();
-  };
-
-  //handle form submit
-  const handleFormSubmit = () => {
-    if (!isSettingMode) {
-      const payload: singleCompanyPayloadData = {
-        name: formData?.company,
-        description: formData?.description,
-        is_active: formData?.isActive,
-      };
-      if (isEditMode) {
-        // Handle edit option action
-        userProfile?.data?.role === ROLES.ADMIN
-          ? dispatch(
-              PUT_SINGLE_WORKFLOW(
-                selectedItem.currentId,
-                payload,
-                `${API_URL.WORKFLOW.ADMIN}`
-              )
-            )
-          : dispatch(PUT_SINGLE_WORKFLOW(selectedItem.currentId, payload));
-      } else {
-        // Handle Add new company action
-        payload.agency = userData()?.user.user_id;
-        userProfile?.data?.role === ROLES.ADMIN
-          ? dispatch(POST_SINGLE_WORKFLOW(payload, `${API_URL.WORKFLOW.ADMIN}`))
-          : dispatch(POST_SINGLE_WORKFLOW(payload));
-      }
-    } else {
-      // Handle Setting option action for admin
-      dispatch(
-        POST_ADMIN_COMPANY(
-          {
-            company_id: selectedItem.currentId,
-            status: companyStatus,
-          },
-          `${API_URL.COMPANY.ADMIN_COMPANY_BLOCK}`
-        )
-      );
-    }
-
-    // reset relevant states
-    setAnchorEl(null);
-    setSelectedItem({ currentId: null, currentTooltip: null });
-    setOpenModal(false);
-    setIsEditMode(false);
-    setFormData({
-      company: "",
-      description: "",
-      isActive: false,
-    });
   };
 
   //handle delete action
@@ -363,9 +248,9 @@ const WorkFlowList = () => {
                 anchorEl={anchorEl}
                 handleView={() => handleEdit(item)}
                 handleEdit={() => handleEdit(item)}
-                handleSetting={() => handleSetting(item)}
+                // handleSetting={() => handleSetting(item)}
                 handleDelete={() => handleDelete(item)}
-                showSetting={userProfile?.data?.role === ROLES.ADMIN}
+                // showSetting={userProfile?.data?.role === Roles.ADMIN}
                 showEdit={!item.assigned_job ? true : false}
                 showView={item.assigned_job ? true : false}
                 showDelete={true}
@@ -385,10 +270,14 @@ const WorkFlowList = () => {
 
   return (
     <>
-      {workFlowList?.loading ? (
-        <LoadingSpinner></LoadingSpinner>
-      ) : (
-        <div className="page-container">
+      <div
+        className={
+          companyInfoPage === true
+            ? "card drop-shadow-none border z-[1] text-sm"
+            : "page-container"
+        }
+      >
+        {headerTitle !== false && (
           <div className="flex-between">
             <Title title="Workflow List" />
             <div className="flex-between gap-[10px] font-sm leading-4 font-medium text-primary">
@@ -396,42 +285,50 @@ const WorkFlowList = () => {
                 <HomeIcon color="disabled" />
               </Link>
               <span className="text-disable opacity-20">|</span>
-              <Link to="/company">Company</Link>
+              <Link to={WORKFLOW_ROUTE.HOME}>Workflow</Link>
             </div>
           </div>
-          <div className="page-card">
-            <div className="flex-between flex-wrap p-[15px] pb-5">
-              <SearchBar
-                setPaginationData={setPaginationData}
+        )}
+        <div
+          className={`${
+            companyInfoPage === true ? "page-card mt-0" : "page-card"
+          }`}
+        >
+          <div
+            className={`${
+              companyInfoPage === true ? "" : "p-[15px] "
+            } flex-between flex-wrap pb-5`}
+          >
+            <SearchBar
+              setPaginationData={setPaginationData}
+              paginationData={paginationData}
+            />
+            <Link to={`${WORKFLOW_ROUTE.HOME}/add`}>
+              <button
+                type="submit"
+                // onClick={() => setOpenModal(true)}
+                className="btn btn-primary btn-label bg-primary flex items-center px-[15px] py-[9px] max-w-[155px] w-full flex-center gap-2"
+              >
+                <AddIcon />
+                <span className="btn-label">Add Workflow</span>
+              </button>
+            </Link>
+          </div>
+          {workFlowList?.loading ? (
+            <LoadingSpinner />
+          ) : (
+            <>
+              <MuiCustomTable
+                loader={workFlowList?.loading}
+                data={data}
+                allData={workFlowList?.data}
                 paginationData={paginationData}
+                setPaginationData={setPaginationData}
               />
-              <Link to={`${WORKFLOW_ROUTE.HOME}/add`}>
-                <button
-                  type="submit"
-                  // onClick={() => setOpenModal(true)}
-                  className="btn btn-primary btn-label bg-primary flex items-center px-[15px] py-[9px] max-w-[155px] w-full flex-center gap-2"
-                >
-                  <AddIcon />
-                  <span className="btn-label">Add Workflow</span>
-                </button>
-              </Link>
-            </div>
-            {workFlowList?.loading ? (
-              <LoadingSpinner />
-            ) : (
-              <>
-                <MuiCustomTable
-                  loader={workFlowList?.loading}
-                  data={data}
-                  allData={workFlowList?.data}
-                  paginationData={paginationData}
-                  setPaginationData={setPaginationData}
-                />
-              </>
-            )}
-          </div>
+            </>
+          )}
         </div>
-      )}
+      </div>
     </>
   );
 };

@@ -2,13 +2,15 @@ import { Roles } from "helper/config";
 import { SidebarRoutesTypes } from "helper/types";
 
 export const SYSTEM: Readonly<{ LOGIN: string; HOME: string }> = Object.freeze({
-  LOGIN: "/login",
+  LOGIN: "/",
   HOME: "/",
 });
 
-export const MAIN_ROUTE: Readonly<{ HOME: string }> = Object.freeze({
-  HOME: `${SYSTEM.HOME}`,
-});
+export const MAIN_ROUTE: Readonly<{ HOME: string; HOME_DASH: string }> =
+  Object.freeze({
+    HOME: `${SYSTEM.HOME}`,
+    HOME_DASH: `${SYSTEM.HOME}home`,
+  });
 
 // Authentication Route
 export const AUTH_ROUTE: Readonly<{
@@ -29,7 +31,7 @@ export const AUTH_ROUTE: Readonly<{
 export const PAGE_ROUTE: Readonly<{
   [key: string]: string;
 }> = Object.freeze({
-  HOME: `${MAIN_ROUTE.HOME}`,
+  HOME: `${MAIN_ROUTE.HOME_DASH}`,
   WORKFLOW: `${MAIN_ROUTE.HOME}workflow`,
   MY_PROJECTS: `${MAIN_ROUTE.HOME}projects`,
   COMPANIES: `${MAIN_ROUTE.HOME}`,
@@ -60,12 +62,13 @@ export const WORKFLOW_ROUTE: Readonly<{
 export const COMPANIES_ROUTE: Readonly<{
   [key: string]: string;
 }> = Object.freeze({
-  COMPANY_PROJECTS_DETAILS: `${PAGE_ROUTE.COMPANY_PROJECTS}/:communityId`,
+  COMPANY_PROJECTS_DETAILS: `${PAGE_ROUTE.COMPANY_PROJECTS}/:storyId`,
   TAGS: `${PAGE_ROUTE.HOME}company-project/tags`,
   COMMUNITY_SETTINGS: `${PAGE_ROUTE.HOME}company-project/community-settings`,
   PROGRAMS: `${PAGE_ROUTE.HOME}company-project/programs`,
   COPY_CODE: `${PAGE_ROUTE.HOME}company-project/copy-code`,
   CREATIVE_CODE: `${PAGE_ROUTE.HOME}company-project/creative-code`,
+  AUDIENCE: `${PAGE_ROUTE.HOME}company-project/audience`,
 });
 
 // My Jobs Route
@@ -74,7 +77,16 @@ export const MY_JOBS_ROUTE: Readonly<{
 }> = Object.freeze({
   HOME: `${PAGE_ROUTE.MY_JOBS}/list`,
   CREATE_MY_JOB: `${PAGE_ROUTE.MY_JOBS}/add`,
-  UPDATE_MY_JOB: `${PAGE_ROUTE.MY_JOBS}/update`,
+  UPDATE_MY_JOB: `${PAGE_ROUTE.MY_JOBS}/:jobId`,
+});
+
+// Draft Jobs Route
+export const DRAFT_JOBS_ROUTE: Readonly<{
+  [key: string]: string;
+}> = Object.freeze({
+  HOME: `${PAGE_ROUTE.DRAFT_JOBS}`,
+  CREATE_DRAFT_JOB: `${PAGE_ROUTE.DRAFT_JOBS}/add`,
+  UPDATE_DRAFT_JOB: `${PAGE_ROUTE.DRAFT_JOBS}/:jobId`,
 });
 
 // Templates Route
@@ -82,6 +94,7 @@ export const TEMPLATES_ROUTE: Readonly<{
   [key: string]: string;
 }> = Object.freeze({
   HOME: `${PAGE_ROUTE.TEMPLATES}/list`,
+  UPDATE_TEMPLATE: `${PAGE_ROUTE.TEMPLATES}/:templateId`,
 });
 
 // Company Route
@@ -157,6 +170,11 @@ export const SIDEBAR_ROUTES: SidebarRoutesTypes[] = [
       {
         name: "Creative Code",
         path: COMPANIES_ROUTE.CREATIVE_CODE,
+        children: [],
+      },
+      {
+        name: "Audience",
+        path: COMPANIES_ROUTE.AUDIENCE,
         children: [],
       },
       // {

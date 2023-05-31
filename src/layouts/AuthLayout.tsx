@@ -9,7 +9,7 @@ const AuthLayout = () => {
 
   // To be updated with redux
   if (isPersist) {
-    return <Navigate to={MAIN_ROUTE.HOME} replace={true} state={true} />;
+    return <Navigate to={MAIN_ROUTE.HOME_DASH} replace={true} state={true} />;
   }
 
   return (

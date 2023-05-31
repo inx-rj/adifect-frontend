@@ -1,8 +1,9 @@
 import {
   Add,
-  CancelOutlined,
+  ArrowDownwardOutlined,
+  ArrowUpwardOutlined,
+  CloseOutlined,
   DeleteOutlineOutlined,
-  PresentToAllOutlined,
 } from "@mui/icons-material";
 import {
   Autocomplete,
@@ -30,7 +31,7 @@ import {
   GET_WORKFLOW_STAGE_DETAILS,
 } from "redux/actions/workFlow/workFlow.actions";
 import { GET_USER_PROFILE_DATA } from "redux/reducers/auth/auth.slice";
-import { COMPANY_LIST } from "redux/reducers/companyTab/companyTab.slice";
+// import { COMPANY_LIST } from "redux/reducers/companyTab/companyTab.slice";
 import { INVITE_USER_LIST } from "redux/reducers/inviteUser/inviteUser.slice";
 import {
   WORKFLOW_MAIN_DETAILS,
@@ -42,18 +43,21 @@ import swal from "sweetalert";
 import { isEmpty } from "helper/utility/customFunctions";
 import { IS_HEADER_COMPANY } from "redux/reducers/config/app/app.slice";
 import MuiAutoComplete from "components/common/muiAutocomplete/MuiAutoComplete";
+import HomeIcon from "@mui/icons-material/Home";
+import { COMPANY_LIST } from "redux/reducers/companyTab/companyTab.slice";
 
 const ApprovalWorkflow = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { "*": workflowId } = useParams();
 
-  const companyData = useAppSelector(COMPANY_LIST);
+  // const companyData = useAppSelector(COMPANY_LIST);
   const userProfile = useAppSelector(GET_USER_PROFILE_DATA);
   const workflowMemberApproversData = useAppSelector(INVITE_USER_LIST);
   const workflowMainDetails = useAppSelector(WORKFLOW_MAIN_DETAILS);
   const workflowStageDetails = useAppSelector(WORKFLOW_STAGE_DETAILS);
   const headerCompany = useAppSelector(IS_HEADER_COMPANY);
+  const companyList = useAppSelector(COMPANY_LIST);
 
   const [isLoading, setIsLoading] = useState(true);
   const [showbutton, setshowbutton] = useState(true);
@@ -123,6 +127,7 @@ const ApprovalWorkflow = () => {
   });
 
   const handleOnDragEnd = (result) => {
+    console.log("result", result, stages);
     if (!result.destination) return;
 
     if (showbutton) {
@@ -176,7 +181,8 @@ const ApprovalWorkflow = () => {
       const items: any = Array.from(stages);
       const [reorderedItem] = items.splice(index, 1);
 
-      let newVar2 = stages.find((item, i) => i == index + 1);
+      // let newVar2 =
+      stages.find((item, i) => i === index + 1);
       items.splice(destIndex, 0, reorderedItem);
 
       for (let i = 0; i < stages.length; i++) {
@@ -230,7 +236,7 @@ const ApprovalWorkflow = () => {
   };
 
   const handleAllApproverChnge = (e, index) => {
-    const { name, value } = e.target;
+    const { name } = e.target;
     const list = [...stages];
     let prevValue = list[index][name];
     list[index][name] = !prevValue;
@@ -239,7 +245,7 @@ const ApprovalWorkflow = () => {
   };
 
   const handleApproverChnge = (e, index) => {
-    const { name, value } = e.target;
+    const { name } = e.target;
     const list = [...stages];
     let prevValue = list[index][name];
     list[index][name] = !prevValue;
@@ -308,7 +314,7 @@ const ApprovalWorkflow = () => {
   }
 
   const handleIsDeadlineChnge = (e, index) => {
-    const { name, value } = e.target;
+    const { name } = e.target;
     const list = [...stages];
     let prevValue = list[index][name];
     list[index][name] = !prevValue;
@@ -325,7 +331,7 @@ const ApprovalWorkflow = () => {
   };
 
   const handleDeadlineChnge = (e, index) => {
-    const { name, value } = e.target;
+    const { value } = e.target;
     const list = [...stages];
     list[index].approval_time = value;
     if (value === 12) {
@@ -362,7 +368,7 @@ const ApprovalWorkflow = () => {
   };
 
   const handleNudgeChnge = (e, index, nudge_index) => {
-    const { name, value } = e.target;
+    const { value } = e.target;
     const list = [...stages];
     list[index].nudge_time[nudge_index].time = value;
     setStages(list);
@@ -454,7 +460,7 @@ const ApprovalWorkflow = () => {
         setErrors(tempErrors);
       }
 
-      if (stages[i].is_observer && stages[i].observer.length == 0) {
+      if (stages[i].is_observer && stages[i].observer.length === 0) {
         tempErrors = {
           observer: "Please select atleast one observer",
         };
@@ -463,7 +469,7 @@ const ApprovalWorkflow = () => {
     }
 
     const isError = Object.values(tempErrors).every(
-      (x) => x == null || x == ""
+      (x) => x === null || x === ""
     );
 
     let newArr;
@@ -503,7 +509,7 @@ const ApprovalWorkflow = () => {
           item.approval_time = null;
           item.nudge_time = null;
         }
-        if (item.order == "") {
+        if (item.order === "") {
           item.order = JSON.stringify(index);
         }
         // item.order = orderArr;
@@ -512,7 +518,7 @@ const ApprovalWorkflow = () => {
     }
 
     const isEmpty = Object.values(tempErrors).every(
-      (x) => x == null || x == ""
+      (x) => x === null || x === ""
     );
 
     if (isEmpty) {
@@ -521,8 +527,8 @@ const ApprovalWorkflow = () => {
           dispatch(DELETE_SINGLE_WORKFLOW_STAGE(deleteStageIds[i]));
         }
       }
-      if (workflowId) {
-        const update = axiosPrivate
+      if (!isNaN(Number(workflowId))) {
+        axiosPrivate
           .put(`${API_URL.WORKFLOW.WORKFLOW_LIST}${workflowId}/`, {
             agency: userProfile.data.id,
             name: workflowName,
@@ -530,7 +536,7 @@ const ApprovalWorkflow = () => {
             company: companyvalue?.id,
           })
           .then((res) => {
-            if (res.data.message == "error") {
+            if (res.data.message === "error") {
               swal({
                 title: "Error",
                 text: "Workflow name already exists",
@@ -541,7 +547,7 @@ const ApprovalWorkflow = () => {
                 },
                 timer: 2000,
               });
-            } else if (res?.data?.status == 400) {
+            } else if (res?.data?.status === 400) {
               setIsLoading(true);
               swal({
                 title: "Error",
@@ -554,7 +560,7 @@ const ApprovalWorkflow = () => {
                 timer: 2000,
               });
               navigate("/workflow");
-            } else if (res.status == 200) {
+            } else if (res.status === 200) {
               setIsLoading(true);
               swal({
                 title: "Successfully Complete",
@@ -597,15 +603,15 @@ const ApprovalWorkflow = () => {
             }, 1);
           });
       } else {
-        const success = axiosPrivate
+        axiosPrivate
           .post(`${API_URL.WORKFLOW.WORKFLOW_LIST}`, {
             agency: userProfile.data.id,
             name: workflowName,
             stage: newArr,
-            company: companyvalue,
+            company: companyvalue?.id,
           })
           .then((res) => {
-            if (res.data.message == "Error!") {
+            if (res.data.message === "Error!") {
               swal({
                 title: "Error",
                 text: "Workflow name already exists",
@@ -652,7 +658,6 @@ const ApprovalWorkflow = () => {
   };
 
   const handleAddStage = () => {
-    let lenStages = stages.length;
     setStages([
       ...stages,
       {
@@ -703,6 +708,29 @@ const ApprovalWorkflow = () => {
   });
 
   useEffect(() => {
+    const handler = () => {
+      setIsOpen6(false);
+      for (let index = 0; index < stagesRef?.current?.length; index++) {
+        const list = [...stagesRef.current];
+        list[index].isOpenDeadline = false;
+        for (let i = 0; i < list[index]?.nudgeOpen?.length; i++) {
+          list[index].nudgeOpen[i].open = false;
+        }
+        setStages(list);
+        stagesRef.current = list;
+      }
+    };
+    window.addEventListener("scroll", handler);
+    return () => {
+      window.removeEventListener("scroll", handler);
+    };
+  }, []);
+
+  // useEffect(() => {
+  //   stagesRef.current = stages;
+  // }, [stages]);
+
+  useEffect(() => {
     if (workflowMainDetails && !isNaN(Number(workflowId))) {
       setWorkflowName(workflowMainDetails?.name);
       setcompanyvalue({
@@ -710,7 +738,7 @@ const ApprovalWorkflow = () => {
         id: workflowMainDetails?.company,
       });
 
-      if (workflowMainDetails?.assigned_job == true) {
+      if (workflowMainDetails?.assigned_job === true) {
         setshowbutton(false);
       } else {
         setshowbutton(true);
@@ -810,11 +838,11 @@ const ApprovalWorkflow = () => {
       stagesRef.current = stagesRef.current;
       setNudgeChange(false);
     }
-  }, [nudgeChange]);
+  }, [nudgeChange, stages]);
 
   useEffect(() => {
-    const success = axiosPrivate
-      .get(`${API_URL.COMPANY.AGENCY_COMPANY_LIST}?is_active=1`)
+    axiosPrivate
+      .get(`${API_URL.COMPANY.COMPANY_LIST}?is_active=1`)
       .then((res) => {
         const responseDestructredData = { ...res?.data?.data };
         // console.log({ res, responseDestructredData }, 'Res Company');
@@ -823,7 +851,7 @@ const ApprovalWorkflow = () => {
         if (
           isEmpty(
             responseDestructredData?.results?.find(
-              (e) => e.company_id == workflowMainDetails?.company
+              (e) => e.company_id === workflowMainDetails?.company
             )
           )
         ) {
@@ -838,13 +866,24 @@ const ApprovalWorkflow = () => {
       .catch((err) => {});
   }, [workflowMainDetails, workflowId]);
 
+  useUpdateEffect(() => {
+    setcompanydata(
+      companyList?.companyList?.data?.results?.map((company) => {
+        return {
+          id: company?.id,
+          name: company?.name,
+        };
+      })
+    );
+  }, [companyList?.companyList?.data?.results]);
+
   //fetch company list when pagination change
   useEffect(() => {
     if (userProfile?.data?.role === Roles.ADMIN) {
       dispatch(GET_COMPANY_LIST(paginationData, `${API_URL.COMPANY.ADMIN}`));
     } else {
       dispatch(
-        GET_COMPANY_LIST(paginationData, `${API_URL.COMPANY.AGENCY_COMPANY_LIST}`)
+        GET_COMPANY_LIST(paginationData, `${API_URL.COMPANY.COMPANY_LIST}`)
       );
     }
     if (!isNaN(Number(workflowId))) {
@@ -859,6 +898,10 @@ const ApprovalWorkflow = () => {
     setErrors({ ...errors, companyvalue: null });
     dispatch(GET_INVITE_MEMBERS_USERS(value?.company_id, 3));
   };
+
+  const handleWorkFlowCompanySearch = (e, value) => {
+    setPaginationData({ ...paginationData, search: value });
+  };
   const [searchText, setSearchText] = useState("");
 
   return (
@@ -870,32 +913,27 @@ const ApprovalWorkflow = () => {
           {showbutton ? (
             <div className="flex justify-between pb-4 items-center">
               <Title title="Edit Approval Workflow" />{" "}
-              <Link
-                to={WORKFLOW_ROUTE.HOME}
-                className="btn btn-outline max-w-[160px] w-full h-full"
-              >
-                <span className="text-lg font-semibold">Back</span>
-              </Link>
+              <div className="flex-between gap-[10px] font-sm leading-4 font-medium text-primary">
+                <Link to="/">
+                  <HomeIcon color="disabled" />
+                </Link>
+                <span className="text-disable opacity-20">|</span>
+                <Link to={WORKFLOW_ROUTE.HOME}>Workflow</Link>
+              </div>
             </div>
           ) : (
-            <div className="flex items-center justify-between pb-4">
+            <div className="flex justify-between pb-4 items-center">
               <Title title="Create Approval Workflow" />{" "}
-              <Link
+              {/* <Link
                 to={WORKFLOW_ROUTE.HOME}
                 className="btn btn-outline max-w-[160px] w-full h-full"
               >
                 {" "}
                 <span className="text-lg font-semibold">Back</span>
-              </Link>
-              {/* <h1 className="approvaltitle">
-                Create Approval Workflow{" "}
-                <span className="backbtnlink">
-                  <Link to={WORKFLOW_ROUTE.HOME}>Back</Link>
-                </span>
-              </h1> */}
+              </Link> */}
             </div>
           )}
-          {showbutton == true ? null : (
+          {showbutton === true ? null : (
             <h6 className="currentlyWorkflow  bg-[#ffe2ad] rounded-t-lg h-[45px] gap-1 flex items-center justify-center text-[#cf5e00] text-base font-semibold">
               This workflow is currently in use and cannot be edited.{" "}
               <span className="jobsusing font-bold border-b-2 border-[#cf5e00] text-base">
@@ -903,68 +941,58 @@ const ApprovalWorkflow = () => {
               </span>
             </h6>
           )}
-          <div className="mt-0 page-card p-7 AG-Workflow">
-            <div
-              className={
-                errors.workflowName
-                  ? "max-w-[500px] w-full error"
-                  : "max-w-[500px] w-full"
-              }
-            >
-              <h5 className="text-base font-semibold">
-                Approval Workflow Name
-              </h5>
-              <input
-                disabled={!showbutton}
-                className="input-style"
-                type="text"
-                value={workflowName}
-                onChange={(e) => {
-                  setWorkflowName(e.target.value);
-                  setErrors({ ...errors, workflowName: null });
-                }}
-                name="Name"
-                placeholder="Name"
-                // onChange={handlechange}
-              />
-              <span
-                className="text-[#D14F4F] flex justify-end"
-                style={{
-                  color: "#D14F4F",
-                  opacity: errors.workflowName ? 1 : 0,
-                }}
-              >
-                {errors.workflowName ?? "valid"}
-              </span>
-            </div>
-            {/* {JSON.stringify(companyvalue)} */}
-            <div
-              className={
-                errors.companyvalue
-                  ? "mt-3 error max-w-[500px] w-full "
-                  : "mt-3 max-w-[500px] w-full "
-              }
-            >
-              <div className="text-content ">
+          <div className="page-card p-7 AG-Workflow mt-0">
+            <div className="border rounded-lg pt-7 px-7 mb-4 pb-2 grid md:grid-cols-2 sm:grid-cols-1 gap-5">
+              <div className={errors.workflowName ? " error" : ""}>
                 <h5 className="text-base font-semibold">
-                  Workflow Assign to Company?
-                </h5>{" "}
-                <div className="styled-select Companyname">
-                  <MuiAutoComplete
-                    placeholder="Select Company"
-                    filterList={companydata ?? []}
-                    selectedOption={companyvalue}
-                    setSearchText={setSearchText}
-                    // setSelectedOption={setcompanyvalue}
-                    handleChange={handleWorkFLowCompanyChange}
-                    searchText={searchText}
-                    label={""}
-                    disabled={!showbutton}
-                    customClass={
-                      "rounded outline-none focus:border-theme hover:border-none"
-                    }
-                  />
-                  {/* <Autocomplete
+                  Approval Workflow Name
+                </h5>
+                <input
+                  disabled={!showbutton}
+                  className="input-style"
+                  type="text"
+                  value={workflowName}
+                  onChange={(e) => {
+                    setWorkflowName(e.target.value);
+                    setErrors({ ...errors, workflowName: null });
+                  }}
+                  name="Name"
+                  placeholder="Name"
+                  // onChange={handlechange}
+                />
+                <span
+                  className="text-[#D14F4F] flex justify-end"
+                  style={{
+                    color: "#D14F4F",
+                    opacity: errors.workflowName ? 1 : 0,
+                  }}
+                >
+                  {errors.workflowName ?? "valid"}
+                </span>
+              </div>
+              {/* {JSON.stringify(companyvalue)} */}
+              <div className={errors.companyvalue ? "error  " : " "}>
+                <div className="text-content ">
+                  <h5 className="text-base font-semibold">
+                    Workflow Assign to Company?
+                  </h5>{" "}
+                  <div className="">
+                    <MuiAutoComplete
+                      placeholder="Select Company"
+                      filterList={companydata ?? []}
+                      selectedOption={companyvalue}
+                      setSearchText={setSearchText}
+                      // setSelectedOption={setcompanyvalue}
+                      handleSearchChange={handleWorkFlowCompanySearch}
+                      handleChange={handleWorkFLowCompanyChange}
+                      searchText={searchText}
+                      label={""}
+                      disabled={!showbutton}
+                      customClass={
+                        "rounded outline-none focus:border-theme hover:border-none"
+                      }
+                    />
+                    {/* <Autocomplete
                     value={companyvalue}
                     id="tags-outlined"
                     onInputChange={(e, v) =>
@@ -1046,18 +1074,19 @@ const ApprovalWorkflow = () => {
                       </MenuItem>
                     ))}
                   </Select> */}
+                  </div>
                 </div>
-              </div>
 
-              <span
-                className="text-[#D14F4F] flex justify-end"
-                style={{
-                  color: "#D14F4F",
-                  opacity: errors.companyvalue ? 1 : 0,
-                }}
-              >
-                {errors.companyvalue ?? "valid"}
-              </span>
+                <span
+                  className="text-[#D14F4F] flex justify-end"
+                  style={{
+                    color: "#D14F4F",
+                    opacity: errors.companyvalue ? 1 : 0,
+                  }}
+                >
+                  {errors.companyvalue ?? "valid"}
+                </span>
+              </div>
             </div>
 
             {/* <div className="AWokflowButton">
@@ -1083,264 +1112,281 @@ const ApprovalWorkflow = () => {
                   </button>
                 )}
               </div> */}
-          </div>
-          <div id="items" className="">
-            <DragDropContext onDragEnd={handleOnDragEnd}>
-              <Droppable droppableId={"characters"}>
-                {(provided) => (
-                  <ul {...provided.droppableProps} ref={provided.innerRef}>
-                    {stagesRef?.current?.map((item, index) => {
-                      // {stages?.map((item, index) => {
-                      return (
-                        <Draggable
-                          isDragDisabled={!showbutton}
-                          key={index}
-                          draggableId={String(index)}
-                          // draggableId={
-                          //   item.stage_id != ""
-                          //     ? String(item.stage_id)
-                          //     : String(index)
-                          // }
-                          index={index}
-                        >
-                          {(provided) => (
-                            <li
-                              ref={provided.innerRef}
-                              {...provided.draggableProps}
-                              {...provided.dragHandleProps}
-                            >
-                              {/* {JSON.stringify(index)} */}
-                              <div
-                                // key={index}
-                                className="services servicesworkflow page-card p-7"
+            <div id="items" className="gap-2">
+              <DragDropContext onDragEnd={handleOnDragEnd}>
+                {/* @ts-ignore */}
+                <Droppable droppableId={"characters"}>
+                  {(provided) => (
+                    <ul
+                      {...provided.droppableProps}
+                      ref={provided.innerRef}
+                      className="characters"
+                    >
+                      {stagesRef?.current?.map((item, index) => {
+                        // {stages?.map((item, index) => {
+                        console.log(
+                          "first",
+                          item.id,
+                          index,
+                          String(index),
+                          Droppable,
+                          stagesRef
+                        );
+                        return (
+                          <Draggable
+                            isDragDisabled={!showbutton}
+                            key={index}
+                            draggableId={String(index)}
+                            // draggableId={
+                            //   item.stage_id != ""
+                            //     ? String(item.stage_id)
+                            //     : String(index)
+                            // }
+                            index={index}
+                          >
+                            {(provided) => (
+                              <li
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                                {...provided.dragHandleProps}
+                                className="mb-4"
                               >
-                                <div className="flex justify-between Stage1">
-                                  <div className="flex items-center w-full gap-2 Stage1_left_Workflow">
-                                    <label>
-                                      <h2 className="text-2xl font-bold">
-                                        Stage {index + 1}
-                                        {/* {item.order != ""
+                                {/* {JSON.stringify(index)} */}
+                                <div
+                                  // key={index}
+                                  className="border rounded-lg p-7"
+                                >
+                                  <div className="Stage1 flex justify-between">
+                                    <div className="Stage1_left_Workflow flex gap-2 items-center w-full">
+                                      <label>
+                                        <h2 className="text-2xl font-bold">
+                                          Stage {index + 1}
+                                          {/* {item.order != ""
                                             ? item.order + 1
                                             : index + 1} */}
-                                        -
-                                      </h2>
-                                    </label>
-                                    <input
-                                      disabled={!showbutton}
-                                      className="ApprovalNameInput max-w-[400px] w-full input-style"
-                                      // onChange={(e) =>
-                                      //   setStages((prev) => [
-                                      //     ...prev,
-                                      //     { stage_name: e.target.value },
-                                      //   ])
-                                      // }
-                                      onChange={(e) => {
-                                        handleServiceChnge(e, index);
-                                        setErrors({
-                                          ...errors,
-                                          stages: null,
-                                        });
-                                      }}
-                                      type="text"
-                                      value={item.stage_name}
-                                      name="stage_name"
-                                      placeholder="Workflow stage name"
-                                    />
-                                  </div>
-
-                                  <div className="Stage1_right_Workflow w-full max-w-[102px] flex gap-2">
-                                    <div
-                                      onClick={(e) =>
-                                        showbutton &&
-                                        orderUp(e, item.stage_id, index)
-                                      }
-                                      // onClick={(e) => setselected(index)}
-                                      className={
-                                        index == 0
-                                          ? "disable_up_down opacity-40"
-                                          : ""
-                                      }
-                                    >
-                                      <PresentToAllOutlined
-                                        style={{
-                                          color: "GrayText",
-                                          fontSize: "25px",
-                                        }}
-                                      />
-                                    </div>
-                                    <div
-                                      className={
-                                        index == stagesRef.current.length - 1
-                                          ? "disable_up_down"
-                                          : ""
-                                      }
-                                      onClick={(e) =>
-                                        showbutton &&
-                                        orderDown(e, item.stage_id, index)
-                                      }
-                                      // onClick={(e) => setselected(index)}
-                                    >
-                                      {/* <img src="/img/don.png" /> */}
-                                      <PresentToAllOutlined
-                                        style={{
-                                          transform: "rotate(180deg)",
-                                          color: "GrayText",
-                                          fontSize: "25px",
-                                        }}
-                                      />
-                                    </div>
-                                    <div
-                                      className={
-                                        stagesRef.current.length < 2
-                                          ? "disable_up_down"
-                                          : ""
-                                      }
-                                      onClick={(e) => {
-                                        showbutton &&
-                                          (item.stage_id
-                                            ? handleRemoveStage(
-                                                index,
-                                                item.stage_id,
-                                                true
-                                              )
-                                            : handleRemoveStage(
-                                                index,
-                                                index,
-                                                true
-                                              ));
-                                      }}
-                                    >
-                                      <DeleteOutlineOutlined
-                                        style={{
-                                          color: "GrayText",
-                                          fontSize: "25px",
-                                        }}
-                                      />
-                                    </div>
-                                  </div>
-                                </div>
-                                <div className="Approvers">
-                                  <h4 className="text-[#1b4ea8] text-lg font-bold mt-5 mb-2.5">
-                                    Approvers
-                                  </h4>
-                                  <div className="flex items-center gap-2 related-jobs-check-box">
-                                    <input
-                                      className="checkbox"
-                                      type="checkbox"
-                                      // id="is_all_approval"
-                                      onClick={(e) =>
-                                        showbutton &&
-                                        handleAllApproverChnge(e, index)
-                                      }
-                                      // onChange={(e) => handleApproverChnge(e, index)}
-                                      // setStages(...stages, { ...item, {item.!item.is_approval })
-                                      defaultChecked={item.is_all_approval}
-                                      name="is_all_approval"
-                                    />
-                                    <label
-                                      className="EveryoneColor  text-base font-normal text-[#474e55]"
-                                      htmlFor="is_all_approval"
-                                    >
-                                      {" "}
-                                      All Approvers must approve job before it
-                                      will move to the next stage
-                                    </label>
-                                  </div>
-                                  <div className="flex items-center gap-2 related-jobs-check-box secondAllApprover">
-                                    <input
-                                      className="checkbox"
-                                      type="checkbox"
-                                      // id="is_approval"
-                                      onClick={(e) =>
-                                        showbutton &&
-                                        handleApproverChnge(e, index)
-                                      }
-                                      // onChange={(e) => handleApproverChnge(e, index)}
-                                      // setStages(...stages, { ...item, {item.!item.is_approval })
-                                      defaultChecked={item.is_approval}
-                                      name="is_approval"
-                                    />
-                                    <label
-                                      className="EveryoneColor text-base font-normal text-[#474e55]"
-                                      htmlFor="is_approval"
-                                    >
-                                      {" "}
-                                      Approvers must approve job every time
-                                      revisions are requested
-                                    </label>
-                                  </div>
-                                  <div className="Observersskillssec mt-2.5 max-w-[586px] w-full">
-                                    <div className="skills-input-container">
-                                      <Autocomplete
-                                        disabled={!showbutton || !companyvalue}
-                                        value={item.approvals}
-                                        className="agency-workflow-approvers-selenium"
-                                        // value={approvers}
-                                        multiple
-                                        id="tags-outlined"
-                                        // open={isOpenApprovers}
-                                        filterOptions={filterOptions}
-                                        options={
-                                          workflowMemberApproversData
-                                            ?.inviteMembersList?.data?.length >
-                                          0
-                                            ? workflowMemberApproversData
-                                                ?.inviteMembersList?.data
-                                            : []
-                                        }
-                                        getOptionLabel={(option) =>
-                                          option?.user_first_name +
-                                          " " +
-                                          option?.user_last_name
-                                        }
-                                        // onChange={(event, value) => setSkills(value)}
-                                        onChange={(e, v) => {
-                                          changeHandler1(e, v, index);
-                                        }}
-                                        // defaultValue={skills ?? []}
-                                        // inputValue={skills}
-                                        // inputProps={{
-                                        //   "aria-label": "Without label",
-                                        // }}
-                                        filterSelectedOptions
-                                        // noOptionsText={
-                                        //   "Press enter to add this skill and select again"
+                                          -
+                                        </h2>
+                                      </label>
+                                      <input
+                                        disabled={!showbutton}
+                                        className="ApprovalNameInput max-w-[400px] w-full input-style"
+                                        // onChange={(e) =>
+                                        //   setStages((prev) => [
+                                        //     ...prev,
+                                        //     { stage_name: e.target.value },
+                                        //   ])
                                         // }
-                                        // hiddenLabel="true"
-                                        onKeyDown={handleKeyDownApprover}
-                                        autoHighlight={true}
-                                        renderInput={(params) => (
-                                          <TextField
-                                            {...params}
-                                            fullWidth
-                                            placeholder={
-                                              !companyvalue
-                                                ? "Select a company first"
-                                                : "Type something"
-                                            }
-                                          />
-                                        )}
-                                        isOptionEqualToValue={
-                                          (option, value) =>
-                                            value === undefined ||
-                                            value === "" ||
-                                            option.id === value.id
-                                          // option.value == value.value
-                                        }
+                                        onChange={(e) => {
+                                          handleServiceChnge(e, index);
+                                          setErrors({
+                                            ...errors,
+                                            stages: null,
+                                          });
+                                        }}
+                                        type="text"
+                                        value={item.stage_name}
+                                        name="stage_name"
+                                        placeholder="Workflow stage name"
                                       />
                                     </div>
-                                    {!item?.approvals?.length ? (
-                                      <>
-                                        <span
-                                          className="text-[#D14F4F] flex justify-end"
+
+                                    <div className="Stage1_right_Workflow w-full max-w-[102px] flex gap-2 items-center">
+                                      <div
+                                        onClick={(e) =>
+                                          showbutton &&
+                                          orderUp(e, item.stage_id, index)
+                                        }
+                                        // onClick={(e) => setselected(index)}
+                                        className={
+                                          index === 0
+                                            ? "disable_up_down opacity-40 border border-[#2472FC] rounded-md"
+                                            : "border border-[#2472FC] rounded-md"
+                                        }
+                                      >
+                                        <ArrowUpwardOutlined
                                           style={{
-                                            color: "#D14F4F",
-                                            opacity: errors.approver ? 1 : 0,
+                                            color: "#2472FC",
+                                            fontSize: "25px",
+                                            margin: "3px",
                                           }}
-                                        >
-                                          {errors.approver ?? "valid"}
-                                        </span>
-                                        {/* <span
+                                        />
+                                      </div>
+                                      <div
+                                        className={
+                                          index === stagesRef.current.length - 1
+                                            ? "disable_up_down border border-[#2472FC] rounded-md"
+                                            : "border border-[#2472FC] rounded-md"
+                                        }
+                                        onClick={(e) =>
+                                          showbutton &&
+                                          orderDown(e, item.stage_id, index)
+                                        }
+                                        // onClick={(e) => setselected(index)}
+                                      >
+                                        {/* <img src="/img/don.png" /> */}
+                                        <ArrowDownwardOutlined
+                                          style={{
+                                            color: "#2472FC",
+                                            fontSize: "25px",
+                                            margin: "3px",
+                                          }}
+                                        />
+                                      </div>
+                                      <div
+                                        className={
+                                          stagesRef.current.length < 2
+                                            ? "disable_up_down border border-[#2472FC] rounded-md"
+                                            : "border border-[#2472FC] rounded-md"
+                                        }
+                                        onClick={(e) => {
+                                          showbutton &&
+                                            (item.stage_id
+                                              ? handleRemoveStage(
+                                                  index,
+                                                  item.stage_id,
+                                                  true
+                                                )
+                                              : handleRemoveStage(
+                                                  index,
+                                                  index,
+                                                  true
+                                                ));
+                                        }}
+                                      >
+                                        <DeleteOutlineOutlined
+                                          style={{
+                                            color: "#2472FC",
+                                            fontSize: "25px",
+                                            margin: "3px",
+                                          }}
+                                        />
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div className="Approvers">
+                                    <h4 className="text-[#000] text-lg font-bold mt-5 mb-2.5">
+                                      Approvers
+                                    </h4>
+                                    <div className="related-jobs-check-box flex items-center gap-2">
+                                      <input
+                                        className="checkbox"
+                                        type="checkbox"
+                                        // id="is_all_approval"
+                                        onClick={(e) =>
+                                          showbutton &&
+                                          handleAllApproverChnge(e, index)
+                                        }
+                                        // onChange={(e) => handleApproverChnge(e, index)}
+                                        // setStages(...stages, { ...item, {item.!item.is_approval })
+                                        defaultChecked={item.is_all_approval}
+                                        name="is_all_approval"
+                                      />
+                                      <label
+                                        className="EveryoneColor  text-base font-normal text-[#474e55]"
+                                        htmlFor="is_all_approval"
+                                      >
+                                        {" "}
+                                        All Approvers must approve job before it
+                                        will move to the next stage
+                                      </label>
+                                    </div>
+                                    <div className="related-jobs-check-box secondAllApprover flex items-center gap-2">
+                                      <input
+                                        className="checkbox"
+                                        type="checkbox"
+                                        // id="is_approval"
+                                        onClick={(e) =>
+                                          showbutton &&
+                                          handleApproverChnge(e, index)
+                                        }
+                                        // onChange={(e) => handleApproverChnge(e, index)}
+                                        // setStages(...stages, { ...item, {item.!item.is_approval })
+                                        defaultChecked={item.is_approval}
+                                        name="is_approval"
+                                      />
+                                      <label
+                                        className="EveryoneColor text-base font-normal text-[#474e55]"
+                                        htmlFor="is_approval"
+                                      >
+                                        {" "}
+                                        Approvers must approve job every time
+                                        revisions are requested
+                                      </label>
+                                    </div>
+                                    <div className="Observersskillssec mt-2.5 max-w-[586px] w-full">
+                                      <div className="skills-input-container">
+                                        <Autocomplete
+                                          disabled={
+                                            !showbutton || !companyvalue
+                                          }
+                                          value={item.approvals}
+                                          className="agency-workflow-approvers-selenium"
+                                          // value={approvers}
+                                          multiple
+                                          id="tags-outlined"
+                                          // open={isOpenApprovers}
+                                          filterOptions={filterOptions}
+                                          options={
+                                            workflowMemberApproversData
+                                              ?.inviteMembersList?.data
+                                              ?.length > 0
+                                              ? workflowMemberApproversData
+                                                  ?.inviteMembersList?.data
+                                              : []
+                                          }
+                                          getOptionLabel={(option) =>
+                                            option?.user_first_name +
+                                            " " +
+                                            option?.user_last_name
+                                          }
+                                          // onChange={(event, value) => setSkills(value)}
+                                          onChange={(e, v) => {
+                                            changeHandler1(e, v, index);
+                                          }}
+                                          // defaultValue={skills ?? []}
+                                          // inputValue={skills}
+                                          // inputProps={{
+                                          //   "aria-label": "Without label",
+                                          // }}
+                                          filterSelectedOptions
+                                          // noOptionsText={
+                                          //   "Press enter to add this skill and select again"
+                                          // }
+                                          // hiddenLabel="true"
+                                          onKeyDown={handleKeyDownApprover}
+                                          autoHighlight={true}
+                                          renderInput={(params) => (
+                                            <TextField
+                                              {...params}
+                                              fullWidth
+                                              placeholder={
+                                                !companyvalue
+                                                  ? "Select a company first"
+                                                  : "Type something"
+                                              }
+                                            />
+                                          )}
+                                          isOptionEqualToValue={
+                                            (option, value) =>
+                                              value === undefined ||
+                                              value === "" ||
+                                              option.id === value.id
+                                            // option.value == value.value
+                                          }
+                                        />
+                                      </div>
+                                      {!item?.approvals?.length ? (
+                                        <>
+                                          <span
+                                            className="text-[#D14F4F] flex justify-end"
+                                            style={{
+                                              color: "#D14F4F",
+                                              opacity: errors.approver ? 1 : 0,
+                                            }}
+                                          >
+                                            {errors.approver ?? "valid"}
+                                          </span>
+                                          {/* <span
                                           className={"errorObservervalid"}
                                           style={{
                                             color: "#D14F4F",
@@ -1348,156 +1394,158 @@ const ApprovalWorkflow = () => {
                                           }}
                                         >
                                           {errors.approver ?? "valid"} */}
-                                        {/* {(errors.observer &&
+                                          {/* {(errors.observer &&
                                               !item.observer.length) ??
                                               "valid"} */}
-                                        {/* </span> */}
-                                      </>
-                                    ) : (
-                                      <span
-                                        className="errorObservervalid"
-                                        style={{
-                                          opacity: 0,
-                                        }}
-                                      >
-                                        valid
-                                      </span>
-                                    )}
-                                  </div>
-                                  <div className="switch_Agency">
-                                    <div className="flex gap-3 Observers">
-                                      <label className="switch">
-                                        <input
-                                          disabled={!showbutton}
-                                          type="checkbox"
-                                          defaultChecked={item.is_observer}
-                                        />
+                                          {/* </span> */}
+                                        </>
+                                      ) : (
                                         <span
-                                          className="slider round"
-                                          // disabled={!showbutton}
-                                          onClick={() => {
-                                            showbutton && handleObserver(index);
-                                            setErrors({
-                                              ...errors,
-                                              observer: null,
-                                            });
+                                          className="errorObservervalid"
+                                          style={{
+                                            opacity: 0,
                                           }}
-                                        ></span>
-                                      </label>
-                                      <h4 className="text-[#1b4ea8] text-lg font-bold">
-                                        Observers
-                                      </h4>
+                                        >
+                                          valid
+                                        </span>
+                                      )}
                                     </div>
-                                  </div>
-                                  <p className="Observerstext  text-base font-normal text-[#474e55] mt-2.5">
-                                    Observers will see this stage of approvals,
-                                    but will not be asked to approve anything.
-                                  </p>
-                                  {/* {JSON.stringify(item.observer)} */}
-                                  {item?.is_observer && (
-                                    <>
-                                      {/* // {stages[index].isObserver && ( */}
-                                      <div
-                                        className={
-                                          errors.observer
-                                            ? "Observersskillssec error1 ObserversskillssecSecond max-w-[586px] w-full mt-2.5"
-                                            : "Observersskillssec ObserversskillssecSecond max-w-[586px] w-full mt-2.5"
-                                        }
-                                      >
-                                        <div className="skills-input-container">
-                                          <Autocomplete
-                                            disabled={
-                                              !showbutton || !companyvalue
-                                            }
-                                            value={item.observer}
-                                            multiple
-                                            id="tags-outlined"
-                                            // open={isOpenObservers}
-                                            onInputChange={
-                                              handleInputChangeAutocomplete2
-                                            }
-                                            filterOptions={filterOptions}
-                                            // options={
-                                            //   workflowMemberData?.length > 0
-                                            //     ? workflowMemberData
-                                            //     : []
-                                            // }
-                                            options={
-                                              workflowMemberApproversData
-                                                ?.inviteMembersList?.data
-                                                ?.length > 0
-                                                ? workflowMemberApproversData
-                                                    ?.inviteMembersList?.data
-                                                : []
-                                            }
-                                            getOptionLabel={(option) =>
-                                              option?.user_first_name +
-                                              " " +
-                                              option?.user_last_name
-                                            }
-                                            // onChange={(event, value) => setSkills(value)}
-                                            onChange={(e, v) => {
-                                              changeHandler2(e, v, index);
+                                    <div className="switch_Agency">
+                                      <div className="Observers flex gap-3">
+                                        <label className="switch">
+                                          <input
+                                            disabled={!showbutton}
+                                            type="checkbox"
+                                            defaultChecked={item.is_observer}
+                                          />
+                                          <span
+                                            className="slider round"
+                                            // disabled={!showbutton}
+                                            onClick={() => {
+                                              showbutton &&
+                                                handleObserver(index);
                                               setErrors({
                                                 ...errors,
                                                 observer: null,
                                               });
                                             }}
-                                            // defaultValue={skills ?? []}
-                                            // inputValue={skills}
-                                            // inputProps={{
-                                            //   "aria-label": "Without label",
-                                            // }}
-                                            filterSelectedOptions
-                                            // noOptionsText={
-                                            //   "Press enter to add this skill and select again"
-                                            // }
-                                            // hiddenLabel="true"
-                                            onKeyDown={handleKeyDownObserver}
-                                            autoHighlight={true}
-                                            renderInput={(params) => (
-                                              <TextField
-                                                {...params}
-                                                fullWidth
-                                                placeholder={
-                                                  !companyvalue
-                                                    ? "Select a company first"
-                                                    : "Type something"
-                                                }
-                                              />
-                                            )}
-                                            isOptionEqualToValue={
-                                              (option, value) =>
-                                                value === undefined ||
-                                                value === "" ||
-                                                option.id === value.id
-                                              // option.value == value.value
-                                            }
-                                            // isOptionEqualToValue={(
-                                            //   option,
-                                            //   value
-                                            // ) =>
-                                            //   value === undefined ||
-                                            //   value === "" ||
-                                            //   option.id === value.id ||
-                                            //   option.value === value.value
-                                            // }
-                                          />
-                                        </div>
-                                        {!item?.observer?.length ? (
-                                          <>
-                                            <span
-                                              className="text-[#D14F4F] flex justify-end"
-                                              style={{
-                                                color: "#D14F4F",
-                                                opacity: errors.observer
-                                                  ? 1
-                                                  : 0,
+                                          ></span>
+                                        </label>
+                                        <h4 className="text-[#000] text-lg font-bold">
+                                          Observers
+                                        </h4>
+                                      </div>
+                                    </div>
+                                    <p className="Observerstext  text-base font-normal text-[#474e55] mt-2.5">
+                                      Observers will see this stage of
+                                      approvals, but will not be asked to
+                                      approve anything.
+                                    </p>
+                                    {/* {JSON.stringify(item.observer)} */}
+                                    {item?.is_observer && (
+                                      <>
+                                        {/* // {stages[index].isObserver && ( */}
+                                        <div
+                                          className={
+                                            errors.observer
+                                              ? "Observersskillssec error1 ObserversskillssecSecond max-w-[586px] w-full mt-2.5"
+                                              : "Observersskillssec ObserversskillssecSecond max-w-[586px] w-full mt-2.5"
+                                          }
+                                        >
+                                          <div className="skills-input-container">
+                                            <Autocomplete
+                                              disabled={
+                                                !showbutton || !companyvalue
+                                              }
+                                              value={item.observer}
+                                              multiple
+                                              id="tags-outlined"
+                                              // open={isOpenObservers}
+                                              onInputChange={
+                                                handleInputChangeAutocomplete2
+                                              }
+                                              filterOptions={filterOptions}
+                                              // options={
+                                              //   workflowMemberData?.length > 0
+                                              //     ? workflowMemberData
+                                              //     : []
+                                              // }
+                                              options={
+                                                workflowMemberApproversData
+                                                  ?.inviteMembersList?.data
+                                                  ?.length > 0
+                                                  ? workflowMemberApproversData
+                                                      ?.inviteMembersList?.data
+                                                  : []
+                                              }
+                                              getOptionLabel={(option) =>
+                                                option?.user_first_name +
+                                                " " +
+                                                option?.user_last_name
+                                              }
+                                              // onChange={(event, value) => setSkills(value)}
+                                              onChange={(e, v) => {
+                                                changeHandler2(e, v, index);
+                                                setErrors({
+                                                  ...errors,
+                                                  observer: null,
+                                                });
                                               }}
-                                            >
-                                              {errors.observer ?? "valid"}
-                                            </span>
-                                            {/* <span
+                                              // defaultValue={skills ?? []}
+                                              // inputValue={skills}
+                                              // inputProps={{
+                                              //   "aria-label": "Without label",
+                                              // }}
+                                              filterSelectedOptions
+                                              // noOptionsText={
+                                              //   "Press enter to add this skill and select again"
+                                              // }
+                                              // hiddenLabel="true"
+                                              onKeyDown={handleKeyDownObserver}
+                                              autoHighlight={true}
+                                              renderInput={(params) => (
+                                                <TextField
+                                                  {...params}
+                                                  fullWidth
+                                                  placeholder={
+                                                    !companyvalue
+                                                      ? "Select a company first"
+                                                      : "Type something"
+                                                  }
+                                                />
+                                              )}
+                                              isOptionEqualToValue={
+                                                (option, value) =>
+                                                  value === undefined ||
+                                                  value === "" ||
+                                                  option.id === value.id
+                                                // option.value == value.value
+                                              }
+                                              // isOptionEqualToValue={(
+                                              //   option,
+                                              //   value
+                                              // ) =>
+                                              //   value === undefined ||
+                                              //   value === "" ||
+                                              //   option.id === value.id ||
+                                              //   option.value === value.value
+                                              // }
+                                            />
+                                          </div>
+                                          {!item?.observer?.length ? (
+                                            <>
+                                              <span
+                                                className="text-[#D14F4F] flex justify-end"
+                                                style={{
+                                                  color: "#D14F4F",
+                                                  opacity: errors.observer
+                                                    ? 1
+                                                    : 0,
+                                                }}
+                                              >
+                                                {errors.observer ?? "valid"}
+                                              </span>
+                                              {/* <span
                                               className={"errorObservervalid"}
                                               style={{
                                                 color: "#D14F4F",
@@ -1507,217 +1555,223 @@ const ApprovalWorkflow = () => {
                                               }}
                                             >
                                               {errors.observer ?? "valid"} */}
-                                            {/* {(errors.observer &&
+                                              {/* {(errors.observer &&
                                               !item.observer.length) ??
                                               "valid"} */}
-                                            {/* </span> */}
-                                          </>
-                                        ) : (
-                                          <span
-                                            className="errorObservervalid"
-                                            style={{
-                                              opacity: 0,
-                                            }}
-                                          >
-                                            valid
-                                          </span>
-                                        )}
-                                      </div>
-                                    </>
-                                  )}
-                                </div>
-                                <div
-                                  style={{ marginTop: "10px" }}
-                                  className="flex items-center gap-2 related-jobs-check-box"
-                                >
-                                  <input
-                                    className="checkbox"
-                                    type="checkbox"
-                                    // id="isDeadline"
-                                    onClick={(e) =>
-                                      showbutton &&
-                                      handleIsDeadlineChnge(e, index)
-                                    }
-                                    // onChange={(e) => handleApproverChnge(e, index)}
-                                    // setStages(...stages, { ...item, {item.!item.is_approval })
-                                    defaultChecked={item.isDeadline}
-                                    name="isDeadline"
-                                  />
-                                  <label
-                                    className=" text-base font-normal text-[#474e55]"
-                                    htmlFor="isDeadline"
+                                              {/* </span> */}
+                                            </>
+                                          ) : (
+                                            <span
+                                              className="errorObservervalid"
+                                              style={{
+                                                opacity: 0,
+                                              }}
+                                            >
+                                              valid
+                                            </span>
+                                          )}
+                                        </div>
+                                      </>
+                                    )}
+                                  </div>
+                                  <div
+                                    style={{ marginTop: "10px" }}
+                                    className="related-jobs-check-box flex items-center gap-2"
                                   >
-                                    {" "}
-                                    Do you want to add deadline for approvers?
-                                  </label>
-                                </div>
-                                {item?.isDeadline && (
-                                  <>
-                                    <div className="deadlineWorkflow">
-                                      <h5 className="mt-5 mb-3 text-base font-semibold Deadlinetitle">
-                                        {/* Deadline for approval */}
-                                        Deadline for approval - Approver will
-                                        have the assigned time below to approve
-                                        asset once they receive the approval
-                                        request
-                                      </h5>
-                                      <Select
-                                        className="menuiteminputcolor menuiteminputcolor441"
-                                        open={item.isOpenDeadline}
-                                        onOpen={() => {
-                                          handleOpenDeadline(index);
-                                        }}
-                                        onClose={() => {
-                                          handleOpenDeadline(index);
-                                        }}
-                                        // MenuProps={menuProps}
-                                        value={item.approval_time}
-                                        onChange={(e) =>
-                                          handleDeadlineChnge(e, index)
-                                        }
-                                        displayEmpty
-                                        inputProps={{
-                                          "aria-label": "Without label",
-                                        }}
-                                      >
-                                        <MenuItem value={12}>12hrs</MenuItem>
-                                        <MenuItem value={24}>24hrs</MenuItem>
-                                        <MenuItem value={36}>36hrs</MenuItem>
-                                      </Select>
-                                    </div>
-                                    <div className="switch_Agency">
-                                      <div className="flex gap-3 mt-4 Observers">
-                                        <label className="switch">
-                                          <input
-                                            disabled={!showbutton}
-                                            type="checkbox"
-                                            defaultChecked={item.is_nudge}
-                                          />
-                                          <span
-                                            className="slider round"
-                                            // disabled={!showbutton}
-                                            onClick={() => {
-                                              showbutton && handleNudge(index);
-                                              // setErrors({
-                                              //   ...errors,
-                                              //   observer: null,
-                                              // });
-                                            }}
-                                          ></span>
-                                        </label>
-                                        <h4 className="text-lg font-bold">
-                                          Nudge
-                                        </h4>
-                                        {/* <h4>Nudge</h4> */}
+                                    <input
+                                      className="checkbox"
+                                      type="checkbox"
+                                      // id="isDeadline"
+                                      onClick={(e) =>
+                                        showbutton &&
+                                        handleIsDeadlineChnge(e, index)
+                                      }
+                                      // onChange={(e) => handleApproverChnge(e, index)}
+                                      // setStages(...stages, { ...item, {item.!item.is_approval })
+                                      defaultChecked={item.isDeadline}
+                                      name="isDeadline"
+                                    />
+                                    <label
+                                      className=" text-base font-normal text-[#474e55]"
+                                      htmlFor="isDeadline"
+                                    >
+                                      {" "}
+                                      Do you want to add deadline for approvers?
+                                    </label>
+                                  </div>
+                                  {item?.isDeadline && (
+                                    <>
+                                      <div className="deadlineWorkflow">
+                                        <h5 className="Deadlinetitle mt-5 mb-3 font-semibold text-base">
+                                          {/* Deadline for approval */}
+                                          Deadline for approval - Approver will
+                                          have the assigned time below to
+                                          approve asset once they receive the
+                                          approval request
+                                        </h5>
+                                        <Select
+                                          className="menuiteminputcolor menuiteminputcolor441"
+                                          open={item.isOpenDeadline}
+                                          onOpen={() => {
+                                            handleOpenDeadline(index);
+                                          }}
+                                          onClose={() => {
+                                            handleOpenDeadline(index);
+                                          }}
+                                          // MenuProps={menuProps}
+                                          value={item.approval_time}
+                                          onChange={(e) =>
+                                            handleDeadlineChnge(e, index)
+                                          }
+                                          displayEmpty
+                                          inputProps={{
+                                            "aria-label": "Without label",
+                                          }}
+                                        >
+                                          <MenuItem value={12}>12hrs</MenuItem>
+                                          <MenuItem value={24}>24hrs</MenuItem>
+                                          <MenuItem value={36}>36hrs</MenuItem>
+                                        </Select>
                                       </div>
-                                    </div>
-                                    {item?.is_nudge && (
-                                      <>
-                                        <div className="Observersskillssec">
-                                          <div className="skills-input-container">
-                                            <h5 className="mt-5 mb-3 text-base font-semibold Deadlinetitle">
-                                              Nudge Time
-                                            </h5>
-                                            {item?.nudge_time?.map(
-                                              (nudge, nudge_index) => (
-                                                <>
-                                                  <div className="selectAndRemoveRight">
-                                                    <Select
-                                                      disabled={!showbutton}
-                                                      style={{
-                                                        marginTop: "10px",
-                                                      }}
-                                                      className="menuiteminputcolor menuiteminputcolor441"
-                                                      open={
-                                                        item.nudgeOpen[
-                                                          nudge_index
-                                                        ].open
-                                                      }
-                                                      onOpen={() => {
-                                                        handleOpenNudge(
-                                                          index,
-                                                          nudge_index
-                                                        );
-                                                      }}
-                                                      onClose={() => {
-                                                        handleOpenNudge(
-                                                          index,
-                                                          nudge_index
-                                                        );
-                                                      }}
-                                                      // MenuProps={menuProps}
-                                                      value={nudge.time}
-                                                      onChange={(e) =>
-                                                        handleNudgeChnge(
-                                                          e,
-                                                          index,
-                                                          nudge_index
-                                                        )
-                                                      }
-                                                      displayEmpty
-                                                      inputProps={{
-                                                        "aria-label":
-                                                          "Without label",
-                                                      }}
-                                                    >
-                                                      <MenuItem
-                                                        hidden={item?.nudge_time?.some(
-                                                          (el) => el.time === 3
-                                                        )}
-                                                        value={3}
-                                                      >
-                                                        3 hrs before the
-                                                        deadline
-                                                      </MenuItem>
-                                                      <MenuItem
-                                                        hidden={item?.nudge_time?.some(
-                                                          (el) => el.time === 6
-                                                        )}
-                                                        value={6}
-                                                      >
-                                                        6 hrs before the
-                                                        deadline
-                                                      </MenuItem>
-                                                      <MenuItem
-                                                        hidden={item?.nudge_time?.some(
-                                                          (el) => el.time === 9
-                                                        )}
-                                                        value={9}
-                                                      >
-                                                        9 hrs before the
-                                                        deadline
-                                                      </MenuItem>
-                                                      <MenuItem
-                                                        hidden={
-                                                          item?.nudge_time?.some(
-                                                            (el) =>
-                                                              el.time === 12
-                                                          ) ||
-                                                          item.approval_time ==
-                                                            12
-                                                        }
-                                                        value={12}
-                                                      >
-                                                        12 hrs before the
-                                                        deadline
-                                                      </MenuItem>
-                                                    </Select>
-                                                    <button
-                                                      className="selectAndRemoveRightButton"
-                                                      hidden={nudge_index === 0}
-                                                      onClick={(e) =>
-                                                        removeNudge(
-                                                          e,
-                                                          index,
-                                                          nudge_index
-                                                        )
-                                                      }
-                                                    >
-                                                      <CancelOutlined
-                                                        color="error"
-                                                        fontSize="medium"
-                                                      />
-                                                      {/* <svg
+                                      <div className="switch_Agency">
+                                        <div className="Observers mt-4 flex gap-3">
+                                          <label className="switch">
+                                            <input
+                                              disabled={!showbutton}
+                                              type="checkbox"
+                                              defaultChecked={item.is_nudge}
+                                            />
+                                            <span
+                                              className="slider round"
+                                              // disabled={!showbutton}
+                                              onClick={() => {
+                                                showbutton &&
+                                                  handleNudge(index);
+                                                // setErrors({
+                                                //   ...errors,
+                                                //   observer: null,
+                                                // });
+                                              }}
+                                            ></span>
+                                          </label>
+                                          <h4 className="text-lg font-bold">
+                                            Nudge
+                                          </h4>
+                                        </div>
+                                      </div>
+                                      {item?.is_nudge && (
+                                        <>
+                                          <div className="Observersskillssec">
+                                            <div className="skills-input-container">
+                                              <h5 className="Deadlinetitle mt-5 mb-3 font-semibold text-base">
+                                                Nudge Time
+                                              </h5>
+                                              {item?.nudge_time?.length &&
+                                                item?.nudge_time?.map(
+                                                  (nudge, nudge_index) => (
+                                                    <>
+                                                      <div className="selectAndRemoveRight">
+                                                        <Select
+                                                          disabled={!showbutton}
+                                                          style={{
+                                                            marginTop: "10px",
+                                                          }}
+                                                          className="menuiteminputcolor menuiteminputcolor441 mr-2"
+                                                          open={
+                                                            item.nudgeOpen[
+                                                              nudge_index
+                                                            ].open
+                                                          }
+                                                          onOpen={() => {
+                                                            handleOpenNudge(
+                                                              index,
+                                                              nudge_index
+                                                            );
+                                                          }}
+                                                          onClose={() => {
+                                                            handleOpenNudge(
+                                                              index,
+                                                              nudge_index
+                                                            );
+                                                          }}
+                                                          // MenuProps={menuProps}
+                                                          value={nudge.time}
+                                                          onChange={(e) =>
+                                                            handleNudgeChnge(
+                                                              e,
+                                                              index,
+                                                              nudge_index
+                                                            )
+                                                          }
+                                                          displayEmpty
+                                                          inputProps={{
+                                                            "aria-label":
+                                                              "Without label",
+                                                          }}
+                                                        >
+                                                          <MenuItem
+                                                            hidden={item?.nudge_time?.some(
+                                                              (el) =>
+                                                                el.time === 3
+                                                            )}
+                                                            value={3}
+                                                          >
+                                                            3 hrs before the
+                                                            deadline
+                                                          </MenuItem>
+                                                          <MenuItem
+                                                            hidden={item?.nudge_time?.some(
+                                                              (el) =>
+                                                                el.time === 6
+                                                            )}
+                                                            value={6}
+                                                          >
+                                                            6 hrs before the
+                                                            deadline
+                                                          </MenuItem>
+                                                          <MenuItem
+                                                            hidden={item?.nudge_time?.some(
+                                                              (el) =>
+                                                                el.time === 9
+                                                            )}
+                                                            value={9}
+                                                          >
+                                                            9 hrs before the
+                                                            deadline
+                                                          </MenuItem>
+                                                          <MenuItem
+                                                            hidden={
+                                                              item?.nudge_time?.some(
+                                                                (el) =>
+                                                                  el.time === 12
+                                                              ) ||
+                                                              item.approval_time ===
+                                                                12
+                                                            }
+                                                            value={12}
+                                                          >
+                                                            12 hrs before the
+                                                            deadline
+                                                          </MenuItem>
+                                                        </Select>
+                                                        <button
+                                                          className="selectAndRemoveRightButton border border-[#2472FC] rounded-md"
+                                                          hidden={
+                                                            nudge_index === 0
+                                                          }
+                                                          onClick={(e) =>
+                                                            removeNudge(
+                                                              e,
+                                                              index,
+                                                              nudge_index
+                                                            )
+                                                          }
+                                                        >
+                                                          <CloseOutlined
+                                                            color="primary"
+                                                            fontSize="large"
+                                                          />
+                                                          {/* <svg
                                                           className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiChip-deleteIcon MuiChip-deleteIconMedium MuiChip-deleteIconColorDefault MuiChip-deleteIconOutlinedColorDefault css-i4bv87-MuiSvgIcon-root"
                                                           focusable="false"
                                                           aria-hidden="true"
@@ -1726,115 +1780,116 @@ const ApprovalWorkflow = () => {
                                                         >
                                                           <path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"></path>
                                                         </svg> */}
-                                                    </button>
-                                                  </div>
-                                                </>
-                                              )
-                                            )}
+                                                        </button>
+                                                      </div>
+                                                    </>
+                                                  )
+                                                )}
+                                            </div>
                                           </div>
-                                        </div>
-                                        <button
-                                          className={
-                                            item?.nudge_time?.length > 1
-                                              ? "hoverNone btn btn-outline my-1.5"
-                                              : "hoverNone btn btn-outline my-1.5"
-                                          }
-                                          hidden={
-                                            item?.approval_time == 12
-                                              ? item?.nudge_time?.length >= 3
-                                              : item?.nudge_time?.length >= 4
-                                          }
-                                          onClick={(e) =>
-                                            addMoreNudge(e, index)
-                                          }
-                                        >
-                                          Add More
-                                        </button>
-                                      </>
-                                    )}
-                                  </>
-                                )}
-                              </div>
-                            </li>
-                          )}
-                        </Draggable>
-                      );
-                    })}
-                    {provided.placeholder}
-                  </ul>
-                )}
-              </Droppable>
-            </DragDropContext>
-          </div>
-          {errors.stages ? (
-            <div
-              style={{ opacity: errors.stages ? 1 : 0 }}
-              className={
-                errors.stages
-                  ? "stageErrorWorkflow error"
-                  : "stageErrorWorkflow notError"
-              }
-            >
-              <span
-                className="text-[#D14F4F] flex justify-end"
-                style={{
-                  color: "#D14F4F",
-                  opacity: errors.stages ? 1 : 0,
-                }}
-              >
-                {errors.stages ?? "valid"}
-              </span>
+                                          <button
+                                            className={
+                                              item?.nudge_time?.length > 1
+                                                ? "hoverNone btn btn-outline my-1.5"
+                                                : "hoverNone btn btn-outline my-1.5"
+                                            }
+                                            hidden={
+                                              item?.approval_time === 12
+                                                ? item?.nudge_time?.length >= 3
+                                                : item?.nudge_time?.length >= 4
+                                            }
+                                            onClick={(e) =>
+                                              addMoreNudge(e, index)
+                                            }
+                                          >
+                                            Add More
+                                          </button>
+                                        </>
+                                      )}
+                                    </>
+                                  )}
+                                </div>
+                              </li>
+                            )}
+                          </Draggable>
+                        );
+                      })}
+                      {provided.placeholder}
+                    </ul>
+                  )}
+                </Droppable>
+              </DragDropContext>
             </div>
-          ) : (
-            <div></div>
-          )}
-          <div className="flex justify-between pt-5">
-            <div className="StageAddPlusB stage-action-btn-left ">
-              {/* <button
+            {errors.stages ? (
+              <div
+                style={{ opacity: errors.stages ? 1 : 0 }}
+                className={
+                  errors.stages
+                    ? "stageErrorWorkflow error"
+                    : "stageErrorWorkflow notError"
+                }
+              >
+                <span
+                  className="text-[#D14F4F] flex justify-end"
+                  style={{
+                    color: "#D14F4F",
+                    opacity: errors.stages ? 1 : 0,
+                  }}
+                >
+                  {errors.stages ?? "valid"}
+                </span>
+              </div>
+            ) : (
+              <div></div>
+            )}
+            <div className="flex justify-between pt-5">
+              <div className="StageAddPlusB stage-action-btn-left ">
+                {/* <button
                 className="Save-C-Btt"
                 type="button"
                 onClick={submitstage}
               >
                 Save{" "}
               </button> */}
-              <button
-                hidden={!showbutton}
-                type="button"
-                onClick={handleAddStage}
-                className="btn btn-outline font-semibold text-lg max-w-[160px] w-full"
-              >
-                <Add />
-                Add Stage
-              </button>
-            </div>
-
-            <div className="workflow-heading stage-action-btn-right">
-              <div className="flex gap-4 AWokflowButton AWokflowButtonbtn">
                 <button
-                  className="btn btn-outline font-semibold text-lg w-[160px] "
-                  style={{ cursor: "pointer" }}
+                  hidden={!showbutton}
                   type="button"
-                  onClick={goback}
+                  onClick={handleAddStage}
+                  className="btn btn-primary"
                 >
-                  Cancel
+                  <Add />
+                  Add Stage
                 </button>
-                {showbutton ? (
+              </div>
+
+              <div className="workflow-heading stage-action-btn-right">
+                <div className="AWokflowButton AWokflowButtonbtn flex gap-4">
                   <button
-                    className="btn btn-primary font-semibold text-lg w-[160px] "
+                    className="btn btn-outline md:w-[160px] sm:w-full "
+                    style={{ cursor: "pointer" }}
                     type="button"
-                    onClick={(e) => validateSubmit(e)}
+                    onClick={goback}
                   >
-                    Save
+                    Cancel
                   </button>
-                ) : (
-                  <button
-                    className="btn btn-primary font-semibold text-lg w-[160px]"
-                    disabled
-                    // type="hidden"
-                  >
-                    Save
-                  </button>
-                )}
+                  {showbutton ? (
+                    <button
+                      className="btn btn-primary md:w-[160px] sm:w-full "
+                      type="button"
+                      onClick={(e) => validateSubmit(e)}
+                    >
+                      Save
+                    </button>
+                  ) : (
+                    <button
+                      className="btn btn-primary font-semibold text-lg md:w-[160px] sm:w-full"
+                      disabled
+                      // type="hidden"
+                    >
+                      Save
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
           </div>

@@ -11,6 +11,7 @@ import NotFoundImg from "assets/images/new.svg";
 import ProfileBG from "assets/images/profile-bg.webp";
 
 import Loader from "assets/images/loader.svg";
+import PlaceholderImage from "assets/images/placeholder-image.svg";
 
 export const Images = {
   Logo,
@@ -25,4 +26,5 @@ export const Images = {
   ProfileBG,
   ErrorLogo,
   Loader,
+  PlaceholderImage
 };

@@ -9,59 +9,59 @@ import { AppDispatch } from "../../store";
 import InviteUserApiClient from "services/inviteUser/InviteUserApiClient";
 import { inviteUserPayloadData } from "helper/types/profileDropdown/inviteUserType";
 import { Images } from "helper/images";
-import { initialTableConfigInterface } from "helper/types/common/table";
+import { initialTableConfigInterface } from "helper/types/common/tableType";
 
 // Fetch the invite users list
 const GET_INVITE_USERS =
   (tableConfig: initialTableConfigInterface) =>
-  async (dispatch: AppDispatch) => {
-    dispatch(SET_INVITE_USER_LIST_LOADING(true));
-    await InviteUserApiClient.fetchInviteUsers(tableConfig)
-      .then((response) => {
-        if (response.status === 201 || response.status === 200) {
-          dispatch(SET_INVITE_USER_LIST_DATA(response?.data?.data));
+    async (dispatch: AppDispatch) => {
+      dispatch(SET_INVITE_USER_LIST_LOADING(true));
+      await InviteUserApiClient.fetchInviteUsers(tableConfig)
+        .then((response) => {
+          if (response.status === 201 || response.status === 200) {
+            dispatch(SET_INVITE_USER_LIST_DATA(response?.data?.data));
+            dispatch(SET_INVITE_USER_LIST_LOADING(false));
+          }
+        })
+        .catch((error) => {
           dispatch(SET_INVITE_USER_LIST_LOADING(false));
-        }
-      })
-      .catch((error) => {
-        dispatch(SET_INVITE_USER_LIST_LOADING(false));
-        swal({
-          title: "Error",
-          text: error?.response?.data?.message ?? error?.response?.data?.detail,
-          className: "errorAlert-login",
-          icon: Images.Logo,
-          timer: 5000,
+          swal({
+            title: "Error",
+            text: error?.response?.data?.message ?? error?.response?.data?.detail,
+            className: "errorAlert-login",
+            icon: Images.Logo,
+            timer: 5000,
+          });
         });
-      });
-  };
+    };
 
 // Fetch the invite members list
 const GET_INVITE_MEMBERS_USERS =
   (tableConfig, level) =>
-  async (dispatch: AppDispatch) => {
-    const params = {
-      level: level,
-      company: tableConfig,
-    };
-    dispatch(SET_INVITE_USER_LIST_LOADING(true));
-    await InviteUserApiClient.fetchInviteMembersList(params)
-      .then((response) => {
-        if (response.status === 201 || response.status === 200) {
-          dispatch(SET_INVITE_MEMBER_LIST_DATA(response?.data));
+    async (dispatch: AppDispatch) => {
+      const params = {
+        level: level,
+        company: tableConfig,
+      };
+      dispatch(SET_INVITE_USER_LIST_LOADING(true));
+      await InviteUserApiClient.fetchInviteMembersList(params)
+        .then((response) => {
+          if (response.status === 201 || response.status === 200) {
+            dispatch(SET_INVITE_MEMBER_LIST_DATA(response?.data));
+            dispatch(SET_INVITE_USER_LIST_LOADING(false));
+          }
+        })
+        .catch((error) => {
           dispatch(SET_INVITE_USER_LIST_LOADING(false));
-        }
-      })
-      .catch((error) => {
-        dispatch(SET_INVITE_USER_LIST_LOADING(false));
-        swal({
-          title: "Error",
-          text: error?.response?.data?.message ?? error?.response?.data?.detail,
-          className: "errorAlert-login",
-          icon: Images.Logo,
-          timer: 5000,
+          swal({
+            title: "Error",
+            text: error?.response?.data?.message ?? error?.response?.data?.detail,
+            className: "errorAlert-login",
+            icon: Images.Logo,
+            timer: 5000,
+          });
         });
-      });
-  };
+    };
 
 // Add new invite user to the invite users list
 const POST_INVITE_USER =
@@ -100,37 +100,37 @@ const POST_INVITE_USER =
 // Update an entry from the invite users list
 const PUT_INVITE_USER =
   (id: number, payloadObj: { levels: number | "" }) =>
-  async (dispatch: AppDispatch) => {
-    dispatch(SET_INVITE_USER_LIST_LOADING(true));
-    await InviteUserApiClient.updateInviteUser(id, payloadObj)
-      .then((response) => {
-        if (response.status === 201 || response.status === 200) {
+    async (dispatch: AppDispatch) => {
+      dispatch(SET_INVITE_USER_LIST_LOADING(true));
+      await InviteUserApiClient.updateInviteUser(id, payloadObj)
+        .then((response) => {
+          if (response.status === 201 || response.status === 200) {
+            swal({
+              title: "Successfully Complete",
+              text: response?.data?.message,
+              icon: Images.Logo,
+              timer: 5000,
+            });
+          }
+          dispatch(
+            GET_INVITE_USERS({
+              page: 1,
+              rowsPerPage: 10,
+            })
+          );
+          dispatch(SET_INVITE_USER_LIST_LOADING(false));
+        })
+        .catch((error) => {
+          dispatch(SET_INVITE_USER_LIST_LOADING(false));
           swal({
-            title: "Successfully Complete",
-            text: response?.data?.message,
+            title: "Error",
+            text: error?.response?.data?.message ?? error?.response?.data?.detail,
+            className: "errorAlert-login",
             icon: Images.Logo,
             timer: 5000,
           });
-        }
-        dispatch(
-          GET_INVITE_USERS({
-            page: 1,
-            rowsPerPage: 10,
-          })
-        );
-        dispatch(SET_INVITE_USER_LIST_LOADING(false));
-      })
-      .catch((error) => {
-        dispatch(SET_INVITE_USER_LIST_LOADING(false));
-        swal({
-          title: "Error",
-          text: error?.response?.data?.message ?? error?.response?.data?.detail,
-          className: "errorAlert-login",
-          icon: Images.Logo,
-          timer: 5000,
         });
-      });
-  };
+    };
 
 // Delete an entry from the invite users list
 const DELETE_INVITE_USER =

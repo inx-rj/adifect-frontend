@@ -3,7 +3,7 @@ import { lazy, useState } from "react";
 import { useAppDispatch, useAppSelector } from "redux/store";
 import { useSingleEffect } from "react-haiku";
 
-import { FormControl, Menu, MenuItem } from "@mui/material";
+import { FormControl, Menu, MenuItem, MenuListProps, MenuListTypeMap } from "@mui/material";
 import { COMPANY_LIST } from "redux/reducers/companyTab/companyTab.slice";
 
 import { Images } from "helper/images";
@@ -25,13 +25,17 @@ const FILTERS = {
   DONE: "Done",
 };
 
-const MENU_OPTIONS = [
+const menuOptions = [
   { id: 1, name: "Sort by newest", value: "-created" },
   { id: 2, name: "Sort by oldest", value: "created" },
   { id: 3, name: "Sort by due date", value: "-job__job_due_date" },
 ];
 
-const AgencyCompanyProjects = () => {
+const MenuProps: MenuListProps = {
+  variant: "menu",
+};
+
+const MyProjects = () => {
   const dispatch = useAppDispatch();
 
   // Redux states
@@ -83,7 +87,8 @@ const AgencyCompanyProjects = () => {
     setOrderFilter({ orderingName: name, ordering: value });
   };
 
-  console.log("FilterData", filterData, "companyData", companyData);
+  // console.log("FilterData", filterData, "companyData", companyData);
+
   return (
     <div className="page-container">
       <h2 className="page-title">My Projects</h2>
@@ -115,9 +120,8 @@ const AgencyCompanyProjects = () => {
                   <button
                     key={index}
                     onClick={() => handleChange("status", filter)}
-                    className={`btn btn-outline filter-btn ${
-                      filter === filterData.status ? "active" : ""
-                    }`}
+                    className={`btn btn-outline filter-btn ${filter === filterData.status ? "active" : ""
+                      }`}
                   >
                     {filter}
                   </button>
@@ -136,15 +140,13 @@ const AgencyCompanyProjects = () => {
                 </h6>
                 <Menu
                   id="long-menu"
-                  MenuListProps={{
-                    variant: "menu",
-                  }}
+                  MenuListProps={MenuProps}
                   anchorEl={anchorEle}
                   keepMounted
                   open={openSortingMenu}
                   onClose={() => setAnchorEle(null)}
                 >
-                  {MENU_OPTIONS.map((option) => (
+                  {menuOptions.map((option) => (
                     <MenuItem
                       key={option.id}
                       onClick={() => menuHandleSort(option.value, option.name)}
@@ -167,4 +169,4 @@ const AgencyCompanyProjects = () => {
   );
 };
 
-export default AgencyCompanyProjects;
+export default MyProjects;

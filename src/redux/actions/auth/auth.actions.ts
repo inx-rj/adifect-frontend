@@ -5,7 +5,7 @@ import {
   SET_USER_PROFILE_DATA,
   SET_USER_PROFILE_LOADING,
 } from "../../reducers/auth/auth.slice";
-import { AppDispatch } from "../../store";
+import { AppDispatch } from "../../store";  
 import { EmailPWDType, EmailType } from "helper/types";
 import AuthApiClient from "services/auth/AuthApiClient";
 import swal from "sweetalert";
@@ -32,6 +32,16 @@ const TRIGGER_LOGIN = (data: EmailPWDType) => async (dispatch: AppDispatch) => {
         localStorage.setItem("access_token", token);
 
         localStorage.setItem("userData", JSON.stringify(response?.data));
+
+        swal({
+          title: "Successfully Complete",
+          text: "Login Success",
+          className: "successAlert-login",
+          icon: Images.Logo,
+          buttons: { visible: false },
+          timer: 1500,
+        });
+  
       }
     })
     .catch((error) => {
@@ -86,6 +96,7 @@ const TRIGGER_EDIT_USER = (userUpdateData) => async (dispatch: AppDispatch) => {
       if (response.status === 200) {
         console.log("Update user response", response)
         dispatch(SET_USER_PROFILE_DATA(response?.data?.[0]));
+        dispatch(GET_USER_DETAILS());
       }
     })
     .catch((error) => {

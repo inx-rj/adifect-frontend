@@ -8,20 +8,18 @@ import { BrowserRouter } from "react-router-dom";
 import { PersistGate } from "redux-persist/integration/react";
 import { ThemeProvider } from "@mui/material";
 import { theme } from "./styles/theme";
-import { HelmetProvider } from "react-helmet-async";
+// import 'api/fb/fbSDKInit';
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
-    <HelmetProvider>
-      <ThemeProvider theme={theme}>
-        <Provider store={store}>
-          <PersistGate loading={null} persistor={persistor}>
-            <BrowserRouter>
-              <App />
-            </BrowserRouter>
-          </PersistGate>
-        </Provider>
-      </ThemeProvider>
-    </HelmetProvider>
+    <ThemeProvider theme={theme}>
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </PersistGate>
+      </Provider>
+    </ThemeProvider>
   </React.StrictMode>
 );

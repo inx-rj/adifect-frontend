@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction } from "react";
+import React from "react";
 import {
   Card,
   Table,
@@ -12,7 +12,7 @@ import {
   Box,
 } from "@mui/material";
 import CustomPagination from "./MuiPagination";
-import { OnChangeFiledValueType, UseStateType } from "helper/types";
+import { UseStateType } from "helper/types";
 import {
   TableDataResponseType,
   TablePaginationType,
@@ -32,14 +32,7 @@ interface MuiTablePropsType {
 const MuiTable = (props: MuiTablePropsType) => {
   // De-structuring of 'props'
   // debugger;
-  const {
-    loader,
-    data,
-    allData,
-    paginationData,
-    setPaginationData,
-    ...restProps
-  } = props;
+  const { loader, data, allData, paginationData, setPaginationData } = props;
 
   // Constans
   const selectRowsOptions = [10, 20, 50, 100]; // Options of the rows per page select field
@@ -77,6 +70,7 @@ const MuiTable = (props: MuiTablePropsType) => {
       sx={{
         boxShadow: "none",
       }}
+      className="relative"
     >
       {loader && (
         <Box className="w-full [&>.spinner-container-bg]:backdrop-blur-sm [&>.spinner-container-bg]:bg-white/30">
@@ -88,8 +82,9 @@ const MuiTable = (props: MuiTablePropsType) => {
           stickyHeader
           sx={{
             "&.MuiTable-root .MuiTableHead-root .MuiTableCell-head": {
-              background: "rgba(227, 227, 227)",
+              background: "#d3e3fe",
               whiteSpace: "nowrap",
+              fontWeight: 600,
             },
             "& .MuiTableCell-body": {
               whiteSpace: "nowrap",
@@ -124,7 +119,10 @@ const MuiTable = (props: MuiTablePropsType) => {
                     }}
                   >
                     {Object.values(items).map((val, valIndex) => (
-                      <TableCell sx={{ px: 3.125, py: 1.25, color: "#71757B" }}>
+                      <TableCell
+                        key={valIndex}
+                        sx={{ px: 3.125, py: 1.25, color: "#71757B" }}
+                      >
                         {val}
                       </TableCell>
                     ))}

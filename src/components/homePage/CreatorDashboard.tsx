@@ -13,8 +13,8 @@ import { useSingleEffect, useUpdateEffect } from "react-haiku";
 import { Link, useNavigate } from "react-router-dom";
 
 import { GET_USER_PROFILE_DATA } from "redux/reducers/auth/auth.slice";
-import { FRESHERS_JOBS_DATA } from "redux/reducers/homePage/fresherJobsList.slice";
-import { GET_JOBS_DETAILS } from "redux/reducers/homePage/jobsList.slice";
+import { FRESHERS_JOBS_DATA } from "redux/reducers/jobs/fresherJobsList.slice";
+import { GET_JOBS_DETAILS } from "redux/reducers/jobs/jobsList.slice";
 import { useAppDispatch, useAppSelector } from "redux/store";
 import CreatorDashboardInProgress from "./creatorDashboard/CreatorDashboardInProgress";
 import CreatorDashboardInReview from "./creatorDashboard/CreatorDashboardInReview";
