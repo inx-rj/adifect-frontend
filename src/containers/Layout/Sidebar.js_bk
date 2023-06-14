@@ -1,0 +1,232 @@
+import React, { useEffect, useState, useRef } from "react";
+import { Link } from "react-router-dom";
+import $ from "jquery";
+import { useSelector } from "react-redux";
+import { ROLE } from "./../../constants/other-constants";
+import { useNavigate, useLocation } from "react-router-dom";
+
+export default function Sidebar() {
+  let navigate = useNavigate();
+  const location = useLocation();
+  const { pathname } = location;
+  // const splitLocation = pathname.split("/");
+  function closeNav() {
+    document.getElementById("mySidepanel").style.width = "0";
+  }
+  const { userData } = useSelector((state) => state.authReducer);
+  useEffect(() => {
+    if (!userData) {
+      navigate("/");
+    }
+  }, []);
+  let topData;
+  let midData;
+  let bottomData;
+  if (userData?.user?.role == Object.keys(ROLE)[0]) {
+    //Admin Sidebar.
+    topData = [
+      { title: "Home", imgPath: "/img/Homeicon.png", path: "/home" },
+      { title: "Projects", imgPath: "/img/Projects.png", path: "/projects" },
+      {
+        title: "Earnings",
+        imgPath: "/img/Earnings_old.png",
+        path: "/earnings",
+      },
+      { title: "Analytics", imgPath: "/img/Analytics.png", path: "/analytics" },
+      {
+        title: "Transactions",
+        imgPath: "/img/Transactions.png",
+        path: "/transactions",
+      },
+    ];
+    midData = [
+      { title: "Jobs", imgPath: "/img/Projects.png", path: "/jobs/list" },
+      {
+        title: "Industries",
+        imgPath: "/img/Earnings.png",
+        path: "/industries/list",
+      },
+      { title: "Levels", imgPath: "/img/lavel.png", path: "/levels/list" },
+      {
+        title: "Categories",
+        imgPath: "/img/category.png",
+        path: "/categories/list",
+      },
+      {
+        title: "Skills",
+        imgPath: "/img/skillicon.png",
+        path: "/skills/list",
+      },
+      {
+        title: "Companies",
+        imgPath: "/img/company.png",
+        path: "/companies/list",
+      },
+    ];
+    bottomData = [
+      { title: "Settings", imgPath: "/img/Settings.png", path: "/settings" },
+      { title: "Help", imgPath: "/img/help.png", path: "/help" },
+    ];
+  } else if (userData?.user?.role == Object.keys(ROLE)[1]) {
+    //Creator Sidebar
+    topData = [
+      {
+        title: "Home",
+        imgPath: "/img/Homeicon.png",
+        path: "/home",
+      },
+      {
+        title: "My Projects",
+        imgPath: "/img/Projects.png",
+        path: "/projects",
+      },
+      {
+        title: "Media",
+        imgPath: "/img/Earnings_old.png",
+        path: "/media",
+      },
+      {
+        title: "Earnings",
+        imgPath: "/img/Earnings_old.png",
+        path: "/earnings",
+      },
+      { title: "Analytics", imgPath: "/img/Analytics.png", path: "/analytics" },
+      {
+        title: "Transactions",
+        imgPath: "/img/Transactions.png",
+        path: "/transactions",
+      },
+    ];
+    midData = [
+      {
+        title: "Available Jobs",
+        imgPath: "/img/Projects.png",
+        path: "/jobs/list",
+      },
+    ];
+    bottomData = [
+      { title: "Settings", imgPath: "/img/Settings.png", path: "/settings" },
+      { title: "Help", imgPath: "/img/help.png", path: "/help" },
+    ];
+  } else if (userData?.user?.role == Object.keys(ROLE)[2]) {
+    //Agency Sidebar
+    topData = [
+      { title: "Home", imgPath: "/img/Homeicon.png", path: "/home" },
+      {
+        title: "Workflow",
+        imgPath: "/img/Homeicon.png",
+        path: "/workflow",
+      },
+      { title: "My Projects", imgPath: "/img/Projects.png", path: "/projects" },
+      {
+        title: "Earnings",
+        imgPath: "/img/Earnings_old.png",
+        path: "/earnings",
+      },
+      { title: "Analytics", imgPath: "/img/Analytics.png", path: "/analytics" },
+      {
+        title: "Transactions",
+        imgPath: "/img/Transactions.png",
+        path: "/transactions",
+      },
+    ];
+    midData = [
+      { title: "My Jobs", imgPath: "/img/Projects.png", path: "/jobs/list" },
+      // { title: "Media", imgPath: "/img/Projects.png", path: "/Media" },
+      // {
+      //   title: "Workflow Levels",
+      //   imgPath: "/img/Projects.png",
+      //   path: "/levels-workflow/list",
+      // },
+      // {
+      //   title: "Workflow Stages",
+      //   imgPath: "/img/Projects.png",
+      //   path: "/stages-workflow/list",
+      // },
+    ];
+    bottomData = [
+      { title: "Settings", imgPath: "/img/Settings.png", path: "/settings" },
+      { title: "Help", imgPath: "/img/help.png", path: "/help" },
+    ];
+  }
+  return (
+    <>
+      <div
+        id="mySidepanel"
+        className="sidemenubar sidepanel"
+        style={{ width: "100%" }}
+      >
+        <a
+          href="javascript:void(0)"
+          className="closebtn"
+          onClick={closeNav}
+          style={{ display: "none" }}
+        >
+          ×
+        </a>
+        <ul className="nav-list">
+          {topData?.map((item, index) => (
+            <li className={pathname == item.path ? "active" : ""} key={index}>
+              {/* <li className={pathname.includes(item?.path?.split('/')[1]) ? "active" : ""} key={index}> */}
+
+              <Link className="Menu" to={item.path}>
+                <span className="menu_img">
+                  <img
+                    className="mr-2"
+                    src={process.env.PUBLIC_URL + item.imgPath}
+                    alt=""
+                  />
+                </span>
+                {item.title}
+              </Link>
+            </li>
+          ))}
+
+          {midData && (
+            <div className="borderlinesidebar">
+              <hr className="borderline" />
+            </div>
+          )}
+
+          {midData?.map((item, index) => (
+            <li className={pathname == item.path ? "active" : ""} key={index}>
+              {/* <li className={pathname.includes(item?.path?.split('/')[1]) ? "active" : ""} key={index}> */}
+              <Link className="Menu" to={item.path}>
+                <span className="menu_img">
+                  <img
+                    className="mr-2"
+                    src={process.env.PUBLIC_URL + item.imgPath}
+                    alt=""
+                  />
+                </span>
+                {item.title}
+              </Link>
+            </li>
+          ))}
+
+          {bottomData && (
+            <div className="borderlinesidebar">
+              <hr className="borderline" />
+            </div>
+          )}
+          {bottomData?.map((item, index) => (
+            <li className={pathname == item.path ? "active" : ""} key={index}>
+              {/* <li className={pathname.includes(item?.path?.split('/')[1]) ? "active" : ""} key={index}> */}
+
+              <Link className="Menu" to={item.path}>
+                <span className="menu_img">
+                  <img
+                    className="mr-2"
+                    src={process.env.PUBLIC_URL + item.imgPath}
+                    alt=""
+                  />
+                </span>
+                {item.title}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </>
+  );
+}

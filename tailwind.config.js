@@ -1,14 +1,15 @@
-/** @type {import("tailwindcss").Config} */
-
+/** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
-    "./src/**/*.{html,js,jsx,ts,tsx}",
+    "./src/**/*.{js,jsx,ts,tsx}",
     "./node_modules/react-tailwindcss-datepicker/dist/index.esm.js",
   ],
+  // important: '#root',
   darkMode: "class",
   theme: {
     extend: {
       fontFamily: {
+        sans: ["Figtree", "sans-serif"], // duplicate untill re-structured
         figtree: ["Figtree", "sans-serif"],
       },
       colors: {
@@ -16,7 +17,6 @@ module.exports = {
         success: "#03b54a",
         warning: "#f1c40f",
         primary: "#2472fc",
-        disable: "#71757B",
         "title-color": "#444444",
         "desc-color": "#848484",
         "success-bg": "#EBFBF6",
@@ -48,7 +48,7 @@ module.exports = {
         light: "0px 0px 29px rgba(0, 0, 0, 0.09)",
       },
       borderRadius: {
-        DEFAULT: "5px",
+        DEFAULT: "8px",
       },
     },
     container: {

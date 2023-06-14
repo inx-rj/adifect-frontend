@@ -1,10 +1,8 @@
-@import url("https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700;800;900&display=swap");
-
 @import "tailwindcss/base";
-@import "./components/base/index.css";
+/* @import "./custom-base-styles.css"; */
 
 @import "tailwindcss/components";
 @import "./components/index.css";
 
 @import "tailwindcss/utilities";
-/* @import "./components/utilities/index.css"; */
+/* @import "./custom-utilities.css"; */

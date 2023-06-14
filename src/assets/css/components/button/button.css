@@ -1,26 +1,19 @@
 /* btn class */
 .btn,
 .btn.MuiButton-root {
-  @apply normal-case text-center px-4 py-3 rounded text-sm font-semibold hover:bg-opacity-90 flex items-center justify-center;
+  @apply font-sans normal-case text-center px-4 py-3 rounded text-sm font-semibold hover:bg-opacity-90 flex items-center justify-center shadow-none;
 }
 
 /* btn-primary class */
 .btn.btn-primary,
 .btn.btn-primary.MuiButton-root {
-  @apply bg-theme  border-theme text-white disabled:bg-dark-100 disabled:text-title-color;
+  @apply bg-theme font-sans  border-theme text-white disabled:bg-dark-100 disabled:text-title-color;
 }
 
 /* btn-outline class */
 .btn.btn-outline,
 .btn.btn-outline.MuiButton-root {
-  @apply border border-theme border-solid text-theme disabled:bg-dark-100 disabled:text-title-color;
-}
-
-.btn.btn-outline.filter-btn {
-  @apply border w-[150px] h-[47px] rounded-lg;
-}
-.btn.btn-outline.filter-btn.active {
-  @apply border w-[150px] h-[47px] rounded-lg bg-theme text-white;
+  @apply border font-sans border-theme text-theme disabled:bg-dark-100 disabled:text-title-color;
 }
 
 .btn-label {

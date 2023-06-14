@@ -1,0 +1,81 @@
+import {
+  WORKFLOW_LIST_REQUEST,
+  WORKFLOW_LIST_SUCCESS,
+  WORKFLOW_LIST_FAIL,
+  WORKFLOW_DETAILS_REQUEST,
+  WORKFLOW_DETAILS_SUCCESS,
+  WORKFLOW_DETAILS_FAIL,
+  WORKFLOW_DETAILS_RESET,
+  WORKFLOW_DELETE_REQUEST,
+  WORKFLOW_DELETE_SUCCESS,
+  WORKFLOW_DELETE_FAIL,
+} from "../../constants/Workflow-constants";
+
+const initialState = {
+  workflowData: [],
+  loading: null,
+};
+
+export const workflowReducer = (state = initialState, action) => {
+  switch (action.type) {
+    case WORKFLOW_LIST_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+    case WORKFLOW_LIST_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        workflowData: action.payload,
+        success: true,
+      };
+    case WORKFLOW_LIST_FAIL:
+      return {
+        ...state,
+        loading: false,
+        workflowData: null,
+        error: action.payload,
+      };
+    default:
+      return state;
+  }
+};
+
+export const workflowDetailsReducer = (
+  state = { workflowDetails: {} },
+  action
+) => {
+  switch (action.type) {
+    case WORKFLOW_DETAILS_REQUEST:
+      return { loading: true };
+    case WORKFLOW_DETAILS_SUCCESS:
+      return {
+        loading: false,
+        success: true,
+        workflowDetails: action.payload,
+      };
+    case WORKFLOW_DETAILS_FAIL:
+      return { loading: false, error: action.payload };
+    case WORKFLOW_DETAILS_RESET:
+      return { workflowDetails: {} };
+    default:
+      return state;
+  }
+};
+
+export const workflowDeleteReducer = (state = {}, action) => {
+  switch (action.type) {
+    case WORKFLOW_DELETE_REQUEST:
+      return { loading: true };
+
+    case WORKFLOW_DELETE_SUCCESS:
+      return { loading: false, success: true };
+
+    case WORKFLOW_DELETE_FAIL:
+      return { loading: false, error: action.payload };
+
+    default:
+      return state;
+  }
+};

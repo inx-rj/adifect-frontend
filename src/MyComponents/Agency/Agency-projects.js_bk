@@ -1,0 +1,29 @@
+import React, { useState } from "react";
+import LoadingSpinner from "../../containers/LoadingSpinner";
+
+export default function AgencyProjects() {
+  const [isLoading, setIsLoading] = useState(true);
+  setTimeout(function () {
+    setIsLoading(false);
+  }, 1200);
+  return (
+    <>
+      {isLoading && <LoadingSpinner />}
+      <>
+        <div className="Category_p">
+          <div className="CategorylistName">
+            <h1>My Projects</h1>
+          </div>
+        </div>
+        <div className="Topallpage Custompage">
+          <div className="ContentDiv">
+            <div className="allpageTitle">
+              <h2>COMING SOON</h2>
+            </div>
+          </div>
+        </div>
+      </>
+      {/* )} */}
+    </>
+  );
+}

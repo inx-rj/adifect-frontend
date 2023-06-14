@@ -1,0 +1,113 @@
+import {
+  WORKFLOW_LIST_REQUEST,
+  WORKFLOW_LIST_SUCCESS,
+  WORKFLOW_LIST_FAIL,
+  WORKFLOW_DELETE_REQUEST,
+  WORKFLOW_DELETE_SUCCESS,
+  WORKFLOW_DELETE_FAIL,
+  WORKFLOW_DETAILS_REQUEST,
+  WORKFLOW_DETAILS_SUCCESS,
+  WORKFLOW_DETAILS_FAIL,
+} from "../../constants/Workflow-constants";
+
+import api from "../../utils/api";
+
+export const workflowlistAll = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: WORKFLOW_LIST_REQUEST,
+    });
+
+    const { data } = await api.get("agency/workflow/");
+
+    dispatch({
+      type: WORKFLOW_LIST_SUCCESS,
+      payload: data,
+    });
+
+    return true;
+  } catch (error) {
+    dispatch({
+      type: WORKFLOW_LIST_FAIL,
+      payload:
+        error.response && error.response.data.detail
+          ? error.response.data.detail
+          : error.message,
+    });
+  }
+};
+
+export const workflowdelete = (id) => async (dispatch) => {
+  try {
+    dispatch({
+      type: WORKFLOW_DELETE_REQUEST,
+    });
+
+    const { data } = await api.delete(`agency/workflow/${id}`);
+
+    dispatch({
+      type: WORKFLOW_DELETE_SUCCESS,
+      payload: data,
+    });
+
+    return true;
+  } catch (error) {
+    dispatch({
+      type: WORKFLOW_DELETE_FAIL,
+      payload:
+        error.response && error.response.data.detail
+          ? error.response.data.detail
+          : error.message,
+    });
+  }
+};
+
+export const workflowgetDetails = (id) => async (dispatch) => {
+  try {
+    dispatch({
+      type: WORKFLOW_DETAILS_REQUEST,
+    });
+
+    const { data } = await api.get(`agency/workflow/${id}/`);
+
+    dispatch({
+      type: WORKFLOW_DETAILS_SUCCESS,
+      payload: data,
+    });
+
+    // return true;
+  } catch (error) {
+    dispatch({
+      type: WORKFLOW_DETAILS_FAIL,
+      payload:
+        error.response && error.response.data.detail
+          ? error.response.data.detail
+          : error.message,
+    });
+  }
+};
+
+export const workflowdelete1 = (id) => async (dispatch) => {
+  try {
+    dispatch({
+      type: WORKFLOW_DELETE_REQUEST,
+    });
+
+    const { data } = await api.delete(`agency/workflow/stage/${id}`);
+
+    dispatch({
+      type: WORKFLOW_DELETE_SUCCESS,
+      payload: data,
+    });
+
+    return true;
+  } catch (error) {
+    dispatch({
+      type: WORKFLOW_DELETE_FAIL,
+      payload:
+        error.response && error.response.data.detail
+          ? error.response.data.detail
+          : error.message,
+    });
+  }
+};

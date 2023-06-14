@@ -46,14 +46,15 @@ span.menu_img {
 
 .Topdiv {
   position: relative;
+  min-height: 100vh;
 }
 div[data-popper-placement="top"] {
   margin-bottom: 15px !important;
 }
 
-.spinner-container-bg {
+/* .spinner-container-bg {
   min-height: 100vh !important;
-}
+} */
 /* .sidebar {
   height: 100vh;
 } */
