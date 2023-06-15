@@ -1033,6 +1033,232 @@ const App = () => {
             </ProtectedRoute>
           }
         ></Route>
+        <Route
+          exact
+          path="/jobs/add"
+          element={
+            <ProtectedRoute>
+              <Job_add_edit />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          exact
+          path="/jobs/add-dev"
+          element={
+            <ProtectedRoute>
+              <Agency_jobs_add_edit />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          exact
+          path="/jobs/:jobId"
+          element={
+            <ProtectedRoute>
+              <Job_add_edit />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          exact
+          path="/jobs/details/:jobId"
+          element={
+            <ProtectedRoute>
+              <Job_details />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          exact
+          path="/jobs/details-dev/:jobId"
+          element={
+            <ProtectedRoute>
+              <Job_details_dev />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          exact
+          path="/jobs/apply/:jobId"
+          element={
+            <ProtectedRoute>
+              <Creator_Apply_Job />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          exact
+          path="/jobs/apply-dev/:jobId"
+          element={
+            <ProtectedRoute>
+              <Creator_apply_job_dev />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          exact
+          path="/industries/list"
+          element={
+            <AdminRoute>
+              <IndustryList />
+            </AdminRoute>
+          }
+        ></Route>
+        <Route
+          exact
+          path="/industries/add"
+          element={
+            <AdminRoute>
+              <Industry_add_edit />
+            </AdminRoute>
+          }
+        ></Route>
+        <Route
+          exact
+          path="/industries/:industryId"
+          element={
+            <AdminRoute>
+              <Industry_add_edit />
+            </AdminRoute>
+          }
+        ></Route>
+        <Route
+          exact
+          path="/levels/list"
+          element={
+            <AdminRoute>
+              <LevelsList />
+            </AdminRoute>
+          }
+        ></Route>
+        <Route
+          exact
+          path="/levels/add"
+          element={
+            <AdminRoute>
+              <Level_add_edit />
+            </AdminRoute>
+          }
+        ></Route>
+        <Route
+          exact
+          path="/levels/:levelId"
+          element={
+            <AdminRoute>
+              <Level_add_edit />
+            </AdminRoute>
+          }
+        ></Route>
+        <Route
+          exact
+          path="/skills/list"
+          element={
+            <AdminRoute>
+              <SkillsList />
+            </AdminRoute>
+          }
+        ></Route>
+        <Route
+          exact
+          path="/skills/add"
+          element={
+            <AdminRoute>
+              <Skill_add_edit />
+            </AdminRoute>
+          }
+        ></Route>
+        <Route
+          exact
+          path="/skills/:skillId"
+          element={
+            <AdminRoute>
+              <Skill_add_edit />
+            </AdminRoute>
+          }
+        ></Route>
+        <Route
+          exact
+          path="/categories/add/"
+          element={
+            <AdminRoute>
+              <Category_add_edit />
+            </AdminRoute>
+          }
+        ></Route>
+        <Route
+          exact
+          path="/categories/list"
+          element={
+            <AdminRoute>
+              <CategoryList />
+            </AdminRoute>
+          }
+        ></Route>
+        <Route
+          // exact
+          path="/categories/:categoryId"
+          element={
+            <AdminRoute>
+              <Category_add_edit />
+            </AdminRoute>
+          }
+        ></Route>
+        <Route
+          exact
+          path="/projects"
+          element={
+            <ProtectedRoute>
+              <Projects />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          exact
+          path="/company-projects"
+          element={
+            <ProtectedRoute>
+              <Company_projects />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          exact
+          path="/company-projects/:communityId"
+          element={
+            <ProtectedRoute>
+              <Agency_company_projects_details />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          exact
+          path="/company-project/tags"
+          element={
+            <ProtectedRoute>
+              <Company_projects_tags />
+            </ProtectedRoute>
+          }
+        ></Route>
+
+        {/* <Route
+          exact
+          path="/company-project/community-settings"
+          element={
+            <ProtectedRoute>
+              <Community_settings />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          exact
+          path="/company-project/audiences"
+          element={
+            <ProtectedRoute>
+              <Audiences />
+            </ProtectedRoute>
+          }
+        /> */}
 
       </Route>
 
