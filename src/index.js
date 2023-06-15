@@ -1,4 +1,6 @@
 import "./assets/css/tailwind.css";
+import "./App.css";
+import "./Responsive.css";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
@@ -10,20 +12,25 @@ import App from "./App";
 import { StyledEngineProvider, ThemeProvider } from "@mui/material";
 import { theme } from "./styles/theme";
 import { HelmetProvider } from "react-helmet-async";
+import { BrowserRouter } from "react-router-dom";
 // import '../../../utils/fbSDKInit';
 
 window.Buffer = window.Buffer || require("buffer").Buffer;
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
-    <ThemeProvider theme={theme}>
-      <Provider store={store}>
-        <HelmetProvider>
-          <App />
-        </HelmetProvider>
-      </Provider>
-    </ThemeProvider>
-  </React.StrictMode>
+  <div className="Topdiv">
+    <BrowserRouter>
+      <React.StrictMode>
+        <ThemeProvider theme={theme}>
+          <Provider store={store}>
+            <HelmetProvider>
+              <App />
+            </HelmetProvider>
+          </Provider>
+        </ThemeProvider>
+      </React.StrictMode>
+    </BrowserRouter>
+  </div>
 );
 
 // If you want to start measuring performance in your app, pass a function

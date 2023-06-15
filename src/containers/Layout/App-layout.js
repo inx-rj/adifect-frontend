@@ -1,12 +1,10 @@
+import React, { useEffect } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import Header from "./Header";
 import Sidebar from "./Sidebar";
 import Footer from "./Footer";
-import React, { useState, useEffect } from "react";
-import LoadingSpinner from "../../containers/LoadingSpinner";
 import { defaultPageLoader } from "../../redux/actions/other-actions";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
 import store from "../../store";
 
 function AppLayout(props) {
@@ -67,15 +65,6 @@ function AppLayout(props) {
                 headerCompany={props.headerCompany}
                 setHeaderCompany={props.setHeaderCompany}
               />
-              {/* <div className="toggleSidebarDiv">
-                <button
-                  className="allpagetoggle"
-                  type="button"
-                  onClick={(e) => props.setIsToggle(!props.isToggle)}
-                >
-                  <img src="/img/toggleicon.png" />
-                </button>
-              </div> */}
             </div>
           </div>
           <div className="Topdivallpage" id="Topdivallpage">
