@@ -16,6 +16,9 @@ function AppLayout(props) {
   const location = useLocation();
 
   const { loading } = useSelector((state) => state.loaderReducer);
+
+  console.log({ location, loading }, 'App-layout');
+
   useEffect(() => {
     dispatch(defaultPageLoader());
 
