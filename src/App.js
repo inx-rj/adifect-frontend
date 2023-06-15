@@ -160,7 +160,12 @@ const App = () => {
   const [isToggle, setIsToggle] = useState(false);
   const [headerCompany, setHeaderCompany] = useState(null);
 
-  debugger;
+  // debugger;
+
+  useEffect(() => {
+    console.log({ headerCompany }, 'headerCompany');
+  }, [headerCompany])
+
 
   return (
     <Routes>
@@ -539,7 +544,28 @@ const App = () => {
           }
         ></Route>
       </Route>
+
       {/* APP Layout Routes */}
+      <Route
+        element={
+          <AppLayout
+            headerCompany={headerCompany}
+            setHeaderCompany={setHeaderCompany}
+            isToggle={isToggle}
+            setIsToggle={setIsToggle}
+          />
+        }
+      >
+        <Route
+          exact
+          path="/home"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        ></Route>
+      </Route>
 
       {/* Error Route */}
       <Route
