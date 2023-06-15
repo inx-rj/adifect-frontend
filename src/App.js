@@ -558,6 +558,99 @@ const App = () => {
       >
         <Route
           exact
+          path="/member/company"
+          element={
+            <ProtectedRoute>
+              <Member_Company />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          exact
+          path="/popup-media"
+          element={
+            <ProtectedRoute>
+              <PopupMedia />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          exact
+          path="/jobs/add-dev-design"
+          element={
+            <ProtectedRoute>
+              <Agency_jobs_add_edit_dev_design />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          exact
+          path="/workflow/test"
+          element={
+            <ProtectedRoute>
+              <DragDrop />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          exact
+          path="/workflow/test/:workflowId"
+          element={
+            <ProtectedRoute>
+              <DragDrop />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          exact
+          path="/email-template"
+          element={
+            <ProtectedRoute>
+              <EmailTemplates />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          exact
+          path="/Admin-jobs-add-edit-dev/:jobId"
+          element={
+            <ProtectedRoute>
+              <Admin_jobs_add_edit_dev />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          exact
+          // path="/agencydata/:agencyid"
+          path="/companydata/:companyid/:agencyId"
+          element={
+            <ProtectedRoute>
+              <Agency_data />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          exact
+          // path="/companydata/:companyid/:agencyId"
+          path="/companydata/:companyid"
+          element={
+            <ProtectedRoute>
+              <Agency_company_datalist />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          exact
+          // path="/companydata/:companyid/:agencyId"
+          path="/notifications"
+          element={
+            <ProtectedRoute>
+              <Agency_Notifications_view />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          exact
           path="/home"
           element={
             <ProtectedRoute>
