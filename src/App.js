@@ -557,6 +557,16 @@ const App = () => {
       >
         <Route
           exact
+          path="/home"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        ></Route>
+
+        <Route
+          exact
           path="/member/company"
           element={
             <ProtectedRoute>
@@ -888,13 +898,142 @@ const App = () => {
 
         <Route
           exact
-          path="/home"
+          path="/jobs/activity/:jobId"
           element={
             <ProtectedRoute>
-              <Dashboard />
+              <Activity />
             </ProtectedRoute>
           }
         ></Route>
+        <Route
+          exact
+          path="/workflow/levels"
+          element={
+            <AdminRoute>
+              <Admin_jobs_workflowlevels />
+            </AdminRoute>
+          }
+        ></Route>
+        <Route
+          exact
+          path="/workflow-dev"
+          element={
+            <ProtectedRoute>
+              <Agency_approval_workflow_dev />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          exact
+          path="/workflow/stage"
+          element={
+            <AdminRoute>
+              <Admin_jobs_workflowstage />
+            </AdminRoute>
+          }
+        ></Route>
+        <Route
+          exact
+          path="/workflow/levels/add"
+          element={
+            <AdminRoute>
+              <Workflow_level_add />
+            </AdminRoute>
+          }
+        ></Route>
+        <Route
+          exact
+          path="/workflowlevels/:levelId"
+          element={
+            <AdminRoute>
+              <Workflow_level_add />
+            </AdminRoute>
+          }
+        ></Route>
+        <Route
+          exact
+          path="/workflow/stage/:stageId"
+          element={
+            <AdminRoute>
+              <Workflow_stage_add />
+            </AdminRoute>
+          }
+        ></Route>
+        <Route
+          exact
+          path="/workflow/stage/add"
+          element={
+            <AdminRoute>
+              <Workflow_stage_add />
+            </AdminRoute>
+          }
+        ></Route>
+        <Route
+          exact
+          path="/companies/list"
+          element={
+            <ProtectedRoute>
+              <CompanyList />
+            </ProtectedRoute>
+          }
+        ></Route>
+
+        <Route
+          exact
+          path="/user-list"
+          element={
+            <ProtectedRoute>
+              <UserList />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          exact
+          path="/agency-list"
+          element={
+            <ProtectedRoute>
+              <AgencyList />
+            </ProtectedRoute>
+          }
+        ></Route>
+
+        <Route
+          exact
+          path="/companies/:companyId"
+          element={
+            <ProtectedRoute>
+              <Company_add_edit />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          exact
+          path="/companies/add"
+          element={
+            <ProtectedRoute>
+              <Company_add_edit />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          exact
+          path="/jobs/list"
+          element={
+            <ProtectedRoute>
+              <Job_list />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          exact
+          path="/jobs/list-dev"
+          element={
+            <ProtectedRoute>
+              <Admin_jobs_list_dev />
+            </ProtectedRoute>
+          }
+        ></Route>
+
       </Route>
 
       {/* Error Route */}
