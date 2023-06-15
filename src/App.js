@@ -796,6 +796,98 @@ const App = () => {
 
         <Route
           exact
+          path="/agency/users-list"
+          element={
+            <AdminRoute>
+              <Admin_agency_users_list />
+            </AdminRoute>
+          }
+        ></Route>
+        <Route
+          exact
+          path="levels-workflow/list"
+          element={
+            <ProtectedRoute>
+              <Agency_jobs_workflowlevels />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          exact
+          path="/levels-workflow/list/add"
+          element={
+            <ProtectedRoute>
+              <Workflow_agency_level_add />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          exact
+          path="/levels-workflow/:levelId"
+          element={
+            <ProtectedRoute>
+              <Workflow_agency_level_add />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          exact
+          path="/agency/company/:companyid"
+          element={
+            <ProtectedRoute>
+              <Workflow_company_add />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          exact
+          path="/member/company/:companyAdminId"
+          element={
+            <ProtectedRoute>
+              <Member_Admin_Company_Add_Edit />
+            </ProtectedRoute>
+          }
+        ></Route>
+
+        <Route
+          exact
+          path="/member/company/add"
+          element={
+            <ProtectedRoute>
+              <Member_Admin_Company_Add_Edit />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          exact
+          path="/member/companydata/:companyid"
+          element={
+            <ProtectedRoute>
+              <Member_Company_Datalist />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          exact
+          path="/agency/company/add"
+          element={
+            <ProtectedRoute>
+              <Workflow_company_add />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          exact
+          path="/stages-workflow/:stageId"
+          element={
+            <ProtectedRoute>
+              <Workflow_agency_stage_add />
+            </ProtectedRoute>
+          }
+        ></Route>
+
+        <Route
+          exact
           path="/home"
           element={
             <ProtectedRoute>
