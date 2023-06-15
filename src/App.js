@@ -16,6 +16,7 @@ import AppLayout from "./containers/Layout/App-layout";
 
 // Routing
 import PublicRoute from "./routing/PublicRoute";
+import ProtectedRoute from "./routing/ProtectedRoute";
 
 import {
   Routes,
@@ -87,12 +88,11 @@ function App() {
             exact
             path="/home"
             element={
-              // <ProtectedRoute>
-              <Dashboard />
-              // </ProtectedRoute>
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
             }
           />
-
         </Route>
 
         <Route
