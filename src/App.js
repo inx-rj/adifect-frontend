@@ -693,6 +693,107 @@ const App = () => {
             </ProtectedRoute>
           }
         ></Route>
+
+        <Route
+          exact
+          path="/Workflow/add/"
+          element={
+            <ProtectedRoute>
+              <Approval_workflow />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          exact
+          path="/Workflow/edit/:workflowId"
+          element={
+            <ProtectedRoute>
+              <Approval_workflow />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          exact
+          path="/Workflow/add-dev/"
+          element={
+            <ProtectedRoute>
+              <Agency_approval_workflow_dev2 />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          exact
+          path="/Workflow/edit-dev/:workflowId"
+          element={
+            <ProtectedRoute>
+              <Agency_approval_workflow_dev2 />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          exact
+          path="/stages-workflow/list/add"
+          element={
+            <ProtectedRoute>
+              <Workflow_agency_stage_add />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          exact
+          path="/stages-workflow/list"
+          element={
+            <ProtectedRoute>
+              <Agency_jobs_workflowstage />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          exact
+          path="/member-media/copy"
+          element={
+            <ProtectedRoute>
+              <Member_MovefolderDam />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          exact
+          path="/member-media/:parentid/copy"
+          element={
+            <ProtectedRoute>
+              <Member_MovefolderDam />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          exact
+          path="/agency/company"
+          element={
+            <ProtectedRoute>
+              <Agency_jobs_company />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          exact
+          path="/templates/list"
+          element={
+            <ProtectedRoute>
+              <Agency_template_list />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          exact
+          path="/templates/:templateId"
+          element={
+            <ProtectedRoute>
+              <Agency_template_edit />
+            </ProtectedRoute>
+          }
+        ></Route>
+
         <Route
           exact
           path="/home"
