@@ -145,8 +145,8 @@ import Company_projects_tags from "./MyComponents/Common/Company-projects-tags";
 // invite
 import Main_Invite from "./MyComponents/Common/Main-Invite";
 
-// import Community_settings from "./MyComponents/Common/Community-settings";
-// import Audiences from "./MyComponents/Common/Audiences";
+import Community_settings from "./MyComponents/Common/Community-settings";
+import Audiences from "./MyComponents/Common/Audiences";
 import Programs from "./MyComponents/Common/Programs";
 import Creative_code from "./MyComponents/Common/Creative-code";
 import Copy_code from "./MyComponents/Common/Copy-code";
@@ -1241,7 +1241,7 @@ const App = () => {
           }
         ></Route>
 
-        {/* <Route
+        <Route
           exact
           path="/company-project/community-settings"
           element={
@@ -1258,7 +1258,7 @@ const App = () => {
               <Audiences />
             </ProtectedRoute>
           }
-        /> */}
+        />
 
       </Route>
 
