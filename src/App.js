@@ -1260,6 +1260,194 @@ const App = () => {
           }
         />
 
+        <Route
+          exact
+          path="/company-project/programs"
+          element={
+            <ProtectedRoute>
+              <Programs />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          exact
+          path="/company-project/creative-code"
+          element={
+            <ProtectedRoute>
+              <Creative_code />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          exact
+          path="/company-project/copy-code"
+          element={
+            <ProtectedRoute>
+              <Copy_code />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          exact
+          path="/earnings"
+          element={
+            <ProtectedRoute>
+              <Earnings />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          exact
+          path="/analytics"
+          element={
+            <ProtectedRoute>
+              <Analytics />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          exact
+          path="/transactions"
+          element={
+            <ProtectedRoute>
+              <Transactions />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          exact
+          path="/settings"
+          element={
+            <ProtectedRoute>
+              <Settings />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          exact
+          path="/Admin-help"
+          element={
+            <ProtectedRoute>
+              <Admin_Help_Table />
+            </ProtectedRoute>
+          }
+        ></Route>
+
+        <Route
+          exact
+          path="/Admin-help-chat/:helpChatId"
+          element={
+            <ProtectedRoute>
+              <Admin_Help_Chat />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          exact
+          path="/help"
+          element={
+            <ProtectedRoute>
+              <Help_info_table />
+            </ProtectedRoute>
+          }
+        ></Route>
+
+        <Route
+          exact
+          path="/help/add"
+          element={
+            <ProtectedRoute>
+              <Help_Common />
+            </ProtectedRoute>
+          }
+        ></Route>
+
+        <Route
+          exact
+          path="/help/view-message/:helpId"
+          element={
+            <ProtectedRoute>
+              <Help_view_message />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          exact
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        ></Route>
+
+        <Route
+          exact
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          exact
+          path="/invite"
+          element={
+            <ProtectedRoute>
+              <Main_Invite />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          exact
+          path="/member/invite"
+          element={
+            <ProtectedRoute>
+              <Member_Admin_invite />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          exact
+          path="/profile-dev-1"
+          element={
+            <ProtectedRoute>
+              <Profile_dev />
+            </ProtectedRoute>
+          }
+        ></Route>
+
+        <Route
+          exact
+          path="/Profile_design"
+          element={
+            <ProtectedRoute>
+              <Profile_design />
+            </ProtectedRoute>
+          }
+        ></Route>
+
+        <Route
+          exact
+          path="/profile-dev"
+          element={
+            <ProtectedRoute>
+              <Profile_new />
+            </ProtectedRoute>
+          }
+        ></Route>
+
+        <Route
+          exact
+          path="/edit-profile"
+          element={
+            <ProtectedRoute>
+              <Profileedit />
+            </ProtectedRoute>
+          }
+        ></Route>
+
       </Route>
 
       {/* Error Route */}
