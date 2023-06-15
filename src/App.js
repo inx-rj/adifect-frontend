@@ -166,7 +166,6 @@ const App = () => {
     console.log({ headerCompany }, 'headerCompany');
   }, [headerCompany])
 
-
   return (
     <Routes>
       <Route
@@ -646,6 +645,51 @@ const App = () => {
           element={
             <ProtectedRoute>
               <Agency_Notifications_view />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          exact
+          path="/Workflow/"
+          element={
+            <ProtectedRoute>
+              <Approval_workflow_list />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          exact
+          path="/draft-jobs/"
+          element={
+            <ProtectedRoute>
+              <Agency_draft_jobs_list />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          exact
+          path="/member-draft-jobs/"
+          element={
+            <ProtectedRoute>
+              <Member_Admin_draft_jobs_list />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          exact
+          path="/member-templates/list"
+          element={
+            <ProtectedRoute>
+              <Member_Admin_template_list />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          exact
+          path="/member-templates/:MembertemplateId"
+          element={
+            <ProtectedRoute>
+              <Member_Admin_template_Edit />
             </ProtectedRoute>
           }
         ></Route>
