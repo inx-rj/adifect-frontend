@@ -9,8 +9,9 @@ import { GET_DUPLICATE_MEMBER_ADMIN_JOB_LIST_IN_PROGRESS } from "redux/actions/j
 import {
   CLEAR_MEMBERS_ADMIN_IN_PROGRESS_JOBS,
   MEMBERS_ADMIN_JOBS_IN_PROGRESS_DATA,
-} from "redux/reducers/homePage/membersJobsListInProgress.slice";
+} from "redux/reducers/jobs/membersJobsListInProgress.slice";
 import { useAppDispatch, useAppSelector } from "redux/store";
+import { IS_HEADER_COMPANY } from "redux/reducers/config/app/app.slice";
 
 const MemeberDashBoardInProgress = () => {
   const dispatch = useAppDispatch();
@@ -20,7 +21,7 @@ const MemeberDashBoardInProgress = () => {
   const [orderingInProgress, setOrderingInProgress] = useState("-created");
   const [orderingName, setOrderingName] = useState("Sort by newest");
   const [anchorElInProgress, setAnchorElInProgress] = React.useState(null);
-  // const [headerCompany, setHeaderCompany] = useOutletContext<any>();
+  const headerCompany = useAppSelector<any>(IS_HEADER_COMPANY);
   const openMenuInProgress = Boolean(anchorElInProgress);
 
   console.log("MemberAdminJobList", MemberAdminJobList);
@@ -46,7 +47,7 @@ const MemeberDashBoardInProgress = () => {
 
   useSingleEffect(() => {
     const data = {
-      // id: headerCompany ?? "",
+      id: headerCompany ?? "",
       status: "2",
       page: 1,
       ordering: orderingInProgress,
@@ -56,7 +57,7 @@ const MemeberDashBoardInProgress = () => {
   useUpdateEffect(() => {
     dispatch(CLEAR_MEMBERS_ADMIN_IN_PROGRESS_JOBS);
     const data = {
-      // id: headerCompany ?? "",
+      id: headerCompany ?? "",
       status: "2",
       page: 1,
       ordering: orderingInProgress,
@@ -131,7 +132,7 @@ const MemeberDashBoardInProgress = () => {
                       }
                     />
                   </div>
-                  <h5 className="h-full max-h-[80px] overflow-y-auto">
+                  <h5 className="h-full max-h-[80px] overflow-y-auto custom-scrollbar">
                     {item?.description?.length > 300
                       ? `${item?.description.slice(0, 300)}...`
                       : item.description}{" "}
@@ -178,9 +179,10 @@ const MemeberDashBoardInProgress = () => {
           </Link>
         )}
         {MemberAdminJobList?.data?.length < 1 && (
-          <div className="jobnotfound">
-            <div className="notfountboder_in_progress"></div>
-            <div className="notfounttext">No jobs in progress</div>
+          <div className="border-l-8 rounded border-[#c315ff] bg-white p-6 h-full max-h-[580px] shadow-[0_4px_40px_#2472fc0f]">
+            <div className="text-lg font-semibold text-center">
+              No jobs in progress
+            </div>
           </div>
         )}
       </div>

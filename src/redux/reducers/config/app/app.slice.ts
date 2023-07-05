@@ -5,7 +5,8 @@ import { appInitialType } from "helper/types/auth/authType";
 const initialState: appInitialType = {
   isMiniSidebar: true,
   persist: false,
-  headerCompany: null,
+  headerCompany: 0,
+  headerCompanyName: "",
 };
 
 export const configAppSlice = createSlice({
@@ -21,15 +22,25 @@ export const configAppSlice = createSlice({
     SET_HEADER_COMPANY: (state, action) => {
       state.headerCompany = action.payload;
     },
+    SET_HEADER_COMPANY_NAME: (state, action) => {
+      state.headerCompanyName = action.payload;
+    },
   },
 });
 
-export const { SET_PERSIST, SET_SIDEBAR, SET_HEADER_COMPANY } =
-  configAppSlice.actions;
+export const {
+  SET_PERSIST,
+  SET_SIDEBAR,
+  SET_HEADER_COMPANY,
+  SET_HEADER_COMPANY_NAME,
+} = configAppSlice.actions;
 
-export const IS_SIDEBAR_COLLAPSED = (state: RootState) =>
+export const IS_SIDEBAR_OPEN = (state: RootState) =>
   state.config.app.isMiniSidebar;
 export const IS_PERSISTED = (state: RootState) => state.config.app.persist;
 
 export const IS_HEADER_COMPANY = (state: RootState) =>
   state.config.app.headerCompany;
+
+export const HEADER_COMPANY_NAME = (state: RootState) =>
+  state.config.app.headerCompanyName;

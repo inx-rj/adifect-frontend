@@ -7,6 +7,9 @@ class WorkFlowTabApiClient {
   fetchWorkFlowList = (filters: any, endpoint: string) =>
     axiosPrivate.get(endpoint + setQueryParams(filters));
 
+  fetchCompanyWorkFlowList = (endpoint, filter) =>
+    axiosPrivate.get(`${endpoint}` + setQueryParams(filter));
+
   //fetch main workflow details
   fetchMainWorkFlowDetails = (workflowId: any) =>
     axiosPrivate.get(`${API_URL.WORKFLOW.WORKFLOW_LIST}${workflowId}/`);

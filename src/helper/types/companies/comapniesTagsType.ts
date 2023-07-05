@@ -11,11 +11,16 @@ export interface CompaniesTagsInitialsType extends LoadingType {
       results: TableRowsType[];
     };
   };
+  response: {
+    add: null;
+    update: null;
+    remove: null;
+    addNew: null;
+  };
 }
 
 export interface tagPayloadDataType {
-  community: number | undefined,
-  title: string,
-  description: string,
+  community: number | undefined;
+  title: string;
+  description: string;
 }
-

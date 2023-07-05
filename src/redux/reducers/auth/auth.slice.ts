@@ -5,7 +5,7 @@ import {
 } from "../../../helper/types/auth/authType";
 import { RootState } from "../../rootReducer";
 
-const userProfileDetails: UserProfileDetailsType = {
+export const userProfileDetails: UserProfileDetailsType = {
   id: null,
   email: "",
   first_name: "",
@@ -27,31 +27,38 @@ const userProfileDetails: UserProfileDetailsType = {
   portfolio: [],
 };
 
+// get userData from localStorage
+const userDataFromStorage = () =>
+  localStorage.getItem("userData")
+    ? JSON.parse(localStorage.getItem("userData"))
+    : null;
+
 const initialState: AuthInitialType = {
   loading: false,
   user: {
     loading: false,
     hasData: false,
-    data: {
-      message: "",
-      refresh: "",
-      token: "",
-      user: {
-        user_id: 0,
-        name: "",
-        email: "",
-        first_name: "",
-        last_name: "",
-        role: 0,
-        user_level: 0,
-      },
-    },
+    data: userDataFromStorage(),
+    // data: {
+    //   message: "",
+    //   refresh: "",
+    //   token: "",
+    //   user: {
+    //     user_id: 0,
+    //     name: "",
+    //     email: "",
+    //     first_name: "",
+    //     last_name: "",
+    //     role: 0,
+    //     user_level: 0,
+    //   },
+    // },
   },
   userProfile: {
     loading: false,
-    hasData: false,
-    data: userProfileDetails
-  }
+    hasData: userProfileDetails,
+    data: userProfileDetails,
+  },
 };
 
 export const authSlice = createSlice({
@@ -91,7 +98,7 @@ export const authSlice = createSlice({
       ...state,
       userProfile: {
         ...state.userProfile,
-        hasData: true,
+        hasData: action.payload,
         data: action.payload,
       },
     }),

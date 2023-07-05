@@ -9,9 +9,13 @@ class CompaniesApiClient {
       `${API_URL.COMPANIES.COMPANY_PROJECTS}` + setQueryParams(filters)
     );
 
-  // Company projects table filters dropdwon list
+  // Company projects table filters dropdown list
   fetchCompanyProjectsFiltersList = () =>
     axiosPrivate.get(`${API_URL.COMPANIES.FILTERS}`);
+
+  // Individual story details
+  fetchCompanyProjectsStroyDetails = (id: any) =>
+    axiosPrivate.get(`${API_URL.COMPANIES.COMPANY_PROJECTS}${id}/`);
 }
 
 export default new CompaniesApiClient();

@@ -68,15 +68,11 @@
   background: #2472fc;
 }
 
-.double_toogle_button
-  .secondjobPricingTypebtn
-  button.MuiButtonBase-root.MuiToggleButton-root {
+.double_toogle_button .secondjobPricingTypebtn button.MuiButtonBase-root.MuiToggleButton-root {
   border-radius: 0 40px 40px 0;
 }
 
-.double_toogle_button
-  .firstjobPricingTypebtn
-  button.MuiButtonBase-root.MuiToggleButton-root {
+.double_toogle_button .firstjobPricingTypebtn button.MuiButtonBase-root.MuiToggleButton-root {
   border-radius: 40px 0px 0px 40px;
 }
 
@@ -86,9 +82,7 @@
   color: #fff !important;
 }
 
-.double_toogle_button
-  .fixed_toogle_button
-  button.MuiButtonBase-root.MuiToggleButton-root {
+.double_toogle_button .fixed_toogle_button button.MuiButtonBase-root.MuiToggleButton-root {
   width: 100px;
   color: #133268;
   background-color: #f4f5f8;
@@ -127,9 +121,11 @@
   min-height: 47px;
   background: #f9fbfc;
 }
+
 .Marketing_2 {
   padding: 0 9px;
 }
+
 .Marketing {
   border: 1px solid #c6cacc;
   width: 100%;
@@ -162,6 +158,7 @@ input.tags-input {
   background: #f9fbfc;
   height: 60px;
 }
+
 input.tags-input {
   border: none !important;
 }
@@ -169,6 +166,7 @@ input.tags-input {
 input.tags-input {
   padding-left: 5px;
 }
+
 .tags-input {
   flex-grow: 1;
   padding: 0.5em 0;
@@ -177,13 +175,67 @@ input.tags-input {
 }
 
 .shwo_data h3 {
-  font-size: 16px!important;
-  font-weight: 500!important;
+  font-size: 16px !important;
+  font-weight: 500 !important;
   color: #000;
   margin: 0 0 20px;
   text-transform: capitalize;
   position: relative;
   line-height: 24px;
-  border-bottom: 1px solidhsla(0,0%,86.7%,.30980392156862746);
+  border-bottom: 1px solidhsla(0, 0%, 86.7%, .30980392156862746);
   padding: 0 0 9px;
+}
+
+
+/* View Jobs */
+.job-custom_popup {
+  position: fixed;
+  z-index: 1300;
+  inset: 0px;
+}
+
+.job-custom_popup .MuiPaper-root.MuiPaper-elevation.MuiPaper-rounded {
+  border-radius: 0 !important;
+  margin: 0 !important;
+  max-height: 100% !important;
+  max-width: 70% !important;
+  width: 70% !important;
+  float: right !important;
+  height: 100% !important;
+}
+
+.mediaimg {
+  margin-top: 20px;
+  float: left;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.mediaimg div {
+  margin-right: 5px;
+  /* width: 120px;
+  height: 120px; */
+  overflow: hidden;
+}
+
+/* .mediaimg div {
+  width: 10%;
+  float: left;
+} */
+
+.mediaimg div img {
+  width: 120px;
+  object-fit: cover;
+  object-position: center;
+  /* padding: 5px; */
+  border-radius: 20px;
+}
+
+.job-custom_popup .MuiDialog-container.MuiDialog-scrollPaper {
+  display: unset!important;
+}
+
+.profileImgDialogagencyApprovel .MuiPaper-root.MuiPaper-elevation {
+  width: 80%;
+  max-width: 80%;
 }

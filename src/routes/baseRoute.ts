@@ -1,14 +1,19 @@
-import { Roles } from "helper/config";
+import { ROLES } from "helper/config";
 import { SidebarRoutesTypes } from "helper/types";
+import { getMemberApprover, getUserRole } from "helper/utility/customFunctions";
+
+const userData = () => JSON.parse(localStorage.getItem("userData")) ?? "";
 
 export const SYSTEM: Readonly<{ LOGIN: string; HOME: string }> = Object.freeze({
-  LOGIN: "/login",
+  LOGIN: "/",
   HOME: "/",
 });
 
-export const MAIN_ROUTE: Readonly<{ HOME: string }> = Object.freeze({
-  HOME: `${SYSTEM.HOME}`,
-});
+export const MAIN_ROUTE: Readonly<{ HOME: string; HOME_DASH: string }> =
+  Object.freeze({
+    HOME: `${SYSTEM.HOME}`,
+    HOME_DASH: `${SYSTEM.HOME}home`,
+  });
 
 // Authentication Route
 export const AUTH_ROUTE: Readonly<{
@@ -29,11 +34,12 @@ export const AUTH_ROUTE: Readonly<{
 export const PAGE_ROUTE: Readonly<{
   [key: string]: string;
 }> = Object.freeze({
-  HOME: `${MAIN_ROUTE.HOME}`,
+  HOME: `${MAIN_ROUTE.HOME_DASH}`,
   WORKFLOW: `${MAIN_ROUTE.HOME}workflow`,
   MY_PROJECTS: `${MAIN_ROUTE.HOME}projects`,
   COMPANIES: `${MAIN_ROUTE.HOME}`,
   COMPANY: `${MAIN_ROUTE.HOME}company`,
+  INTAKE_FORMS: `${MAIN_ROUTE.HOME}intake-forms`,
   MEDIA: `${MAIN_ROUTE.HOME}media`,
   MY_JOBS: `${MAIN_ROUTE.HOME}jobs`,
   DRAFT_JOBS: `${MAIN_ROUTE.HOME}draft-jobs`,
@@ -44,7 +50,7 @@ export const PAGE_ROUTE: Readonly<{
   COMPANY_PROJECTS: `${MAIN_ROUTE.HOME}company-projects`,
   INDUSTRIES: `${MAIN_ROUTE.HOME}industries`,
   SKILLS: `${MAIN_ROUTE.HOME}skills`,
-  USERS: `${MAIN_ROUTE.HOME}users`,
+  USERS: `${MAIN_ROUTE.HOME}users-list`,
 });
 
 // Workflow Route
@@ -60,12 +66,36 @@ export const WORKFLOW_ROUTE: Readonly<{
 export const COMPANIES_ROUTE: Readonly<{
   [key: string]: string;
 }> = Object.freeze({
-  COMPANY_PROJECTS_DETAILS: `${PAGE_ROUTE.COMPANY_PROJECTS}/:communityId`,
+  COMPANY_PROJECTS_DETAILS: `${PAGE_ROUTE.COMPANY_PROJECTS}/:storyId`,
   TAGS: `${PAGE_ROUTE.HOME}company-project/tags`,
   COMMUNITY_SETTINGS: `${PAGE_ROUTE.HOME}company-project/community-settings`,
   PROGRAMS: `${PAGE_ROUTE.HOME}company-project/programs`,
   COPY_CODE: `${PAGE_ROUTE.HOME}company-project/copy-code`,
   CREATIVE_CODE: `${PAGE_ROUTE.HOME}company-project/creative-code`,
+  AUDIENCE: `${PAGE_ROUTE.HOME}company-project/audience`,
+});
+
+//IntakeForm Route
+export const INTAKE_FORMS_ROUTE: Readonly<{
+  CREATE_INTAKE_FORM: string;
+  EDIT_INTAKE_FORM: string;
+  VIEW_INTAKE_FORM: string;
+  RESPONSE_INTAKE_FORM: string;
+  PUBLIC_INTAKE_FORM: string;
+  [key: string]: string;
+}> = Object.freeze({
+  CREATE_INTAKE_FORM: `${PAGE_ROUTE.INTAKE_FORMS}/create`,
+  EDIT_INTAKE_FORM: `${PAGE_ROUTE.INTAKE_FORMS}/edit/:formName`,
+  VIEW_INTAKE_FORM: `${PAGE_ROUTE.INTAKE_FORMS}/view/:formName`,
+  RESPONSE_INTAKE_FORM: `${PAGE_ROUTE.INTAKE_FORMS}/responses/:formName`,
+  PUBLIC_INTAKE_FORM: `${PAGE_ROUTE.INTAKE_FORMS}/:formName`,
+});
+
+//Media Route
+export const MEDIA_ROUTE: Readonly<{
+  MEDIA_HOME: string;
+}> = Object.freeze({
+  MEDIA_HOME: `${PAGE_ROUTE.MEDIA}`,
 });
 
 // My Jobs Route
@@ -74,7 +104,17 @@ export const MY_JOBS_ROUTE: Readonly<{
 }> = Object.freeze({
   HOME: `${PAGE_ROUTE.MY_JOBS}/list`,
   CREATE_MY_JOB: `${PAGE_ROUTE.MY_JOBS}/add`,
-  UPDATE_MY_JOB: `${PAGE_ROUTE.MY_JOBS}/update`,
+  UPDATE_MY_JOB: `${PAGE_ROUTE.MY_JOBS}/:jobId`,
+  MY_JOB_DETAILS: `${PAGE_ROUTE.MY_JOBS}/details/:jobId`,
+});
+
+// Draft Jobs Route
+export const DRAFT_JOBS_ROUTE: Readonly<{
+  [key: string]: string;
+}> = Object.freeze({
+  HOME: `${PAGE_ROUTE.DRAFT_JOBS}`,
+  CREATE_DRAFT_JOB: `${PAGE_ROUTE.DRAFT_JOBS}/add`,
+  UPDATE_DRAFT_JOB: `${PAGE_ROUTE.DRAFT_JOBS}/:jobId`,
 });
 
 // Templates Route
@@ -82,6 +122,7 @@ export const TEMPLATES_ROUTE: Readonly<{
   [key: string]: string;
 }> = Object.freeze({
   HOME: `${PAGE_ROUTE.TEMPLATES}/list`,
+  UPDATE_TEMPLATE: `${PAGE_ROUTE.TEMPLATES}/:templateId`,
 });
 
 // Company Route
@@ -99,6 +140,7 @@ export const HELP_ROUTE: Readonly<{
 }> = Object.freeze({
   HOME: `${PAGE_ROUTE.HELP}`,
   CREATE_HELP: `${PAGE_ROUTE.HELP}/add`,
+  VIEW_HELP: `${PAGE_ROUTE.HELP}/view-message/:helpChatId`
 });
 
 // Define Sidebar Route
@@ -109,20 +151,29 @@ export const SIDEBAR_ROUTES: SidebarRoutesTypes[] = [
     name: "Home",
     path: PAGE_ROUTE.HOME,
     icon: "HomeOutlined",
-    children: [], // Empty means it has all role access
+    children: [],
+    permission: [], // Empty means it has all role access
   },
   {
     name: "Workflow",
     path: WORKFLOW_ROUTE.HOME,
     icon: "GridViewOutlined",
     children: [],
-    permission: [Roles.ADMIN, Roles.AGENCY],
+    permission: [
+      ROLES.ADMIN,
+      ROLES.AGENCY,
+      getUserRole(userData()?.user?.role, userData()?.user?.user_level),
+    ],
   },
   {
     name: "My Projects",
     path: PAGE_ROUTE.MY_PROJECTS,
     icon: "StickyNote2Outlined",
-    permission: [Roles.CREATOR, Roles.AGENCY],
+    permission: [
+      ROLES.CREATOR,
+      ROLES.AGENCY,
+      getUserRole(userData()?.user?.role, userData()?.user?.user_level),
+    ],
   },
   {
     name: "Companies",
@@ -159,159 +210,155 @@ export const SIDEBAR_ROUTES: SidebarRoutesTypes[] = [
         path: COMPANIES_ROUTE.CREATIVE_CODE,
         children: [],
       },
+      {
+        name: "Audience",
+        path: COMPANIES_ROUTE.AUDIENCE,
+        children: [],
+      },
       // {
       //   title: "Stories Options",
       //   imgPath: "/img/tabsicon.png",
       //   path: "/company-project/stories-options",
       // },
     ],
-    permission: [Roles.AGENCY],
+    permission: [ROLES.ADMIN, ROLES.AGENCY],
+  },
+  {
+    name: "Intake Forms",
+    path: PAGE_ROUTE.INTAKE_FORMS,
+    icon: "DescriptionOutlined",
+    children: [],
+    permission: [
+      ROLES.ADMIN,
+      ROLES.AGENCY,
+      getUserRole(userData()?.user?.role, userData()?.user?.user_level),
+      getMemberApprover(userData()?.user?.role, userData()?.user?.user_level),
+    ],
   },
   {
     name: "Media",
     path: PAGE_ROUTE.MEDIA,
     icon: "MovieOutlined",
     children: [],
-    permission: [Roles.ADMIN, Roles.AGENCY],
+    permission: [
+      ROLES.ADMIN,
+      ROLES.AGENCY,
+      getUserRole(userData()?.user?.role, userData()?.user?.user_level),
+      getMemberApprover(userData()?.user?.role, userData()?.user?.user_level),
+    ],
   },
   {
     name: "Jobs",
     path: MY_JOBS_ROUTE.HOME,
     icon: "BusinessCenterOutlined",
     children: [],
-    permission: [Roles.ADMIN],
+    permission: [ROLES.ADMIN],
   },
   {
     name: "My Jobs",
     path: MY_JOBS_ROUTE.HOME,
     icon: "BusinessCenterOutlined",
     children: [],
-    permission: [Roles.AGENCY, Roles.ADMIN, Roles.MEMBER],
+    permission: [
+      ROLES.AGENCY,
+      ROLES.MEMBER,
+      getUserRole(userData()?.user?.role, userData()?.user?.user_level),
+    ],
   },
   {
     name: "Industries",
     path: PAGE_ROUTE.INDUSTRIES,
     icon: "LocationCityOutlined",
     children: [],
-    permission: [Roles.ADMIN],
+    permission: [ROLES.ADMIN],
   },
   {
     name: "Skills",
     path: PAGE_ROUTE.SKILLS,
     icon: "DrawOutlined",
     children: [],
-    permission: [Roles.ADMIN],
+    permission: [ROLES.ADMIN],
   },
   {
     name: "Users",
-    path: PAGE_ROUTE.SKILLS,
+    path: PAGE_ROUTE.USERS,
     icon: "Groups2Outlined",
     children: [],
-    permission: [Roles.ADMIN],
+    permission: [ROLES.ADMIN],
   },
   {
     name: "Draft Jobs",
     path: PAGE_ROUTE.DRAFT_JOBS,
     icon: "CardTravelOutlined",
     children: [],
-    permission: [Roles.AGENCY],
+    permission: [
+      ROLES.AGENCY,
+      getUserRole(userData()?.user?.role, userData()?.user?.user_level),
+    ],
   },
   {
     name: "Templates",
     path: TEMPLATES_ROUTE.HOME,
     icon: "ReceiptLongOutlined",
     children: [],
-    permission: [Roles.AGENCY],
+    permission: [
+      ROLES.AGENCY,
+      getUserRole(userData()?.user?.role, userData()?.user?.user_level),
+    ],
+  },
+  {
+    name: "Available Jobs",
+    path: MY_JOBS_ROUTE.HOME,
+    icon: "CardTravelOutlined",
+    permission: [ROLES.CREATOR],
+  },
+  {
+    name: "Companies",
+    path: PAGE_ROUTE.COMPANY,
+    icon: "ApartmentOutlined",
+    children: [],
+    permission: [
+      ROLES.ADMIN,
+      getMemberApprover(userData()?.user?.role, userData()?.user?.user_level),
+    ],
   },
   {
     name: "Company",
     path: PAGE_ROUTE.COMPANY,
     icon: "ApartmentOutlined",
     children: [],
-    permission: [Roles.ADMIN, Roles.AGENCY],
-  },
-  {
-    name: "Available Jobs",
-    path: MY_JOBS_ROUTE.HOME,
-    icon: "CardTravelOutlined",
-    permission: [Roles.CREATOR],
+    permission: [
+      ROLES.AGENCY,
+      getUserRole(userData()?.user?.role, userData()?.user?.user_level),
+    ],
   },
   {
     name: "Help",
     path: HELP_ROUTE.HOME,
     icon: "HelpOutlineOutlined",
     children: [],
+    permission:[]
   },
 
-  //Agency Member - ADMIN Sidebar
-  // { name: "Home", path: "/home" },
+  // Agency and admin
   // {
-  //   name: "Workflow",
-  //   path: "/workflow",
+  //   name: "Earnings",
+  //   imgPath: "/img/Earnings_old.png",
+  //   path: "/earnings",
   // },
+  // { name: "Analytics", imgPath: "/img/Analytics.png", path: "/analytics" },
   // {
-  //   name: "Media",
-  //   path: "/member-media",
+  //   name: "Transactions",
+  //   imgPath: "/img/Transactions.png",
+  //   path: "/transactions",
   // },
-  // { name: "My Jobs", path: "/jobs/list" },
-  // // { name: "Media", imgPath: "/img/Projects.png", path: "/Media" },
-  // {
-  //   name: "Draft Jobs",
-  //   path: "/member-draft-jobs/",
-  // },
-  // {
-  //   name: "Templates",
-  //   path: "/member-templates/list",
-  // },
-  // {
-  //   name: "Company",
-  //   path: "/member/company",
-  // },
-  // { name: "Help", path: "/help" },
 
-  // //Agency Member - MARKETER Sidebar
-  // { name: "Home", path: "/home" },
+  // Admin
+  // { name: "Levels", imgPath: "/img/lavel.png", path: "/levels/list" },
   // {
-  //   name: "Workflow",
-  //   path: "/workflow",
+  //   name: "Categories",
+  //   imgPath: "/img/category.png",
+  //   path: "/categories/list",
   // },
-  // { name: "My Projects", path: "/projects" },
-  // {
-  //   name: "Media",
-  //   path: "/member-media",
-  // },
-  // { name: "My Jobs", path: "/jobs/list" },
-  // {
-  //   name: "Templates",
-  //   path: "/member-templates/list",
-  // },
-  // {
-  //   name: "Company",
-  //   path: "/member/company",
-  // },
-  // { name: "Help", path: "/help" },
-
-  // //Agency Member - APPROVER Sidebar
-
-  // { name: "Home", path: "/home" },
-  // {
-  //   name: "Media",
-  //   path: "/member-media",
-  // },
-  // { name: "My Jobs", path: "/jobs/list" },
-  // {
-  //   name: "Company",
-  //   path: "/member/company",
-  // },
-  // { name: "Help", path: "/help" },
-
-  // //Agency Member - IN-HOUSE DESIGNER Sidebar
-  // { name: "Home", path: "/home" },
-  // {
-  //   name: "Media",
-  //   path: "/member-media",
-  // },
-  // { name: "My Projects", path: "/projects" },
-  // { name: "My Jobs", path: "/jobs/list" },
-  // { name: "Help", path: "/help" },
+  // { name: "Settings", imgPath: "/img/Settings.png", path: "/settings" },
 ];

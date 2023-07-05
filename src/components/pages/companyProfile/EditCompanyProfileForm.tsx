@@ -142,7 +142,7 @@ const EditCompanyProfileForm = ({ handlePopup, openPopup, tabData }) => {
           dialogTitle="Edit Profile"
           textAlign="left"
           dialogContent={
-            <>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-2" >
               <div
                 className={
                   errors.company
@@ -298,12 +298,11 @@ const EditCompanyProfileForm = ({ handlePopup, openPopup, tabData }) => {
                 <DropdownWithSearch
                   filterList={{
                     name: "industry",
-                    label: "Select Industry",
+                    placeholder: "Select Industry",
                     options: industriesList.data.results,
                     labelAs: "industry_name",
                     valueAs: "id",
                   }}
-                  shrinkLabel={false}
                   currentValue={formData?.industry}
                   handleChange={(name, val) => {
                     if (val) {
@@ -313,12 +312,13 @@ const EditCompanyProfileForm = ({ handlePopup, openPopup, tabData }) => {
                 />
                 <span className="err-tag">{errors.industry ?? ""}</span>
               </div>
-            </>
+            </div>
           }
           openPopup={openPopup}
           closePopup={handlePopup}
           mainActionHandler={validateSubmit}
           mainActionTitle="Create"
+          maxWidth="800px"
         />
       )}
       <MuiPopup

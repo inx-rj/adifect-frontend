@@ -1,53 +1,52 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import { useState } from "react";
-import swal from "sweetalert";
-import { Button, MenuItem, Select, Typography } from "@mui/material";
-import { Link } from "react-router-dom";
-import { useSingleEffect, useUpdateEffect } from "react-haiku";
+import { useState } from 'react';
+import swal from 'sweetalert';
+import { Button, MenuItem, Select, Typography } from '@mui/material';
+import { Link } from 'react-router-dom';
+import { useSingleEffect, useUpdateEffect } from 'react-haiku';
 
 //import redux
-import { useAppSelector } from "redux/store";
-import { useAppDispatch } from "redux/store";
+import { useAppSelector } from 'redux/store';
+import { useAppDispatch } from 'redux/store';
 import {
   DELETE_INVITE_USER,
   GET_INVITE_USERS,
   POST_INVITE_USER,
-  PUT_INVITE_USER,
-} from "redux/actions/inviteUser/inviteUser.actions";
-import { INVITE_USER_LIST } from "redux/reducers/inviteUser/inviteUser.slice";
-import { COMPANY_LIST } from "redux/reducers/companyTab/companyTab.slice";
-import { GET_COMPANY_LIST } from "redux/actions/companyTab/companyTab.actions";
+  PUT_INVITE_USER
+} from 'redux/actions/inviteUser/inviteUser.actions';
+import { INVITE_USER_LIST } from 'redux/reducers/inviteUser/inviteUser.slice';
+import { COMPANY_LIST } from 'redux/reducers/companyTab/companyTab.slice';
+import { GET_COMPANY_LIST } from 'redux/actions/companyTab/companyTab.actions';
 
 //import components
-import SearchBar from "components/common/searchBar/SearchBar";
-import MuiCustomTable from "components/common/muiTable/MuiTable";
-import ActionMenuButton from "components/common/actionMenuButton/ActionMenuButton";
-import LoadingSpinner from "components/common/loadingSpinner/Loader";
-import MuiPopup from "components/common/muiPopup/MuiPopup";
+import SearchBar from 'components/common/searchBar/SearchBar';
+import MuiCustomTable from 'components/common/muiTable/MuiTable';
+import ActionMenuButton from 'components/common/actionMenuButton/ActionMenuButton';
+import LoadingSpinner from 'components/common/loadingSpinner/Loader';
+import MuiPopup from 'components/common/muiPopup/MuiPopup';
 
 //import assets
-import SortArrowIcon from "../../../assets/images/sort_arrows.png";
-import PersonAddAltIcon from "@mui/icons-material/PersonAddAlt";
-import HomeIcon from "@mui/icons-material/Home";
+import SortArrowIcon from '../../../assets/images/sort_arrows.png';
+import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
+import HomeIcon from '@mui/icons-material/Home';
 
 // import helpers
-import { validateEmail } from "helper/validations";
-import {
-  TablePaginationType,
-  TableRowColType,
-} from "helper/types/muiTable/muiTable";
-import { Images } from "helper/images";
-import { getUserLevel } from "helper/utility/customFunctions";
+import { validateEmail } from 'helper/validations';
+import { TablePaginationType, TableRowColType } from 'helper/types/muiTable/muiTable';
+import { Images } from 'helper/images';
+import { getUserLevel } from 'helper/utility/customFunctions';
+import { GET_USER_PROFILE_DATA } from 'redux/reducers/auth/auth.slice';
+import { initialTableConfigInterface } from 'helper/types/common/tableType';
 
 const InviteUser = () => {
   const dispatch = useAppDispatch();
 
   const { inviteUserList } = useAppSelector(INVITE_USER_LIST);
   const { companyList } = useAppSelector(COMPANY_LIST);
+  const userProfile = useAppSelector(GET_USER_PROFILE_DATA);
 
   const [selectedItem, setSelectedItem] = useState({
     currentTooltip: null,
-    currentId: null,
+    currentId: null
   });
   const [anchorEl, setAnchorEl] = useState(null);
   const [openModal, setOpenModal] = useState(false);
@@ -56,36 +55,36 @@ const InviteUser = () => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [formData, setFormData] = useState<{
     email: string;
-    company: "" | number;
-    level: "" | 1 | 2 | 3 | 4;
+    company: '' | number;
+    level: '' | 1 | 2 | 3 | 4;
   }>({
-    email: "",
-    company: "",
-    level: "",
+    email: '',
+    company: '',
+    level: ''
   });
   const [errors, setErrors] = useState({
     email: null,
     company: null,
-    level: null,
+    level: null
   });
-  const [paginationData, setPaginationData] = useState<TablePaginationType>({
+  const [tableFilters, setTableFilters] = useState<initialTableConfigInterface>({
     page: 1,
     rowsPerPage: 10,
-    search: "",
+    search: ''
   });
 
   //fetch inital invite users and companies data list
   useSingleEffect(() => {
-    dispatch(GET_COMPANY_LIST(paginationData));
-    dispatch(GET_INVITE_USERS(paginationData));
+    dispatch(GET_COMPANY_LIST(tableFilters));
+    dispatch(GET_INVITE_USERS(tableFilters));
   });
 
   useUpdateEffect(() => {
-    dispatch(GET_INVITE_USERS(paginationData));
-  }, [paginationData]);
+    dispatch(GET_INVITE_USERS(tableFilters));
+  }, [tableFilters]);
 
   //set the edit mode
-  const handleEdit = (item) => {
+  const handleEdit = item => {
     setOpenModal(true);
     setIsEditMode(true);
     setErrors({ ...errors, level: null });
@@ -94,29 +93,29 @@ const InviteUser = () => {
   };
 
   //validate inputs
-  const validateSubmit = (e) => {
+  const validateSubmit = e => {
     e.preventDefault();
     let tempErrors = {
       email: null,
       company: null,
-      level: !formData?.level ? "Please select a level" : null,
+      level: !formData?.level ? 'Please select a level' : null
     };
     if (!isEditMode) {
       tempErrors = {
         email: validateEmail(formData?.email),
-        company: !formData?.company ? "Please select a company" : null,
-        level: !formData?.level ? "Please select a level" : null,
+        company: !formData?.company ? 'Please select a company' : null,
+        level: !formData?.level ? 'Please select a level' : null
       };
     }
     setErrors(tempErrors);
-    if (Object.values(tempErrors).filter((value) => value)?.length) {
+    if (Object.values(tempErrors).filter(value => value)?.length) {
       return;
     }
     handleFormSubmit();
   };
 
   //handle form data
-  const handleInputChange = (e) => {
+  const handleInputChange = e => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
     setErrors({ ...errors, [name]: null });
@@ -125,39 +124,40 @@ const InviteUser = () => {
   //handle add and edit form submit
   const handleFormSubmit = () => {
     if (isEditMode) {
-      dispatch(
-        PUT_INVITE_USER(selectedItem.currentId, { levels: formData?.level })
-      );
+      dispatch(PUT_INVITE_USER(selectedItem.currentId, { levels: formData?.level }));
     } else {
       dispatch(
-        POST_INVITE_USER({
-          email: formData?.email,
-          company: formData?.company,
-          levels: formData?.level,
-        })
+        POST_INVITE_USER(
+          {
+            email: formData?.email,
+            company: formData?.company,
+            levels: formData?.level
+          },
+          userProfile?.data?.id
+        )
       );
     }
     setAnchorEl(null);
     setSelectedItem({ currentId: null, currentTooltip: null });
     setOpenModal(false);
     setIsEditMode(false);
-    setFormData({ ...formData, email: "" });
+    setFormData({ ...formData, email: '' });
   };
 
   //handle delete action
-  const handleDelete = (item) => {
+  const handleDelete = item => {
     swal({
-      title: "Warning",
-      text: "Are you sure you want to remove this user?",
-      className: "errorAlert",
+      title: 'Warning',
+      text: 'Are you sure you want to remove this user?',
+      className: 'errorAlert',
       icon: Images.ErrorLogo,
       buttons: {
         Cancel: true,
-        Confirm: true,
+        Confirm: true
       },
-      dangerMode: true,
-    }).then((willDelete) => {
-      if (willDelete === "Confirm") {
+      dangerMode: true
+    }).then(willDelete => {
+      if (willDelete === 'Confirm') {
         dispatch(DELETE_INVITE_USER(item?.id));
       }
     });
@@ -175,9 +175,9 @@ const InviteUser = () => {
             <img src={SortArrowIcon} alt="Title" />
           </label>
         ),
-        field: "name",
-        sort: "asc",
-        width: 180,
+        field: 'name',
+        sort: 'asc',
+        width: 180
       },
       {
         id: 2,
@@ -187,9 +187,9 @@ const InviteUser = () => {
             <img src={SortArrowIcon} alt="Title" />
           </label>
         ),
-        field: "email",
-        sort: "asc",
-        width: 180,
+        field: 'email',
+        sort: 'asc',
+        width: 180
       },
       {
         id: 3,
@@ -199,9 +199,9 @@ const InviteUser = () => {
             <img src={SortArrowIcon} alt="Title" />
           </label>
         ),
-        field: "company",
-        sort: "asc",
-        width: 160,
+        field: 'company',
+        sort: 'asc',
+        width: 160
       },
       {
         id: 4,
@@ -211,24 +211,24 @@ const InviteUser = () => {
             <img src={SortArrowIcon} alt="Title" />
           </label>
         ),
-        field: "level",
-        sort: "asc",
-        width: 160,
+        field: 'level',
+        sort: 'asc',
+        width: 160
       },
       {
         id: 6,
-        label: "Status",
-        field: "status",
-        sort: "asc",
-        width: 160,
+        label: 'Status',
+        field: 'status',
+        sort: 'asc',
+        width: 160
       },
       {
         id: 6,
-        label: "Action",
-        field: "action",
-        sort: "asc",
-        width: 160,
-      },
+        label: 'Action',
+        field: 'action',
+        sort: 'asc',
+        width: 160
+      }
     ],
 
     rows:
@@ -238,16 +238,16 @@ const InviteUser = () => {
               name: (
                 <Typography
                   sx={{
-                    "&.MuiTypography-root": {
-                      display: "inline-block",
-                      fontSize: "14px",
+                    '&.MuiTypography-root': {
+                      display: 'inline-block',
+                      fontSize: '14px',
                       fontWeight: 400,
                       p: 0,
-                      fontFamily: '"Figtree", sans-serif',
-                    },
+                      fontFamily: '"Figtree", sans-serif'
+                    }
                   }}
                 >
-                  {item?.user_email ? item?.user_name : "N/A"}
+                  {item?.user_email ? item?.user_name : 'N/A'}
                 </Typography>
               ),
               email: item?.user_email ? item.user_email : item.email,
@@ -260,19 +260,15 @@ const InviteUser = () => {
                   disableFocusRipple
                   disableElevation
                   sx={{
-                    width: "80px",
-                    background:
-                      item?.status !== 1
-                        ? "rgba(250, 45, 32, 0.08)"
-                        : "rgba(32, 161, 68, 0.08)",
-                    color:
-                      item?.status !== 1 ? "rgba(250, 45, 32, 1)" : "#20A144",
-                    fontSize: "12px",
-                    textTransform: "none",
-                    pointerEvents: "none",
+                    width: '80px',
+                    background: item?.status !== 1 ? 'rgba(250, 45, 32, 0.08)' : 'rgba(32, 161, 68, 0.08)',
+                    color: item?.status !== 1 ? 'rgba(250, 45, 32, 1)' : '#20A144',
+                    fontSize: '12px',
+                    textTransform: 'none',
+                    pointerEvents: 'none'
                   }}
                 >
-                  {item?.status !== 1 ? "Inactive" : "Active"}
+                  {item?.status !== 1 ? 'Inactive' : 'Active'}
                 </Button>
               ),
               action: (
@@ -288,10 +284,10 @@ const InviteUser = () => {
                   isEditMode={isEditMode}
                   item={{ id: item?.id, isActive: item?.is_active }}
                 />
-              ),
+              )
             };
           })
-        : [],
+        : []
   };
 
   return (
@@ -309,10 +305,7 @@ const InviteUser = () => {
 
       <div className="page-card">
         <div className="flex-between flex flex-wrap p-[15px] pb-5">
-          <SearchBar
-            setPaginationData={setPaginationData}
-            paginationData={paginationData}
-          />
+          <SearchBar setTableFilters={setTableFilters} tableFilters={tableFilters} />
           <button
             type="submit"
             onClick={() => setOpenModal(true)}
@@ -323,38 +316,28 @@ const InviteUser = () => {
           </button>
         </div>
         {inviteUserList?.loading ? (
-          <LoadingSpinner positionClass="left-[calc(40%_-_50px)] top-[calc(40%_-_50px)" />
+          <LoadingSpinner />
         ) : (
           <>
             <MuiCustomTable
               loader={inviteUserList?.loading}
               data={data}
               allData={inviteUserList?.data}
-              paginationData={paginationData}
-              setPaginationData={setPaginationData}
+              tableFilters={tableFilters}
+              setTableFilters={setTableFilters}
             />
             <MuiPopup
-              dialogTitle={isEditMode ? "Edit Invite User" : "Invite User"}
+              dialogTitle={isEditMode ? 'Edit Invite User' : 'Invite User'}
               textAlign="left"
               dialogContent={
                 <>
                   {!isEditMode && (
                     <>
-                      <div
-                        className={
-                          errors.email
-                            ? "input-fields-wrapper error-style"
-                            : "input-fields-wrapper"
-                        }
-                      >
+                      <div className={errors.email ? 'input-fields-wrapper error-style' : 'input-fields-wrapper'}>
                         <h4>Email Address</h4>
                         <div className="styled-select">
                           <input
-                            className={
-                              errors.email
-                                ? "input-style input-err-style"
-                                : "input-style"
-                            }
+                            className={errors.email ? 'input-style input-err-style' : 'input-style'}
                             type="email"
                             placeholder="Enter Email Address"
                             name="email"
@@ -362,17 +345,11 @@ const InviteUser = () => {
                             onChange={handleInputChange}
                             required
                           />
-                          <span className="err-tag">{errors.email ?? ""}</span>
+                          <span className="err-tag">{errors.email ?? ''}</span>
                         </div>
                       </div>
 
-                      <div
-                        className={
-                          errors.company
-                            ? "input-fields-wrapper error-style"
-                            : "input-fields-wrapper"
-                        }
-                      >
+                      <div className={errors.company ? 'input-fields-wrapper error-style' : 'input-fields-wrapper'}>
                         <h4>Company</h4>
                         <div className="styled-select">
                           <Select
@@ -385,16 +362,16 @@ const InviteUser = () => {
                               setOpenCompanyDropdown(false);
                             }}
                             MenuProps={{
-                              variant: "menu",
-                              disableScrollLock: true,
+                              variant: 'menu',
+                              disableScrollLock: true
                             }}
                             value={formData.company}
                             onChange={handleInputChange}
                             displayEmpty
-                            inputProps={{ "aria-label": "Without label" }}
+                            inputProps={{ 'aria-label': 'Without label' }}
                           >
                             <MenuItem value="">Select Company</MenuItem>
-                            {companyList?.data.results?.map((item) =>
+                            {companyList?.data.results?.map(item =>
                               item.is_active ? (
                                 <MenuItem key={item?.id} value={item?.id}>
                                   {item?.name}
@@ -402,20 +379,12 @@ const InviteUser = () => {
                               ) : null
                             )}
                           </Select>
-                          <span className="err-tag">
-                            {errors.company ?? ""}
-                          </span>
+                          <span className="err-tag">{errors.company ?? ''}</span>
                         </div>
                       </div>
                     </>
                   )}
-                  <div
-                    className={
-                      errors.level
-                        ? "input-fields-wrapper error-style"
-                        : "input-fields-wrapper"
-                    }
-                  >
+                  <div className={errors.level ? 'input-fields-wrapper error-style' : 'input-fields-wrapper'}>
                     <h4>Level</h4>
                     <div className="styled-select">
                       <Select
@@ -428,13 +397,13 @@ const InviteUser = () => {
                           setOpenLevelDropdown(false);
                         }}
                         MenuProps={{
-                          variant: "menu",
-                          disableScrollLock: true,
+                          variant: 'menu',
+                          disableScrollLock: true
                         }}
                         value={formData.level}
                         onChange={handleInputChange}
                         displayEmpty
-                        inputProps={{ "aria-label": "Without label" }}
+                        inputProps={{ 'aria-label': 'Without label' }}
                       >
                         <MenuItem value=""> Select Level </MenuItem>
                         <MenuItem value={1}>Admin Level</MenuItem>
@@ -442,7 +411,7 @@ const InviteUser = () => {
                         <MenuItem value={3}>Approver Level</MenuItem>
                         <MenuItem value={4}>In-house Designer</MenuItem>
                       </Select>
-                      <span className="err-tag">{errors.level ?? ""}</span>
+                      <span className="err-tag">{errors.level ?? ''}</span>
                     </div>
                   </div>
                 </>
@@ -457,7 +426,7 @@ const InviteUser = () => {
                 }
               }}
               mainActionHandler={validateSubmit}
-              mainActionTitle={isEditMode ? "Save" : "Invite"}
+              mainActionTitle={isEditMode ? 'Save' : 'Invite'}
             />
           </>
         )}

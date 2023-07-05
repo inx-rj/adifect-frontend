@@ -13,6 +13,12 @@ const initialState: CompaniesTagsInitialsType = {
       results: [],
     },
   },
+  response: {
+    add: null,
+    update: null,
+    remove: null,
+    addNew: null,
+  },
 };
 
 export const companiesTagsSlice = createSlice({
@@ -38,6 +44,30 @@ export const companiesTagsSlice = createSlice({
         data: action.payload,
       },
     }),
+
+    SET_NEW_COMPANIES_PROJECTS_STORY_TAGS_DATA: (state, action) => ({
+      ...state,
+      response: {
+        ...state.response,
+        addNew: action.payload,
+      },
+    }),
+
+    SET_EXISTING_COMPANIES_PROJECTS_STORY_TAGS_DATA: (state, action) => ({
+      ...state,
+      response: {
+        ...state.response,
+        add: action.payload,
+      },
+    }),
+
+    SET_COMPANIES_PROJECTS_STORY_TAGS_DATA: (state, action) => ({
+      ...state,
+      response: {
+        ...state.response,
+        remove: action.payload,
+      },
+    }),
   },
 });
 
@@ -45,6 +75,9 @@ export const {
   SET_COMPANIES_TAGS_LOADING,
   SET_COMPANIES_PROJECTS_TAGS_LOADING,
   SET_COMPANIES_PROJECTS_TAGS_DATA,
+  SET_COMPANIES_PROJECTS_STORY_TAGS_DATA,
+  SET_EXISTING_COMPANIES_PROJECTS_STORY_TAGS_DATA,
+  SET_NEW_COMPANIES_PROJECTS_STORY_TAGS_DATA,
 } = companiesTagsSlice.actions;
 
 export const COMPANY_PROJECTS_TAGS_DATA = (state: RootState) =>
@@ -52,3 +85,6 @@ export const COMPANY_PROJECTS_TAGS_DATA = (state: RootState) =>
 
 export const COMPANY_PROJECTS_TAGS = (state: RootState) =>
   state.companies.companiesTags;
+
+export const COMPANY_PROJECTS_STORY_TAGS_RESPONSE = (state: RootState) =>
+  state.companies.companiesTags.response;

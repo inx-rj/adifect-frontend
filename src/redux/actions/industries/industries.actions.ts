@@ -4,7 +4,7 @@ import {
   SET_INDUSTRY_LIST_DATA,
   SET_INDUSTRY_LIST_LOADING,
 } from "redux/reducers/industries/industries.slice";
-import { initialTableConfigInterface } from "helper/types/common/table";
+import { initialTableConfigInterface } from "helper/types/common/tableType";
 import { Images } from "helper/images";
 import { API_URL } from "helper/env";
 import IndustryTabApiClient from "services/industries/IndustryTabApiClient";

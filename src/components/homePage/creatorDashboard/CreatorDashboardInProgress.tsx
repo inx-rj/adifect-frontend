@@ -7,16 +7,17 @@ import { Link } from "react-router-dom";
 import {
   CLEAR_JOBS,
   JOBS_DATA,
-} from "../../../redux/reducers/homePage/jobsList.slice";
+} from "../../../redux/reducers/jobs/jobsList.slice";
 import { useAppDispatch, useAppSelector } from "../../../redux/store";
 import { Images } from "../../../helper/images";
 import BadgeUI from "../../../components/common/badge/BadgeUI";
 import { GET_CREATORS_JOBLIST } from "redux/actions/jobs/jobs.actions";
+import { CREATOR_JOBS_DATA } from "redux/reducers/jobs/creatorJobsList.slice";
 
 const CreatorDashboardInProgress = () => {
   const dispatch = useAppDispatch();
-  const SuperAdminJobList = useAppSelector(JOBS_DATA);
-  const [orderingInProgress, setOrderingInProgress] = useState("-created");
+  const SuperAdminJobList = useAppSelector(CREATOR_JOBS_DATA);
+  const [orderingInProgress, setOrderingInProgress] = useState("-job__created");
   const [orderingName, setOrderingName] = useState("Sort by newest");
   const [anchorElInProgress, setAnchorElInProgress] = React.useState(null);
   // const [headerCompany, setHeaderCompany] = useOutletContext<any>();
@@ -117,11 +118,11 @@ const CreatorDashboardInProgress = () => {
             </Menu>
           </div>
         </div>
-        {SuperAdminJobList?.JobsListsList?.data?.results
+        {SuperAdminJobList?.data?.results
           ?.slice(0, 5)
-          ?.map((item) => (
-            <>
-              <Link to={`/jobs/details/${item.id}`}>
+          ?.map((item, index) => (
+            <div className="" key={index}>
+              <Link to={`/jobs/details/${item.id}`} >
                 <div className="mb-5">
                   <div className="border-l-8 rounded border-[#2472FC] bg-white p-6 h-full max-h-[580px] shadow-[0_4px_40px_#2472fc0f]">
                     <div className="pb-3">
@@ -133,7 +134,7 @@ const CreatorDashboardInProgress = () => {
                         }
                       />
                     </div>
-                    <h5 className="h-full max-h-[80px] overflow-y-auto">
+                    <h5 className="h-full max-h-[80px] overflow-y-auto custom-scrollbar">
                       {item?.description?.length > 300
                         ? `${item?.description.slice(0, 300)}...`
                         : item.description}{" "}
@@ -158,7 +159,7 @@ const CreatorDashboardInProgress = () => {
                     <div className="flex flex-wrap gap-2">
                       {item.skills?.slice(0, 5)?.map((data, index) => {
                         return (
-                          <span className="">
+                          <span className="" key={index}>
                             <BadgeUI
                               variant="primary"
                               customClass="max-w-max text-sm font-semibold"
@@ -172,16 +173,16 @@ const CreatorDashboardInProgress = () => {
                   </div>
                 </div>
               </Link>
-            </>
+            </div>
           ))}
-        {SuperAdminJobList?.JobsListsList?.data?.results?.length > 5 && (
+        {SuperAdminJobList?.data?.results?.length > 5 && (
           <Link to={`/projects`} onClick={setLocalVarRedirect}>
-            <span className="hover:text-theme text-base font-medium">
+            <span className="text-theme text-base font-medium">
               View More...
             </span>
           </Link>
         )}
-        {SuperAdminJobList?.JobsListsList?.data?.results?.length < 1 && (
+        {SuperAdminJobList?.data?.results?.length < 1 && (
           <div className="border-l-8 rounded border-[#2472FC] bg-white p-6 h-full max-h-[580px] shadow-[0_4px_40px_#2472fc0f]">
             <div className="text-lg font-semibold text-center">
               No jobs in progress

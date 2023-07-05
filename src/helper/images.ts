@@ -11,6 +11,11 @@ import NotFoundImg from "assets/images/new.svg";
 import ProfileBG from "assets/images/profile-bg.webp";
 
 import Loader from "assets/images/loader.svg";
+import ActivityArrowOld from "assets/images/activityarrowold.png";
+import ActivityArrow from "assets/images/activityarrow.png";
+import AssertGallery from "assets/images/assertgallery.png";
+import PlaceholderImage from "assets/images/placeholder-image.svg";
+import AdifectLogo from "assets/images/adifectnewLogo.png";
 
 export const Images = {
   Logo,
@@ -25,4 +30,9 @@ export const Images = {
   ProfileBG,
   ErrorLogo,
   Loader,
+  PlaceholderImage,
+  ActivityArrowOld,
+  ActivityArrow,
+  AssertGallery,
+  AdifectLogo
 };

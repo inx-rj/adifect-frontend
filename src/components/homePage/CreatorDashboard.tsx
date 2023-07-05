@@ -13,8 +13,8 @@ import { useSingleEffect, useUpdateEffect } from "react-haiku";
 import { Link, useNavigate } from "react-router-dom";
 
 import { GET_USER_PROFILE_DATA } from "redux/reducers/auth/auth.slice";
-import { FRESHERS_JOBS_DATA } from "redux/reducers/homePage/fresherJobsList.slice";
-import { GET_JOBS_DETAILS } from "redux/reducers/homePage/jobsList.slice";
+import { FRESHERS_JOBS_DATA } from "redux/reducers/jobs/fresherJobsList.slice";
+import { GET_JOBS_DETAILS } from "redux/reducers/jobs/jobsList.slice";
 import { useAppDispatch, useAppSelector } from "redux/store";
 import CreatorDashboardInProgress from "./creatorDashboard/CreatorDashboardInProgress";
 import CreatorDashboardInReview from "./creatorDashboard/CreatorDashboardInReview";
@@ -35,6 +35,8 @@ import {
   FileUploadOutlined,
   InsertLink,
 } from "@mui/icons-material";
+import { MAIN_ROUTE } from "routes/baseRoute";
+import { API_URL } from "helper/env";
 
 interface ErrorsType {
   selects?: null | string;
@@ -49,10 +51,11 @@ interface ErrorsType {
 }
 const CreatorDashboard = () => {
   const dispatch = useAppDispatch();
-  const userData = useAppSelector(GET_USER_PROFILE_DATA);
+  const userProfile = useAppSelector(GET_USER_PROFILE_DATA);
 
   const freshJob = useAppSelector(FRESHERS_JOBS_DATA);
   const jobDetails = useAppSelector(GET_JOBS_DETAILS);
+  const userData = useAppSelector(GET_USER_PROFILE_DATA);
 
   const [showBlueBox, setShowBlueBox] = useState(true);
   const [show, setShow] = useState(false);
@@ -114,10 +117,16 @@ const CreatorDashboard = () => {
   });
 
   useSingleEffect(() => {
-    if (userData?.data?.user_level == 4) {
+    if (userProfile?.data?.user_level == 4) {
       dispatch(GET_MEMEBERS_FRESHERS_JOBLIST());
     } else {
-      dispatch(GET_MEMEBERS_FRESHERS_LATEST_JOBLIST());
+      dispatch(
+        GET_MEMEBERS_FRESHERS_LATEST_JOBLIST(
+          userData?.data?.user_level === 4
+            ? `${API_URL.JOBS.MEMBERS_LATEST_JOBS}`
+            : `${API_URL.JOBS.LATEST_JOBS}`
+        )
+      );
     }
     // dispatch(FreshJobs());
   });
@@ -481,8 +490,6 @@ const CreatorDashboard = () => {
     submitHandler();
   };
   const submitHandler = async () => {
-    let user = JSON.parse(localStorage.getItem("userData"));
-
     if ((number) => 5) {
       // const formData = new FormData();
       const formData = {
@@ -490,7 +497,7 @@ const CreatorDashboard = () => {
         formSampleUrls: formSampleUrls,
         number: number,
         coverletter: coverletter,
-        user: user.user.user_id,
+        user: userProfile?.data?.id,
         proposed_due_date: startDate.toISOString().slice(0, 10),
         job: freshJob?.data?.data.id,
         duration: selects,
@@ -519,7 +526,13 @@ const CreatorDashboard = () => {
         .then((res) => {
           setIsPopupLoading(false);
           setIsLoading(true);
-          dispatch(GET_MEMEBERS_FRESHERS_LATEST_JOBLIST());
+          dispatch(
+            GET_MEMEBERS_FRESHERS_LATEST_JOBLIST(
+              userData?.data?.user_level === 4
+                ? `${API_URL.JOBS.MEMBERS_LATEST_JOBS}`
+                : `${API_URL.JOBS.LATEST_JOBS}`
+            )
+          );
           swal({
             title: "Successfully Complete",
             // text: res.data?.message,
@@ -530,7 +543,7 @@ const CreatorDashboard = () => {
           });
           setTimeout(() => {
             setOpen1(false);
-            navigate("/home");
+            navigate(`${MAIN_ROUTE.HOME_DASH}`);
           }, 800);
         })
         .catch((err) => {
@@ -578,10 +591,16 @@ const CreatorDashboard = () => {
   };
 
   useUpdateEffect(() => {
-    if (userData?.data?.user_level == 4) {
+    if (userProfile?.data?.user_level == 4) {
       dispatch(GET_MEMEBERS_FRESHERS_JOBLIST());
     } else {
-      dispatch(GET_MEMEBERS_FRESHERS_LATEST_JOBLIST());
+      dispatch(
+        GET_MEMEBERS_FRESHERS_LATEST_JOBLIST(
+          userData?.data?.user_level === 4
+            ? `${API_URL.JOBS.MEMBERS_LATEST_JOBS}`
+            : `${API_URL.JOBS.LATEST_JOBS}`
+        )
+      );
     }
     // dispatch(FreshJobs());
   }, [jobDetails]);
@@ -627,7 +646,7 @@ const CreatorDashboard = () => {
                   // onClick={() => openPopup(`${freshJob?.data?.data?.id}`)}
                 >
                   <div className="p-5 grid grid-cols-1 gap-4">
-                    <div className="border border-1 rounded-lg p-4">
+                    <div className="border border-1 rounded-lg p-6">
                       <div className="flex justify-between items-center">
                         <Link to={`/jobs/details/${freshJob?.data?.data?.id}`}>
                           <Title title={freshJob?.data?.data?.title} />
@@ -729,12 +748,6 @@ const CreatorDashboard = () => {
                                 <h1 className="text-2xl font-bold text-[#1b4ea8]">
                                   Apply to Job
                                 </h1>{" "}
-                                {/* <span
-                                  className="closebtnjoblist"
-                                  onClick={handleClose}
-                                >
-                                  <i className="fa-solid fa-xmark"></i>
-                                </span> */}
                                 <div className="cursor-pointer">
                                   <img
                                     // disabled={!showBlueBox}
@@ -1372,8 +1385,8 @@ const CreatorDashboard = () => {
               <button
                   type="button"
                   hidden={
-                    userData?.user?.role == Object.keys(ROLE)[0] ||
-                    userData?.user?.role == Object.keys(ROLE)[2]
+                    userProfile?.user?.role == Object.keys(ROLE)[0] ||
+                    userProfile?.user?.role == Object.keys(ROLE)[2]
                   }
                   
                   className="btn btn-primary Small border-radius Small_new_bt"
@@ -1383,10 +1396,10 @@ const CreatorDashboard = () => {
              </Link> */}
                       </div>
                       {/* {JSON.stringify(freshJob)} */}
-                      <div className="jobListDetailsAreaAndTaskbox">
-                        <div className="RemoteText RemoteTextEightyWidth">
+                      <div className="jobListDetailsAreaAndTaskbox flex gap-2">
+                        <div className="RemoteText RemoteTextEightyWidth max-w-[calc(100 - 30%)] w-full">
                           <p
-                            className="text-base font-semibold text-[#A0A0A0] gap-2 my-4"
+                            className="text-base font-semibold text-[#A0A0A0] gap-2 my-3"
                             onClick={() =>
                               openPopup(`${freshJob?.data?.data?.id}`)
                             }
@@ -1418,12 +1431,14 @@ const CreatorDashboard = () => {
                               Budget:{" "}
                               {freshJob?.data?.data?.price && (
                                 <>
-                                  <h5>${freshJob?.data?.data?.price}</h5>
+                                  <h5 className="text-[#000] font-bold">
+                                    ${freshJob?.data?.data?.price}
+                                  </h5>
                                 </>
                               )}
                               {!freshJob?.data?.data?.price && (
                                 <>
-                                  <h3 className="colorOnNA">N/A</h3>
+                                  <h3 className="text-[#000] font-bold">N/A</h3>
                                 </>
                               )}
                             </span>
@@ -1438,73 +1453,40 @@ const CreatorDashboard = () => {
                               Level:{" "}
                               {freshJob?.data?.data?.level?.level_name && (
                                 <>
-                                  <h5>
+                                  <h5 className="text-[#000] font-bold">
                                     {freshJob?.data?.data?.level?.level_name}
                                   </h5>
                                 </>
                               )}
                               {!freshJob?.data?.data?.level?.level_name && (
                                 <>
-                                  <h3 className="colorOnNA">N/A</h3>
+                                  <h3 className="text-[#000] font-bold">N/A</h3>
                                 </>
                               )}
                             </span>
                           </div>
-                          {freshJob?.data?.data?.skills?.length > 0 && (
-                            <>
-                              <h5 className="text-[#A0A0A0] text-base font-semibold">
-                                Skills:{" "}
-                              </h5>
-                              <div className="Skill mt-2 flex flex-wrap gap-2">
-                                {freshJob?.data?.data?.skills?.map(
-                                  (freshJob, index) => (
-                                    <div key={index}>
-                                      <BadgeUI
-                                        variant="primary"
-                                        customClass="max-w-max text-sm font-semibold"
-                                      >
-                                        {freshJob.skill_name}
-                                        {/* <Link to="#">{freshJob.skill_name}</Link> */}
-                                      </BadgeUI>
-                                    </div>
-                                  )
-                                )}
-                                {freshJob?.data?.data?.skills?.length < 1 && (
-                                  <>
-                                    <h3 className="text-[#A0A0A0] text-base font-semibold">
-                                      N/A
-                                    </h3>
-                                  </>
-                                )}
-                              </div>
-                            </>
-                          )}
 
-                          <div
-                            className="Skill mt-2 Skilldashbordnew"
-                            onClick={() =>
-                              openPopup(`${freshJob?.data?.data?.id}`)
-                            }
-                          >
-                            {freshJob?.data?.data?.tags?.length > 0 && (
+                          <div className="grid grid-cols-2">
+                            {freshJob?.data?.data?.skills?.length > 0 && (
                               <>
-                                <h5 className="text-[#A0A0A0] text-base font-semibold">
-                                  Tags:{" "}
-                                </h5>
                                 <div className="Skill mt-2 flex flex-wrap gap-2">
-                                  {freshJob?.data?.data?.tags
-                                    ?.split(",")
-                                    ?.map((tag, index) => (
+                                  <h5 className="text-[#A0A0A0] text-base font-semibold">
+                                    Skills:{" "}
+                                  </h5>
+                                  {freshJob?.data?.data?.skills?.map(
+                                    (freshJob, index) => (
                                       <div key={index}>
                                         <BadgeUI
                                           variant="primary"
                                           customClass="max-w-max text-sm font-semibold"
                                         >
-                                          {tag}
+                                          {freshJob.skill_name}
+                                          {/* <Link to="#">{freshJob.skill_name}</Link> */}
                                         </BadgeUI>
                                       </div>
-                                    ))}
-                                  {freshJob?.data?.data?.tags?.length < 1 && (
+                                    )
+                                  )}
+                                  {freshJob?.data?.data?.skills?.length < 1 && (
                                     <>
                                       <h3 className="text-[#A0A0A0] text-base font-semibold">
                                         N/A
@@ -1512,37 +1494,80 @@ const CreatorDashboard = () => {
                                     </>
                                   )}
                                 </div>
-                                {/* {freshJob?.data?.data?.tags
+                              </>
+                            )}
+
+                            <div
+                              className="Skill mt-2 Skilldashbordnew"
+                              onClick={() =>
+                                openPopup(`${freshJob?.data?.data?.id}`)
+                              }
+                            >
+                              {freshJob?.data?.data?.tags?.length > 0 && (
+                                <>
+                                  <div className="Skill flex flex-wrap gap-2">
+                                    <h5 className="text-[#A0A0A0] text-base font-semibold">
+                                      Tags:{" "}
+                                    </h5>
+                                    {freshJob?.data?.data?.tags
+                                      ?.split(",")
+                                      ?.map((tag, index) => (
+                                        <div key={index}>
+                                          <BadgeUI
+                                            variant="primary"
+                                            customClass="max-w-max text-sm font-semibold"
+                                          >
+                                            {tag}
+                                          </BadgeUI>
+                                        </div>
+                                      ))}
+                                    {freshJob?.data?.data?.tags?.length < 1 && (
+                                      <>
+                                        <h3 className="text-[#A0A0A0] text-base font-semibold">
+                                          N/A
+                                        </h3>
+                                      </>
+                                    )}
+                                  </div>
+                                  {/* {freshJob?.data?.data?.tags
                                   ?.split(",")
                                   .map((tag, index) => (
                                     <li key={index}>
                                       <Link to="#">{tag}</Link>
                                     </li>
                                   ))} */}
-                                {/* {freshJob?.tags?.length < 1 && (
+                                  {/* {freshJob?.tags?.length < 1 && (
                               <>
                                 <li>
                                   <h3 className="colorOnNA">N/A</h3>
                                 </li>
                               </>
                             )} */}
-                              </>
-                            )}
+                                </>
+                              )}
+                            </div>
                           </div>
                         </div>
                         {freshJob?.data?.data?.jobtasks_job?.length > 0 && (
-                          <div className="taskBoxJobListCard1">
-                            <div className="taskBoxJobListCardFirstHead">
-                              <div className="taskBoxJobListCardFirstNoBg">
-                                <h3 className="taskMember1">Task</h3>
-                                <h3 className="taskMemberd2">Date</h3>
+                          <div className="taskBoxJobListCard1 max-w-[30%] w-full ">
+                            <div className="taskBoxJobListCardFirstHead p-3 border-[rgb(36_114_252_0)] rounded-lg mt-4 shadow-[1px_1px_6px_#dddddd69]">
+                              <div className="grid grid-cols-2">
+                                <h3 className="taskMember1 text-[#000] font-bold text-xl">
+                                  Task
+                                </h3>
+                                <h3 className="taskMemberd2 text-[#000] font-bold text-xl">
+                                  Date
+                                </h3>
                               </div>
-                              <div className="taskBoxJobListCardDetailsDate1">
+                              <div className="taskBoxJobListCardDetailsDate1 ">
                                 {freshJob?.data?.data?.jobtasks_job?.map(
-                                  (item) => {
+                                  (item, index) => {
                                     return (
                                       <>
-                                        <div className="tasksecdiv1">
+                                        <div
+                                          className="tasksecdiv1 grid grid-cols-2 "
+                                          key={index}
+                                        >
                                           <div className="tasktitlesec1">
                                             {item?.title}
                                           </div>

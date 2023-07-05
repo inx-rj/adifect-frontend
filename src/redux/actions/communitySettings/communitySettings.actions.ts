@@ -1,5 +1,5 @@
 import { AppDispatch } from "redux/store";
-import { initialTableConfigInterface } from "helper/types/common/table";
+import { initialTableConfigInterface } from "helper/types/common/tableType";
 import {
   SET_COMMUNITY_SETTINGS_DATA,
   SET_COMMUNITY_SETTINGS_DATA_LOADING,
@@ -13,15 +13,15 @@ import swal from "sweetalert";
 // Get Community Settings List
 const GET_COMMUNITY_SETTINGS_LIST =
   (tableConfig: initialTableConfigInterface) =>
-  async (dispatch: AppDispatch) => {
-    dispatch(SET_COMMUNITY_SETTINGS_DATA_LOADING(true));
-    await CommunitySettingsApiClient.fetchCommunitySettingsList(
-      tableConfig
-    ).then((response) => {
-      dispatch(SET_COMMUNITY_SETTINGS_DATA(response?.data?.data));
-      dispatch(SET_COMMUNITY_SETTINGS_DATA_LOADING(false));
-    });
-  };
+    async (dispatch: AppDispatch) => {
+      dispatch(SET_COMMUNITY_SETTINGS_DATA_LOADING(true));
+      await CommunitySettingsApiClient.fetchCommunitySettingsList(
+        tableConfig
+      ).then((response) => {
+        dispatch(SET_COMMUNITY_SETTINGS_DATA(response?.data?.data));
+        dispatch(SET_COMMUNITY_SETTINGS_DATA_LOADING(false));
+      });
+    };
 
 // Create Community Settings List
 const CREATE_COMMUNITY_SETTINGS_LIST =
@@ -35,13 +35,13 @@ const CREATE_COMMUNITY_SETTINGS_LIST =
 // Update Community Settings List
 const UPDATE_COMMUNITY_SETTINGS_LIST =
   (id: number, formData: { [key: string]: any }) =>
-  async (dispatch: AppDispatch) => {
-    await dispatch(SET_COMMUNITY_SETTINGS_LOADING(true));
-    return await CommunitySettingsApiClient.updateCommunitySettingsData(
-      id,
-      formData
-    );
-  };
+    async (dispatch: AppDispatch) => {
+      await dispatch(SET_COMMUNITY_SETTINGS_LOADING(true));
+      return await CommunitySettingsApiClient.updateCommunitySettingsData(
+        id,
+        formData
+      );
+    };
 
 // Delete Community Settings List
 const DELETE_COMMUNITY_SETTINGS_LIST =

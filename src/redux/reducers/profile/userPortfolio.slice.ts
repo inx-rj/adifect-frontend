@@ -1,16 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "redux/rootReducer";
 
-
 const initialState = {
   portfolioList: {
     loading: false,
-    data: {
-      count: 0,
-      next: "",
-      previous: "",
-      results: []
-    },
+    data: [],
   },
 };
 
@@ -35,9 +29,8 @@ export const userPortfolioSlice = createSlice({
   },
 });
 
-export const { 
-  SET_PROFILE_PORTFOLIO_LOADING,
-  SET_PROFILE_PORTFOLIO_DATA
-} = userPortfolioSlice.actions;
+export const { SET_PROFILE_PORTFOLIO_LOADING, SET_PROFILE_PORTFOLIO_DATA } =
+  userPortfolioSlice.actions;
 
-export const GET_PROFILE_PORTFOLIO = (state: RootState) => state.profile.portfolio.portfolioList;
+export const GET_PROFILE_PORTFOLIO = (state: RootState) =>
+  state.profile.portfolio.portfolioList;

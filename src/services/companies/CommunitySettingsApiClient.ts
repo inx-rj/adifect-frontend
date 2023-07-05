@@ -1,7 +1,7 @@
 import { setQueryParams } from "helper/utility/customFunctions";
 import axiosPrivate from "../../api/axios";
 import { API_URL } from "../../helper/env";
-import { initialTableConfigInterface } from "helper/types/common/table";
+import { initialTableConfigInterface } from "helper/types/common/tableType";
 
 class CommunitySettingsApiClient {
   // Community Settings table data list

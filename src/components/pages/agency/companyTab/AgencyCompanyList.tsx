@@ -1,57 +1,39 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import { lazy, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { useSingleEffect, useUpdateEffect } from "react-haiku";
-import swal from "sweetalert";
+import { lazy, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useSingleEffect, useUpdateEffect } from 'react-haiku';
+import swal from 'sweetalert';
 
 //import MUI components and icons
-import {
-  Button,
-  Checkbox,
-  FormControlLabel,
-  MenuItem,
-  Select,
-  Typography,
-} from "@mui/material";
-import HomeIcon from "@mui/icons-material/Home";
-import AddIcon from "@mui/icons-material/Add";
+import { Button, Checkbox, FormControlLabel, MenuItem, Select, Typography } from '@mui/material';
+import HomeIcon from '@mui/icons-material/Home';
+import AddIcon from '@mui/icons-material/Add';
 
 //import helper files
-import {
-  TableRowColType,
-  TablePaginationType,
-} from "helper/types/muiTable/muiTable";
-import { Images } from "helper/images";
-import { formateISODateToLocaleString } from "helper/utility/customFunctions";
-import { API_URL } from "helper/env";
-import { singleCompanyPayloadData } from "helper/types/companyTab/companiesType";
-import { Roles } from "helper/config";
+import { TableRowColType } from 'helper/types/muiTable/muiTable';
+import { Images } from 'helper/images';
+import { formateISODateToLocaleString } from 'helper/utility/customFunctions';
+import { API_URL } from 'helper/env';
+import { singleCompanyPayloadData } from 'helper/types/companyTab/companiesType';
+import { ROLES } from 'helper/config';
 
 //import redux
-import { useAppDispatch, useAppSelector } from "redux/store";
+import { useAppDispatch, useAppSelector } from 'redux/store';
 import {
   DELETE_SINGLE_COMPANY,
   GET_COMPANY_LIST,
   POST_ADMIN_COMPANY,
   POST_SINGLE_COMPANY,
-  PUT_SINGLE_COMPANY,
-} from "redux/actions/companyTab/companyTab.actions";
-import { COMPANY_LIST } from "redux/reducers/companyTab/companyTab.slice";
-import { GET_USER_PROFILE_DATA } from "redux/reducers/auth/auth.slice";
+  PUT_SINGLE_COMPANY
+} from 'redux/actions/companyTab/companyTab.actions';
+import { COMPANY_LIST } from 'redux/reducers/companyTab/companyTab.slice';
+import { GET_USER_PROFILE_DATA } from 'redux/reducers/auth/auth.slice';
+import { initialTableConfigInterface } from 'helper/types/common/tableType';
 
 //import custom component
-const MuiCustomTable = lazy(
-  () => import("components/common/muiTable/MuiTable")
-);
-const SearchBar = lazy(() => import("components/common/searchBar/SearchBar"));
-const ActionMenuButton = lazy(
-  () => import("components/common/actionMenuButton/ActionMenuButton")
-);
-const MuiPopup = lazy(() => import("components/common/muiPopup/MuiPopup"));
-const LoadingSpinner = lazy(
-  () => import("components/common/loadingSpinner/Loader")
-);
-const userData = () => JSON.parse(localStorage.getItem("userData") ?? "");
+const MuiCustomTable = lazy(() => import('components/common/muiTable/MuiTable'));
+const SearchBar = lazy(() => import('components/common/searchBar/SearchBar'));
+const ActionMenuButton = lazy(() => import('components/common/actionMenuButton/ActionMenuButton'));
+const MuiPopup = lazy(() => import('components/common/muiPopup/MuiPopup'));
 
 const AgencyCompanyList = () => {
   const dispatch = useAppDispatch();
@@ -69,7 +51,7 @@ const AgencyCompanyList = () => {
     currentId: null | number;
   }>({
     currentTooltip: null,
-    currentId: null,
+    currentId: null
   });
   const [isEditMode, setIsEditMode] = useState(false);
   const [isSettingMode, setIsSettingMode] = useState(false);
@@ -80,52 +62,68 @@ const AgencyCompanyList = () => {
     description: string;
     isActive: boolean;
   }>({
-    company: "",
-    description: "",
-    isActive: false,
+    company: '',
+    description: '',
+    isActive: false
   });
   const [errors, setErrors] = useState({
     company: null,
-    description: null,
+    description: null
   });
-  const [paginationData, setPaginationData] = useState<TablePaginationType>({
+  const [tableFilters, setTableFilters] = useState<initialTableConfigInterface>({
     page: 1,
     rowsPerPage: 10,
-    search: "",
+    search: ''
   });
 
   //fetch initial companies data list
   useSingleEffect(() => {
-    if (userProfile?.data?.role === Roles.ADMIN) {
-      dispatch(GET_COMPANY_LIST(paginationData, `${API_URL.COMPANY.ADMIN}`));
-    } else {
-      dispatch(GET_COMPANY_LIST(paginationData));
-    }
+    // if (userProfile?.data?.role === ROLES.ADMIN) {
+    dispatch(
+      GET_COMPANY_LIST(
+        tableFilters,
+        userProfile?.data?.role === ROLES.ADMIN
+          ? `${API_URL.COMPANY.ADMIN}`
+          : userProfile?.data?.role === ROLES.MEMBER
+          ? `${API_URL.COMPANY.MEMBER_COMPANY_LIST}`
+          : `${API_URL.COMPANY.COMPANY_LIST}`
+      )
+    );
+    // } else {
+    //   dispatch(GET_COMPANY_LIST(tableFilters));
+    // }
   });
 
   //fetch company list when pagination change
   useUpdateEffect(() => {
-    if (userProfile?.data?.role === Roles.ADMIN) {
-      dispatch(GET_COMPANY_LIST(paginationData, `${API_URL.COMPANY.ADMIN}`));
-    } else {
-      dispatch(
-        GET_COMPANY_LIST(
-          paginationData,
-          `${API_URL.COMPANY.AGENCY_COMPANY_LIST}`
-        )
-      );
-    }
-  }, [paginationData, userProfile.data?.role]);
+    // if (userProfile?.data?.role === ROLES.ADMIN) {
+    //   dispatch(GET_COMPANY_LIST(tableFilters, `${API_URL.COMPANY.ADMIN}`));
+    // } else {
+    //   dispatch(
+    //     GET_COMPANY_LIST(tableFilters, `${API_URL.COMPANY.COMPANY_LIST}`)
+    //   );
+    // }
+    dispatch(
+      GET_COMPANY_LIST(
+        tableFilters,
+        userProfile?.data?.role === ROLES.ADMIN
+          ? `${API_URL.COMPANY.ADMIN}`
+          : userProfile?.data?.role === ROLES.MEMBER
+          ? `${API_URL.COMPANY.MEMBER_COMPANY_LIST}`
+          : `${API_URL.COMPANY.COMPANY_LIST}`
+      )
+    );
+  }, [tableFilters, userProfile.data?.role]);
 
   //handle form data
-  const handleInputChange = (e) => {
+  const handleInputChange = e => {
     const { name, value, checked } = e.target;
-    setFormData({ ...formData, [name]: name === "isActive" ? checked : value });
+    setFormData({ ...formData, [name]: name === 'isActive' ? checked : value });
     setErrors({ ...errors, [name]: null });
   };
 
   //handle edit action
-  const handleEdit = (item) => {
+  const handleEdit = item => {
     setOpenModal(true);
     setIsEditMode(true);
     setErrors({ company: null, description: null });
@@ -133,12 +131,12 @@ const AgencyCompanyList = () => {
     setFormData({
       company: item?.name,
       description: item?.description,
-      isActive: item?.is_active,
+      isActive: item?.is_active
     });
   };
 
   //handle settings action
-  const handleSetting = (item) => {
+  const handleSetting = item => {
     setOpenModal(true);
     setIsSettingMode(true);
     setSelectedItem({ ...selectedItem, currentId: item?.id });
@@ -146,9 +144,9 @@ const AgencyCompanyList = () => {
   };
 
   //handle view action
-  const handleView = (item) => {
-    if (userProfile?.data?.role === Roles.ADMIN) {
-      navigate(item.agency ? `/company/${item.id}/${item.agency}` : "#");
+  const handleView = item => {
+    if (userProfile?.data?.role === ROLES.ADMIN) {
+      navigate(item.agency ? `/company/${item.id}/${item.agency}` : '#');
     } else {
       navigate(`/company/${item.id}`);
     }
@@ -156,14 +154,14 @@ const AgencyCompanyList = () => {
   };
 
   //validate inputs
-  const validateSubmit = (e) => {
+  const validateSubmit = e => {
     e.preventDefault();
     const tempErrors = {
-      company: !formData.company ? "Please enter Company Name" : null,
-      description: !formData.description ? "Please enter Description" : null,
+      company: !formData.company ? 'Please enter Company Name' : null,
+      description: !formData.description ? 'Please enter Description' : null
     };
     setErrors(tempErrors);
-    if (Object.values(tempErrors).filter((value) => value)?.length) {
+    if (Object.values(tempErrors).filter(value => value)?.length) {
       return;
     }
     handleFormSubmit();
@@ -175,23 +173,17 @@ const AgencyCompanyList = () => {
       const payload: singleCompanyPayloadData = {
         name: formData?.company,
         description: formData?.description,
-        is_active: formData?.isActive,
+        is_active: formData?.isActive
       };
       if (isEditMode) {
         // Handle edit option action
-        userProfile?.data?.role === Roles.ADMIN
-          ? dispatch(
-              PUT_SINGLE_COMPANY(
-                selectedItem.currentId,
-                payload,
-                `${API_URL.COMPANY.ADMIN}`
-              )
-            )
+        userProfile?.data?.role === ROLES.ADMIN
+          ? dispatch(PUT_SINGLE_COMPANY(selectedItem.currentId, payload, `${API_URL.COMPANY.ADMIN}`))
           : dispatch(PUT_SINGLE_COMPANY(selectedItem.currentId, payload));
       } else {
         // Handle Add new company action
-        payload.agency = userData()?.user.user_id;
-        userProfile?.data?.role === Roles.ADMIN
+        payload.agency = userProfile?.data?.id;
+        userProfile?.data?.role === ROLES.ADMIN
           ? dispatch(POST_SINGLE_COMPANY(payload, `${API_URL.COMPANY.ADMIN}`))
           : dispatch(POST_SINGLE_COMPANY(payload));
       }
@@ -201,7 +193,7 @@ const AgencyCompanyList = () => {
         POST_ADMIN_COMPANY(
           {
             company_id: selectedItem.currentId,
-            status: companyStatus,
+            status: companyStatus
           },
           `${API_URL.COMPANY.ADMIN_COMPANY_BLOCK}`
         )
@@ -214,34 +206,29 @@ const AgencyCompanyList = () => {
     setOpenModal(false);
     setIsEditMode(false);
     setFormData({
-      company: "",
-      description: "",
-      isActive: false,
+      company: '',
+      description: '',
+      isActive: false
     });
   };
 
   //handle inactive action
   const handleInactive = () => {
     swal({
-      title: "Warning",
-      text: "Are you sure you want to inactivate this company?",
-      className: "errorAlert",
+      title: 'Warning',
+      text: 'Are you sure you want to inactivate this company?',
+      className: 'errorAlert',
       icon: Images.ErrorLogo,
       buttons: {
         Cancel: true,
-        Confirm: true,
+        OK: true
       },
-      dangerMode: true,
-    }).then((willDelete) => {
-      if (willDelete === "Confirm") {
-        if (userProfile?.data?.role === Roles.ADMIN) {
+      dangerMode: true
+    }).then(willDelete => {
+      if (willDelete === 'OK') {
+        if (userProfile?.data?.role === ROLES.ADMIN) {
           //admin
-          dispatch(
-            DELETE_SINGLE_COMPANY(
-              selectedItem.currentId,
-              `${API_URL.COMPANY.ADMIN}`
-            )
-          );
+          dispatch(DELETE_SINGLE_COMPANY(selectedItem.currentId, `${API_URL.COMPANY.ADMIN}`));
         } else {
           dispatch(DELETE_SINGLE_COMPANY(selectedItem.currentId)); //agency user
         }
@@ -254,19 +241,19 @@ const AgencyCompanyList = () => {
   //handle active action
   const handleActive = () => {
     swal({
-      title: "",
-      text: "Are you sure you want to active this company?",
-      className: "errorAlert",
+      title: '',
+      text: 'Are you sure you want to active this company?',
+      className: 'errorAlert',
       icon: Images.Logo,
-      dangerMode: true,
-    }).then((willDelete) => {
+      dangerMode: true
+    }).then(willDelete => {
       if (willDelete) {
-        if (userProfile?.data?.role === Roles.ADMIN) {
+        if (userProfile?.data?.role === ROLES.ADMIN) {
           dispatch(
             PUT_SINGLE_COMPANY(
               selectedItem.currentId,
               {
-                is_active: true,
+                is_active: true
               },
               `${API_URL.COMPANY.ADMIN}`
             )
@@ -274,7 +261,7 @@ const AgencyCompanyList = () => {
         } else {
           dispatch(
             PUT_SINGLE_COMPANY(selectedItem.currentId, {
-              is_active: true,
+              is_active: true
             })
           );
         }
@@ -294,9 +281,9 @@ const AgencyCompanyList = () => {
           <img className="ml-2" src={Images.SortArrows} alt="Title" />
         </label>
       ),
-      field: "title",
-      sort: "asc",
-      width: 180,
+      field: 'title',
+      sort: 'asc',
+      width: 180
     },
     {
       id: 2,
@@ -306,24 +293,24 @@ const AgencyCompanyList = () => {
           <img className="ml-2" src={Images.SortArrows} alt="title" />
         </label>
       ),
-      field: "createdAt",
-      sort: "asc",
-      width: 180,
+      field: 'createdAt',
+      sort: 'asc',
+      width: 180
     },
     {
       id: 3,
-      label: "Status",
-      field: "status",
-      sort: "asc",
-      width: 160,
+      label: 'Status',
+      field: 'status',
+      sort: 'asc',
+      width: 160
     },
     {
       id: 4,
-      label: "Action",
-      field: "action",
-      sort: "asc",
-      width: 100,
-    },
+      label: 'Action',
+      field: 'action',
+      sort: 'asc',
+      width: 100
+    }
   ];
 
   let rows: {
@@ -340,20 +327,20 @@ const AgencyCompanyList = () => {
               <div key={index}>
                 <Typography
                   sx={{
-                    "&.MuiTypography-root": {
-                      display: "inline-block",
+                    '&.MuiTypography-root': {
+                      display: 'inline-block',
                       fontFamily: '"Figtree", sans-serif',
-                      fontSize: "14px",
+                      fontSize: '14px',
                       fontWeight: 400,
-                      p: 0,
-                    },
+                      p: 0
+                    }
                   }}
                 >
                   {item?.name}
                 </Typography>
               </div>
             ),
-            createdAt: formateISODateToLocaleString(item?.created ?? ""),
+            createdAt: formateISODateToLocaleString(item?.created ?? ''),
             status: (
               <Button
                 variant="contained"
@@ -361,25 +348,16 @@ const AgencyCompanyList = () => {
                 disableFocusRipple
                 disableElevation
                 sx={{
-                  width: "80px",
+                  width: '80px',
                   background:
-                    item?.is_active && !item.is_blocked
-                      ? "rgba(32, 161, 68, 0.08)"
-                      : "rgba(250, 45, 32, 0.08)",
-                  color:
-                    item?.is_active && !item.is_blocked
-                      ? "#20A144"
-                      : "rgba(250, 45, 32, 1)",
-                  fontSize: "12px",
-                  textTransform: "none",
-                  pointerEvents: "none",
+                    item?.is_active && !item.is_blocked ? 'rgba(32, 161, 68, 0.08)' : 'rgba(250, 45, 32, 0.08)',
+                  color: item?.is_active && !item.is_blocked ? '#20A144' : 'rgba(250, 45, 32, 1)',
+                  fontSize: '12px',
+                  textTransform: 'none',
+                  pointerEvents: 'none'
                 }}
               >
-                {item.is_blocked
-                  ? "Blocked"
-                  : item?.is_active
-                  ? "Active"
-                  : "Inactive"}
+                {item.is_blocked ? 'Blocked' : item?.is_active ? 'Active' : 'Inactive'}
               </Button>
             ),
             action: (
@@ -393,20 +371,20 @@ const AgencyCompanyList = () => {
                 handleSetting={() => handleSetting(item)}
                 handleInactive={handleInactive}
                 handleActive={handleActive}
-                showSetting={userProfile?.data?.role === Roles.ADMIN}
+                showSetting={userProfile?.data?.role === ROLES.ADMIN}
                 showView={true}
-                showEdit={true}
-                showInActive={true}
+                showEdit={userProfile?.data?.role !== ROLES.MEMBER}
+                showInActive={userProfile?.data?.role !== ROLES.MEMBER}
                 isEditMode={isEditMode}
                 item={{ id: item?.id, isActive: item?.is_active }}
               />
-            ),
+            )
           };
         })
       : [];
 
   //Modify table data for the admin user
-  if (userProfile?.data?.role === Roles.ADMIN) {
+  if (userProfile?.data?.role === ROLES.ADMIN) {
     const newCol = {
       id: 2,
       label: (
@@ -415,9 +393,9 @@ const AgencyCompanyList = () => {
           <img className="ml-2" src={Images.SortArrows} alt="Title" />
         </label>
       ),
-      field: "agency",
-      sort: "asc",
-      width: 180,
+      field: 'agency',
+      sort: 'asc',
+      width: 180
     };
     columns.splice(1, 0, newCol);
     columns = columns.map((item, index) => ({ ...item, id: index + 1 }));
@@ -426,36 +404,34 @@ const AgencyCompanyList = () => {
       agency: (
         <Typography
           sx={{
-            "&.MuiTypography-root": {
-              display: "inline-block",
+            '&.MuiTypography-root': {
+              display: 'inline-block',
               fontFamily: '"Figtree", sans-serif',
-              fontSize: "14px",
+              fontSize: '14px',
               fontWeight: 400,
-              p: 0,
-            },
+              p: 0
+            }
           }}
         >
-          {companyList?.data.results[index]?.agency_name
-            ? companyList?.data.results[index]?.agency_name
-            : "N/A"}
+          {companyList?.data.results[index]?.agency_name ? companyList?.data.results[index]?.agency_name : 'N/A'}
         </Typography>
       ),
       createdAt: item?.createdAt,
       status: item?.status,
-      action: item?.action,
+      action: item?.action
     }));
   }
 
   //final table data
   const data: TableRowColType = {
     columns,
-    rows,
+    rows
   };
 
   return (
     <div className="page-container">
       <div className="flex-between">
-        <h1>Company</h1>
+        <h4 className="font-bold text-xl">Company Accounts</h4>
         <div className="flex-between gap-[10px] font-sm leading-4 font-medium text-primary">
           <Link to="/">
             <HomeIcon color="disabled" />
@@ -466,10 +442,7 @@ const AgencyCompanyList = () => {
       </div>
       <div className="page-card">
         <div className="flex-between flex-wrap p-[15px] pb-5">
-          <SearchBar
-            setPaginationData={setPaginationData}
-            paginationData={paginationData}
-          />
+          <SearchBar setTableFilters={setTableFilters} tableFilters={tableFilters} />
           <button
             type="submit"
             onClick={() => setOpenModal(true)}
@@ -479,136 +452,91 @@ const AgencyCompanyList = () => {
             <span className="btn-label">Add Company</span>
           </button>
         </div>
-        {companyList?.loading ? (
-          <LoadingSpinner positionClass="left-[calc(40%_-_50px)] top-[calc(40%_-_50px)" />
-        ) : (
-          <>
-            <MuiCustomTable
-              loader={companyList?.loading}
-              data={data}
-              allData={companyList?.data}
-              paginationData={paginationData}
-              setPaginationData={setPaginationData}
-            />
-            <MuiPopup
-              dialogTitle={
-                isEditMode
-                  ? "Edit Company"
-                  : isSettingMode
-                  ? "Change Setting"
-                  : "Add Company"
-              }
-              textAlign="left"
-              dialogContent={
+
+        <MuiCustomTable
+          loader={companyList?.loading}
+          data={data}
+          allData={companyList?.data}
+          tableFilters={tableFilters}
+          setTableFilters={setTableFilters}
+        />
+        <MuiPopup
+          dialogTitle={isEditMode ? 'Edit Company' : isSettingMode ? 'Change Setting' : 'Add Company'}
+          textAlign="left"
+          dialogContent={
+            <>
+              {isSettingMode ? (
+                <div>
+                  <h4>Company Status</h4>
+                  <div className="styled-select">
+                    <Select
+                      name="companyStatus"
+                      MenuProps={{
+                        variant: 'menu',
+                        disableScrollLock: true
+                      }}
+                      displayEmpty
+                      inputProps={{ 'aria-label': 'Without label' }}
+                      value={companyStatus ? 1 : 0}
+                      onChange={e => setCompanyStatus(Boolean(e.target.value))}
+                    >
+                      <MenuItem value={0}>Unblock</MenuItem>
+                      <MenuItem value={1}> Block</MenuItem>
+                    </Select>
+                  </div>
+                </div>
+              ) : (
                 <>
-                  {isSettingMode ? (
-                    <div>
-                      <h4>Company Status</h4>
-                      <div className="styled-select">
-                        <Select
-                          name="companyStatus"
-                          MenuProps={{
-                            variant: "menu",
-                            disableScrollLock: true,
-                          }}
-                          displayEmpty
-                          inputProps={{ "aria-label": "Without label" }}
-                          value={companyStatus ? 1 : 0}
-                          onChange={(e) =>
-                            setCompanyStatus(Boolean(e.target.value))
-                          }
-                        >
-                          <MenuItem value={0}>Unblock</MenuItem>
-                          <MenuItem value={1}> Block</MenuItem>
-                        </Select>
-                      </div>
-                    </div>
-                  ) : (
-                    <>
-                      <div
-                        className={
-                          errors.company
-                            ? "input-fields-wrapper error-style"
-                            : "input-fields-wrapper"
-                        }
-                      >
-                        <h4>Company</h4>
-                        <div className="styled-select">
-                          <input
-                            className={
-                              errors.company
-                                ? "input-style input-err-style"
-                                : "input-style"
-                            }
-                            type="text"
-                            placeholder="Enter Company Name"
-                            name="company"
-                            value={formData.company}
-                            onChange={handleInputChange}
-                            required
-                          />
-                          <span className="err-tag">
-                            {errors.company ?? ""}
-                          </span>
-                        </div>
-                      </div>
-                      <div
-                        className={
-                          errors.description
-                            ? "input-fields-wrapper error-style"
-                            : "input-fields-wrapper"
-                        }
-                      >
-                        <h4>Description</h4>
-                        <div className="styled-select">
-                          <textarea
-                            name="description"
-                            className={
-                              errors.description
-                                ? "input-style input-err-style"
-                                : "input-style"
-                            }
-                            placeholder="Enter Company Description"
-                            maxLength={2000}
-                            value={formData.description}
-                            onChange={handleInputChange}
-                            required
-                          />
-                          <span className="err-tag">
-                            {errors.description ?? ""}
-                          </span>
-                        </div>
-                      </div>
-                      <FormControlLabel
-                        control={
-                          <Checkbox
-                            checked={formData.isActive}
-                            onChange={handleInputChange}
-                            name="isActive"
-                          />
-                        }
-                        label="Active"
+                  <div className={errors.company ? 'input-fields-wrapper error-style' : 'input-fields-wrapper'}>
+                    <h4>Company</h4>
+                    <div className="styled-select">
+                      <input
+                        className={errors.company ? 'input-style input-err-style' : 'input-style'}
+                        type="text"
+                        placeholder="Enter Company Name"
+                        name="company"
+                        value={formData.company}
+                        onChange={handleInputChange}
+                        required
                       />
-                    </>
-                  )}
+                      <span className="err-tag">{errors.company ?? ''}</span>
+                    </div>
+                  </div>
+                  <div className={errors.description ? 'input-fields-wrapper error-style' : 'input-fields-wrapper'}>
+                    <h4>Description</h4>
+                    <div className="styled-select">
+                      <textarea
+                        name="description"
+                        className={errors.description ? 'input-style input-err-style' : 'input-style'}
+                        placeholder="Enter Company Description"
+                        maxLength={2000}
+                        value={formData.description}
+                        onChange={handleInputChange}
+                        required
+                      />
+                      <span className="err-tag">{errors.description ?? ''}</span>
+                    </div>
+                  </div>
+                  <FormControlLabel
+                    control={<Checkbox checked={formData.isActive} onChange={handleInputChange} name="isActive" />}
+                    label="Active"
+                  />
                 </>
-              }
-              openPopup={openModal}
-              closePopup={() => {
-                if (isEditMode) {
-                  setOpenModal(false);
-                  setIsEditMode(false);
-                } else {
-                  setOpenModal(false);
-                }
-              }}
-              mainActionHandler={
-                isSettingMode ? handleFormSubmit : validateSubmit
-              }
-              mainActionTitle={"Save"}
-            />
-          </>
-        )}
+              )}
+            </>
+          }
+          openPopup={openModal}
+          closePopup={() => {
+            if (isEditMode) {
+              setOpenModal(false);
+              setIsEditMode(false);
+            } else {
+              setOpenModal(false);
+            }
+          }}
+          mainActionHandler={isSettingMode ? handleFormSubmit : validateSubmit}
+          mainActionTitle={'Save'}
+        />
       </div>
     </div>
   );

@@ -56,7 +56,7 @@ const ChannelPopoverCard = ({
             }}
           />
         </Grid>
-        <Grid item xs={12} sm container ml={2}>
+        <Grid item ml={2}>
           <Card
             sx={{
               p: 1.875,

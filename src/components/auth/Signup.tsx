@@ -25,6 +25,7 @@ import {
   USER_DATA_LOADER,
 } from "redux/reducers/auth/auth.slice";
 import { REGISTER_INVITE_USER } from "redux/actions/inviteUser/inviteUser.actions";
+import { AUTH_ROUTE } from "routes/baseRoute";
 
 export default function Signup() {
   let navigate = useNavigate();
@@ -350,11 +351,10 @@ export default function Signup() {
               >
                 <label>Role: </label>
                 <Select
-                  className={`${
-                    role === ""
-                      ? "!text-[#939393] hover:border-[#939393] "
-                      : "text-[#000]"
-                  }bg-[#f9fbfc] !rounded w-full !text-sm !font-semibold`}
+                  className={`${role === ""
+                    ? "!text-[#939393] hover:border-[#939393] "
+                    : "text-[#000]"
+                    }bg-white !rounded w-full !text-sm !font-semibold`}
                   value={role}
                   open={isOpen}
                   disabled={redirectMyUrl}
@@ -390,7 +390,7 @@ export default function Signup() {
               <p className="card-page-info mt-uni-gap">
                 By signing up, you agree to our Privacy Policy
               </p>{" "}
-              <Link className="btn-link" to="/login">
+              <Link className="btn-link" to={AUTH_ROUTE.LOGIN}>
                 Sign In Instead
               </Link>
             </div>

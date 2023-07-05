@@ -16,25 +16,37 @@ export interface UserPortfolioType {
   user: number;
 }
 export interface UserProfileDetailsType {
-  id: number;
-  email: string;
-  first_name: string;
-  last_name: string;
-  profile_title: string | null;
-  profile_description: string | null;
-  role: number;
-  video: string | null;
-  profile_img: string | null;
-  profile_status: string;
-  preferred_communication_mode: string;
-  preferred_communication_id: string | null;
-  availability: string | null;
-  Portfolio_user: UserPortfolioType[];
-  user_level: number;
-  sub_title: string | null;
-  Language: string | null;
-  website: string | null;
-  portfolio: [];
+  id?: number;
+  email?: string;
+  name?: string;
+  first_name?: string;
+  last_name?: string;
+  profile_title?: string | null;
+  profile_description?: string | null;
+  role?: number;
+  video?: [];
+  remove_video?: string;
+  profile_img?: string | null;
+  remove_image?: string | number;
+  profile_status?: string;
+  preferred_communication_mode?: string;
+  preferred_communication_id?: string | null;
+  availability?: string | null;
+  Portfolio_user?: UserPortfolioType[];
+  user_level?: number;
+  sub_title?: string | null;
+  Language?: string | null;
+  website?: string | null;
+  portfolio?: File[] | any;
+  remove_portfolio?: File[] | any;
+  skills?: { id: number | string; name: string }[];
+  username?: string | null;
+  profile_changed?: string | null;
+}
+
+export interface profileKeyValueType {
+  name: string;
+  value?: string | null | number | File | Blob;
 }
 export interface AuthInitialType extends LoadingType {
   user: {
@@ -49,7 +61,7 @@ export interface AuthInitialType extends LoadingType {
   };
   userProfile: {
     loading: false;
-    hasData: boolean;
+    hasData: UserProfileDetailsType;
     data: UserProfileDetailsType;
   };
 }
@@ -57,5 +69,6 @@ export interface AuthInitialType extends LoadingType {
 export interface appInitialType {
   persist: boolean;
   isMiniSidebar: boolean;
-  headerCompany?: null | number;
+  headerCompany: number | null;
+  headerCompanyName: string | null;
 }

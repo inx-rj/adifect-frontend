@@ -1,11 +1,14 @@
 import { setQueryParams } from "helper/utility/customFunctions";
 import axiosPrivate from "../../api/axios";
 
-
-class CompanyTabApiClient {
+class CompanyTabApiClientCls {
   //fetch company list
   fetchCompanyList = (filters: any, endpoint: string) =>
     axiosPrivate.get(endpoint + setQueryParams(filters));
+
+  //fetch member Admin company list
+  fetchMemberAdminCompanyList = (endpoint: string) =>
+    axiosPrivate.get(`${endpoint}`);
 
   //Add a new company entry
   addSingleCompany = (payload: any, endpoint: string) => {
@@ -24,8 +27,10 @@ class CompanyTabApiClient {
 
   //Fetch a company based on Header Company Id
   fetchSingleCompany = (id: number, endpoint: string) => {
-    return axiosPrivate.get(`${endpoint}${id}/`);
+    return axiosPrivate.get(`company/${id}/`);
   };
 }
 
-export default new CompanyTabApiClient();
+const CompanyTabApiClient = new CompanyTabApiClientCls();
+
+export default CompanyTabApiClient;

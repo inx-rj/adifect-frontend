@@ -2,10 +2,10 @@ import { lazy, Suspense } from "react";
 import { Outlet } from "react-router-dom";
 import { useAppSelector } from "../redux/store";
 import React from "react";
-// import { IS_SIDEBAR_COLLAPSED } from "../redux/reducers/config/app/app.slice";
+// import { IS_SIDEBAR_OPEN } from "../redux/reducers/config/app/app.slice";
 // import Sidebar from "../containers/Layout/Sidebar";
 // import Header from "../containers/Layout/Header";
-// import { IS_SIDEBAR_COLLAPSED } from "../redux/reducers/app/app.slice";
+// import { IS_SIDEBAR_OPEN } from "../redux/reducers/app/app.slice";
 // import Sidebar from "../containers/Layout/Sidebar";
 
 //Import lazy load Component
@@ -14,7 +14,7 @@ import React from "react";
 // const Sidebar = lazy(() => import("../MyComponents/Common/sidebar/Sidebar"));
 
 const Dashboard = () => {
-  // const isSidebarCollapsed = useAppSelector(IS_SIDEBAR_COLLAPSED);
+  // const isSidebarOpen = useAppSelector(IS_SIDEBAR_OPEN);
 
   return (
     <div className={`relative `}>

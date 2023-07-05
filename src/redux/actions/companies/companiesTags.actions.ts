@@ -4,9 +4,12 @@ import CompaniesTagsApiClient from "services/companies/CompaniesTagsApiClient";
 import {
   SET_COMPANIES_PROJECTS_TAGS_LOADING,
   SET_COMPANIES_PROJECTS_TAGS_DATA,
+  SET_COMPANIES_PROJECTS_STORY_TAGS_DATA,
+  SET_EXISTING_COMPANIES_PROJECTS_STORY_TAGS_DATA,
+  SET_NEW_COMPANIES_PROJECTS_STORY_TAGS_DATA,
 } from "redux/reducers/companies/companiesTags.slice";
 import { tagPayloadDataType } from "helper/types/companies/comapniesTagsType";
-import { initialTableConfigInterface } from "helper/types/common/table";
+import { initialTableConfigInterface } from "helper/types/common/tableType";
 import { Images } from "helper/images";
 
 // Get Company Projects List
@@ -56,6 +59,9 @@ const GET_COMPANY_PROJECTS_TAGS_LIST =
           text: error?.response?.data?.message ?? error?.response?.data?.detail,
           className: "errorAlert-login",
           icon: Images.Logo,
+          buttons: {
+            OK: false,
+          },
           timer: 5000,
         });
       });
@@ -72,6 +78,9 @@ const POST_COMPANY_PROJECTS_TAG =
             title: "Successfully Complete",
             text: response?.data?.message,
             icon: Images.Logo,
+            buttons: {
+              OK: false,
+            },
             timer: 5000,
           });
         }
@@ -94,7 +103,8 @@ const POST_COMPANY_PROJECTS_TAG =
         } else if (error?.response?.data?.description) {
           errMsg = error?.response?.data?.title?.[0];
         } else {
-          errMsg = error?.response?.data?.message ?? error?.response?.data?.detail;
+          errMsg =
+            error?.response?.data?.message ?? error?.response?.data?.detail;
         }
         dispatch(SET_COMPANIES_PROJECTS_TAGS_LOADING(false));
         swal({
@@ -102,10 +112,137 @@ const POST_COMPANY_PROJECTS_TAG =
           text: errMsg,
           className: "errorAlert-login",
           icon: Images.Logo,
+          buttons: {
+            OK: false,
+          },
           timer: 5000,
         });
       });
   };
 
+// Add new story Tag to the tagList
+const POST_COMPANY_PROJECTS_STORY_TAG =
+  (tagData) => async (dispatch: AppDispatch) => {
+    dispatch(SET_COMPANIES_PROJECTS_TAGS_LOADING(true));
+    await CompaniesTagsApiClient.addCompanyProjectsStoryTag(tagData)
+      .then((response) => {
+        if (response.status === 201 || response.status === 200) {
+          // swal({
+          //   title: "Successfully Complete",
+          //   text: response?.data?.message,
+          //   icon: Images.Logo,
+          //   buttons: {
+          //     OK: false,
+          //   },
+          //   timer: 5000,
+          // });
+          dispatch(
+            SET_NEW_COMPANIES_PROJECTS_STORY_TAGS_DATA(response?.data?.message)
+          );
+        }
+        dispatch(SET_COMPANIES_PROJECTS_TAGS_LOADING(false));
+      })
+      .catch((error) => {
+        let errMsg = "";
+        if (error?.response?.data?.message?.length > 0) {
+          errMsg = JSON.stringify(error.response.data.message);
+        } else {
+          errMsg =
+            error?.response?.data?.message ?? error?.response?.data?.detail;
+        }
+        dispatch(SET_COMPANIES_PROJECTS_TAGS_LOADING(false));
+        swal({
+          title: "Error",
+          text: errMsg,
+          className: "errorAlert-login",
+          icon: Images.Logo,
+          buttons: {
+            OK: false,
+          },
+          timer: 5000,
+        });
+      });
+  };
+
+// Add Story Tag to existing story tag list
+const POST_EXISTING_COMPANY_PROJECTS_STORY_TAG =
+  (tagData: tagPayloadDataType, storyId) => async (dispatch: AppDispatch) => {
+    dispatch(SET_COMPANIES_PROJECTS_TAGS_LOADING(true));
+    const params = {
+      story: storyId,
+      title: tagData,
+    };
+    await CompaniesTagsApiClient.addExistingCompanyProjectsStoryTag(params)
+      .then((response) => {
+        if (response.status === 201 || response.status === 200) {
+          dispatch(
+            SET_EXISTING_COMPANIES_PROJECTS_STORY_TAGS_DATA(
+              response?.data?.message
+            )
+          );
+        }
+
+        dispatch(SET_COMPANIES_PROJECTS_TAGS_LOADING(false));
+      })
+      .catch((error) => {
+        let errMsg = "";
+        if (error?.response?.data?.message?.length > 0) {
+          errMsg = JSON.stringify(error.response.data.message);
+        } else {
+          errMsg = error?.response?.data?.message;
+        }
+        dispatch(SET_COMPANIES_PROJECTS_TAGS_LOADING(false));
+        swal({
+          title: "Error",
+          text: errMsg,
+          className: "errorAlert-login",
+          icon: Images.Logo,
+          buttons: {
+            OK: false,
+          },
+          timer: 5000,
+        });
+      });
+  };
+// Delete Story Tag from Story Tag list
+const DELETE_STORY_TAG =
+  (tagData: tagPayloadDataType, storyId) => async (dispatch: AppDispatch) => {
+    dispatch(SET_COMPANIES_PROJECTS_TAGS_LOADING(true));
+    const params = {
+      story: storyId,
+      tag: tagData,
+    };
+    await CompaniesTagsApiClient.deleteCompanyProjectsStoryTag(params)
+      .then((response) => {
+        if (response.status === 204 || response.status === 200) {
+          dispatch(
+            SET_COMPANIES_PROJECTS_STORY_TAGS_DATA(
+              "Story Tag removed successfully"
+            )
+          );
+        }
+        dispatch(SET_COMPANIES_PROJECTS_TAGS_LOADING(false));
+      })
+      .catch((error) => {
+        // console.log("error", error);
+        dispatch(SET_COMPANIES_PROJECTS_TAGS_LOADING(false));
+        swal({
+          title: "Error",
+          text: "errMsg",
+          className: "errorAlert-login",
+          icon: Images.Logo,
+          buttons: {
+            OK: false,
+          },
+          timer: 5000,
+        });
+      });
+  };
 // Common auth Config
-export { GET_COMPANY_PROJECTS_TAGS_LIST, POST_COMPANY_PROJECTS_TAG };
+export {
+  GET_COMPANY_PROJECTS_TAGS_LIST,
+  POST_COMPANY_PROJECTS_TAG,
+  POST_COMPANY_PROJECTS_STORY_TAG,
+  DELETE_STORY_TAG,
+  POST_EXISTING_COMPANY_PROJECTS_STORY_TAG,
+};

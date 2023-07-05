@@ -1,48 +1,45 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState } from "react";
-import { Box, Typography } from "@mui/material";
-import { useAppDispatch, useAppSelector } from "redux/store";
-import { COMPANY_PROJECTS_FILTERS_DATA } from "redux/reducers/companies/companies.slice";
-import { GET_COMPANY_PROJECTS_FILTERS_LIST } from "redux/actions/companies/companies.actions";
+import React, { useState } from 'react';
+import { Box, Typography } from '@mui/material';
+import { useAppDispatch, useAppSelector } from 'redux/store';
+import { COMPANY_PROJECTS_FILTERS_DATA } from 'redux/reducers/companies/companies.slice';
+import { GET_COMPANY_PROJECTS_FILTERS_LIST } from 'redux/actions/companies/companies.actions';
 import {
   CREATE_CREATIVE_CODE_LIST,
   DELETE_CREATIVE_CODE_LIST,
   GET_CREATIVE_CODE_LIST,
-  UPDATE_CREATIVE_CODE_LIST,
-} from "redux/actions/creativeCode/creativeCode.actions";
-import { useSingleEffect, useUpdateEffect } from "react-haiku";
-import swal from "sweetalert";
-import ActionMenuButton from "components/common/actionMenuButton/ActionMenuButton";
-import { isEmpty } from "helper/utility/customFunctions";
-import { Images } from "helper/images";
+  UPDATE_CREATIVE_CODE_LIST
+} from 'redux/actions/creativeCode/creativeCode.actions';
+import { useSingleEffect, useUpdateEffect } from 'react-haiku';
+import swal from 'sweetalert';
+import ActionMenuButton from 'components/common/actionMenuButton/ActionMenuButton';
+import { isEmpty } from 'helper/utility/customFunctions';
+import { Images } from 'helper/images';
 import {
   CREATIVE_CODE_DATA,
   CREATIVE_CODE_RESPONSE,
   SET_CREATE_CREATIVE_CODE,
   SET_CREATIVE_CODE_EDIT_DATA,
-  SET_CREATIVE_CODE_LOADING,
-} from "redux/reducers/companies/creativeCode.slice";
-import MuiPopup from "components/common/muiPopup/MuiPopup";
-import CustomAddCreativeCodeModal from "./customAddModal/CustomAddCreativeCodeModal";
-import MuiTable from "components/common/muiTable/MuiTable";
-import { Add } from "@mui/icons-material";
+  SET_CREATIVE_CODE_LOADING
+} from 'redux/reducers/companies/creativeCode.slice';
+import MuiPopup from 'components/common/muiPopup/MuiPopup';
+import CustomAddCreativeCodeModal from './customAddModal/CustomAddCreativeCodeModal';
+import MuiTable from 'components/common/muiTable/MuiTable';
+import { Add } from '@mui/icons-material';
 
 export default function CreativeCode() {
   const dispatch = useAppDispatch();
 
   // Redux states
-  const agencyCompanyProjectsFiltersList = useAppSelector(
-    COMPANY_PROJECTS_FILTERS_DATA
-  );
+  const agencyCompanyProjectsFiltersList = useAppSelector(COMPANY_PROJECTS_FILTERS_DATA);
   const creativeCodeList = useAppSelector(CREATIVE_CODE_DATA);
   const success = useAppSelector(CREATIVE_CODE_RESPONSE);
 
   // React states
-  const [paginationData, setPaginationData] = useState({
+  const [tableFilters, setTableFilters] = useState({
     page: 1,
-    rowsPerPage: 10,
+    rowsPerPage: 10
   }); // pagination params state
-  const [filterData, setFilterData] = useState({ search: "" }); // filter params state
+  const [filterData, setFilterData] = useState({ search: '' }); // filter params state
   const [showTagModal, setShowTagModal] = useState(false); // Add Creative Code modal state
   const [formData, setFormData] = useState({
     title: undefined,
@@ -53,7 +50,7 @@ export default function CreativeCode() {
     vertical_pixel: undefined,
     duration: undefined,
     link: undefined,
-    notes: undefined,
+    notes: undefined
   }); // Add Program modal fields state
   const [errors, setErrors] = useState({
     title: null,
@@ -64,30 +61,30 @@ export default function CreativeCode() {
     vertical_pixel: null,
     duration: null,
     link: null,
-    notes: null,
+    notes: null
   }); // Add Program modal fields error state
   const [selectedOption, setSelectedOption] = useState({
-    name: "",
-    id: "",
+    name: '',
+    id: ''
   }); // Community dropdown state for 'Add Program' modal
-  const [searchText, setSearchText] = useState(""); // Community dropdown search state
+  const [searchText, setSearchText] = useState(''); // Community dropdown search state
 
   // Action Menu button states
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [isEditMode, setIsEditMode] = useState(false);
   const [selectedItem, setSelectedItem] = useState({
     currentTooltip: null,
-    currentId: null,
+    currentId: null
   });
 
   // Community, Story, Tag fetch list API call
   useSingleEffect(() => {
     dispatch(GET_COMPANY_PROJECTS_FILTERS_LIST());
-    dispatch(GET_CREATIVE_CODE_LIST({ ...paginationData, ...filterData }));
+    dispatch(GET_CREATIVE_CODE_LIST({ ...tableFilters, ...filterData }));
   });
 
   //set the edit mode
-  const handleEdit = (item) => {
+  const handleEdit = item => {
     setShowTagModal(true);
     setIsEditMode(true);
     setErrors({
@@ -100,7 +97,7 @@ export default function CreativeCode() {
       vertical_pixel: null,
       duration: null,
       link: null,
-      notes: null,
+      notes: null
     });
     setSelectedItem({ ...selectedItem, currentId: item?.id });
 
@@ -113,24 +110,24 @@ export default function CreativeCode() {
       vertical_pixel: item?.vertical_pixel,
       duration: item?.duration,
       link: item?.link,
-      notes: item?.notes,
+      notes: item?.notes
     });
   };
 
   //handle delete action
-  const handleDelete = (item) => {
+  const handleDelete = item => {
     swal({
-      title: "Warning",
+      title: 'Warning',
       text: `Are you sure you want to remove this ${item?.title}?`,
-      className: "errorAlert",
-      icon: "/img/logonew-red.svg",
+      className: 'errorAlert',
+      icon: Images.ErrorLogo,
       buttons: {
         Cancel: true,
-        OK: true,
+        OK: true
       },
-      dangerMode: true,
-    }).then((willDelete) => {
-      if (willDelete !== "Cancel") {
+      dangerMode: true
+    }).then(willDelete => {
+      if (willDelete !== 'Cancel') {
         dispatch(DELETE_CREATIVE_CODE_LIST(item?.id)).then((r: void) => r);
       }
     });
@@ -140,7 +137,7 @@ export default function CreativeCode() {
 
   // To handle filter change
   const handleFilterChange = ({ target: { name, value } }) => {
-    setFilterData((prevState) => {
+    setFilterData(prevState => {
       return { ...prevState, [name]: value };
     });
   };
@@ -156,9 +153,9 @@ export default function CreativeCode() {
             <img className="ml-1" src={Images.SortArrows} alt="Title" />
           </label>
         ),
-        field: "creativeCodeTitle",
-        sort: "asc",
-        width: 100,
+        field: 'creativeCodeTitle',
+        sort: 'asc',
+        width: 100
       },
       {
         id: 2,
@@ -168,9 +165,9 @@ export default function CreativeCode() {
             <img className="ml-1" src={Images.SortArrows} alt="Title" />
           </label>
         ),
-        field: "fileName",
-        sort: "asc",
-        width: 50,
+        field: 'fileName',
+        sort: 'asc',
+        width: 50
       },
       {
         id: 3,
@@ -180,9 +177,9 @@ export default function CreativeCode() {
             <img className="ml-1" src={Images.SortArrows} alt="Title" />
           </label>
         ),
-        field: "format",
-        sort: "asc",
-        width: 50,
+        field: 'format',
+        sort: 'asc',
+        width: 50
       },
       {
         id: 4,
@@ -192,9 +189,9 @@ export default function CreativeCode() {
             <img className="ml-1" src={Images.SortArrows} alt="Title" />
           </label>
         ),
-        field: "creativeTheme",
-        sort: "asc",
-        width: 100,
+        field: 'creativeTheme',
+        sort: 'asc',
+        width: 100
       },
       {
         id: 5,
@@ -204,9 +201,9 @@ export default function CreativeCode() {
             <img className="ml-1" src={Images.SortArrows} alt="Title" />
           </label>
         ),
-        field: "horizontalPx",
-        sort: "asc",
-        width: 50,
+        field: 'horizontalPx',
+        sort: 'asc',
+        width: 50
       },
       {
         id: 6,
@@ -216,9 +213,9 @@ export default function CreativeCode() {
             <img className="ml-1" src={Images.SortArrows} alt="Title" />
           </label>
         ),
-        field: "verticalPx",
-        sort: "asc",
-        width: 50,
+        field: 'verticalPx',
+        sort: 'asc',
+        width: 50
       },
       {
         id: 7,
@@ -228,9 +225,9 @@ export default function CreativeCode() {
             <img className="ml-1" src={Images.SortArrows} alt="Title" />
           </label>
         ),
-        field: "duration",
-        sort: "asc",
-        width: 50,
+        field: 'duration',
+        sort: 'asc',
+        width: 50
       },
       {
         id: 8,
@@ -240,9 +237,9 @@ export default function CreativeCode() {
             <img className="ml-1" src={Images.SortArrows} alt="Title" />
           </label>
         ),
-        field: "link",
-        sort: "asc",
-        width: 100,
+        field: 'link',
+        sort: 'asc',
+        width: 100
       },
       {
         id: 9,
@@ -252,52 +249,52 @@ export default function CreativeCode() {
             <img className="ml-1" src={Images.SortArrows} alt="Title" />
           </label>
         ),
-        field: "notes",
-        sort: "asc",
-        width: 100,
+        field: 'notes',
+        sort: 'asc',
+        width: 100
       },
       {
         id: 4,
-        label: "Action",
-        field: "action",
-        sort: "asc",
-        width: 50,
-      },
+        label: 'Action',
+        field: 'action',
+        sort: 'asc',
+        width: 50
+      }
     ],
 
     rows:
       creativeCodeList?.data?.results?.length > 0
         ? creativeCodeList?.data?.results?.map((item, index) => {
             return {
-              creativeCodeTitle: item.title ?? "",
+              creativeCodeTitle: item.title ?? '',
 
-              fileName: item.file_name ?? "",
+              fileName: item.file_name ?? '',
 
-              format: item.format ?? "",
+              format: item.format ?? '',
 
-              creativeTheme: item.creative_theme ?? "",
+              creativeTheme: item.creative_theme ?? '',
 
-              horizontalPx: item.horizontal_pixel ?? "",
+              horizontalPx: item.horizontal_pixel ?? '',
 
-              verticalPx: item.vertical_pixel ?? "",
+              verticalPx: item.vertical_pixel ?? '',
 
-              duration: item.duration ?? "",
+              duration: item.duration ?? '',
 
               link: (
                 <Typography
                   key={index}
                   className="truncate w-max-full"
                   sx={{
-                    "&.MuiTypography-root": {
-                      color: "#71757B",
-                      fontSize: "14px",
+                    '&.MuiTypography-root': {
+                      color: '#71757B',
+                      fontSize: '14px',
                       fontWeight: 400,
                       p: 0,
-                      fontFamily: '"Figtree", sans-serif',
-                    },
+                      fontFamily: '"Figtree", sans-serif'
+                    }
                   }}
                 >
-                  {item.link ?? ""}
+                  {item.link ?? ''}
                 </Typography>
               ),
 
@@ -306,16 +303,16 @@ export default function CreativeCode() {
                   key={index}
                   className="truncate w-3/4"
                   sx={{
-                    "&.MuiTypography-root": {
-                      color: "#71757B",
-                      fontSize: "14px",
+                    '&.MuiTypography-root': {
+                      color: '#71757B',
+                      fontSize: '14px',
                       fontWeight: 400,
                       p: 0,
-                      fontFamily: '"Figtree", sans-serif',
-                    },
+                      fontFamily: '"Figtree", sans-serif'
+                    }
                   }}
                 >
-                  {item.notes ?? ""}
+                  {item.notes ?? ''}
                 </Typography>
               ),
 
@@ -334,16 +331,16 @@ export default function CreativeCode() {
                     item={{ id: item?.id, isActive: item?.is_active }}
                   />
                 </div>
-              ),
+              )
             };
           })
-        : [],
+        : []
   };
 
   // Creative Code fetch list API call
   useUpdateEffect(() => {
-    dispatch(GET_CREATIVE_CODE_LIST({ ...paginationData, ...filterData }));
-  }, [paginationData, filterData]);
+    dispatch(GET_CREATIVE_CODE_LIST({ ...tableFilters, ...filterData }));
+  }, [tableFilters, filterData]);
 
   // Reset modal fields and errors state
   const resetModalData = () => {
@@ -357,7 +354,7 @@ export default function CreativeCode() {
       vertical_pixel: null,
       duration: null,
       link: null,
-      notes: null,
+      notes: null
     });
     setFormData({
       title: undefined,
@@ -368,36 +365,30 @@ export default function CreativeCode() {
       vertical_pixel: undefined,
       duration: undefined,
       link: undefined,
-      notes: undefined,
+      notes: undefined
     });
     setShowTagModal(!showTagModal);
     setSelectedOption(null);
   };
 
   //validate inputs
-  const validateSubmit = (e) => {
+  const validateSubmit = e => {
     e.preventDefault();
     const tempErrors = {
-      title: isEmpty(formData.title) ? "Title is required" : "",
-      file_name: isEmpty(formData.file_name) ? "File name is required" : "",
-      format: isEmpty(formData.format) ? "Format is required" : "",
-      creative_theme: isEmpty(formData.creative_theme)
-        ? "Creative Theme is required"
-        : "",
-      horizontal_pixel: isEmpty(formData.horizontal_pixel)
-        ? "Horizontal pixel is required"
-        : "",
-      vertical_pixel: isEmpty(formData.vertical_pixel)
-        ? "Vertical Pixel is required"
-        : "",
-      duration: isEmpty(formData.duration) ? "Duration is required" : "",
-      link: isEmpty(formData.link) ? "Link is required" : "",
-      notes: isEmpty(formData.notes) ? "Notes is required" : "",
+      title: isEmpty(formData.title) ? 'Title is required' : '',
+      file_name: isEmpty(formData.file_name) ? 'File name is required' : '',
+      format: isEmpty(formData.format) ? 'Format is required' : '',
+      creative_theme: isEmpty(formData.creative_theme) ? 'Creative Theme is required' : '',
+      horizontal_pixel: isEmpty(formData.horizontal_pixel) ? 'Horizontal pixel is required' : '',
+      vertical_pixel: isEmpty(formData.vertical_pixel) ? 'Vertical Pixel is required' : '',
+      duration: isEmpty(formData.duration) ? 'Duration is required' : '',
+      link: isEmpty(formData.link) ? 'Link is required' : '',
+      notes: isEmpty(formData.notes) ? 'Notes is required' : ''
       // community: isEmpty(selectedOption?.['name'], 'Community is required'),
     };
     setErrors(tempErrors);
 
-    if (Object.values(tempErrors).filter((value) => value).length) {
+    if (Object.values(tempErrors).filter(value => value).length) {
       return;
     }
     submitHandler();
@@ -409,65 +400,65 @@ export default function CreativeCode() {
       // API call
       if (isEditMode) {
         dispatch(UPDATE_CREATIVE_CODE_LIST(selectedItem?.currentId, formData))
-          .then((res) => {
+          .then(res => {
             swal({
-              title: "Successfully Complete",
-              text: "Successfully Saved!",
-              className: "successAlert-login",
+              title: 'Successfully Complete',
+              text: 'Successfully Saved!',
+              className: 'successAlert-login',
               icon: Images.Logo,
               buttons: {
-                OK: false,
+                OK: false
               },
-              timer: 1500,
+              timer: 1500
             });
             dispatch(SET_CREATIVE_CODE_EDIT_DATA(res?.data?.message));
             dispatch(SET_CREATIVE_CODE_LOADING(false));
             resetModalData();
           })
-          .catch((err) => {
+          .catch(err => {
             swal({
-              title: "Error",
+              title: 'Error',
               text: err.response.data.message?.length
                 ? err.response.data.message
                 : JSON.stringify(err.response.data.message),
-              className: "errorAlert",
+              className: 'errorAlert',
               icon: Images.ErrorLogo,
               buttons: {
-                OK: false,
+                OK: false
               },
-              timer: 5000,
+              timer: 5000
             });
             dispatch(SET_CREATIVE_CODE_LOADING(false));
           });
       } else {
         dispatch(CREATE_CREATIVE_CODE_LIST(formData))
-          .then((res) => {
+          .then(res => {
             swal({
-              title: "Successfully Complete",
-              text: "Successfully Saved!",
-              className: "successAlert-login",
+              title: 'Successfully Complete',
+              text: 'Successfully Saved!',
+              className: 'successAlert-login',
               icon: Images.Logo,
               buttons: {
-                OK: false,
+                OK: false
               },
-              timer: 1500,
+              timer: 1500
             });
             dispatch(SET_CREATE_CREATIVE_CODE(res?.data?.message));
             dispatch(SET_CREATIVE_CODE_LOADING(false));
             resetModalData();
           })
-          .catch((err) => {
+          .catch(err => {
             swal({
-              title: "Error",
+              title: 'Error',
               text: err.response.data.message?.length
                 ? err.response.data.message
                 : JSON.stringify(err.response.data.message),
-              className: "errorAlert",
+              className: 'errorAlert',
               icon: Images.ErrorLogo,
               buttons: {
-                OK: false,
+                OK: false
               },
-              timer: 5000,
+              timer: 5000
             });
             dispatch(SET_CREATIVE_CODE_LOADING(false));
           });
@@ -477,7 +468,7 @@ export default function CreativeCode() {
 
   // Clears the error when the community dropdown option is selected
   useUpdateEffect(() => {
-    if (!isEmpty(selectedOption?.["name"] || selectedOption)) {
+    if (!isEmpty(selectedOption?.['name'] || selectedOption)) {
       setErrors({
         ...errors,
         title: null,
@@ -488,7 +479,7 @@ export default function CreativeCode() {
         vertical_pixel: null,
         duration: null,
         link: null,
-        notes: null,
+        notes: null
       });
     }
   }, [selectedOption]);
@@ -496,7 +487,7 @@ export default function CreativeCode() {
   // Fetch Creative Code updated List on Add, Edit and Delete
   useUpdateEffect(() => {
     if (success.add || success.update || success.delete) {
-      dispatch(GET_CREATIVE_CODE_LIST({ ...paginationData, ...filterData }));
+      dispatch(GET_CREATIVE_CODE_LIST({ ...tableFilters, ...filterData }));
     }
   }, [success]);
 
@@ -506,16 +497,16 @@ export default function CreativeCode() {
         <h1 className="page-title">Creative Code</h1>
 
         <div className="page-card new-card p-0">
-          <div className="flex flex-wrap p-[15px] pb-[20px]">
+          <div className="page-filters-bar">
             <Box
               sx={{
-                "& input": {
-                  width: "335px",
-                  height: "49px",
-                  border: "1px solid #ddd",
-                  borderRadius: "8px",
-                  padding: "0 11px",
-                },
+                '& input': {
+                  width: '335px',
+                  height: '49px',
+                  border: '1px solid #ddd',
+                  borderRadius: '8px',
+                  padding: '0 11px'
+                }
               }}
             >
               <input
@@ -533,12 +524,12 @@ export default function CreativeCode() {
               <button
                 className="btn btn-primary"
                 type="button"
-                onClick={(e) => {
+                onClick={e => {
                   setShowTagModal(true);
                 }}
                 // disabled={true}
               >
-                {" "}
+                {' '}
                 <Add /> Add Creative Code
               </button>
             </div>
@@ -550,9 +541,7 @@ export default function CreativeCode() {
             dialogContent={
               <CustomAddCreativeCodeModal
                 communityOptions={
-                  agencyCompanyProjectsFiltersList?.data?.community
-                    ? agencyCompanyProjectsFiltersList
-                    : []
+                  agencyCompanyProjectsFiltersList?.data?.community ? agencyCompanyProjectsFiltersList : []
                 }
                 selectedOption={selectedOption}
                 setSelectedOption={setSelectedOption}
@@ -574,8 +563,8 @@ export default function CreativeCode() {
             loader={creativeCodeList?.loading}
             data={data}
             allData={creativeCodeList?.data}
-            paginationData={paginationData}
-            setPaginationData={setPaginationData}
+            tableFilters={tableFilters}
+            setTableFilters={setTableFilters}
           />
         </div>
       </div>

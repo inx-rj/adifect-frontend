@@ -1,0 +1,27 @@
+.App-profile-image {
+  @apply absolute z-[9999] inset-0 bg-white;
+}
+.crop-container-profile-image {
+  @apply relative w-full h-[85%] bg-slate-400;
+}
+.controls-profile-image {
+  @apply flex items-center px-5 py-0 bottom-5;
+}
+.slider {
+  @apply px-0 py-[22px];
+}
+.zoom-range-profile-image {
+  @apply h-0.5 w-full border-y-2 border-y-[#2373fe] border-solid bg-theme;
+}
+.zoom-range-profile-image::-moz-range-thumb {
+  @apply border w-3 h-3 transition-shadow  ease-in-out delay-[0ms] rounded-[50%] border-solid border-theme bg-theme;
+}
+.zoom-range-profile-image::-webkit-slider-thumb {
+  @apply border w-3 h-3 transition-shadow  ease-in-out delay-[0ms] rounded-[50%] border-solid border-theme bg-theme;
+}
+.controls-profile-image:hover input[type="range"]::-webkit-slider-thumb {
+  @apply shadow-[0px_0px_0px_8px_rgba(63,81,181,0.16)] rounded-[50%];
+}
+.controls-profile-image:hover input[type="range"]::-moz-range-thumb {
+  @apply shadow-[0px_0px_0px_8px_rgba(63,81,181,0.16)];
+}

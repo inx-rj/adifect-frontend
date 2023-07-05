@@ -3,36 +3,41 @@ import axiosPrivate from "../../api/axios";
 import { API_URL } from "../../helper/env";
 
 class HomePageApiClient {
-  fetchAdminDashboardInProgressJobsList = (filters: any) =>
-    axiosPrivate.get(
-      `${API_URL.HOMEPAGE.JOBS_LIST}` + setQueryParams(filters)
-    );
+  fetchAdminDashboardInProgressJobsList = (
+    endpoint: string,
+    filters: any,
+    orderingFilter?: any
+  ) => {
+    if (orderingFilter === "" || orderingFilter === undefined) {
+      return axiosPrivate.get(`${endpoint}` + setQueryParams(filters));
+    } else {
+      return axiosPrivate.get(
+        `${endpoint}` + setQueryParams(filters) + `&${orderingFilter}`
+      );
+    }
+  };
 
   fetchSuperAdminJobListInReviewList = (filters: any) =>
-    axiosPrivate.get(
-      `${API_URL.HOMEPAGE.JOBS_LIST}` + setQueryParams(filters)
-    );
+    axiosPrivate.get(`${API_URL.JOBS.JOBS_LIST}` + setQueryParams(filters));
 
   fetchMembersJobListList = () =>
-    axiosPrivate.get(`${API_URL.HOMEPAGE.MEMBERS_LATEST_JOBS}`);
+    axiosPrivate.get(`${API_URL.JOBS.MEMBERS_LATEST_JOBS}`);
 
-  fetchMembersLatestJobListList = () =>
-    axiosPrivate.get(`${API_URL.HOMEPAGE.LATEST_JOBS}`);
+  fetchMembersLatestJobListList = (endpoint) => axiosPrivate.get(`${endpoint}`);
 
   fetchMembersApprovalJobsList = (currentPage) =>
     axiosPrivate.get(
-      `${API_URL.HOMEPAGE.MEMBERS_APPROVAL_JOBS_LIST}` +
-        setQueryParams(currentPage)
+      `${API_URL.JOBS.MEMBERS_APPROVAL_JOBS_LIST}` + setQueryParams(currentPage)
     );
 
-  fetchDuplicateMemberAdminJobListInReview = (currentPage) =>
+  fetchDuplicateMemberAdminJobListInReview = (data) =>
     axiosPrivate.get(
-      `${API_URL.HOMEPAGE.MEMBERS_JOBS_LIST}` + setQueryParams(currentPage)
+      `${API_URL.JOBS.MEMBERS_JOBS_LIST}?company=${data?.id}&job_applied__status=${data?.status}&ordering=${data?.ordering}&page=${data?.page}`
     );
 
   fetchCreatorJobsList = (filters: any) =>
     axiosPrivate.get(
-      `${API_URL.HOMEPAGE.CREATOR_JOBS_LIST}` + setQueryParams(filters)
+      `${API_URL.JOBS.CREATOR_JOBS_LIST}` + setQueryParams(filters)
     );
 }
 

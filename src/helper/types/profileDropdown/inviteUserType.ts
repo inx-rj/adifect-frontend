@@ -21,4 +21,8 @@ export interface InviteUserInitialType extends LoadingType {
     loading: boolean;
     data: TableRowsType[];
   };
+  workflowInviteUserList: {
+    loading: boolean;
+    data: TableRowsType[];
+  };
 }

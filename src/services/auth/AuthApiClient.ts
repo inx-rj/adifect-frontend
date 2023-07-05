@@ -47,7 +47,7 @@ class AuthApiClient {
 
   // Edit and update profile
   updateUserProfileData = (userUpdateData) =>
-    axiosPrivate.post(
+    axiosPrivate.put(
       `${API_URL.AUTH.EDIT_PROFILE}`, userUpdateData, {
       headers: {
         "Content-Type": "multipart/form-data",

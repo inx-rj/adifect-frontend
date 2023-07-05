@@ -13,7 +13,7 @@ const ReactDateRangePicker = ({
   handleChange,
   asSingle = false,
   containerClassName,
-  inputClassName = "dr-picker-input"
+  inputClassName = "dr-picker-input border"
 }: ReactDateRangePickerPropsType) => {
   const [value, setValue] = useState<StartEndDataType | null>({
     startDate: null,

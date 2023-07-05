@@ -3,7 +3,11 @@
 }
 
 .nav-link {
-  @apply flex items-center justify-start rounded p-2 hover:bg-theme/[0.05] hover:text-theme mb-1;
+  @apply flex items-center justify-start rounded px-5 py-4 hover:bg-theme/[0.05] hover:text-theme mb-1;
+}
+.nav-link > span,
+.sub-menu-wrapper span {
+  @apply truncate font-semibold;
 }
 
 /* Active Menu Link */
@@ -14,13 +18,17 @@
   .MuiAccordion-root
   .MuiButtonBase-root
   .MuiAccordionSummary-content {
-  @apply my-2;
+  @apply my-0;
 }
 .sidebar li.active > .nav-link,
-.sub-menu-wrapper.active .MuiAccordion-root .MuiButtonBase-root,
-.sub-menu-wrapper .MuiAccordion-root .MuiButtonBase-root.Mui-expanded {
+.sub-menu-wrapper.active .MuiAccordion-root .MuiButtonBase-root {
   @apply bg-theme/10 text-theme;
 }
+
+.sub-menu-wrapper .MuiAccordion-root .MuiButtonBase-root.Mui-expanded {
+  @apply text-theme;
+}
+
 /* Active Sub Menu Link */
 .sidebar li.submenu-active > .sub-menu,
 .sub-menu-wrapper.active
@@ -40,13 +48,13 @@
 }
 
 .sub-menu-wrapper .sub-menu {
-  @apply my-1 block text-sm hover:text-theme text-[#71757B];
+  @apply my-1 block text-base font-medium hover:text-theme text-[#71757B];
 }
 .sub-menu-wrapper .MuiAccordion-root {
   @apply mx-0 shadow-none;
 }
 .sub-menu-wrapper .MuiAccordion-root .MuiButtonBase-root {
-  @apply min-h-[auto] rounded px-2   hover:bg-theme/10 hover:text-theme;
+  @apply min-h-[auto] rounded px-5 py-4 hover:bg-theme/10 hover:text-theme;
 }
 
 /* Submenu for mini sidebar  */

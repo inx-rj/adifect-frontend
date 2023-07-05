@@ -1,24 +1,21 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import { useSingleEffect, useUpdateEffect } from "react-haiku";
+import { useState } from 'react';
+import { useSingleEffect, useUpdateEffect } from 'react-haiku';
 
-import MuiCustomTable from "components/common/muiTable/MuiTable";
-import MuiPopup from "components/common/muiPopup/MuiPopup";
-import LoadingSpinner from "components/common/loadingSpinner/Loader";
+import MuiCustomTable from 'components/common/muiTable/MuiTable';
+import MuiPopup from 'components/common/muiPopup/MuiPopup';
+import LoadingSpinner from 'components/common/loadingSpinner/Loader';
 
-import { Button, Typography } from "@mui/material";
-import HomeIcon from "@mui/icons-material/Home";
+import { Button, Typography } from '@mui/material';
 
-import { TableRowColType } from "helper/types/muiTable/muiTable";
-import { Images } from "helper/images";
+import { TableRowColType } from 'helper/types/muiTable/muiTable';
+import { Images } from 'helper/images';
 
-import { useAppDispatch, useAppSelector } from "redux/store";
-import { COMPANY_PROJECTS_TAGS } from "redux/reducers/companies/companiesTags.slice";
+import { useAppDispatch, useAppSelector } from 'redux/store';
+import { COMPANY_PROJECTS_TAGS } from 'redux/reducers/companies/companiesTags.slice';
 import {
   GET_COMPANY_PROJECTS_TAGS_LIST,
-  POST_COMPANY_PROJECTS_TAG,
-} from "redux/actions/companies/companiesTags.actions";
+  POST_COMPANY_PROJECTS_TAG
+} from 'redux/actions/companies/companiesTags.actions';
 
 const AgencyCompanyProjectsTags = () => {
   const dispatch = useAppDispatch();
@@ -30,37 +27,37 @@ const AgencyCompanyProjectsTags = () => {
   const [showTagModal, setShowTagModal] = useState(false);
   const [currentCommunity, setCurrentCommunity] = useState();
   const [formData, setFormData] = useState({
-    tagName: "",
-    tagDescription: "",
+    tagName: '',
+    tagDescription: ''
   });
 
   const [errors, setErrors] = useState({
     tagName: null,
-    tagDescription: null,
+    tagDescription: null
   });
-  const [paginationData, setPaginationData] = useState({
+  const [tableFilters, setTableFilters] = useState({
     page: 1,
-    rowsPerPage: 10,
+    rowsPerPage: 10
   });
 
   //fetch inital tags data list
   useSingleEffect(() => {
-    dispatch(GET_COMPANY_PROJECTS_TAGS_LIST(paginationData));
+    dispatch(GET_COMPANY_PROJECTS_TAGS_LIST(tableFilters));
   });
 
   //fetch company projects tags list when pagination change
   useUpdateEffect(() => {
-    dispatch(GET_COMPANY_PROJECTS_TAGS_LIST(paginationData));
-  }, [paginationData]);
+    dispatch(GET_COMPANY_PROJECTS_TAGS_LIST(tableFilters));
+  }, [tableFilters]);
 
   //open tag modal
-  const openTagModal = (communityId) => {
+  const openTagModal = communityId => {
     setCurrentCommunity(communityId);
     setShowTagModal(true);
   };
 
   //handle form data
-  const handleInputChange = (e) => {
+  const handleInputChange = e => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
     setErrors({ ...errors, [name]: null });
@@ -69,11 +66,11 @@ const AgencyCompanyProjectsTags = () => {
   //validate inputs
   const validateSubmit = () => {
     const tempErrors = {
-      tagName: !formData.tagName && "Please enter Tag Name",
-      tagDescription: !formData.tagDescription && "Please enter Description",
+      tagName: !formData.tagName && 'Please enter Tag Name',
+      tagDescription: !formData.tagDescription && 'Please enter Description'
     };
     setErrors(tempErrors);
-    if (Object.values(tempErrors).filter((value) => value)?.length) {
+    if (Object.values(tempErrors).filter(value => value)?.length) {
       return;
     }
     handleFolderSubmit();
@@ -84,11 +81,11 @@ const AgencyCompanyProjectsTags = () => {
     const tagData = {
       community: currentCommunity,
       title: formData.tagName,
-      description: formData.tagDescription,
+      description: formData.tagDescription
     };
     dispatch(POST_COMPANY_PROJECTS_TAG(tagData));
     setShowTagModal(false);
-    setFormData({ tagName: "", tagDescription: "" });
+    setFormData({ tagName: '', tagDescription: '' });
   };
 
   const data: TableRowColType = {
@@ -101,16 +98,16 @@ const AgencyCompanyProjectsTags = () => {
             <img className="ml-2" src={Images.SortArrows} alt="Title" />
           </label>
         ),
-        field: "community",
-        sort: "asc",
-        width: 160,
+        field: 'community',
+        sort: 'asc',
+        width: 160
       },
       {
         id: 2,
-        label: "Tags",
-        field: "tags",
-        width: 425,
-      },
+        label: 'Tags',
+        field: 'tags',
+        width: 425
+      }
     ],
     rows:
       companyProjectsTagsList?.data?.results?.length > 0
@@ -119,13 +116,13 @@ const AgencyCompanyProjectsTags = () => {
               community: (
                 <Typography
                   sx={{
-                    "&.MuiTypography-root": {
-                      display: "inline-block",
-                      fontSize: "14px",
+                    '&.MuiTypography-root': {
+                      display: 'inline-block',
+                      fontSize: '14px',
                       fontWeight: 400,
                       p: 0,
-                      fontFamily: '"Figtree", sans-serif',
-                    },
+                      fontFamily: '"Figtree", sans-serif'
+                    }
                   }}
                 >
                   {data.name}
@@ -135,10 +132,10 @@ const AgencyCompanyProjectsTags = () => {
                 <Typography
                   component="div"
                   sx={{
-                    maxWidth: "450px",
+                    maxWidth: '450px'
                   }}
                 >
-                  {data?.tags?.map((item) => (
+                  {data?.tags?.map(item => (
                     <Button
                       key={item?.id}
                       variant="contained"
@@ -146,16 +143,16 @@ const AgencyCompanyProjectsTags = () => {
                       disableFocusRipple
                       disableElevation
                       sx={{
-                        padding: "7px 5px",
-                        background: "rgba(36,114,252,0.08)",
-                        color: "#2472FC",
-                        "&:hover": {
-                          background: "rgba(36,114,252,0.08)",
+                        padding: '7px 5px',
+                        background: 'rgba(36,114,252,0.08)',
+                        color: '#2472FC',
+                        '&:hover': {
+                          background: 'rgba(36,114,252,0.08)'
                         },
-                        fontSize: "12px",
-                        textTransform: "none",
-                        marginTop: data?.tags?.length > 5 ? "10px" : "",
-                        marginRight: data?.tags?.length > 1 ? "10px" : "",
+                        fontSize: '12px',
+                        textTransform: 'none',
+                        marginTop: data?.tags?.length > 5 ? '10px' : '',
+                        marginRight: data?.tags?.length > 1 ? '10px' : ''
                       }}
                     >
                       {item?.title}
@@ -164,28 +161,28 @@ const AgencyCompanyProjectsTags = () => {
                   <Button
                     variant="contained"
                     sx={{
-                      width: "35px",
-                      height: "35px",
-                      minWidth: "35px",
+                      width: '35px',
+                      height: '35px',
+                      minWidth: '35px',
                       padding: 0,
-                      background: "#2472FC",
-                      fontSize: "16px",
-                      boxShadow: "none",
-                      marginTop: data?.tags?.length > 4 ? "10px" : "",
-                      marginLeft: data?.tags?.length > 1 ? "" : "10px",
-                      "&:hover": {
-                        boxShadow: "none",
-                      },
+                      background: '#2472FC',
+                      fontSize: '16px',
+                      boxShadow: 'none',
+                      marginTop: data?.tags?.length > 4 ? '10px' : '',
+                      marginLeft: data?.tags?.length > 1 ? '' : '10px',
+                      '&:hover': {
+                        boxShadow: 'none'
+                      }
                     }}
                     onClick={() => openTagModal(data?.id)}
                   >
                     +
                   </Button>
                 </Typography>
-              ),
+              )
             };
           })
-        : [],
+        : []
   };
 
   return (
@@ -201,19 +198,19 @@ const AgencyCompanyProjectsTags = () => {
       <div className="page-card">
         {companyProjectsTagsList?.loading ? (
           <div className="projectsLoaderCreatorPage">
-            <LoadingSpinner positionClass="left-[calc(40%_-_50px)] top-[calc(40%_-_50px)" />
+            <LoadingSpinner />
           </div>
         ) : (
           <MuiCustomTable
             loader={companyProjectsTagsList?.loading}
             data={data}
             allData={companyProjectsTagsList?.data}
-            paginationData={paginationData}
-            setPaginationData={setPaginationData}
+            tableFilters={tableFilters}
+            setTableFilters={setTableFilters}
           />
         )}
 
-        {companyProjectsTagsList?.data?.results?.map((data) => (
+        {companyProjectsTagsList?.data?.results?.map(data => (
           <>
             {currentCommunity === data?.id && (
               <MuiPopup
@@ -221,21 +218,11 @@ const AgencyCompanyProjectsTags = () => {
                 textAlign="left"
                 dialogContent={
                   <>
-                    <div
-                      className={
-                        errors.tagName
-                          ? "input-fields-wrapper error-style"
-                          : "input-fields-wrapper"
-                      }
-                    >
+                    <div className={errors.tagName ? 'input-fields-wrapper error-style' : 'input-fields-wrapper'}>
                       <h4>Add New Tag</h4>
                       <div className="styled-select">
                         <input
-                          className={
-                            errors.tagName
-                              ? "input-style input-err-style"
-                              : "input-style"
-                          }
+                          className={errors.tagName ? 'input-style input-err-style' : 'input-style'}
                           type="text"
                           placeholder="Enter tag name"
                           name="tagName"
@@ -243,34 +230,24 @@ const AgencyCompanyProjectsTags = () => {
                           onChange={handleInputChange}
                           required
                         />
-                        <span className="err-tag">{errors.tagName ?? ""}</span>
+                        <span className="err-tag">{errors.tagName ?? ''}</span>
                       </div>
                     </div>
                     <div
-                      className={
-                        errors.tagDescription
-                          ? "input-fields-wrapper error-style"
-                          : "input-fields-wrapper"
-                      }
+                      className={errors.tagDescription ? 'input-fields-wrapper error-style' : 'input-fields-wrapper'}
                     >
                       <h4>Description</h4>
                       <div className="styled-select">
                         <textarea
                           name="tagDescription"
-                          className={
-                            errors.tagDescription
-                              ? "input-style input-err-style"
-                              : "input-style"
-                          }
+                          className={errors.tagDescription ? 'input-style input-err-style' : 'input-style'}
                           placeholder="Enter description"
                           maxLength={2000}
                           value={formData.tagDescription}
                           onChange={handleInputChange}
                           required
                         />
-                        <span className="err-tag">
-                          {errors.tagDescription ?? ""}
-                        </span>
+                        <span className="err-tag">{errors.tagDescription ?? ''}</span>
                       </div>
                     </div>
                   </>

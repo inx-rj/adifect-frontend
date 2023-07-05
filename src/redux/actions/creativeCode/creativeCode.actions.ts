@@ -1,5 +1,5 @@
 import { AppDispatch } from "redux/store";
-import { initialTableConfigInterface } from "helper/types/common/table";
+import { initialTableConfigInterface } from "helper/types/common/tableType";
 import swal from "sweetalert";
 import { Images } from "helper/images";
 import {
@@ -13,15 +13,15 @@ import CreativeCodeApiClient from "services/companies/CreativeCodeApiClient";
 // Get Creative Code List
 const GET_CREATIVE_CODE_LIST =
   (tableConfig: initialTableConfigInterface) =>
-  async (dispatch: AppDispatch) => {
-    dispatch(SET_CREATIVE_CODE_DATA_LOADING(true));
-    await CreativeCodeApiClient.fetchCreativeCodeList(tableConfig).then(
-      (response) => {
-        dispatch(SET_CREATIVE_CODE_DATA(response?.data?.data));
-        dispatch(SET_CREATIVE_CODE_DATA_LOADING(false));
-      }
-    );
-  };
+    async (dispatch: AppDispatch) => {
+      dispatch(SET_CREATIVE_CODE_DATA_LOADING(true));
+      await CreativeCodeApiClient.fetchCreativeCodeList(tableConfig).then(
+        (response) => {
+          dispatch(SET_CREATIVE_CODE_DATA(response?.data?.data));
+          dispatch(SET_CREATIVE_CODE_DATA_LOADING(false));
+        }
+      );
+    };
 
 // Create Creative Code List
 const CREATE_CREATIVE_CODE_LIST =
@@ -33,10 +33,10 @@ const CREATE_CREATIVE_CODE_LIST =
 // Update Creative Code List
 const UPDATE_CREATIVE_CODE_LIST =
   (id: number, formData: { [key: string]: string }) =>
-  async (dispatch: AppDispatch) => {
-    await dispatch(SET_CREATIVE_CODE_LOADING(true));
-    return await CreativeCodeApiClient.updateCreativeCodeData(id, formData);
-  };
+    async (dispatch: AppDispatch) => {
+      await dispatch(SET_CREATIVE_CODE_LOADING(true));
+      return await CreativeCodeApiClient.updateCreativeCodeData(id, formData);
+    };
 
 // Delete Creative Code List
 const DELETE_CREATIVE_CODE_LIST =
