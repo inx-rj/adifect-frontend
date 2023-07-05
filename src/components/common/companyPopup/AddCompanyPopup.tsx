@@ -2,13 +2,11 @@ import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "redux/store";
 import { POST_SINGLE_COMPANY } from "redux/actions/companyTab/companyTab.actions";
 import { GET_USER_PROFILE_DATA } from "redux/reducers/auth/auth.slice";
-import { Roles } from "helper/config";
+import { ROLES } from "helper/config";
 import { API_URL } from "helper/env";
 import { singleCompanyPayloadData } from "helper/types/companyTab/companiesType";
 import MuiPopup from "components/common/muiPopup/MuiPopup";
 import { Checkbox, FormControlLabel } from "@mui/material";
-
-const userData = () => JSON.parse(localStorage.getItem("userData") ?? "");
 
 const AddCompanyPopup = ({ setOpenModal, openModal }) => {
   const dispatch = useAppDispatch();
@@ -55,11 +53,11 @@ const AddCompanyPopup = ({ setOpenModal, openModal }) => {
       name: formData?.company,
       description: formData?.description,
       is_active: formData?.isActive,
-      agency: userData()?.user.user_id,
+      agency: userProfile?.data?.id,
     };
 
     // Handle Add new company action
-    userProfile?.data?.role === Roles.ADMIN
+    userProfile?.data?.role === ROLES.ADMIN
       ? dispatch(POST_SINGLE_COMPANY(payload, `${API_URL.COMPANY.ADMIN}`))
       : dispatch(POST_SINGLE_COMPANY(payload));
 

@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 import {
   CLEAR_IN_REVIEW_JOBS,
   IN_REVIEW_JOBS_DATA,
-} from "../../../redux/reducers/homePage/inReviewJobsList.slice";
+} from "../../../redux/reducers/jobs/inReviewJobsList.slice";
 import { useAppDispatch, useAppSelector } from "./../../../redux/store";
 import { GET_ADMIN_DASHBOARD_IN_REVIEW_JOBLIST } from "redux/actions/jobs/jobs.actions";
 
@@ -133,7 +133,7 @@ const AdminDashboardInReview = () => {
                         }
                       />
                     </div>
-                    <h5 className="h-full max-h-[80px] overflow-y-auto">
+                    <h5 className="h-full max-h-[80px] overflow-y-auto custom-scrollbar">
                       {item?.description?.length > 300
                         ? `${item?.description.slice(0, 300)}...`
                         : item.description}{" "}

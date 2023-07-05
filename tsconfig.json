@@ -7,6 +7,10 @@
       "DOM.Iterable",
       "ESNext"
     ],
+    "types": [
+      "facebook-js-sdk",
+      "node"
+    ],
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
     "allowUmdGlobalAccess": false,
@@ -16,6 +20,7 @@
     "declaration": true,
     "declarationMap": true,
     "diagnostics": false,
+    "downlevelIteration": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "isolatedModules": true,
@@ -38,7 +43,7 @@
     "strictFunctionTypes": true,
     "strictNullChecks": false,
     "strictPropertyInitialization": false,
-    "strict": true
+    "strict": true,
   },
   "files": [
     "globals.d.ts"

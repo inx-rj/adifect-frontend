@@ -7,6 +7,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
+import { OpenInNew } from "@mui/icons-material";
 export interface propsType {
   anchorEl: null | HTMLElement;
   selectedItem: any;
@@ -15,6 +16,7 @@ export interface propsType {
   showEdit?: boolean;
   showInActive?: boolean;
   showSetting?: boolean;
+  showOpen?: boolean;
   isEditMode?: boolean;
   item?: {
     id: number;
@@ -28,6 +30,7 @@ export interface propsType {
   handleInactive?: () => void;
   handleActive?: () => void;
   handleSetting?: () => void;
+  handleOpen?: () => void;
   handleChannelPopoverClose?: () => void | boolean;
 }
 
@@ -42,11 +45,13 @@ const ActionMenuButton = ({
   handleInactive,
   handleActive,
   handleSetting,
+  handleOpen,
   showSetting = false,
   showDelete = false,
   showView = false,
   showEdit = false,
   showInActive = false,
+  showOpen = false,
   isEditMode = false,
   item,
   handleChannelPopoverClose,
@@ -128,7 +133,7 @@ const ActionMenuButton = ({
                 <AddCircleOutlineOutlinedIcon fontSize="small" />
               )}
             </ListItemIcon>
-            {item?.isActive ? "Inactive" : "Active"}
+            {item?.isActive ? "Active" : "Inactive"}
           </MenuItem>
         )}
         {showDelete && (
@@ -145,6 +150,14 @@ const ActionMenuButton = ({
               <SettingsOutlinedIcon fontSize="small" />
             </ListItemIcon>
             Setting
+          </MenuItem>
+        )}
+        {showOpen && (
+          <MenuItem sx={menuItemStyle} onClick={handleOpen}>
+            <ListItemIcon>
+              <OpenInNew fontSize="small" />
+            </ListItemIcon>
+            Open
           </MenuItem>
         )}
       </Menu>

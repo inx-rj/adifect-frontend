@@ -1,5 +1,5 @@
 import { AppDispatch } from "redux/store";
-import { initialTableConfigInterface } from "helper/types/common/table";
+import { initialTableConfigInterface } from "helper/types/common/tableType";
 import CopyCodeApiClient from "services/companies/CopyCodeApiClient";
 import {
   SET_COPY_CODE_DATA,
@@ -13,13 +13,13 @@ import { Images } from "helper/images";
 // Get Copy Code List
 const GET_COPY_CODE_LIST =
   (tableConfig: initialTableConfigInterface) =>
-  async (dispatch: AppDispatch) => {
-    dispatch(SET_COPY_CODE_DATA_LOADING(true));
-    await CopyCodeApiClient.fetchCopyCodeList(tableConfig).then((response) => {
-      dispatch(SET_COPY_CODE_DATA(response?.data?.data));
-      dispatch(SET_COPY_CODE_DATA_LOADING(false));
-    });
-  };
+    async (dispatch: AppDispatch) => {
+      dispatch(SET_COPY_CODE_DATA_LOADING(true));
+      await CopyCodeApiClient.fetchCopyCodeList(tableConfig).then((response) => {
+        dispatch(SET_COPY_CODE_DATA(response?.data?.data));
+        dispatch(SET_COPY_CODE_DATA_LOADING(false));
+      });
+    };
 
 // Create Copy Code List
 const CREATE_COPY_CODE_LIST =
@@ -31,10 +31,10 @@ const CREATE_COPY_CODE_LIST =
 // Update Copy Code List
 const UPDATE_COPY_CODE_LIST =
   (id: number, formData: { [key: string]: string }) =>
-  async (dispatch: AppDispatch) => {
-    await dispatch(SET_COPY_CODE_LOADING(true));
-    return await CopyCodeApiClient.updateCopyCodeData(id, formData);
-  };
+    async (dispatch: AppDispatch) => {
+      await dispatch(SET_COPY_CODE_LOADING(true));
+      return await CopyCodeApiClient.updateCopyCodeData(id, formData);
+    };
 
 // Delete Copy Code List
 const DELETE_COPY_CODE_LIST = (id: number) => async (dispatch: AppDispatch) => {

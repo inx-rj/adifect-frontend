@@ -1,110 +1,107 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState } from "react";
-import { Box } from "@mui/material";
-import { useAppDispatch, useAppSelector } from "redux/store";
-import { COMPANY_PROJECTS_FILTERS_DATA } from "redux/reducers/companies/companies.slice";
-import { GET_COMPANY_PROJECTS_FILTERS_LIST } from "redux/actions/companies/companies.actions";
+import React, { useState } from 'react';
+import { Box } from '@mui/material';
+import { useAppDispatch, useAppSelector } from 'redux/store';
+import { COMPANY_PROJECTS_FILTERS_DATA } from 'redux/reducers/companies/companies.slice';
+import { GET_COMPANY_PROJECTS_FILTERS_LIST } from 'redux/actions/companies/companies.actions';
 import {
   CREATE_PROGRAMS_LIST,
   DELETE_PROGRAMS_LIST,
   GET_PROGRAMS_LIST,
-  UPDATE_PROGRAMS_LIST,
-} from "redux/actions/programs/programs.actions";
-import { useSingleEffect, useUpdateEffect } from "react-haiku";
-import swal from "sweetalert";
-import ActionMenuButton from "components/common/actionMenuButton/ActionMenuButton";
-import { isEmpty } from "helper/utility/customFunctions";
+  UPDATE_PROGRAMS_LIST
+} from 'redux/actions/programs/programs.actions';
+import { useSingleEffect, useUpdateEffect } from 'react-haiku';
+import swal from 'sweetalert';
+import ActionMenuButton from 'components/common/actionMenuButton/ActionMenuButton';
+import { isEmpty } from 'helper/utility/customFunctions';
 import {
   PROGRAMS_DATA,
   PROGRAMS_RESPONSE,
   SET_CREATE_PROGRAMS,
   SET_PROGRAMS_EDIT_DATA,
-  SET_PROGRAMS_LOADING,
-} from "redux/reducers/companies/programs.slice";
-import { Images } from "helper/images";
-import MuiPopup from "components/common/muiPopup/MuiPopup";
-import CustomAddProgramModal from "./customAddModal/CustomAddProgramModal";
-import MuiTable from "components/common/muiTable/MuiTable";
-import { Add } from "@mui/icons-material";
+  SET_PROGRAMS_LOADING
+} from 'redux/reducers/companies/programs.slice';
+import { Images } from 'helper/images';
+import MuiPopup from 'components/common/muiPopup/MuiPopup';
+import CustomAddProgramModal from './customAddModal/CustomAddProgramModal';
+import MuiTable from 'components/common/muiTable/MuiTable';
+import { Add } from '@mui/icons-material';
 
 export default function Programs() {
   const dispatch = useAppDispatch();
 
   // Redux states
-  const agencyCompanyProjectsFiltersList = useAppSelector(
-    COMPANY_PROJECTS_FILTERS_DATA
-  );
+  const agencyCompanyProjectsFiltersList = useAppSelector(COMPANY_PROJECTS_FILTERS_DATA);
   const programsList = useAppSelector(PROGRAMS_DATA);
   const success = useAppSelector(PROGRAMS_RESPONSE);
   // React states
-  const [paginationData, setPaginationData] = useState({
+  const [tableFilters, setTableFilters] = useState({
     page: 1,
-    rowsPerPage: 10,
+    rowsPerPage: 10
   }); // pagination params state
-  const [filterData, setFilterData] = useState({ search: "" }); // filter params state
+  const [filterData, setFilterData] = useState({ search: '' }); // filter params state
   const [showTagModal, setShowTagModal] = useState(false); // Add Programs modal state
   const [formData, setFormData] = useState({
-    title: "",
-    community: { label: "", value: "" },
+    title: '',
+    community: { label: '', value: '' }
   }); // Add Program modal fields state
   const [errors, setErrors] = useState({
     title: null,
-    community: null,
+    community: null
   }); // Add Program modal fields error state
   const [selectedOption, setSelectedOption] = useState({
-    id: "",
-    name: "",
+    id: '',
+    name: ''
   }); // Community dropdown state for 'Add Program' modal
-  const [searchText, setSearchText] = useState(""); // Community dropdown search state
+  const [searchText, setSearchText] = useState(''); // Community dropdown search state
 
   // Action Menu button states
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [isEditMode, setIsEditMode] = useState(false);
   const [selectedItem, setSelectedItem] = useState({
     currentTooltip: null,
-    currentId: null,
+    currentId: null
   });
 
   // Community, Story, Tag fetch list API call
   useSingleEffect(() => {
     dispatch(GET_COMPANY_PROJECTS_FILTERS_LIST());
-    dispatch(GET_PROGRAMS_LIST({ ...paginationData, ...filterData }));
+    dispatch(GET_PROGRAMS_LIST({ ...tableFilters, ...filterData }));
   });
 
   //set the edit mode
-  const handleEdit = (item) => {
+  const handleEdit = item => {
     setShowTagModal(true);
     setIsEditMode(true);
     setErrors({
       title: null,
-      community: null,
+      community: null
     });
     setSelectedItem({ ...selectedItem, currentId: item?.id });
     setSelectedOption({
       name: item?.community?.name,
-      id: item?.community?.id,
+      id: item?.community?.id
     });
 
     setFormData({
       ...formData,
-      title: item?.title,
+      title: item?.title
     });
   };
 
   //handle delete action
-  const handleDelete = (item) => {
+  const handleDelete = item => {
     swal({
-      title: "Warning",
+      title: 'Warning',
       text: `Are you sure you want to remove this ${item?.title}?`,
-      className: "errorAlert",
-      icon: "/img/logonew-red.svg",
+      className: 'errorAlert',
+      icon: Images.ErrorLogo,
       buttons: {
         Cancel: true,
-        OK: true,
+        OK: true
       },
-      dangerMode: true,
-    }).then((willDelete) => {
-      if (willDelete !== "Cancel") {
+      dangerMode: true
+    }).then(willDelete => {
+      if (willDelete !== 'Cancel') {
         dispatch(DELETE_PROGRAMS_LIST(item?.id)).then((r: void) => r);
       }
     });
@@ -114,7 +111,7 @@ export default function Programs() {
 
   // To handle filter change
   const handleFilterChange = ({ target: { name, value } }) => {
-    setFilterData((prevState) => {
+    setFilterData(prevState => {
       return { ...prevState, [name]: value };
     });
   };
@@ -130,9 +127,9 @@ export default function Programs() {
             <img className="ml-1" src={Images.SortArrows} alt="Title" />
           </label>
         ),
-        field: "programTitle",
-        sort: "asc",
-        width: 300,
+        field: 'programTitle',
+        sort: 'asc',
+        width: 300
       },
       {
         id: 2,
@@ -142,26 +139,26 @@ export default function Programs() {
             <img className="ml-1" src={Images.SortArrows} alt="Title" />
           </label>
         ),
-        field: "community",
-        sort: "asc",
-        width: 300,
+        field: 'community',
+        sort: 'asc',
+        width: 300
       },
       {
         id: 4,
-        label: "Action",
-        field: "action",
-        sort: "asc",
-        width: 100,
-      },
+        label: 'Action',
+        field: 'action',
+        sort: 'asc',
+        width: 100
+      }
     ],
 
     rows:
       programsList?.data?.results?.length > 0
         ? programsList?.data?.results?.map((item, index) => {
             return {
-              tite: item.title ?? "",
+              tite: item.title ?? '',
 
-              community: item.community.name ?? "",
+              community: item.community.name ?? '',
 
               action: (
                 <div>
@@ -179,43 +176,41 @@ export default function Programs() {
                     item={{ id: item?.id, isActive: item?.is_active }}
                   />
                 </div>
-              ),
+              )
             };
           })
-        : [],
+        : []
   };
 
   // Programs fetch list API call
   useUpdateEffect(() => {
-    dispatch(GET_PROGRAMS_LIST({ ...paginationData, ...filterData }));
-  }, [paginationData, filterData]);
+    dispatch(GET_PROGRAMS_LIST({ ...tableFilters, ...filterData }));
+  }, [tableFilters, filterData]);
 
   // Reset modal fields and errors state
   const resetModalData = () => {
     setErrors({
       title: null,
-      community: null,
+      community: null
     });
     setFormData({
       title: undefined,
-      community: undefined,
+      community: undefined
     });
     setShowTagModal(!showTagModal);
     setSelectedOption(null);
   };
 
   //validate inputs
-  const validateSubmit = (e) => {
+  const validateSubmit = e => {
     e.preventDefault();
     const tempErrors = {
-      title: isEmpty(formData?.title) ? "Program title is required" : "",
-      community: isEmpty(selectedOption?.["name"])
-        ? "Community is required"
-        : "",
+      title: isEmpty(formData?.title) ? 'Program title is required' : '',
+      community: isEmpty(selectedOption?.['name']) ? 'Community is required' : ''
     };
     setErrors(tempErrors);
 
-    if (Object.values(tempErrors).filter((value) => value).length) {
+    if (Object.values(tempErrors).filter(value => value).length) {
       return;
     }
     submitHandler();
@@ -226,71 +221,71 @@ export default function Programs() {
       // Payload
       const programPayload = {
         title: formData?.title,
-        community: selectedOption?.["id"],
+        community: selectedOption?.['id']
       };
 
       // API call
       if (isEditMode) {
         dispatch(UPDATE_PROGRAMS_LIST(selectedItem?.currentId, programPayload))
-          .then((res) => {
+          .then(res => {
             swal({
-              title: "Successfully Complete",
-              text: "Successfully Saved!",
-              className: "successAlert-login",
+              title: 'Successfully Complete',
+              text: 'Successfully Saved!',
+              className: 'successAlert-login',
               icon: Images.Logo,
               buttons: {
-                OK: false,
+                OK: false
               },
-              timer: 1500,
+              timer: 1500
             });
             dispatch(SET_PROGRAMS_EDIT_DATA(res?.data?.message));
             dispatch(SET_PROGRAMS_LOADING(false));
             resetModalData();
           })
-          .catch((err) => {
+          .catch(err => {
             swal({
-              title: "Error",
+              title: 'Error',
               text: err.response.data.message?.length
                 ? err.response.data.message
                 : JSON.stringify(err.response.data.message),
-              className: "errorAlert",
+              className: 'errorAlert',
               icon: Images.ErrorLogo,
               buttons: {
-                OK: false,
+                OK: false
               },
-              timer: 5000,
+              timer: 5000
             });
             dispatch(SET_PROGRAMS_LOADING(false));
           });
       } else {
         dispatch(CREATE_PROGRAMS_LIST(programPayload))
-          .then((res) => {
+          .then(res => {
             swal({
-              title: "Successfully Complete",
-              text: "Successfully Saved!",
-              className: "successAlert-login",
+              title: 'Successfully Complete',
+              text: 'Successfully Saved!',
+              className: 'successAlert-login',
               icon: Images.Logo,
               buttons: {
-                OK: false,
+                OK: false
               },
-              timer: 1500,
+              timer: 1500
             });
             dispatch(SET_CREATE_PROGRAMS(res?.data?.message));
             dispatch(SET_PROGRAMS_LOADING(false));
             resetModalData();
           })
-          .catch((err) => {
+          .catch(err => {
             swal({
-              title: "Error",
+              title: 'Error',
               text: err.response.data.message?.length
                 ? err.response.data.message
                 : JSON.stringify(err.response.data.message),
-              className: "errorAlert",
+              className: 'errorAlert',
               icon: Images.ErrorLogo,
               buttons: {
-                OK: false,
+                OK: false
               },
-              timer: 5000,
+              timer: 5000
             });
             dispatch(SET_PROGRAMS_LOADING(false));
           });
@@ -300,10 +295,10 @@ export default function Programs() {
 
   // Clears the error when the community dropdown option is selected
   useUpdateEffect(() => {
-    if (!isEmpty(selectedOption?.["name"] || selectedOption)) {
+    if (!isEmpty(selectedOption?.['name'] || selectedOption)) {
       setErrors({
         title: null,
-        community: null,
+        community: null
       });
     }
   }, [selectedOption]);
@@ -311,7 +306,7 @@ export default function Programs() {
   // Fetch Programs updated List on Add, Edit and Delete
   useUpdateEffect(() => {
     if (success.add || success.update || success.delete) {
-      dispatch(GET_PROGRAMS_LIST({ ...paginationData, ...filterData }));
+      dispatch(GET_PROGRAMS_LIST({ ...tableFilters, ...filterData }));
     }
   }, [success]);
 
@@ -321,16 +316,16 @@ export default function Programs() {
         <h1 className="page-title">Programs</h1>
 
         <div className="page-card new-card p-0">
-          <div className="flex flex-wrap p-[15px] pb-[20px]">
+          <div className="page-filters-bar">
             <Box
               sx={{
-                "& input": {
-                  width: "335px",
-                  height: "49px",
-                  border: "1px solid #ddd",
-                  borderRadius: "8px",
-                  padding: "0 11px",
-                },
+                '& input': {
+                  width: '335px',
+                  height: '49px',
+                  border: '1px solid #ddd',
+                  borderRadius: '8px',
+                  padding: '0 11px'
+                }
               }}
             >
               <input
@@ -348,12 +343,12 @@ export default function Programs() {
               <button
                 className="btn btn-primary"
                 type="button"
-                onClick={(e) => {
+                onClick={e => {
                   setShowTagModal(true);
                 }}
                 // disabled={true}
               >
-                {" "}
+                {' '}
                 <Add /> Add Program
               </button>
             </div>
@@ -365,9 +360,7 @@ export default function Programs() {
             dialogContent={
               <CustomAddProgramModal
                 communityOptions={
-                  agencyCompanyProjectsFiltersList?.data?.community
-                    ? agencyCompanyProjectsFiltersList
-                    : []
+                  agencyCompanyProjectsFiltersList?.data?.community ? agencyCompanyProjectsFiltersList : []
                 }
                 selectedOption={selectedOption}
                 setSelectedOption={setSelectedOption}
@@ -389,8 +382,8 @@ export default function Programs() {
             loader={programsList?.loading}
             data={data}
             allData={programsList?.data}
-            paginationData={paginationData}
-            setPaginationData={setPaginationData}
+            tableFilters={tableFilters}
+            setTableFilters={setTableFilters}
           />
         </div>
       </div>

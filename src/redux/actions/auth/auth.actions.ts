@@ -1,4 +1,3 @@
-import { Images } from "helper/images";
 import {
   SET_USER_DATA,
   SET_USER_DATA_LOADING,
@@ -10,6 +9,7 @@ import { EmailPWDType, EmailType } from "helper/types";
 import AuthApiClient from "services/auth/AuthApiClient";
 import swal from "sweetalert";
 import { TRIGGER_PERSIST_MODE } from "../config/app/app.actions";
+import { Images } from '../../../helper/images';
 
 // Perform User Registration
 const REGISTER_USER = (data: any) => async (dispatch: AppDispatch) => {
@@ -32,6 +32,16 @@ const TRIGGER_LOGIN = (data: EmailPWDType) => async (dispatch: AppDispatch) => {
         localStorage.setItem("access_token", token);
 
         localStorage.setItem("userData", JSON.stringify(response?.data));
+
+        swal({
+          title: "Successfully Complete",
+          text: "Login Success",
+          className: "successAlert-login",
+          icon: Images.Logo,
+          buttons: { visible: false },
+          timer: 1500,
+        });
+
       }
     })
     .catch((error) => {
@@ -79,13 +89,23 @@ const GET_USER_DETAILS = () => async (dispatch: AppDispatch) => {
 
 // Edit user details
 const TRIGGER_EDIT_USER = (userUpdateData) => async (dispatch: AppDispatch) => {
-  console.log("userUpdateData", userUpdateData)
   dispatch(SET_USER_PROFILE_LOADING(true));
   return await AuthApiClient.updateUserProfileData(userUpdateData)
     .then((response) => {
       if (response.status === 200) {
-        console.log("Update user response", response)
-        dispatch(SET_USER_PROFILE_DATA(response?.data?.[0]));
+        // console.log("Update user response", response)
+        // dispatch(SET_USER_PROFILE_DATA(response?.data?.[0]));
+        swal({
+          title: "Successfully Complete",
+          text: "Profile successfully updated",
+          className: "successAlert-login",
+          icon: Images.Logo,
+          buttons: {
+            OK: false,
+          },
+          timer: 3000,
+        });
+        dispatch(GET_USER_DETAILS());
       }
     })
     .catch((error) => {

@@ -8,6 +8,18 @@ import {
   Typography,
 } from "@mui/material";
 
+interface Types {
+  dialogTitle: string;
+  dialogContent: any;
+  openPopup: boolean;
+  closePopup: () => void;
+  mainActionHandler?: any;
+  mainActionTitle?: string;
+  textAlign?: string;
+  maxWidth?: string;
+  dialogAction?: boolean;
+}
+
 const MuiPopup = ({
   dialogTitle,
   dialogContent,
@@ -17,7 +29,8 @@ const MuiPopup = ({
   mainActionTitle,
   textAlign = "center",
   maxWidth = "450px",
-}) => {
+  dialogAction = true,
+}: Types) => {
   return (
     <Dialog
       className="profileImgDialogagency popupclass logoutPopup"
@@ -59,24 +72,26 @@ const MuiPopup = ({
             {dialogContent}
           </Typography>
         </DialogContent>
-        <DialogActions
-          sx={{
-            "&.MuiDialogActions-root": {
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              padding: 0,
-              gap: "15px",
-            },
-          }}
-        >
-          <Button onClick={mainActionHandler} className="btn btn-primary">
-            {mainActionTitle}
-          </Button>
-          <button className="btn btn-outline" onClick={closePopup}>
-            Cancel
-          </button>
-        </DialogActions>
+        {dialogAction && (
+          <DialogActions
+            sx={{
+              "&.MuiDialogActions-root": {
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                padding: 0,
+                gap: "15px",
+              },
+            }}
+          >
+            <Button onClick={mainActionHandler} className="btn btn-primary">
+              {mainActionTitle}
+            </Button>
+            <button className="btn btn-outline" onClick={closePopup}>
+              Cancel
+            </button>
+          </DialogActions>
+        )}
       </div>
     </Dialog>
   );

@@ -8,7 +8,7 @@
 }
 
 .deadlineWorkflow .menuiteminputcolor441 {
-  @apply w-[546px] h-[56px] border border-[#ddd];
+  @apply md:w-[546px] sm:w-[440px] h-[56px] border border-[#ddd];
 }
 
 .selectAndRemoveRight

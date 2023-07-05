@@ -13,7 +13,7 @@
 /* btn-outline class */
 .btn.btn-outline,
 .btn.btn-outline.MuiButton-root {
-  @apply border border-theme text-theme disabled:bg-dark-100 disabled:text-title-color;
+  @apply border border-theme border-solid text-theme disabled:bg-dark-100 disabled:text-title-color;
 }
 
 .btn.btn-outline.filter-btn {

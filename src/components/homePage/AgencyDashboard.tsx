@@ -24,16 +24,16 @@ const AgencyDashboard = () => {
       {/* {loading ? <LoadingSpinner /> : <></>} */}
       {isLoading && <LoadingSpinner />}
 
-      <div className="pb-5">
+      {/* <div className="pb-5"> // Hide as per client requirement
         <Title title="Analytics" />
-      </div>
+      </div> */}
       <div className=" grid md:grid-cols-2 sm:grid-cols-1 gap-4">
-        <div className="rounded-md bg-white p-6 shadow-[0_4px_40px_#2472fc0f]">
-          <AgencyDashboardAnalyticsPerformanceChart />
+        {/* <div className="rounded-md bg-white p-6 shadow-[0_4px_40px_#2472fc0f]">
+          <AgencyDashboardAnalyticsPerformanceChart /> // Hide as per client requirement
         </div>
         <div className="rounded-md bg-white p-6 shadow-[0_4px_40px_#2472fc0f]">
-          <AgencyDashboardAnalyticsAdsList />
-        </div>
+          <AgencyDashboardAnalyticsAdsList /> // Hide as per client requirement
+        </div> */}
         <div className="">
           <AgencyDashboardInProgress />
         </div>

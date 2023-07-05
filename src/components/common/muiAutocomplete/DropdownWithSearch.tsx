@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useMemo, useState } from "react";
 import { Autocomplete, TextField } from "@mui/material";
 import { filterUIOptionsListType } from "helper/types/companies/companiesType";
@@ -7,19 +6,18 @@ interface DropdownWithSearchPropsType {
   filterList: filterUIOptionsListType;
   handleChange: (filedName: string, value: any) => void;
   currentValue?: number;
-  shrinkLabel?: boolean;
 }
 
 const DropdownWithSearch = ({
   filterList,
   handleChange,
   currentValue,
-  shrinkLabel = true,
 }: DropdownWithSearchPropsType) => {
   const [selectedOption, setSelectedOption] = useState<{
     label: string;
     value: number;
   } | null>(null);
+
   const [searchText, setSearchText] = useState<string>("");
 
   //modify the options array as per requirement
@@ -65,6 +63,9 @@ const DropdownWithSearch = ({
               },
             },
             "& .MuiTextField-root": {
+              "& .MuiInputBase-root": {
+                borderRadius: 2,
+              },
               "& .MuiFormLabel-root": {
                 background: "white",
                 fontSize: "14px",
@@ -97,8 +98,8 @@ const DropdownWithSearch = ({
           return (
             <TextField
               {...params}
-              label={!selectedOption ? filterList?.label : ""}
-              InputLabelProps={{ shrink: shrinkLabel }}
+              label={filterList?.label}
+              placeholder={filterList?.placeholder}
               value={selectedOption ? selectedOption : searchText}
               onChange={(event) => setSearchText(event.target.value)}
               variant="outlined"

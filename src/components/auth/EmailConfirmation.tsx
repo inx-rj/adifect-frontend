@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import Logo from "components/common/logo/Logo";
 import LoadingSpinner from "components/common/loadingSpinner/Loader";
+import { Images } from "helper/images";
 
 const EmailConfirmation = ({ confirmationMsg, isLoading }) => {
   useEffect(() => {
@@ -24,7 +25,7 @@ const EmailConfirmation = ({ confirmationMsg, isLoading }) => {
                   <div className="logo-content">
                     <Link to="/">
                       <img
-                        src="/img/logonew.svg"
+                        src={Images.Logo}
                         className="login-logo"
                         alt=""
                       />

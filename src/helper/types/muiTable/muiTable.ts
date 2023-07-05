@@ -1,5 +1,5 @@
 export interface TableColumnsType {
-  id: number | string;
+  id?: number | string;
   label: any;
   field: string;
   sort?: string;
@@ -25,5 +25,4 @@ export interface TableDataResponseType {
 export interface TablePaginationType {
   page: number;
   rowsPerPage: number;
-  search?: string
 }

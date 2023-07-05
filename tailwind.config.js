@@ -1,6 +1,7 @@
 /** @type {import("tailwindcss").Config} */
 
 module.exports = {
+  important: true,
   content: [
     "./src/**/*.{html,js,jsx,ts,tsx}",
     "./node_modules/react-tailwindcss-datepicker/dist/index.esm.js",
@@ -48,7 +49,7 @@ module.exports = {
         light: "0px 0px 29px rgba(0, 0, 0, 0.09)",
       },
       borderRadius: {
-        DEFAULT: "5px",
+        DEFAULT: "8px",
       },
     },
     container: {

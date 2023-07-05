@@ -243,3 +243,9 @@ export const validateUsername = (value) => {
   // if (value > 20) return "You can enter only 20 characters";
   return null;
 };
+
+// ------------ Intake Forms validations ----------------//
+// To Formate ISO date into Locale string
+export const formateISODateToLocaleString = (value) => {
+  return new Date(value ?? "").toLocaleString();
+};

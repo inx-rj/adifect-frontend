@@ -1,6 +1,7 @@
 import { AppDispatch } from "../../../store";
 import {
   SET_HEADER_COMPANY,
+  SET_HEADER_COMPANY_NAME,
   SET_PERSIST,
   SET_SIDEBAR,
 } from "../../../reducers/config/app/app.slice";
@@ -16,8 +17,11 @@ const TOGGLE_SIDEBAR = (payload: boolean) => {
 };
 
 // Header company
-const TRIGGER_HEADER_COMPANY = (payload: number | string) => {
-  return async (dispatch: AppDispatch) => dispatch(SET_HEADER_COMPANY(payload));
+const TRIGGER_HEADER_COMPANY = (companyId: number | string, companyName: string) => {
+  return async (dispatch: AppDispatch) => {
+    dispatch(SET_HEADER_COMPANY(companyId));
+    dispatch(SET_HEADER_COMPANY_NAME(companyName));
+  }
 };
 
 export { TOGGLE_SIDEBAR, TRIGGER_PERSIST_MODE, TRIGGER_HEADER_COMPANY };

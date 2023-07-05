@@ -1,6 +1,6 @@
 import swal from "sweetalert";
 import { AppDispatch } from "../../store";
-import { initialTableConfigInterface } from "helper/types/common/table";
+import { initialTableConfigInterface } from "helper/types/common/tableType";
 import { Images } from "helper/images";
 
 import {
@@ -8,6 +8,7 @@ import {
   SET_LEVELS_LIST_LOADING,
 } from "redux/reducers/levels/levels.slice";
 import levelsApiClient from "services/levels/levelsApiClient";
+import { hasResultsKey } from "helper/utility/customFunctions";
 
 // Fetch levels list
 const GET_LEVELS_LIST =
@@ -19,7 +20,15 @@ const GET_LEVELS_LIST =
       .then((response) => {
         console.log("response", response);
         if (response.status === 201 || response.status === 200) {
-          dispatch(SET_LEVELS_LIST_DATA(response?.data));
+          const customizedResponse = hasResultsKey(response)
+            ? response?.data?.data || response?.data
+            : {
+                count: 0,
+                prev: null,
+                next: null,
+                results: response?.data?.data || response?.data,
+              };
+          dispatch(SET_LEVELS_LIST_DATA(customizedResponse));
           dispatch(SET_LEVELS_LIST_LOADING(false));
         }
       })

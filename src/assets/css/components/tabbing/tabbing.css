@@ -17,7 +17,7 @@
 }
 
 .nav-card {
-  @apply bg-white text-[#71757B] p-3 xlg:p-4 gap-2 xlg:gap-4 flex cursor-pointer border-b items-center md:items-start;
+  @apply bg-white text-[#71757B] p-3 xlg:p-4 gap-2 flex cursor-pointer md:border-b items-center md:items-start;
 }
 
 .nav-card .title {
@@ -30,19 +30,19 @@
 
 .tab-head-wrapper.active .nav-card,
 .nav-card.active {
-  @apply bg-theme/10 text-theme border-b-theme/10;
+  @apply bg-theme/10 text-theme;
 }
 .tab-head-wrapper.active .nav-card .title,
 .nav-card.active .title {
   @apply text-theme;
 }
 .tab-head-content {
-  @apply p-0 w-full md:w-[220px] xl:w-[300px] max-h-[calc(100vh-165px)] h-full overflow-y-auto sticky top-[64px] md:top-[75px] left-0 right-0 flex flex-row md:flex-col z-[2];
+  @apply p-0 w-full md:w-[220px] xl:w-[270px] max-h-[calc(100vh-165px)] h-full overflow-y-auto sticky top-[64px] md:top-[75px] left-0 right-0 flex flex-row md:flex-col z-[2];
 }
 .tab-head-wrapper.active .nav-card::before,
 .nav-card.active::before {
   content: "";
-  @apply absolute top-0 left-0 bottom-0 border-l-[3px] border-l-theme;
+  @apply w-full absolute top-0 left-0 bottom-0 border-t-[3px] border-t-theme md:border-t-0 md:border-t-transparent md:border-l-[3px] md:border-l-theme;
 }
 .tab-head-wrapper.active .nav-card .info,
 .nav-card.active .info {

@@ -2,14 +2,22 @@ import { setQueryParams } from "helper/utility/customFunctions";
 import axiosPrivate from "../../api/axios";
 import { API_URL } from "../../helper/env";
 
-const userData = () => JSON.parse(localStorage.getItem("userData") ?? "");
-
 class InviteUserApiClient {
   // get invited users list
   fetchInviteUsers = (filters: any) =>
     axiosPrivate.get(
       `${API_URL.INVITE.INVITE_USERS}` + setQueryParams(filters)
     );
+
+  // get workflow invited users list
+  fetchWorkflowInviteUsers = (id: any) =>
+    axiosPrivate.get(
+      `${API_URL.INVITE.INVITE_MEMBERS_LIST}?company=${id ?? ""}`
+    );
+
+  // get job activity invited users list
+  fetchJobActivityInviteUsers = (id: number | string) =>
+    axiosPrivate.get(`${API_URL.INVITE.JOB_ACTIVITY_USER}${id}/`);
 
   // get invited members list
   fetchInviteMembersList = (filters: any) =>
@@ -20,10 +28,10 @@ class InviteUserApiClient {
     );
 
   //add invite user
-  addInviteUser = (postObj: any) => {
+  addInviteUser = (postObj: any, userRole) => {
     const payload = {
       ...postObj,
-      agency: userData()?.user.user_id,
+      agency: userRole,
     };
     return axiosPrivate.post(`${API_URL.INVITE.INVITE_USERS}`, payload);
   };

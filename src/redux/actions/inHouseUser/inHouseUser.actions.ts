@@ -6,6 +6,7 @@ import InHouseUserApiClient from "services/inHouseUser/InHouseUserApiClient";
 import {
   SET_IN_HOUSE_USER_LIST_DATA,
   SET_IN_HOUSE_USER_LIST_LOADING,
+  SET_IN_HOUSE_USER_SUCCESS_MESSAGE,
 } from "redux/reducers/inHouseUser/inHouseUser.slice";
 import { API_URL } from "helper/env";
 
@@ -18,6 +19,7 @@ const GET_IN_HOUSE_USER_LIST =
       .then((response) => {
         if (response.status === 201 || response.status === 200) {
           dispatch(SET_IN_HOUSE_USER_LIST_DATA(response?.data));
+          dispatch(SET_IN_HOUSE_USER_SUCCESS_MESSAGE("Successfully fetched"))
           dispatch(SET_IN_HOUSE_USER_LIST_LOADING(false));
         }
       })

@@ -11,17 +11,25 @@ export interface CompanyListInitialsType extends LoadingType {
       results: TableRowsType[];
     };
   };
+  singleCompany: {
+    loading: boolean;
+    data: TableRowsType;
+  };
+  memberAdminCompanyList: {
+    loading: boolean;
+    data: TableRowsType;
+  };
 }
 
 export interface singleCompanyPayloadData {
-  name?: string,
-  description?: string,
-  is_active?: boolean,
-  company_id?: number
-  status?: boolean,
-  agency?: number
-  company_email?: string,
-  company_phone_number?: string,
-  company_website?: string,
-  industry?: number,
+  name?: string;
+  description?: string;
+  is_active?: boolean;
+  company_id?: number;
+  status?: boolean;
+  agency?: number;
+  company_email?: string;
+  company_phone_number?: string;
+  company_website?: string;
+  industry?: number;
 }

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
@@ -7,14 +7,17 @@ import { Link, useLocation } from "react-router-dom";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import RemoveIcon from "@mui/icons-material/Remove";
 import MuiIcon from "components/common/MuiIcon";
-import { IS_SIDEBAR_COLLAPSED } from "redux/reducers/config/app/app.slice";
-import { useAppSelector } from "redux/store";
+import { IS_SIDEBAR_OPEN } from "redux/reducers/config/app/app.slice";
+import { useAppDispatch, useAppSelector } from "redux/store";
 import { Button, Divider, Menu, MenuItem, Tooltip } from "@mui/material";
+import { TOGGLE_SIDEBAR } from "redux/actions/config/app/app.actions";
 
 const SidebarMenuItem = ({ navItem }) => {
   const { children } = navItem;
 
   const location = useLocation();
+  const dispatch = useAppDispatch();
+
   const { pathname } = location;
 
   const [expanded, setExpanded] = useState(null);
@@ -24,7 +27,7 @@ const SidebarMenuItem = ({ navItem }) => {
   const [isMobile, setIsMobile] = useState(window.innerWidth);
   const open = Boolean(anchorEl);
 
-  const isSidebarCollapsed = useAppSelector(IS_SIDEBAR_COLLAPSED);
+  const isSidebarOpen = useAppSelector(IS_SIDEBAR_OPEN);
 
   const handleWindowResize = () => {
     setIsMobile(window.innerWidth);
@@ -39,31 +42,37 @@ const SidebarMenuItem = ({ navItem }) => {
     setAnchorEl(anchorEl ? null : event.currentTarget);
   };
 
+  useEffect(() => {
+    // console.log({ isSidebarOpen, isMobile, navItem });
+    if (isMobile < 767) {
+      dispatch(TOGGLE_SIDEBAR(false));
+    }
+  }, [isMobile, location])
+
   return (
     <>
-      {children?.length > 0 ? (
+      {children?.length ? (
         <li
-          className={`sub-menu-wrapper
-          ${children.find((item) => pathname.includes(item.path))
-              ? "active"
-              : ""
-            }
-        `}
+          className={`sub-menu-wrapper ${children.find((item) => pathname.includes(item.path)) ? "active" : ""}`}
         >
           {/* Minisidebar menu with tooltip  */}
-          {!isSidebarCollapsed && (
+          {!isSidebarOpen && (
             <>
-              <Tooltip title={navItem.name} placement="right-start">
-                <Button
-                  onClick={handleClick}
-                  aria-controls={open ? navItem.name : undefined}
-                  aria-haspopup="true"
-                  aria-expanded={open ? "true" : undefined}
-                  className={`tooltip-btn ${open ? "tooltip-open" : ""} `}
-                >
-                  <MuiIcon icon={navItem?.icon} />
-                </Button>
-              </Tooltip>
+              <Button
+                disableRipple
+                onClick={handleClick}
+                aria-controls={open ? navItem.name : undefined}
+                aria-haspopup="true"
+                aria-expanded={open ? "true" : undefined}
+                className={`tooltip-btn w-full flex-col transition ease-out duration-1000 ${open ? "tooltip-open" : ""}`}
+                sx={{
+                  px: 0,
+                  py: 1
+                }}
+              >
+                <MuiIcon icon={navItem?.icon} />
+                <span className="capitalize text-base">{navItem.name}</span>
+              </Button>
               <Menu
                 anchorEl={anchorEl}
                 id={navItem.name}
@@ -99,23 +108,22 @@ const SidebarMenuItem = ({ navItem }) => {
               </Menu>{" "}
             </>
           )}
-          {isSidebarCollapsed && (
+          {isSidebarOpen && (
             <Accordion
               expanded={expanded === navItem.id}
               onChange={handleChange(navItem.id)}
             >
               <AccordionSummary
-                expandIcon={isSidebarCollapsed && <ExpandMoreIcon />}
+                expandIcon={isSidebarOpen && <ExpandMoreIcon />}
                 aria-controls="panel1bh-content"
                 id="panel1bh-header"
               >
-                <Typography>
+                <Typography className="transition ease-out duration-1000">
                   <MuiIcon icon={navItem?.icon} />
-                  {isSidebarCollapsed && isMobile > 768 && <span className="ml-2">{navItem.name}</span>}
-                  {isMobile < 768 && <span className="ml-2">{navItem.name}</span>}
+                  <span className="ml-2">{navItem.name}</span>
                 </Typography>
               </AccordionSummary>
-              <AccordionDetails>
+              <AccordionDetails className="ml-6 p-2">
                 <ul>
                   {children.map((item, index) => (
                     <li
@@ -142,10 +150,9 @@ const SidebarMenuItem = ({ navItem }) => {
         </li>
       ) : (
         <li className={pathname === navItem.path ? "active" : ""}>
-          <Link className="Menu nav-link" to={navItem.path}>
+          <Link className={`transition ease-out duration-1000 nav-link ${isSidebarOpen ? "px-5" : "flex-col px-0 py-2"}`} to={navItem.path}>
             <MuiIcon icon={navItem?.icon} />
-            {isSidebarCollapsed && isMobile > 768 && <span className="ml-2">{navItem.name}</span>}
-            {isMobile < 768 && <span className="ml-2">{navItem.name}</span>}
+            <span className={`${isSidebarOpen ? 'ml-2' : 'ml-0 mt-2'}`}>{navItem.name}</span>
           </Link>
         </li>
       )}

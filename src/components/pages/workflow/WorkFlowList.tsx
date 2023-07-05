@@ -1,232 +1,140 @@
-import React from "react";
-/* eslint-disable react-hooks/exhaustive-deps */
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { useSingleEffect, useUpdateEffect } from "react-haiku";
-import swal from "sweetalert";
+import React from 'react';
+
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useSingleEffect, useUpdateEffect } from 'react-haiku';
+import swal from 'sweetalert';
 
 //import custom component
-import MuiCustomTable from "components/common/muiTable/MuiTable";
-import SearchBar from "components/common/searchBar/SearchBar";
-import ActionMenuButton from "components/common/actionMenuButton/ActionMenuButton";
+import MuiCustomTable from 'components/common/muiTable/MuiTable';
+import SearchBar from 'components/common/searchBar/SearchBar';
+import ActionMenuButton from 'components/common/actionMenuButton/ActionMenuButton';
 
 //import MUI components and icons
-import {
-  Button,
-  Checkbox,
-  FormControlLabel,
-  MenuItem,
-  Select,
-  Typography,
-} from "@mui/material";
-import HomeIcon from "@mui/icons-material/Home";
-import AddIcon from "@mui/icons-material/Add";
+import { Button, Typography } from '@mui/material';
+import HomeIcon from '@mui/icons-material/Home';
+import AddIcon from '@mui/icons-material/Add';
 
 //import helper files
-import {
-  TableRowColType,
-  TablePaginationType,
-} from "helper/types/muiTable/muiTable";
-import { Images } from "helper/images";
-import { formateISODateToLocaleString } from "helper/utility/customFunctions";
+import { TableRowColType, TablePaginationType } from 'helper/types/muiTable/muiTable';
+import { Images } from 'helper/images';
 
 //import redux
-import { useAppDispatch, useAppSelector } from "redux/store";
-import {
-  DELETE_SINGLE_COMPANY,
-  GET_COMPANY_LIST,
-  POST_ADMIN_COMPANY,
-  POST_SINGLE_COMPANY,
-  PUT_SINGLE_COMPANY,
-} from "redux/actions/companyTab/companyTab.actions";
-import { COMPANY_LIST } from "redux/reducers/companyTab/companyTab.slice";
-import { GET_USER_PROFILE_DATA } from "redux/reducers/auth/auth.slice";
-import { API_URL } from "helper/env";
-import { singleCompanyPayloadData } from "helper/types/companyTab/companiesType";
-import { WORKFLOW_LIST } from "redux/reducers/workFlow/workFlow.slice";
-import {
-  DELETE_SINGLE_WORKFLOW,
-  GET_WORKFLOW_LIST,
-  POST_SINGLE_WORKFLOW,
-  PUT_SINGLE_WORKFLOW,
-} from "redux/actions/workFlow/workFlow.actions";
-import { WORKFLOW_ROUTE } from "routes/baseRoute";
-import LoadingSpinner from "components/common/loadingSpinner/Loader";
-import Title from "components/common/pageTitle/Title";
+import { useAppDispatch, useAppSelector } from 'redux/store';
+import { GET_USER_PROFILE_DATA } from 'redux/reducers/auth/auth.slice';
+import { API_URL } from 'helper/env';
+import { WORKFLOW_LIST } from 'redux/reducers/workFlow/workFlow.slice';
+import { DELETE_SINGLE_WORKFLOW, GET_WORKFLOW_LIST } from 'redux/actions/workFlow/workFlow.actions';
+import { WORKFLOW_ROUTE } from 'routes/baseRoute';
+import LoadingSpinner from 'components/common/loadingSpinner/Loader';
+import Title from 'components/common/pageTitle/Title';
+import { ROLES } from 'helper/config';
+import { IS_HEADER_COMPANY } from 'redux/reducers/config/app/app.slice';
+import { initialTableConfigInterface } from 'helper/types/common/tableType';
 
-const ROLES = {
-  ADMIN: 0,
-  CREATOR: 1,
-  AGENCY: 2,
-  MEMBER: 3,
-};
+interface workFlowListProps {
+  headerTitle?: boolean;
+  companyInfoPage?: boolean;
+  companyId?: string | number;
+}
 
-const userData = () => JSON.parse(localStorage.getItem("userData") ?? "");
-
-const WorkFlowList = () => {
+const WorkFlowList = (props: workFlowListProps) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+
+  const { headerTitle, companyInfoPage, companyId } = props;
 
   // Redux states
   //   const { companyList } = useAppSelector(COMPANY_LIST);
   const { workFlowList } = useAppSelector(WORKFLOW_LIST);
   const userProfile = useAppSelector(GET_USER_PROFILE_DATA);
+  const headerCompany = useAppSelector(IS_HEADER_COMPANY);
 
   // React states
-  const [openModal, setOpenModal] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedItem, setSelectedItem] = useState<{
     currentTooltip: null | number;
     currentId: null | number;
   }>({
     currentTooltip: null,
-    currentId: null,
+    currentId: null
   });
   const [isEditMode, setIsEditMode] = useState(false);
-  const [isSettingMode, setIsSettingMode] = useState(false);
-  const [companyStatus, setCompanyStatus] = useState(false);
 
-  const [formData, setFormData] = useState<{
-    company: string;
-    description: string;
-    isActive: boolean;
-  }>({
-    company: "",
-    description: "",
-    isActive: false,
-  });
-  const [errors, setErrors] = useState({
-    company: "",
-    description: "",
-  });
-  const [paginationData, setPaginationData] = useState<TablePaginationType>({
+  const [tableFilters, setTableFilters] = useState<initialTableConfigInterface>({
     page: 1,
     rowsPerPage: 10,
-    search: "",
+    search: ''
   });
 
   //fetch initial companies data list
   useSingleEffect(() => {
-    if (userProfile?.data?.role === ROLES.ADMIN) {
-      dispatch(GET_WORKFLOW_LIST(paginationData, `${API_URL.WORKFLOW.ADMIN}`));
-    } else {
-      dispatch(GET_WORKFLOW_LIST(paginationData));
-    }
+    dispatch(
+      GET_WORKFLOW_LIST(
+        {
+          ...tableFilters,
+          company:
+            userProfile?.data?.role === ROLES.MEMBER && headerCompany ? headerCompany : companyInfoPage ? companyId : ''
+        },
+        userProfile?.data?.role === ROLES.ADMIN
+          ? `${API_URL.WORKFLOW.ADMIN}`
+          : userProfile?.data?.role === ROLES.MEMBER
+          ? `${API_URL.WORKFLOW.MEMBER_WORKFLOW_LIST}`
+          : `${API_URL.WORKFLOW.WORKFLOW_LIST}`
+      )
+    );
   });
 
   //fetch workflow list when pagination change
   useUpdateEffect(() => {
-    if (userProfile?.data?.role === ROLES.ADMIN) {
-      dispatch(GET_WORKFLOW_LIST(paginationData, `${API_URL.WORKFLOW.ADMIN}`));
-    } else {
-      dispatch(
-        GET_WORKFLOW_LIST(paginationData, `${API_URL.WORKFLOW.WORKFLOW_LIST}`)
-      );
-    }
-  }, [paginationData, userProfile.data?.role]);
+    dispatch(
+      GET_WORKFLOW_LIST(
+        {
+          ...tableFilters,
+          company:
+            userProfile?.data?.role === ROLES.MEMBER && headerCompany ? headerCompany : companyInfoPage ? companyId : ''
+        },
+        userProfile?.data?.role === ROLES.ADMIN
+          ? `${API_URL.WORKFLOW.ADMIN}`
+          : userProfile?.data?.role === ROLES.MEMBER
+          ? `${API_URL.WORKFLOW.MEMBER_WORKFLOW_LIST}`
+          : `${API_URL.WORKFLOW.WORKFLOW_LIST}`
+      )
+    );
+  }, [tableFilters, userProfile.data?.role]);
+
+  useUpdateEffect(() => {
+    const companyParam = { ...tableFilters };
+    companyParam['company'] = headerCompany;
+    console.log('companyParam', companyParam);
+    // if (userProfile?.data?.role === ROLES.ADMIN) {
+    //   dispatch(GET_WORKFLOW_LIST(companyParam, `${API_URL.WORKFLOW.ADMIN}`));
+    // } else {
+    dispatch(GET_WORKFLOW_LIST(companyParam, `${API_URL.WORKFLOW.WORKFLOW_LIST}`));
+    // }
+  }, [headerCompany]);
 
   //handle edit action
-  const handleEdit = (item) => {
-    // setOpenModal(true);
-    // setIsEditMode(true);
-    // setErrors({ company: "", description: "" });
-    // setSelectedItem({ ...selectedItem, currentId: item?.id });
-    // setFormData({
-    //   company: item?.name,
-    //   description: item?.description,
-    //   isActive: item?.is_active,
-    // });
+  const handleEdit = item => {
+    setIsEditMode(true);
     navigate(`${item?.id}`);
   };
 
-  //handle settings action
-  const handleSetting = (item) => {
-    setOpenModal(true);
-    setIsSettingMode(true);
-    setSelectedItem({ ...selectedItem, currentId: item?.id });
-    setCompanyStatus(item?.is_blocked);
-  };
-
-  //validate inputs
-  const validateSubmit = (e) => {
-    e.preventDefault();
-    const tempErrors = {
-      company: !formData.company ? "Please enter Company Name" : "",
-      description: !formData.description ? "Please enter Description" : "",
-    };
-    setErrors(tempErrors);
-    if (Object.values(tempErrors).filter((value) => value)?.length) {
-      return;
-    }
-    handleFormSubmit();
-  };
-
-  //handle form submit
-  const handleFormSubmit = () => {
-    if (!isSettingMode) {
-      const payload: singleCompanyPayloadData = {
-        name: formData?.company,
-        description: formData?.description,
-        is_active: formData?.isActive,
-      };
-      if (isEditMode) {
-        // Handle edit option action
-        userProfile?.data?.role === ROLES.ADMIN
-          ? dispatch(
-              PUT_SINGLE_WORKFLOW(
-                selectedItem.currentId,
-                payload,
-                `${API_URL.WORKFLOW.ADMIN}`
-              )
-            )
-          : dispatch(PUT_SINGLE_WORKFLOW(selectedItem.currentId, payload));
-      } else {
-        // Handle Add new company action
-        payload.agency = userData()?.user.user_id;
-        userProfile?.data?.role === ROLES.ADMIN
-          ? dispatch(POST_SINGLE_WORKFLOW(payload, `${API_URL.WORKFLOW.ADMIN}`))
-          : dispatch(POST_SINGLE_WORKFLOW(payload));
-      }
-    } else {
-      // Handle Setting option action for admin
-      dispatch(
-        POST_ADMIN_COMPANY(
-          {
-            company_id: selectedItem.currentId,
-            status: companyStatus,
-          },
-          `${API_URL.COMPANY.ADMIN_COMPANY_BLOCK}`
-        )
-      );
-    }
-
-    // reset relevant states
-    setAnchorEl(null);
-    setSelectedItem({ currentId: null, currentTooltip: null });
-    setOpenModal(false);
-    setIsEditMode(false);
-    setFormData({
-      company: "",
-      description: "",
-      isActive: false,
-    });
-  };
-
   //handle delete action
-  const handleDelete = (item) => {
+  const handleDelete = item => {
     swal({
-      title: "",
-      text: "Are you sure you want to remove this workflow?",
-      className: "errorAlert",
+      title: '',
+      text: 'Are you sure you want to remove this workflow?',
+      className: 'errorAlert',
       icon: Images.Logo,
       buttons: {
         Cancel: true,
-        OK: true,
+        OK: true
       },
-      dangerMode: true,
-    }).then((willDelete) => {
+      dangerMode: true
+    }).then(willDelete => {
       //Use the text used in swal button for condition
-      if (willDelete !== "Cancel") {
+      if (willDelete !== 'Cancel') {
         dispatch(DELETE_SINGLE_WORKFLOW(item?.id));
       }
     });
@@ -244,9 +152,9 @@ const WorkFlowList = () => {
           <img className="ml-2" src={Images.SortArrows} alt="Title" />
         </label>
       ),
-      field: "title",
-      sort: "asc",
-      width: 180,
+      field: 'title',
+      sort: 'asc',
+      width: 180
     },
     {
       id: 1,
@@ -256,9 +164,9 @@ const WorkFlowList = () => {
           <img className="ml-2" src={Images.SortArrows} alt="Company" />
         </label>
       ),
-      field: "company",
-      sort: "asc",
-      width: 180,
+      field: 'company',
+      sort: 'asc',
+      width: 180
     },
     // {
     //   id: 2,
@@ -274,18 +182,18 @@ const WorkFlowList = () => {
     // },
     {
       id: 3,
-      label: "Status",
-      field: "status",
-      sort: "asc",
-      width: 160,
+      label: 'Status',
+      field: 'status',
+      sort: 'asc',
+      width: 160
     },
     {
       id: 4,
-      label: "Action",
-      field: "action",
-      sort: "asc",
-      width: 100,
-    },
+      label: 'Action',
+      field: 'action',
+      sort: 'asc',
+      width: 100
+    }
   ];
 
   let rows: {
@@ -302,14 +210,14 @@ const WorkFlowList = () => {
               <div key={index}>
                 <Typography
                   sx={{
-                    "&.MuiTypography-root": {
-                      display: "inline-block",
-                      color: "rgba(39, 90, 208, 1)",
+                    '&.MuiTypography-root': {
+                      display: 'inline-block',
+                      color: 'rgba(39, 90, 208, 1)',
                       fontFamily: '"Figtree", sans-serif',
-                      fontSize: "14px",
+                      fontSize: '14px',
                       fontWeight: 400,
-                      p: 0,
-                    },
+                      p: 0
+                    }
                   }}
                 >
                   {item?.name}
@@ -320,14 +228,14 @@ const WorkFlowList = () => {
               <div key={index}>
                 <Typography
                   sx={{
-                    "&.MuiTypography-root": {
-                      display: "inline-block",
-                      color: "rgba(39, 90, 208, 1)",
+                    '&.MuiTypography-root': {
+                      display: 'inline-block',
+                      color: 'rgba(39, 90, 208, 1)',
                       fontFamily: '"Figtree", sans-serif',
-                      fontSize: "14px",
+                      fontSize: '14px',
                       fontWeight: 400,
-                      p: 0,
-                    },
+                      p: 0
+                    }
                   }}
                 >
                   {item?.company_name}
@@ -342,17 +250,15 @@ const WorkFlowList = () => {
                 disableFocusRipple
                 disableElevation
                 sx={{
-                  width: "80px",
-                  background: item?.is_active
-                    ? "rgba(32, 161, 68, 0.08)"
-                    : "rgba(250, 45, 32, 0.08)",
-                  color: item?.is_active ? "#20A144" : "rgba(250, 45, 32, 1)",
-                  fontSize: "12px",
-                  textTransform: "none",
-                  pointerEvents: "none",
+                  width: '80px',
+                  background: item?.is_active ? 'rgba(32, 161, 68, 0.08)' : 'rgba(250, 45, 32, 0.08)',
+                  color: item?.is_active ? '#20A144' : 'rgba(250, 45, 32, 1)',
+                  fontSize: '12px',
+                  textTransform: 'none',
+                  pointerEvents: 'none'
                 }}
               >
-                {item?.is_active ? "Active" : "Inactive"}
+                {item?.is_active ? 'Active' : 'Inactive'}
               </Button>
             ),
             action: (
@@ -363,16 +269,16 @@ const WorkFlowList = () => {
                 anchorEl={anchorEl}
                 handleView={() => handleEdit(item)}
                 handleEdit={() => handleEdit(item)}
-                handleSetting={() => handleSetting(item)}
+                // handleSetting={() => handleSetting(item)}
                 handleDelete={() => handleDelete(item)}
-                showSetting={userProfile?.data?.role === ROLES.ADMIN}
+                // showSetting={userProfile?.data?.role === ROLES.ADMIN}
                 showEdit={!item.assigned_job ? true : false}
                 showView={item.assigned_job ? true : false}
                 showDelete={true}
                 isEditMode={isEditMode}
                 item={{ id: item?.id, isActive: item?.is_active }}
               />
-            ),
+            )
           };
         })
       : [];
@@ -380,15 +286,13 @@ const WorkFlowList = () => {
   //final table data
   const data: TableRowColType = {
     columns,
-    rows,
+    rows
   };
 
   return (
     <>
-      {workFlowList?.loading ? (
-        <LoadingSpinner></LoadingSpinner>
-      ) : (
-        <div className="page-container">
+      <div className={companyInfoPage === true ? 'card drop-shadow-none border z-[1] text-sm' : 'page-container'}>
+        {headerTitle !== false && (
           <div className="flex-between">
             <Title title="Workflow List" />
             <div className="flex-between gap-[10px] font-sm leading-4 font-medium text-primary">
@@ -396,42 +300,39 @@ const WorkFlowList = () => {
                 <HomeIcon color="disabled" />
               </Link>
               <span className="text-disable opacity-20">|</span>
-              <Link to="/company">Company</Link>
+              <Link to={WORKFLOW_ROUTE.HOME}>Workflow</Link>
             </div>
           </div>
-          <div className="page-card">
-            <div className="flex-between flex-wrap p-[15px] pb-5">
-              <SearchBar
-                setPaginationData={setPaginationData}
-                paginationData={paginationData}
+        )}
+        <div className={`${companyInfoPage === true ? 'page-card mt-0' : 'page-card'}`}>
+          <div className={`${companyInfoPage === true ? '' : 'p-[15px] '} flex-between flex-wrap pb-5`}>
+            <SearchBar setTableFilters={setTableFilters} tableFilters={tableFilters} />
+            <Link to={`${WORKFLOW_ROUTE.HOME}/add`}>
+              <button
+                type="submit"
+                // onClick={() => setOpenModal(true)}
+                className="btn btn-primary btn-label bg-primary flex items-center px-[15px] py-[9px] max-w-[155px] w-full flex-center gap-2"
+              >
+                <AddIcon />
+                <span className="btn-label">Add Workflow</span>
+              </button>
+            </Link>
+          </div>
+          {workFlowList?.loading ? (
+            <LoadingSpinner />
+          ) : (
+            <>
+              <MuiCustomTable
+                loader={workFlowList?.loading}
+                data={data}
+                allData={workFlowList?.data}
+                tableFilters={tableFilters}
+                setTableFilters={setTableFilters}
               />
-              <Link to={`${WORKFLOW_ROUTE.HOME}/add`}>
-                <button
-                  type="submit"
-                  // onClick={() => setOpenModal(true)}
-                  className="btn btn-primary btn-label bg-primary flex items-center px-[15px] py-[9px] max-w-[155px] w-full flex-center gap-2"
-                >
-                  <AddIcon />
-                  <span className="btn-label">Add Workflow</span>
-                </button>
-              </Link>
-            </div>
-            {workFlowList?.loading ? (
-              <LoadingSpinner />
-            ) : (
-              <>
-                <MuiCustomTable
-                  loader={workFlowList?.loading}
-                  data={data}
-                  allData={workFlowList?.data}
-                  paginationData={paginationData}
-                  setPaginationData={setPaginationData}
-                />
-              </>
-            )}
-          </div>
+            </>
+          )}
         </div>
-      )}
+      </div>
     </>
   );
 };

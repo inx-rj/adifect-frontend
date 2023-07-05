@@ -2,9 +2,11 @@ import {
   Add,
   BorderColorOutlined,
   CloseOutlined,
+  CollectionsOutlined,
+  DeleteOutlineOutlined,
   Edit,
-  FileUploadOutlined,
-} from "@mui/icons-material";
+  FileUploadOutlined
+} from '@mui/icons-material';
 import {
   Autocomplete,
   Dialog,
@@ -20,68 +22,67 @@ import {
   TextField,
   ToggleButton,
   ToggleButtonGroup,
-  createFilterOptions,
-} from "@mui/material";
-import CustomDateRangePicker from "components/common/reactDatePicker/ReactDateRangePicker";
-import axiosPrivate from "api/axios";
-import { Roles } from "helper/config";
-import { API_URL } from "helper/env";
-import { TablePaginationType } from "helper/types/muiTable/muiTable";
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import { useDropzone } from "react-dropzone";
-import { useSingleEffect, useUpdateEffect } from "react-haiku";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import {
-  GET_COMPANY_LIST,
-  GET_SINGLE_COMPANY_DATA,
-} from "redux/actions/companyTab/companyTab.actions";
-import { GET_IN_HOUSE_USER_LIST } from "redux/actions/inHouseUser/inHouseUser.actions";
-import { CREATE_JOB } from "redux/actions/jobs/jobs.actions";
-import { GET_LEVELS_LIST } from "redux/actions/levels/levels.action";
-import { GET_SKILLS_LIST } from "redux/actions/skills/skills.action";
-import { GET_WORKFLOW_LIST } from "redux/actions/workFlow/workFlow.actions";
-import { GET_USER_PROFILE_DATA } from "redux/reducers/auth/auth.slice";
-import { COMPANY_PROJECTS_DATA } from "redux/reducers/companies/companies.slice";
-import {
-  COMPANY_LIST,
-  SET_COMPANY_LIST_LOADING,
-} from "redux/reducers/companyTab/companyTab.slice";
-import { GET_JOBS_DETAILS } from "redux/reducers/homePage/jobsList.slice";
-import { IN_HOUSE_USER_LIST } from "redux/reducers/inHouseUser/inHouseUser.slice";
-import { LEVELS_LIST } from "redux/reducers/levels/levels.slice";
-import { SKILLS_LIST } from "redux/reducers/skills/skills.slice";
-import { WORKFLOW_LIST } from "redux/reducers/workFlow/workFlow.slice";
-import { useAppDispatch, useAppSelector } from "redux/store";
-import swal from "sweetalert";
-import ReactDateRangePicker from "components/common/reactDatePicker/ReactDateRangePicker";
-import { IS_HEADER_COMPANY } from "redux/reducers/config/app/app.slice";
-import { Images } from "helper/images";
-import { GET_INDUSTRY_LIST } from "redux/actions/industries/industries.actions";
-import { INDUSTRY_LIST } from "redux/reducers/industries/industries.slice";
+  createFilterOptions
+} from '@mui/material';
+import CustomDateRangePicker from 'components/common/reactDatePicker/ReactDateRangePicker';
+import axiosPrivate from 'api/axios';
+import { ROLES } from 'helper/config';
+import { API_URL } from 'helper/env';
+import { TablePaginationType } from 'helper/types/muiTable/muiTable';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useDropzone } from 'react-dropzone';
+import { useSingleEffect, useUpdateEffect } from 'react-haiku';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { GET_COMPANY_LIST, GET_SINGLE_COMPANY_DATA } from 'redux/actions/companyTab/companyTab.actions';
+import { GET_IN_HOUSE_USER_LIST } from 'redux/actions/inHouseUser/inHouseUser.actions';
+import { CREATE_JOB, UPDATE_JOB } from 'redux/actions/jobs/jobs.actions';
+import { GET_LEVELS_LIST } from 'redux/actions/levels/levels.action';
+import { ADD_SKILL_SET_LIST, GET_SKILLS_LIST } from 'redux/actions/skills/skills.action';
+import { GET_WORKFLOW_LIST } from 'redux/actions/workFlow/workFlow.actions';
+import { GET_USER_PROFILE_DATA } from 'redux/reducers/auth/auth.slice';
+import { COMPANY_PROJECTS_DATA } from 'redux/reducers/companies/companies.slice';
+import { COMPANY_LIST, SET_COMPANY_LIST_LOADING } from 'redux/reducers/companyTab/companyTab.slice';
+import { GET_JOBS_DETAILS } from 'redux/reducers/jobs/jobsList.slice';
+import { IN_HOUSE_USER_LIST } from 'redux/reducers/inHouseUser/inHouseUser.slice';
+import { LEVELS_LIST } from 'redux/reducers/levels/levels.slice';
+import { SKILLS_LIST } from 'redux/reducers/skills/skills.slice';
+import { WORKFLOW_LIST } from 'redux/reducers/workFlow/workFlow.slice';
+import { useAppDispatch, useAppSelector } from 'redux/store';
+import swal from 'sweetalert';
+import ReactDateRangePicker from 'components/common/reactDatePicker/ReactDateRangePicker';
+import { HEADER_COMPANY_NAME, IS_HEADER_COMPANY } from 'redux/reducers/config/app/app.slice';
+import { Images } from 'helper/images';
+import { GET_INDUSTRY_LIST } from 'redux/actions/industries/industries.actions';
+import { INDUSTRY_LIST } from 'redux/reducers/industries/industries.slice';
+import { UPDATE_DRAFT_JOBS_LIST } from 'redux/actions/draftJobs/draftJobs.action';
+import { GET_DETAIL_JOB_DATA } from 'redux/actions/jobs/jobs.actions';
+import MuiAutoComplete from 'components/common/muiAutocomplete/MuiAutoComplete';
+import { hasResultsKey, isEmpty } from 'helper/utility/customFunctions';
+import { initialTableConfigInterface } from 'helper/types/common/tableType';
 
 const thumbsContainer = {
-  display: "flex",
-  flexDirection: "row",
-  flexWrap: "wrap",
-  marginTop: 16,
+  display: 'flex',
+  flexDirection: 'row',
+  flexWrap: 'wrap',
+  marginTop: 16
 };
 
 const thumb = {
-  display: "inline-flex",
+  display: 'inline-flex',
   borderRadius: 2,
-  border: "1px solid #eaeaea",
+  border: '1px solid #eaeaea',
   marginBottom: 8,
   marginRight: 8,
   width: 100,
   height: 100,
   padding: 4,
-  boxSizing: "border-box",
+  boxSizing: 'border-box'
 };
 
 const thumbInner = {
-  display: "flex",
+  display: 'flex',
   minWidth: 0,
-  overflow: "hidden",
+  overflow: 'hidden'
 };
 
 const AdminJobsAddEdit = () => {
@@ -98,19 +99,19 @@ const AdminJobsAddEdit = () => {
   const [dam, setdam] = useState(false);
 
   const [show, setShow] = useState(false);
+  const [searchText, setSearchText] = useState('');
+  const [companydata, setcompanydata] = useState([]);
 
-  const [title, setTitle] = useState("");
+  const [title, setTitle] = useState('');
   const [companyvalue, setcompanyvalue] = useState(null);
   const [Workflowdata, setworkflowdata] = useState(null);
   const [apivalue, setapivalue] = useState(null);
-  const [templatedata, settemplatedata] = useState("1");
+  const [templatedata, settemplatedata] = useState('1');
   const [templatevalue, settemplatevalue] = useState(null);
   const [industryname, setindustryname] = useState(null);
   const [industryvalue, setindustryvalue] = useState(null);
-  const [description, setDescription] = useState("");
-  const [isRelatedToPrevJob, setIsRelatedToPrevJob] = useState<
-    boolean | string
-  >(false);
+  const [description, setDescription] = useState('');
+  const [isRelatedToPrevJob, setIsRelatedToPrevJob] = useState<boolean | string>(false);
   const [relatedJobs, setRelatedJobs] = useState(null);
   const [skills, setSkills] = useState([]);
   const [isOpenSkill, setIsOpenSkill] = useState(false);
@@ -122,8 +123,8 @@ const AdminJobsAddEdit = () => {
   const [fileExtension, setFileExtension] = useState([]);
   const [fileNameDisplay, setFileNameDisplay] = useState([]);
   const [removeJobDocuments, setRemoveJobDocuments] = useState([]);
-  const [formUrls, setFormUrls] = useState<any>([""]);
-  const [imgUrl, setImgUrl] = useState("");
+  const [formUrls, setFormUrls] = useState<any>(['']);
+  const [imgUrl, setImgUrl] = useState('');
   const [showText, setShowText] = useState(false);
   const [issamplefiles, setissamplefiles] = useState(false);
   const [openVault1, setOpenVault1] = useState(false);
@@ -134,29 +135,29 @@ const AdminJobsAddEdit = () => {
   const [fileSampleExtension, setFileSampleExtension] = useState([]);
   const [fileNameSampleDisplay, setFileNameSampleDisplay] = useState([]);
   const [removeJobSampleDocuments, setRemoveJobSampleDocuments] = useState([]);
-  const [formSampleUrls, setFormSampleUrls] = useState([""]);
+  const [formSampleUrls, setFormSampleUrls] = useState(['']);
   const [showText1, setShowText1] = useState(false);
-  const [sampleimgUrl, setsampleImgUrl] = useState("");
+  const [sampleimgUrl, setsampleImgUrl] = useState('');
   const [isShowntask, setIsShowntask] = useState(false);
 
   const [itemData, setItemData] = useState([]);
   const [removetaskDocuments, setRemovetaskDocuments] = useState([]);
   const [inputData, setInputData] = useState({
-    title: "",
-    due_date: "",
+    title: '',
+    due_date: ''
   });
   const [taskDueDate, setTaskDueDate] = useState(new Date());
   const [datechanger, setdatechanger] = useState(false);
   const [isBudgetNotRequired, setIsBudgetNotRequired] = useState<any>(false);
-  const [job_type, setJobType] = useState("0");
+  const [job_type, setJobType] = useState('0');
   const [level, setlevel] = useState(null);
-  const [price, setPrice] = useState("");
+  const [price, setPrice] = useState('');
   const [inHouseUser, setInHouseUser] = useState([]);
   const [deliveryDate, setDeliveryDate] = useState<any | Date>(new Date());
   const [divid, setdivid] = useState(4);
   const [alertdate, setalertdate] = useState(false);
   const [tags, setTags] = useState([]);
-  const [savetagbutton, setSavetagButton] = useState("");
+  const [savetagbutton, setSavetagButton] = useState('');
   const [isShown, setIsShown] = useState(false);
   const [textchange, settextchange] = useState(false);
   const [templatename, setTemplatename] = useState<any>();
@@ -177,15 +178,16 @@ const AdminJobsAddEdit = () => {
 
   // React states
   const [filterData, setFilterData] = useState<{ [key: string]: string }>({
-    from_date: "",
-    to_date: "",
-    community: "",
-    status: "",
+    from_date: '',
+    to_date: '',
+    community: '',
+    status: '',
     // Channel: "",
-    tag: "",
+    tag: ''
   });
 
   const headerCompany = useAppSelector(IS_HEADER_COMPANY);
+  const headerCompanyName = useAppSelector(HEADER_COMPANY_NAME);
   const jobDetails = useAppSelector(GET_JOBS_DETAILS);
   const { companyList } = useAppSelector(COMPANY_LIST);
   const userProfile = useAppSelector(GET_USER_PROFILE_DATA);
@@ -194,7 +196,6 @@ const AdminJobsAddEdit = () => {
   const levelsData = useAppSelector(LEVELS_LIST);
   const inHouseUserList = useAppSelector(IN_HOUSE_USER_LIST);
   const { industriesList } = useAppSelector(INDUSTRY_LIST);
-
   // console.log("WorkFlowData", WorkFlowData);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -226,72 +227,69 @@ const AdminJobsAddEdit = () => {
     workflow: null,
     inHouseUser: null,
     company: null,
-    level: null,
+    level: null
   });
 
-  const [paginationData, setPaginationData] = useState<TablePaginationType>({
+  const [tableFilters, setTableFilters] = useState<initialTableConfigInterface>({
     page: 1,
     rowsPerPage: 10,
-    search: "",
+    search: ''
   });
+
+  const [searchType, setSearchType] = useState('');
 
   //fetch initial companies data list
   useSingleEffect(() => {
-    if (userProfile?.data?.role === Roles.ADMIN) {
-      dispatch(GET_COMPANY_LIST(paginationData, `${API_URL.COMPANY.ADMIN}`));
-      dispatch(GET_WORKFLOW_LIST(paginationData, `${API_URL.WORKFLOW.ADMIN}`));
+    dispatch(
+      GET_COMPANY_LIST(
+        tableFilters,
+        userProfile?.data?.role === ROLES.ADMIN
+          ? `${API_URL.COMPANY.ADMIN}`
+          : userProfile?.data?.role === ROLES.MEMBER
+          ? `${API_URL.COMPANY.MEMBER_COMPANY_LIST}`
+          : `${API_URL.COMPANY.COMPANY_LIST}`
+      )
+    );
+    dispatch(GET_SKILLS_LIST(tableFilters));
 
-      dispatch(GET_SKILLS_LIST(paginationData));
-    } else {
-      dispatch(GET_COMPANY_LIST(paginationData));
-      dispatch(GET_WORKFLOW_LIST(paginationData));
-      dispatch(GET_SKILLS_LIST(paginationData));
-    }
     dispatch(
       GET_INDUSTRY_LIST({
         page: 1,
-        rowsPerPage: 10,
+        rowsPerPage: 10
       })
     );
   });
 
   //fetch company list when pagination change
   useUpdateEffect(() => {
-    if (userProfile?.data?.role === Roles.ADMIN) {
-      dispatch(GET_COMPANY_LIST(paginationData, `${API_URL.COMPANY.ADMIN}`));
-      dispatch(GET_WORKFLOW_LIST(paginationData, `${API_URL.WORKFLOW.ADMIN}`));
-      dispatch(GET_SKILLS_LIST(paginationData));
-      dispatch(GET_LEVELS_LIST(paginationData));
+    if (userProfile?.data?.role === ROLES.ADMIN) {
+      if (searchType === 'companySearch') {
+        dispatch(GET_COMPANY_LIST(tableFilters, `${API_URL.COMPANY.ADMIN}`));
+      } else if (searchType === 'workflowCompanySearch') {
+        dispatch(GET_WORKFLOW_LIST(tableFilters, `${API_URL.WORKFLOW.ADMIN}`));
+      }
+      dispatch(GET_SKILLS_LIST(tableFilters));
+      dispatch(GET_LEVELS_LIST(tableFilters));
     } else {
-      dispatch(
-        GET_COMPANY_LIST(
-          paginationData,
-          `${API_URL.COMPANY.AGENCY_COMPANY_LIST}`
-        )
-      );
-      dispatch(
-        GET_WORKFLOW_LIST(paginationData, `${API_URL.WORKFLOW.WORKFLOW_LIST}`)
-      );
-      dispatch(GET_SKILLS_LIST(paginationData));
-      dispatch(GET_LEVELS_LIST(paginationData));
+      if (searchType === 'companySearch') {
+        dispatch(GET_COMPANY_LIST(tableFilters, `${API_URL.COMPANY.COMPANY_LIST}`));
+      } else if (searchType === 'workflowCompanySearch') {
+        dispatch(GET_WORKFLOW_LIST(tableFilters, `${API_URL.WORKFLOW.WORKFLOW_LIST}`));
+      }
+      dispatch(GET_SKILLS_LIST(tableFilters));
+      dispatch(GET_LEVELS_LIST(tableFilters));
     }
-  }, [paginationData, userProfile.data?.role]);
+  }, [tableFilters, userProfile.data?.role]);
 
-  const yesterday = new Date(
-    new Date().setDate(new Date().getDate() + 1)
-  ).toDateString();
+  const yesterday = new Date(new Date().setDate(new Date().getDate() + 1)).toDateString();
 
   const coverter = new Date(yesterday).toISOString().slice(0, 10);
 
-  const threeDay = new Date(
-    new Date().setDate(new Date().getDate() + 4)
-  ).toDateString();
+  const threeDay = new Date(new Date().setDate(new Date().getDate() + 4)).toDateString();
 
   const coverter1 = new Date(threeDay).toISOString().slice(0, 10);
 
-  const sevenDay = new Date(
-    new Date().setDate(new Date().getDate() + 8)
-  ).toDateString();
+  const sevenDay = new Date(new Date().setDate(new Date().getDate() + 8)).toDateString();
 
   const coverter2 = new Date(sevenDay).toISOString().slice(0, 10);
 
@@ -304,25 +302,25 @@ const AdminJobsAddEdit = () => {
     acceptedFiles,
     isFocused,
     isDragAccept,
-    isDragReject,
+    isDragReject
   } = useDropzone({
     accept: {
-      "image/jpeg": [],
-      "image/png": [],
-      "video/mov": [],
-      "video/mp4": [],
-      "audio/mpeg": [],
-      "video/quicktime": [],
+      'image/jpeg': [],
+      'image/png': [],
+      'video/mov': [],
+      'video/mp4': [],
+      'audio/mpeg': [],
+      'video/quicktime': []
     },
     onDrop: useCallback(
-      (acceptedFiles) => {
+      acceptedFiles => {
         // console.log(acceptedFiles[0]);
         // if (!acceptedFiles[0].type.match(imageMimeType)) {
         //   swal({
         //     title: "Error",
         //     text: "Image type is not valid",
         //     className: "errorAlert",
-        //     icon: "/img/logonew-red.svg",
+        //     icon: Images.ErrorLogo,
         //     buttons: false,
         //     timer: 5000,
         //   });
@@ -331,46 +329,43 @@ const AdminJobsAddEdit = () => {
         //     title: "Error",
         //     text: "Max file size allowed is 10mb",
         //     className: "errorAlert",
-        //     icon: "/img/logonew-red.svg",
+        //     icon: Images.ErrorLogo,
         //     buttons: false,
         //     timer: 5000,
         //   });
         // } else {
         setFiles([
           ...files,
-          ...acceptedFiles.map((file) =>
+          ...acceptedFiles.map(file =>
             Object.assign(file, {
               preview: URL.createObjectURL(file),
-              title: file.name,
+              title: file.name
             })
-          ),
+          )
         ]);
         // }
       },
       [files]
-    ),
+    )
   });
 
-  const {
-    getRootProps: getRootGalleryProps,
-    getInputProps: getInputGalleryProps,
-  } = useDropzone({
+  const { getRootProps: getRootGalleryProps, getInputProps: getInputGalleryProps } = useDropzone({
     accept: {
-      "image/jpeg": [],
-      "image/png": [],
-      "video/mov": [],
-      "video/mp4": [],
-      "audio/mpeg": [],
-      "video/quicktime": [],
+      'image/jpeg': [],
+      'image/png': [],
+      'video/mov': [],
+      'video/mp4': [],
+      'audio/mpeg': [],
+      'video/quicktime': []
     },
     onDrop: useCallback(
-      (acceptedFiles) => {
+      acceptedFiles => {
         // if (!acceptedFiles[0].type.match(imageMimeType)) {
         //   swal({
         //     title: "Error",
         //     text: "Image type is not valid",
         //     className: "errorAlert",
-        //     icon: "/img/logonew-red.svg",
+        //     icon: Images.ErrorLogo,
         //     buttons: false,
         //     timer: 5000,
         //   });
@@ -379,37 +374,53 @@ const AdminJobsAddEdit = () => {
         //     title: "Error",
         //     text: "Max file size allowed is 10mb",
         //     className: "errorAlert",
-        //     icon: "/img/logonew-red.svg",
+        //     icon: Images.ErrorLogo,
         //     buttons: false,
         //     timer: 5000,
         //   });
         // } else {
         setFileGallery([
           ...fileGallery,
-          ...acceptedFiles.map((file) =>
+          ...acceptedFiles.map(file =>
             Object.assign(file, {
               preview: URL.createObjectURL(file),
-              title: file.name,
+              title: file.name
             })
-          ),
+          )
         ]);
         // }
       },
       [fileGallery]
-    ),
+    )
   });
 
-  const blockInvalidChar = (e) =>
-    ["e", "E", "+", "-"].includes(e.key) && e.preventDefault();
+  const blockInvalidChar = e => ['e', 'E', '+', '-'].includes(e.key) && e.preventDefault();
 
   const menuProps = {
-    variant: "menu",
-    disableScrollLock: true,
+    variant: 'menu',
+    disableScrollLock: true
+  };
+
+  const handleWorkflowChange = (e, value) => {
+    setworkflowdata(value);
+    setErrors({ ...errors, workflow: null });
+  };
+
+  //search workflow associated with selected company
+  const handleWorkFlowCompanySearch = (e, value) => {
+    setTableFilters({ ...tableFilters, search: value });
+    setSearchType('workflowCompanySearch');
+  };
+
+  //search company
+  const handleCompanySearch = (e, value) => {
+    setTableFilters({ ...tableFilters, search: value });
+    setSearchType('companySearch');
   };
 
   //Get value
-  const getvalue = (e) => {
-    setcompanyvalue(e.target.value);
+  const getvalue = (e, value) => {
+    setcompanyvalue(value);
     // setShow(true);
     // const success = api
     //   .get(`${BACKEND_API_URL}company/${e.target.value}`)
@@ -426,13 +437,13 @@ const AdminJobsAddEdit = () => {
       // settemplatedata("1");
       setlevel(null);
       // setJobType("");
-      setPrice("");
+      setPrice('');
       setindustryname(null);
       // setDeliveryDate();
-      setDescription("");
+      setDescription('');
       setSkills([]);
       setTags([]);
-      setTemplatename("");
+      setTemplatename('');
       setisfiles(false);
       setissamplefiles(false);
       setInHouseUser([]);
@@ -440,27 +451,18 @@ const AdminJobsAddEdit = () => {
     if (e.target.value !== null) {
       setShow(true);
 
-      if (userProfile.data.role === Roles.ADMIN) {
-        dispatch(
-          GET_IN_HOUSE_USER_LIST(
-            e.target.value,
-            `${API_URL.IN_HOUSE_USER.ADMIN_USER_LIST}`
-          )
-        );
-        const success = axiosPrivate
-          .get(`${API_URL.WORKFLOW.ADMIN}work-flow/?company=${e.target.value}`)
-          .then((res) => {
-            // console.log(res.data);
-            setapivalue(res.data);
-          });
+      if (userProfile.data.role === ROLES.ADMIN) {
+        dispatch(GET_IN_HOUSE_USER_LIST(e.target.value, `${API_URL.IN_HOUSE_USER.ADMIN_USER_LIST}`));
+        const success = axiosPrivate.get(`${API_URL.WORKFLOW.ADMIN}work-flow/?company=${value?.id}`).then(res => {
+          // console.log(res.data);
+          setapivalue(res?.data?.data?.results);
+        });
       } else {
-        dispatch(GET_IN_HOUSE_USER_LIST(e.target.value));
-        const success = axiosPrivate
-          .get(`${API_URL.WORKFLOW.WORKFLOW_LIST}?company=${e.target.value}`)
-          .then((res) => {
-            // console.log(res.data);
-            setapivalue(res.data);
-          });
+        dispatch(GET_IN_HOUSE_USER_LIST(value?.id));
+        const success = axiosPrivate.get(`${API_URL.WORKFLOW.WORKFLOW_LIST}?company=${value?.id}`).then(res => {
+          // console.log(res.data, "res");
+          setapivalue(res?.data?.data?.results);
+        });
       }
       // dispatch(getAdminRelatedJobs(e.target.value));
       // const success = axiosPrivate
@@ -481,8 +483,8 @@ const AdminJobsAddEdit = () => {
     }
   };
 
-  const gettemplate = (e) => {
-    console.log("template");
+  const gettemplate = e => {
+    console.log('template');
     // const success = api
     //   .get(`${BACKEND_API_URL}admin-job-template/${e.target.value}/`)
     //   .then((res) => {
@@ -623,62 +625,63 @@ const AdminJobsAddEdit = () => {
     }
   };
 
-  const filterOptions = createFilterOptions({
-    matchFrom: "start",
-    // stringify: (option) => option?.skill_name,
-  });
-
   //Set skills value
   const changeHandler = (e, v) => {
     setSkills(v);
     // setIsOpenSkill(false);
   };
 
-  const handleKeyDownSkills = (e) => {
+  const handleKeyDownSkills = e => {
     if (e.keyCode === 8) return;
     if (!e.target.value) return;
-    if (e.key === "Tab") return;
+    if (e.key === 'Tab') return;
     setIsOpenSkill(true);
-    if (e.key !== "Enter") return;
+    if (e.key !== 'Enter') return;
     const value = e.target.value;
     if (!value.trim()) return;
-    const filteredCurrentSkills = skills.filter((str) =>
-      str.skill_name.toLowerCase().includes(value.toLowerCase().trim())
+
+    const filteredCurrentSkills = skills?.filter(str =>
+      str.skills_name.toLowerCase().includes(value?.toLowerCase().trim())
     );
-    const filteredDatabaseSkills =
-      skillsData?.skillsList?.data?.results?.filter((str) => {
-        if (str.skill_name.toLowerCase() === value.toLowerCase().trim()) {
-          return true;
-        }
-        return false;
-      });
-    // console.log("filteredDatabaseSkills", filteredDatabaseSkills);
-    if (
-      filteredDatabaseSkills?.length > 0 &&
-      filteredCurrentSkills?.length > 0
-    ) {
+
+    const filteredDatabaseSkills = skillsData?.skillsList?.data?.results?.map(str => {
+      // console.log("str", str);
+      if (str.skill_name.toLowerCase() == value.toLowerCase().trim()) {
+        return true;
+      }
+      return false;
+    });
+    //     str.skill_name.toLowerCase() == value.toLowerCase()
+    // );
+    console.log('filteredDatabaseSkills', filteredDatabaseSkills);
+    if (filteredDatabaseSkills?.length > 0 && filteredCurrentSkills?.length > 0) {
       swal({
-        title: "Notice",
-        text: "Skill already exists",
-        className: "errorAlert-login",
-        icon: "/img/logonew-red.svg",
+        title: 'Notice',
+        text: 'Skill already exists',
+        className: 'errorAlert-login',
+        icon: Images.ErrorLogo,
         // buttons: false,
-        timer: 3000,
+        buttons: {
+          OK: false
+        },
+        timer: 3000
       });
       return;
     }
     for (var i = 0; i < skillsData?.skillsList?.data?.results?.length; i++) {
-      if (
-        skillsData?.skillsList?.data?.results[i].skill_name
-          .toLowerCase()
-          .indexOf(value.toLowerCase().trim()) > -1
-      ) {
+      if (skillsData?.skillsList?.data?.results[i].skill_name.toLowerCase().indexOf(value.toLowerCase().trim()) > -1) {
         // changeHandler(e, value);
         // setSkills([...skills, value]);
-        e.target.value = "";
+        e.target.value = '';
         return;
       }
     }
+    setSkills([...skills, value]);
+    const skillData = {
+      skill_name: value,
+      is_active: true
+    };
+    // dispatch(ADD_SKILL_SET_LIST(skillData));
     // const config = {
     //   headers: {
     //     "Content-Type": "multipart/form-data",
@@ -686,53 +689,48 @@ const AdminJobsAddEdit = () => {
     //   },
     // };
 
-    // axios
-    //   .post(
-    //     `${BACKEND_API_URL}skills/`,
-    //     {
-    //       skill_name: value,
-    //       is_active: true,
-    //     },
-    //     config
-    //   )
-    //   .then((res) => {
-    //     // console.log("keys", res);
-    //     setAddedSkill(true);
-    //     setAddedSkill(false);
-    //     const addedSkill = skillsData.filter((item) => item.id === value);
-    //     // setSkills([...skills, res.data]);
-    //   });
-    e.target.value = "";
+    dispatch(ADD_SKILL_SET_LIST(skillData))
+      .then(res => {
+        // console.log("keys", res);
+        setAddedSkill(true);
+        setAddedSkill(false);
+        const addedSkill = skillsData?.skillsList?.data?.results.filter(item => item?.id === value);
+        // setSkills([...skills, res.data]);
+      })
+      .catch(error => {
+        console.log('error', error);
+      });
+    e.target.value = '';
   };
 
   //Change files
-  const handleClickfiles = (event) => {
-    setisfiles((current) => !current);
+  const handleClickfiles = event => {
+    setisfiles(current => !current);
   };
 
   const handleCloseDam = () => {
     setOpenVault(false);
     // localStorage.setItem("dam", false);
-    localStorage.removeItem("damon");
-    localStorage.removeItem("jobdamid");
-    localStorage.removeItem("prev_vault");
+    localStorage.removeItem('damon');
+    localStorage.removeItem('jobdamid');
+    localStorage.removeItem('prev_vault');
   };
   const handleCloseDam1 = () => {
     setOpenVault1(false);
     // localStorage.setItem("dam", false);
-    localStorage.removeItem("damon");
-    localStorage.removeItem("jobdamid");
-    localStorage.removeItem("prev_vault");
+    localStorage.removeItem('damon');
+    localStorage.removeItem('jobdamid');
+    localStorage.removeItem('prev_vault');
   };
 
   const saveDamDataHandler = () => {
     setdam(true);
     setsampledam(false);
     setOpenVault(false);
-    localStorage.removeItem("damon");
-    localStorage.removeItem("jobdamid");
-    localStorage.removeItem("prev_vault");
-    let useimage = localStorage.getItem("useimage");
+    localStorage.removeItem('damon');
+    localStorage.removeItem('jobdamid');
+    localStorage.removeItem('prev_vault');
+    let useimage = localStorage.getItem('useimage');
     // dispatch(CollectionView(useimage));
     // setexistingmediafile1([Collectionviewdata]);
   };
@@ -741,39 +739,39 @@ const AdminJobsAddEdit = () => {
     setsampledam(true);
     setdam(false);
     setOpenVault1(false);
-    localStorage.removeItem("damon");
-    localStorage.removeItem("jobdamid");
-    localStorage.removeItem("prev_vault");
-    let useimage = localStorage.getItem("useimage");
+    localStorage.removeItem('damon');
+    localStorage.removeItem('jobdamid');
+    localStorage.removeItem('prev_vault');
+    let useimage = localStorage.getItem('useimage');
     // dispatch(CollectionView(useimage));
     // setexistingsamplemediafile1(Collectionviewdata);
   };
 
   const handleClickOpenDam = () => {
     setOpenVault(true);
-    localStorage.setItem("damon", "on");
+    localStorage.setItem('damon', 'on');
     // if (mediafile1.length && mediafile1[0] != undefined) {
     //   localStorage.setItem("prev_vault", JSON.stringify(mediafile1));
     // }
     if (mediafile1.length && mediafile1[0] != undefined) {
-      localStorage.setItem("prev_vault", JSON.stringify(mediafile1));
+      localStorage.setItem('prev_vault', JSON.stringify(mediafile1));
     }
   };
 
-  const removeFile = (file) => () => {
+  const removeFile = file => () => {
     const newFiles = [...files];
     newFiles.splice(newFiles.indexOf(file), 1);
     setFiles(newFiles);
   };
 
-  const removedamFile = (file) => () => {
+  const removedamFile = file => () => {
     const newdamGallery = [...mediafile];
     newdamGallery.splice(newdamGallery.indexOf(file), 1);
     setexistingmediafile(newdamGallery);
     // console.log(mediafile);
   };
 
-  const removedamFile1 = (file) => () => {
+  const removedamFile1 = file => () => {
     const newdamGallery1 = [...mediafile1];
     newdamGallery1.splice(newdamGallery1.indexOf(file), 1);
     setexistingmediafile1(newdamGallery1);
@@ -782,20 +780,20 @@ const AdminJobsAddEdit = () => {
   const removeDocument = (e, v) => {
     // console.log("e-", e);
     // console.log("v-", v);
-    if (v == "icon") {
+    if (v == 'icon') {
       const s = jobDocuments.filter((item, index) => index !== e);
       const s1 = imgRef.current.filter((item, index) => index !== e);
       setJobDocuments(s);
       imgRef.current = s1;
       return;
     }
-    if (v == "image") {
+    if (v == 'image') {
       // console.log("e2--", e);
       const s = jobDocuments.filter((item, index) => index !== e);
       setJobDocuments(s);
       return;
     }
-    if (v == "data") {
+    if (v == 'data') {
       // console.log("e3--", e);
       // const s = jobDocuments.filter((item, index) => index !== e);
       // setJobDocuments(s);
@@ -806,145 +804,135 @@ const AdminJobsAddEdit = () => {
     }
   };
 
-  const removeImageDocuments = (document_id) => {
+  const removeImageDocuments = document_id => {
     setRemoveJobDocuments([...removeJobDocuments, document_id]);
   };
 
-  const removeFormFieldsUrls = (i) => {
+  const removeFormFieldsUrls = i => {
     let newFormValues = [...formUrls];
     newFormValues.splice(i, 1);
     setFormUrls(newFormValues);
   };
 
-  const handleKeyDownUrl = (e) => {
-    let isValidImgUrl: any = "";
-    if (imgUrl != "") {
+  const handleKeyDownUrl = e => {
+    let isValidImgUrl: any = '';
+    if (imgUrl != '') {
       isValidImgUrl = imgUrl.match(
         /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g
       );
       if (isValidImgUrl) {
-        if (e.key !== "Enter") return;
+        if (e.key !== 'Enter') return;
         const value = e.target.value;
         if (!value.trim()) return;
 
-        const filteredTags = formUrls.filter(
-          (str) => str.toLowerCase() == value
-        );
+        const filteredTags = formUrls.filter(str => str.toLowerCase() == value);
 
         if (filteredTags.length > 0) {
           swal({
-            title: "Notice",
-            text: "Url already added",
-            className: "errorAlert-login",
-            icon: "/img/logonew-red.svg",
+            title: 'Notice',
+            text: 'Url already added',
+            className: 'errorAlert-login',
+            icon: Images.ErrorLogo,
             // buttons: false,
-            timer: 3000,
+            timer: 3000
           });
           return;
         }
         setFormUrls([...formUrls, value]);
-        e.target.value = "";
-        setImgUrl("");
+        e.target.value = '';
+        setImgUrl('');
       } else {
         // setImgUrl("");
         const tempErrors: any = {
-          formImgUrls:
-            isValidImgUrl == null && "Please check the url(s) and try again",
+          formImgUrls: isValidImgUrl == null && 'Please check the url(s) and try again'
         };
         setErrors(tempErrors);
       }
     } else {
-      setImgUrl("");
+      setImgUrl('');
       const tempErrors: any = {
-        formImgUrls:
-          isValidImgUrl == null && "Please check the url(s) and try again",
+        formImgUrls: isValidImgUrl == null && 'Please check the url(s) and try again'
       };
       setErrors(tempErrors);
     }
   };
 
-  const handleChangeUrls = (e) => {
-    let isValidImgUrl: any = "";
-    if (imgUrl != "") {
+  const handleChangeUrls = e => {
+    let isValidImgUrl: any = '';
+    if (imgUrl != '') {
       isValidImgUrl = imgUrl.match(
         /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g
       );
       if (isValidImgUrl) {
-        const filteredTags = formUrls.filter(
-          (str) => str.toLowerCase() == isValidImgUrl
-        );
+        const filteredTags = formUrls.filter(str => str.toLowerCase() == isValidImgUrl);
 
         if (filteredTags.length > 0) {
           swal({
-            title: "Notice",
-            text: "Url already added",
-            className: "errorAlert-login",
-            icon: "/img/logonew-red.svg",
+            title: 'Notice',
+            text: 'Url already added',
+            className: 'errorAlert-login',
+            icon: Images.ErrorLogo,
             // buttons: false,
-            timer: 3000,
+            timer: 3000
           });
           return;
         }
 
         setFormUrls([...formUrls, imgUrl]);
         // console.log("test Url ", isValidImgUrl);
-        setImgUrl("");
+        setImgUrl('');
       } else {
         // setImgUrl("");
         const tempErrors: any = {
-          formImgUrls:
-            isValidImgUrl == null && "Please check the url(s) and try again",
+          formImgUrls: isValidImgUrl == null && 'Please check the url(s) and try again'
         };
         setErrors(tempErrors);
       }
     } else {
-      setImgUrl("");
+      setImgUrl('');
       const tempErrors: any = {
-        formImgUrls:
-          isValidImgUrl == null && "Please check the url(s) and try again",
+        formImgUrls: isValidImgUrl == null && 'Please check the url(s) and try again'
       };
       setErrors(tempErrors);
     }
   };
 
-  const onClickInclude = () => setShowText((current) => !current);
+  const onClickInclude = () => setShowText(current => !current);
 
-  const onClickInclude1 = () => setShowText1((current) => !current);
+  const onClickInclude1 = () => setShowText1(current => !current);
 
-  const handleClicksamplefiles = (event) => {
-    setissamplefiles((current) => !current);
+  const handleClicksamplefiles = event => {
+    setissamplefiles(current => !current);
   };
 
-  const thumbs = files.map((file) => (
-    <div
-      className="inline-flex rounded-sm border-1-[#eaeaea] mb-[8px] mr-[8px] w-full h-full p-[4px]"
-      key={file.name}
-    >
-      <div className="removeimgdevpage" style={thumbInner}>
-        <img className="img-upload-item" src="/img/assertgallery.png" />
+  const thumbs = files.map(file => (
+    <div className="inline-flex rounded-sm border-1-[#eaeaea] mb-[8px] mr-[8px] w-full h-full p-[4px]" key={file.name}>
+      <div className="removeimgdevpage flex justify-between w-full" style={thumbInner}>
+        <div className="flex gap-1">
+          <CollectionsOutlined />
+          {/* <img className="img-upload-item" src="/img/assertgallery.png" /> */}
+          {file.title}
+        </div>
         <button onClick={removeFile(file)}>
-          <img src="/img/assertbin.png" />
+          <DeleteOutlineOutlined />
         </button>
-        {file.title}
       </div>
     </div>
   ));
 
-  const existingMedia = mediafile?.map((file) => (
-    <div
-      className="inline-flex rounded-sm border-1-[#eaeaea] mb-[8px] mr-[8px] w-full h-full p-[4px]"
-      key={file.id}
-    >
+  const existingMedia = mediafile?.map(file => (
+    <div className="inline-flex rounded-sm border-1-[#eaeaea] mb-[8px] mr-[8px] w-full h-full p-[4px]" key={file.id}>
       {file && (
         <>
-          <img className="img-upload-item" src="/img/assertgallery.png" />{" "}
+          <CollectionsOutlined />
+          {/* <img className="img-upload-item" src="/img/assertgallery.png" />{" "} */}
         </>
       )}
-      <div className="removeimgdevpage" style={thumbInner}>
+      <div className="removeimgdevpage w-full" style={thumbInner}>
         <button onClick={removedamFile(file)}>
           {file && (
             <>
-              <img src="/img/assertbin.png" />
+              <DeleteOutlineOutlined />
             </>
           )}
         </button>
@@ -961,23 +949,21 @@ const AdminJobsAddEdit = () => {
   ));
 
   // console.log("mediafile1 -- ", mediafile1);
-  const existingMedia1 = mediafile1?.map((file) => {
-    console.log("existingMedia1");
+  const existingMedia1 = mediafile1?.map(file => {
+    console.log('existingMedia1');
     return (
-      <div
-        className="inline-flex rounded-sm border-1-[#eaeaea] mb-[8px] mr-[8px] w-full h-full p-[4px]"
-        key={file?.id}
-      >
+      <div className="inline-flex rounded-sm border-1-[#eaeaea] mb-[8px] mr-[8px] w-full h-full p-[4px]" key={file?.id}>
         {file && (
           <>
-            <img className="img-upload-item" src="/img/assertgallery.png" />{" "}
+            <CollectionsOutlined />
+            {/* <img className="img-upload-item" src="/img/assertgallery.png" />{" "} */}
           </>
         )}
-        <div className="removeimgdevpage" style={thumbInner}>
+        <div className="removeimgdevpage w-full" style={thumbInner}>
           <button onClick={removedamFile1(file)}>
             {file && (
               <>
-                <img src="/img/assertbin.png" />
+                <DeleteOutlineOutlined />
               </>
             )}
           </button>
@@ -985,7 +971,7 @@ const AdminJobsAddEdit = () => {
           <div>
             {file && (
               <>
-                {" "}
+                {' '}
                 <span className="thumbDesignWButton">Vault</span>
               </>
             )}
@@ -997,55 +983,55 @@ const AdminJobsAddEdit = () => {
 
   const handleClickOpenDam1 = () => {
     setOpenVault1(true);
-    localStorage.setItem("damon", "on");
+    localStorage.setItem('damon', 'on');
     if (samplemediafile1.length && samplemediafile1[0] != undefined) {
-      localStorage.setItem("prev_vault", JSON.stringify(samplemediafile1));
+      localStorage.setItem('prev_vault', JSON.stringify(samplemediafile1));
     }
   };
 
-  const removesampleFile = (file) => () => {
+  const removesampleFile = file => () => {
     const newfileGallery = [...fileGallery];
     newfileGallery.splice(newfileGallery.indexOf(file), 1);
     setFileGallery(newfileGallery);
   };
 
-  const thumbs1 = fileGallery.map((file) => (
-    <div
-      className="inline-flex rounded-sm border-1-[#eaeaea] mb-[8px] mr-[8px] w-full h-full p-[4px]"
-      key={file.name}
-    >
-      <img className="img-upload-item" src="/img/assertgallery.png" />
-      <div className="removeimgdevpage" style={thumbInner}>
+  const thumbs1 = fileGallery.map(file => (
+    <div className="inline-flex rounded-sm border-1-[#eaeaea] mb-[8px] mr-[8px] w-full h-full p-[4px]" key={file.name}>
+      <div className="flex justify-between w-full">
+        <div className="flex gap-1">
+          <CollectionsOutlined />
+          {/* <img className="img-upload-item" src="/img/assertgallery.png" /> */}
+          <div className="removeimgdevpage" style={thumbInner}>
+            {file.title}
+          </div>
+        </div>
         <button onClick={removesampleFile(file)}>
-          <img src="/img/assertbin.png" />
+          <DeleteOutlineOutlined />
         </button>
-        {file.title}
       </div>
     </div>
   ));
 
-  const removesampledamFile = (file) => () => {
+  const removesampledamFile = file => () => {
     const newsampledamGallery = [...samplemediafile];
     newsampledamGallery.splice(newsampledamGallery.indexOf(file), 1);
     setexistingsamplemediafile(newsampledamGallery);
   };
 
-  const existingsampleMedia = samplemediafile?.map((file) => (
-    <div
-      className="inline-flex rounded-sm border-1-[#eaeaea] mb-[8px] mr-[8px] w-full h-full p-[4px]"
-      key={file?.id}
-    >
+  const existingsampleMedia = samplemediafile?.map(file => (
+    <div className="inline-flex rounded-sm border-1-[#eaeaea] mb-[8px] mr-[8px] w-full h-full p-[4px]" key={file?.id}>
       {file && (
         <>
-          {" "}
-          <img className="img-upload-item" src="/img/assertgallery.png" />
+          {' '}
+          <CollectionsOutlined />
+          {/* <img className="img-upload-item" src="/img/assertgallery.png" /> */}
         </>
       )}
       <div className="removeimgdevpage" style={thumbInner}>
         <button onClick={removesampledamFile(file)}>
           {file && (
             <>
-              <img src="/img/assertbin.png" />
+              <DeleteOutlineOutlined />
             </>
           )}
         </button>
@@ -1061,28 +1047,26 @@ const AdminJobsAddEdit = () => {
     </div>
   ));
 
-  const removesampledamFile1 = (file) => () => {
+  const removesampledamFile1 = file => () => {
     const newsampledamGallery1 = [...samplemediafile1];
     newsampledamGallery1.splice(newsampledamGallery1.indexOf(file), 1);
     setexistingsamplemediafile1(newsampledamGallery1);
   };
 
-  const existingsampleMedia1 = samplemediafile1?.map((file) => (
-    <div
-      className="inline-flex rounded-sm border-1-[#eaeaea] mb-[8px] mr-[8px] w-full h-full p-[4px]"
-      key={file?.id}
-    >
+  const existingsampleMedia1 = samplemediafile1?.map(file => (
+    <div className="inline-flex rounded-sm border-1-[#eaeaea] mb-[8px] mr-[8px] w-full h-full p-[4px]" key={file?.id}>
       {file && (
         <>
-          <img className="img-upload-item" src="/img/assertgallery.png" />
+          <CollectionsOutlined />
+          {/* <img className="img-upload-item" src="/img/assertgallery.png" /> */}
         </>
       )}
       <div className="removeimgdevpage" style={thumbInner}>
         <button onClick={removesampledamFile1(file)}>
           {file && (
             <>
-              {" "}
-              <img src="/img/assertbin.png" />
+              {' '}
+              <DeleteOutlineOutlined />
             </>
           )}
         </button>
@@ -1101,154 +1085,144 @@ const AdminJobsAddEdit = () => {
   const removeSampleDocument = (e, v) => {
     // console.log("e-", e);
     // console.log("v-", v);
-    if (v == "icon") {
+    if (v == 'icon') {
       const s = jobSampleDocuments.filter((item, index) => index !== e);
       const s1 = imgSampleRef.current.filter((item, index) => index !== e);
       setJobSampleDocuments(s);
       imgSampleRef.current = s1;
       return;
     }
-    if (v == "image") {
+    if (v == 'image') {
       // console.log("e2--", e);
       const s = jobSampleDocuments.filter((item, index) => index !== e);
       setJobSampleDocuments(s);
       return;
     }
-    if (v == "data") {
+    if (v == 'data') {
       // console.log("e3--", e);
       // const s = jobDocuments.filter((item, index) => index !== e);
       // setJobDocuments(s);
       setJobSampleDocuments(jobSampleDocuments.filter((el, i) => i !== e));
       setFileSampleExtension(fileSampleExtension.filter((el, i) => i !== e));
-      setFileNameSampleDisplay(
-        fileNameSampleDisplay.filter((el, i) => i !== e)
-      );
+      setFileNameSampleDisplay(fileNameSampleDisplay.filter((el, i) => i !== e));
       return;
     }
   };
 
-  const removeImageSampleDocuments = (document_id) => {
+  const removeImageSampleDocuments = document_id => {
     setRemoveJobSampleDocuments([...removeJobSampleDocuments, document_id]);
   };
 
-  const removeFormFieldsSampleUrls = (i) => {
+  const removeFormFieldsSampleUrls = i => {
     let newFormValues = [...formSampleUrls];
     newFormValues.splice(i, 1);
     setFormSampleUrls(newFormValues);
   };
 
-  const handleKeyDownSampleUrl = (e) => {
-    let sampleurl: any = "";
-    if (sampleimgUrl != "") {
+  const handleKeyDownSampleUrl = e => {
+    let sampleurl: any = '';
+    if (sampleimgUrl != '') {
       sampleurl = sampleimgUrl.match(
         /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g
       );
       if (sampleurl) {
-        if (e.key !== "Enter") return;
+        if (e.key !== 'Enter') return;
         const value = e.target.value;
         if (!value.trim()) return;
 
-        const filteredTags = formSampleUrls.filter(
-          (str) => str.toLowerCase() == value
-        );
+        const filteredTags = formSampleUrls.filter(str => str.toLowerCase() == value);
 
         if (filteredTags.length > 0) {
           swal({
-            title: "Notice",
-            text: "Tag already added",
-            className: "errorAlert-login",
-            icon: "/img/logonew-red.svg",
+            title: 'Notice',
+            text: 'Tag already added',
+            className: 'errorAlert-login',
+            icon: Images.ErrorLogo,
             // buttons: false,
-            timer: 3000,
+            timer: 3000
           });
           return;
         }
         setFormSampleUrls([...formSampleUrls, value]);
-        e.target.value = "";
-        setsampleImgUrl("");
+        e.target.value = '';
+        setsampleImgUrl('');
         // setFormSampleUrls([...formSampleUrls, sampleimgUrl]);
         // setsampleImgUrl("");
       } else {
         // setsampleImgUrl("");
         // console.log("test Url els4e", sampleurl);
         const tempErrors: any = {
-          formsampleImgUrls:
-            sampleurl == null && "Please check the url(s) and try again",
+          formsampleImgUrls: sampleurl == null && 'Please check the url(s) and try again'
         };
         // console.log("tempErrors", tempErrors);
         setErrors(tempErrors);
       }
     } else {
-      setsampleImgUrl("");
+      setsampleImgUrl('');
       const tempErrors: any = {
-        formsampleImgUrls:
-          sampleurl == null && "Please check the url(s) and try again",
+        formsampleImgUrls: sampleurl == null && 'Please check the url(s) and try again'
       };
       setErrors(tempErrors);
     }
   };
 
-  const handleChangesampleUrls = (e) => {
-    let sampleurl: any = "";
-    if (sampleimgUrl != "") {
+  const handleChangesampleUrls = e => {
+    let sampleurl: any = '';
+    if (sampleimgUrl != '') {
       sampleurl = sampleimgUrl.match(
         /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g
       );
       if (sampleurl) {
-        const filteredTags = formSampleUrls.filter(
-          (str) => str.toLowerCase() == sampleurl
-        );
+        const filteredTags = formSampleUrls.filter(str => str.toLowerCase() == sampleurl);
 
         if (filteredTags.length > 0) {
           swal({
-            title: "Notice",
-            text: "Url already added",
-            className: "errorAlert-login",
-            icon: "/img/logonew-red.svg",
+            title: 'Notice',
+            text: 'Url already added',
+            className: 'errorAlert-login',
+            icon: Images.ErrorLogo,
             // buttons: false,
-            timer: 3000,
+            timer: 3000
           });
           return;
         }
         setFormSampleUrls([...formSampleUrls, sampleimgUrl]);
         // console.log("test Url ", sampleurl);
-        setsampleImgUrl("");
+        setsampleImgUrl('');
       } else {
         // setsampleImgUrl("");
         // console.log("test Url els4e", sampleurl);
         const tempErrors: any = {
-          formsampleImgUrls:
-            sampleurl == null && "Please check the url(s) and try again",
+          formsampleImgUrls: sampleurl == null && 'Please check the url(s) and try again'
         };
         // console.log("tempErrors", tempErrors);
         setErrors(tempErrors);
       }
     } else {
-      setsampleImgUrl("");
+      setsampleImgUrl('');
       const tempErrors: any = {
-        formsampleImgUrls:
-          sampleurl == null && "Please check the url(s) and try again",
+        formsampleImgUrls: sampleurl == null && 'Please check the url(s) and try again'
       };
       setErrors(tempErrors);
     }
   };
 
-  const handleClicktask = (event) => {
+  const handleClicktask = event => {
     // 👇️ toggle shown state
-    setIsShowntask((current) => !current);
+    setIsShowntask(current => !current);
 
     // 👇️ or simply set it to true
     // setIsShown(true);
   };
 
-  const handleDelte = (id) => {
+  const handleDelte = id => {
     const upDateItem = itemData.filter((elem, index) => {
       return index !== id;
     });
     setItemData(upDateItem);
   };
 
-  const removetaskdetailDocuments = (document_id) => {
+  const removetaskdetailDocuments = document_id => {
     setRemovetaskDocuments([...removetaskDocuments, document_id]);
     // const success = api
     //   .delete(`${BACKEND_API_URL}job-task/${document_id}/`)
@@ -1256,28 +1230,25 @@ const AdminJobsAddEdit = () => {
     //     // console.log(res);
     //   });
   };
-  const handleSubmit = (e) => {
+  const handleSubmit = e => {
     e.preventDefault();
     if (inputData.title && taskDueDate) {
-      console.log("inputData", inputData, taskDueDate, itemData);
+      console.log('inputData', inputData, taskDueDate, itemData);
       const coverter = new Date(taskDueDate).toISOString().slice(0, 10);
-      setItemData([
-        ...itemData,
-        { title: inputData.title, due_date: coverter },
-      ]);
-      setInputData({ title: "", due_date: "" });
+      setItemData([...itemData, { title: inputData.title, due_date: coverter }]);
+      setInputData({ title: '', due_date: '' });
     } else {
     }
     setdatechanger(true);
   };
 
-  const handleChange = (e) => {
+  const handleChange = e => {
     const { name, value } = e.target;
-    console.log("ssssssssssssssssssssssssssssss", name, value);
+    console.log('ssssssssssssssssssssssssssssss', name, value);
     setInputData({ ...inputData, [name]: value });
     setErrors({ ...errors, tasks: null });
 
-    if (e.key === "Enter") {
+    if (e.key === 'Enter') {
       handleSubmit(e);
     }
     // console.log(inputData);
@@ -1285,7 +1256,7 @@ const AdminJobsAddEdit = () => {
 
   //set selected filter
   const handleDateChange = (name: string, value: any) => {
-    setFilterData((prevState) => {
+    setFilterData(prevState => {
       return { ...prevState, [name]: value };
     });
     setDeliveryDate(value);
@@ -1298,7 +1269,7 @@ const AdminJobsAddEdit = () => {
     setTaskDueDate(value);
   };
 
-  const handleInputChangeAutocompleteUsers = (e) => {
+  const handleInputChangeAutocompleteUsers = e => {
     // console.log(e.target.value);
     // if (e.target.value !== "") {
     //   setIsOpenUser(true);
@@ -1309,7 +1280,7 @@ const AdminJobsAddEdit = () => {
   };
 
   const filterOptionsUsers = createFilterOptions({
-    matchFrom: "start",
+    matchFrom: 'start'
     // stringify: (option) => option.user_full_name,
   });
 
@@ -1318,88 +1289,84 @@ const AdminJobsAddEdit = () => {
     setErrors({ ...errors, inHouseUser: null });
   };
 
-  const handleKeyDownInHouseUsers = (e) => {
+  const handleKeyDownInHouseUsers = e => {
     if (e.keyCode === 8) return;
     if (!e.target.value) return;
-    if (e.key === "Tab") return;
+    if (e.key === 'Tab') return;
     // setIsOpenApprovers(true);
-    if (e.key !== "Enter") return;
+    if (e.key !== 'Enter') return;
     // if (!value.trim()) return;
-    e.target.value = "";
+    e.target.value = '';
   };
 
-  const handleDiv = (id) => {
-    if (id === "1") {
+  const handleDiv = id => {
+    if (id === '1') {
       setdivid(1);
       setDeliveryDate(yesterday);
-    } else if (id === "2") {
+    } else if (id === '2') {
       setdivid(2);
       setDeliveryDate(threeDay);
-    } else if (id === "3") {
+    } else if (id === '3') {
       setdivid(3);
       setDeliveryDate(sevenDay);
-    } else if (id === "4") {
+    } else if (id === '4') {
       setdivid(4);
     }
   };
 
-  const removeTag = (index) => {
+  const removeTag = index => {
     setTags(tags.filter((el, i) => i !== index));
   };
 
-  const handleKeyDown = (e) => {
-    if (e.key !== "Enter") return;
+  const handleKeyDown = e => {
+    if (e.key !== 'Enter') return;
     const value = e.target.value;
     if (!value.trim()) return;
 
-    const filteredTags = tags.filter(
-      (str) => str.toLowerCase() == value.toLowerCase()
-    );
+    const filteredTags = tags.filter(str => str.toLowerCase() == value.toLowerCase());
 
     if (filteredTags.length > 0) {
       swal({
-        title: "Notice",
-        text: "Tag already added",
-        className: "errorAlert-login",
-        icon: "/img/logonew-red.svg",
+        title: 'Notice',
+        text: 'Tag already added',
+        className: 'errorAlert-login',
+        icon: Images.ErrorLogo,
         // buttons: false,
-        timer: 3000,
+        timer: 3000
       });
       return;
     }
     setTags([...tags, value]);
-    e.target.value = "";
-    setSavetagButton("");
+    e.target.value = '';
+    setSavetagButton('');
   };
 
   const handleSaveTag = (e, v) => {
     if (savetagbutton.length < 1) return;
 
-    const filteredTags = tags.filter(
-      (str) => str.toLowerCase() == savetagbutton.toLowerCase()
-    );
+    const filteredTags = tags.filter(str => str.toLowerCase() == savetagbutton.toLowerCase());
 
     if (filteredTags.length > 0) {
       swal({
-        title: "Notice",
-        text: "Tag already added",
-        className: "errorAlert-login",
-        icon: "/img/logonew-red.svg",
+        title: 'Notice',
+        text: 'Tag already added',
+        className: 'errorAlert-login',
+        icon: Images.ErrorLogo,
         // buttons: false,
-        timer: 3000,
+        timer: 3000
       });
       return;
     }
 
     setTags([...tags, savetagbutton]);
-    setSavetagButton("");
+    setSavetagButton('');
     // console.log(inputRef.current.value);
-    inputRef.current.value = "";
+    inputRef.current.value = '';
   };
 
-  const handleClick = (event) => {
+  const handleClick = event => {
     // 👇️ toggle shown state
-    setIsShown((current) => !current);
+    setIsShown(current => !current);
 
     // 👇️ or simply set it to true
     // setIsShown(true);
@@ -1409,22 +1376,22 @@ const AdminJobsAddEdit = () => {
     // console.log(data);
     e.preventDefault();
     // Urls Validation
-    let isValidUrl: any = "";
+    let isValidUrl: any = '';
     let newFormValues = formUrls;
     setFormUrls(newFormValues);
     if (formUrls) {
-      if (formUrls != "") {
+      if (formUrls != '') {
         isValidUrl =
           /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g;
       }
     }
     // SampleUrls Validation
-    let isValidSampleUrl: any = "";
-    let newFormSampleValues = formSampleUrls.filter((n) => n);
+    let isValidSampleUrl: any = '';
+    let newFormSampleValues = formSampleUrls.filter(n => n);
     setFormSampleUrls(newFormSampleValues);
     if (formSampleUrls) {
       for (let i = 0; i < formSampleUrls.length; i++) {
-        if (formSampleUrls[i] != "") {
+        if (formSampleUrls[i] != '') {
           isValidSampleUrl = formSampleUrls[i].match(
             /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g
           );
@@ -1464,7 +1431,7 @@ const AdminJobsAddEdit = () => {
     // $(".error").prop("id", "error_move");
 
     // console.log("errors -- ", errors);
-    if (Object.values(tempErrors).filter((value) => value).length) {
+    if (Object.values(tempErrors).filter(value => value).length) {
       // setErrorCheck(true);
 
       // setTimeout(function () {
@@ -1483,7 +1450,7 @@ const AdminJobsAddEdit = () => {
     submitHandler(data);
   };
 
-  const submitHandler = async (data) => {
+  const submitHandler = async data => {
     setIsLoading(true);
 
     const formData = new FormData();
@@ -1507,26 +1474,26 @@ const AdminJobsAddEdit = () => {
     if (jobId) {
       if (files.length) {
         for (const key of Object.keys(files)) {
-          formData.append("image", JSON.stringify(files[key]));
+          formData.append('image', JSON.stringify(files[key]));
         }
       }
     } else {
       if (files.length) {
         for (const key of Object.keys(files)) {
-          formData.append("image", JSON.stringify(files[key]));
+          formData.append('image', JSON.stringify(files[key]));
         }
       }
     }
     if (jobId) {
       if (files.length) {
         for (const key of Object.keys(files)) {
-          formData.append("template_image", JSON.stringify(files[key]));
+          formData.append('template_image', JSON.stringify(files[key]));
         }
       }
     } else {
       if (files.length) {
         for (const key of Object.keys(files)) {
-          formData.append("template_image", JSON.stringify(files[key]));
+          formData.append('template_image', JSON.stringify(files[key]));
         }
       }
     }
@@ -1534,32 +1501,27 @@ const AdminJobsAddEdit = () => {
     // console.log("removeJobDocuments---____", removeJobDocuments);
     if (removeJobDocuments.length) {
       for (const key of Object.keys(removeJobDocuments)) {
-        formData.append(
-          "remove_image",
-          JSON.stringify(removeJobDocuments[key])
-        );
+        formData.append('remove_image', JSON.stringify(removeJobDocuments[key]));
       }
     }
 
     if (mediafile.length) {
       {
-        mediafile.map((item) => {
+        mediafile.map(item => {
           const idget = item.id;
-          formData.append("dam_images", JSON.stringify(idget));
+          formData.append('dam_images', JSON.stringify(idget));
         });
       }
     }
 
     if (isBudgetNotRequired) {
-      formData.append("is_house_member", JSON.stringify(isBudgetNotRequired));
+      formData.append('is_house_member', JSON.stringify(isBudgetNotRequired));
 
       if (inHouseUser?.length > 0) {
         for (var i = 0; i < inHouseUser.length; i++) {
           formData.append(
-            "house_member",
-            inHouseUser[i].id
-              ? JSON.stringify(inHouseUser[i].id)
-              : JSON.stringify(inHouseUser[i])
+            'house_member',
+            inHouseUser[i].id ? JSON.stringify(inHouseUser[i].id) : JSON.stringify(inHouseUser[i])
           );
         }
       }
@@ -1567,161 +1529,149 @@ const AdminJobsAddEdit = () => {
 
     if (samplemediafile1.length) {
       {
-        samplemediafile1.map((item) => {
+        samplemediafile1.map(item => {
           const idget = item.id;
-          formData.append("dam_sample_images", JSON.stringify(idget));
+          formData.append('dam_sample_images', JSON.stringify(idget));
         });
       }
     }
 
     if (mediafile1.length) {
       {
-        mediafile1.map((item) => {
+        mediafile1.map(item => {
           const idget = item.id;
-          formData.append("dam_images", JSON.stringify(idget));
+          formData.append('dam_images', JSON.stringify(idget));
         });
       }
     }
 
     if (samplemediafile.length) {
       {
-        samplemediafile.map((item) => {
+        samplemediafile.map(item => {
           const idget = item.id;
-          formData.append("dam_sample_images", JSON.stringify(idget));
+          formData.append('dam_sample_images', JSON.stringify(idget));
         });
       }
     }
 
     if (removetaskDocuments.length) {
       for (const key of Object.keys(removetaskDocuments)) {
-        formData.append("task_id", JSON.stringify(removetaskDocuments[key]));
+        formData.append('task_id', JSON.stringify(removetaskDocuments[key]));
       }
     }
 
     // console.log("removeJobDocuments---____", removeJobDocuments);
     if (removeJobSampleDocuments.length) {
       for (const key of Object.keys(removeJobSampleDocuments)) {
-        formData.append(
-          "remove_image",
-          JSON.stringify(removeJobSampleDocuments[key])
-        );
+        formData.append('remove_image', JSON.stringify(removeJobSampleDocuments[key]));
       }
     }
-    formData.append("title", title);
+    formData.append('title', title);
     // formData.append("tasks_due_date", date);
-    formData.append("tasks", JSON.stringify(itemData));
-    formData.append("description", description);
-    formData.append("due_date_index", JSON.stringify(divid));
-    formData.append("is_active", "true");
+    formData.append('tasks', JSON.stringify(itemData));
+    formData.append('description', description);
+    formData.append('due_date_index', JSON.stringify(divid));
+    formData.append('is_active', 'true');
 
-    formData.append("assigned_to", JSON.stringify(userProfile?.data?.id));
-    formData.append("created_by", JSON.stringify(userProfile?.data?.id));
+    formData.append('assigned_to', JSON.stringify(userProfile?.data?.id));
+    formData.append('created_by', JSON.stringify(userProfile?.data?.id));
 
-    if (isShown && data == "post") {
-      formData.append("status", "1");
-    } else if (data == "post") {
-      formData.append("status", "2");
-    } else if (data == "draft") {
-      formData.append("status", "0");
+    if (isShown && data == 'post') {
+      formData.append('status', '1');
+    } else if (data == 'post') {
+      formData.append('status', '2');
+    } else if (data == 'draft') {
+      formData.append('status', '0');
     }
     formData.append(
-      "expected_delivery_date",
+      'expected_delivery_date',
       // new Date(deliveryDate).toLocaleDateString().replaceAll("/", "-")
       deliveryDate
     );
     for (var i = 0; i < skills.length; i++) {
-      formData.append(
-        "skills",
-        skills[i].id ? JSON.stringify(skills[i].id) : JSON.stringify(skills[i])
-      );
+      formData.append('skills', skills[i].id ? JSON.stringify(skills[i].id) : JSON.stringify(skills[i]));
     }
     if (isRelatedToPrevJob) {
       if (relatedJobs) {
         // for (var i = 0; i < relatedJobs.length; i++) {
-        formData.append("related_jobs", JSON.stringify(relatedJobs));
+        formData.append('related_jobs', JSON.stringify(relatedJobs));
         // }
       } else {
-        formData.append("relatedJobs", JSON.stringify(relatedJobs));
+        formData.append('relatedJobs', JSON.stringify(relatedJobs));
       }
     } else {
-      formData.append("relatedJobs", null);
+      formData.append('relatedJobs', null);
     }
 
     if (jobId) {
       if (fileGallery.length) {
         for (const key of Object.keys(fileGallery)) {
-          formData.append("sample_image", JSON.stringify(fileGallery[key]));
+          formData.append('sample_image', JSON.stringify(fileGallery[key]));
         }
       }
     } else {
       if (fileGallery.length) {
         for (const key of Object.keys(fileGallery)) {
-          formData.append("sample_image", JSON.stringify(fileGallery[key]));
+          formData.append('sample_image', JSON.stringify(fileGallery[key]));
         }
       }
     }
     if (jobId) {
       if (fileGallery.length) {
         for (const key of Object.keys(fileGallery)) {
-          formData.append(
-            "template_sample_image",
-            JSON.stringify(fileGallery[key])
-          );
+          formData.append('template_sample_image', JSON.stringify(fileGallery[key]));
         }
       }
     } else {
       if (fileGallery.length) {
         for (const key of Object.keys(fileGallery)) {
-          formData.append(
-            "template_sample_image",
-            JSON.stringify(fileGallery[key])
-          );
+          formData.append('template_sample_image', JSON.stringify(fileGallery[key]));
         }
       }
     }
 
     if (formUrls) {
-      setFormUrls(formUrls.filter((item) => item));
-      formData.append("image_url", formUrls.toString());
+      setFormUrls(formUrls.filter(item => item));
+      formData.append('image_url', formUrls.toString());
     }
     if (formSampleUrls.length) {
-      setFormSampleUrls(formSampleUrls.filter((item) => item));
-      formData.append("sample_work_url", formSampleUrls.toString());
+      setFormSampleUrls(formSampleUrls.filter(item => item));
+      formData.append('sample_work_url', formSampleUrls.toString());
     }
 
     // if (industry) {
     //   formData.append("industry", JSON.stringify(industry));
     // }
-    if (data == "draft") {
+    if (data == 'draft') {
       if (companyvalue) {
-        formData.append("company", companyvalue);
+        formData.append('company', companyvalue?.id);
       }
     } else {
-      formData.append("company", companyvalue);
+      formData.append('company', companyvalue?.id);
     }
 
     if (price && !isBudgetNotRequired) {
-      formData.append("price", price);
+      formData.append('price', price);
     }
 
     if (level && !isBudgetNotRequired) {
-      formData.append("level", level);
+      formData.append('level', level);
     }
     if (job_type && !isBudgetNotRequired) {
-      formData.append("job_type", job_type);
+      formData.append('job_type', job_type);
     }
-    formData.append("tags", tags.toString());
+    formData.append('tags', tags.toString());
     if (templatename) {
-      formData.append("template_name", templatename);
+      formData.append('template_name', templatename);
     }
     if (industryname != null) {
-      formData.append("industry", industryname);
+      formData.append('industry', industryname);
     }
 
-    formData.append("user", JSON.stringify(userProfile?.data?.id));
+    formData.append('user', JSON.stringify(userProfile?.data?.id));
 
     if (Workflowdata != null) {
-      formData.append("workflow", Workflowdata);
+      formData.append('workflow', Workflowdata?.id);
     }
 
     // console.log("submittedData--", formData);
@@ -1732,80 +1682,86 @@ const AdminJobsAddEdit = () => {
     //     Authorization: `Bearer ${userData.token}`,
     //   },
     // };
-    if (jobId && data == "post" && !isShown) {
-      // const create_job = await axios
-      //   .put(`${BACKEND_API_URL}jobs/${jobId}/`, formData, config)
-      //   .then((res) => {
-      //     // console.log("EDITTTT");
-      //     swal({
-      //       title: "Successfully Complete",
-      //       text: "Successfully Saved Job",
-      //       className: "successAlert",
-      //       icon: "/img/logonew.svg",
-      //       buttons: false,
-      //       timer: 5000,
-      //     });
-      //     if (data == "draft") {
-      //       navigate(`/draft-jobs`);
-      //     } else {
-      //       navigate(`/jobs/list`);
-      //     }
-      //   })
-      //   .catch((err) => {
-      //     swal({
-      //       title: "Error",
-      //       text: err.response.data.message,
-      //       className: "errorAlert",
-      //       icon: "/img/logonew-red.svg",
-      //       // buttons: false,
-      //       timer: 5000,
-      //     });
-      //     setIsLoading(false);
-      //   });
+    if (jobId && data == 'post' && !isShown) {
+      dispatch(UPDATE_JOB(jobId, formData))
+        // const create_job = await axios
+        //   .put(`${BACKEND_API_URL}jobs/${jobId}/`, formData, config)
+        .then(res => {
+          // console.log("EDITTTT");
+          swal({
+            title: 'Successfully Complete',
+            text: 'Successfully Saved Job',
+            className: 'successAlert',
+            icon: Images.Logo,
+            buttons: {
+              OK: false
+            },
+            timer: 5000
+          });
+          if (data == 'draft') {
+            navigate(`/draft-jobs`);
+          } else {
+            navigate(`/jobs/list`);
+          }
+        })
+        .catch(err => {
+          swal({
+            title: 'Error',
+            text: err.response.data.message,
+            className: 'errorAlert',
+            icon: Images.ErrorLogo,
+            buttons: {
+              OK: false
+            },
+            timer: 5000
+          });
+          setIsLoading(false);
+        });
       // if (imageChanged) {
-    } else if (jobId && data == "draft" && !isShown) {
+    } else if (jobId && data == 'draft' && !isShown) {
       // console.log("DRAFTTTT");
       // const create_job = await axios
       //   .put(`${BACKEND_API_URL}jobs/${jobId}/`, formData, config)
-      //   .then((res) => {
-      //     swal({
-      //       title: "Successfully Complete",
-      //       text: "Successfully Created",
-      //       className: "successAlert",
-      //       icon: "/img/logonew.svg",
-      //       // buttons: false,
-      //       timer: 5000,
-      //     });
-      //     navigate(`/draft-jobs`);
-      //   })
-      //   .catch((err) => {
-      //     swal({
-      //       title: "Error",
-      //       text: err.response.data.message,
-      //       className: "errorAlert",
-      //       icon: "/img/logonew-red.svg",
-      //       // buttons: false,
-      //       timer: 5000,
-      //     });
-      //     setIsLoading(false);
-      //   });
+      dispatch(UPDATE_DRAFT_JOBS_LIST(jobId, formData))
+        .then(res => {
+          swal({
+            title: 'Successfully Complete',
+            text: 'Successfully Created',
+            className: 'successAlert',
+            icon: Images.Logo,
+            // buttons: false,
+            timer: 5000
+          });
+          navigate(`/draft-jobs`);
+        })
+        .catch(err => {
+          swal({
+            title: 'Error',
+            text: err.response.data.message,
+            className: 'errorAlert',
+            icon: Images.ErrorLogo,
+            // buttons: false,
+            timer: 5000
+          });
+          setIsLoading(false);
+        });
     } else {
       // const update_job = await axios
       //   .post(`${BACKEND_API_URL}jobs/`, formData, config)
       dispatch(CREATE_JOB(formData))
-        .then((res) => {
+        .then(res => {
           // console.log("POSTTTT", data);
           swal({
-            title: "Successfully Complete",
-            text: "Successfully Created",
-            className: "successAlert",
+            title: 'Successfully Complete',
+            text: 'Successfully Created',
+            className: 'successAlert',
             icon: Images.Logo,
             buttons: {
-              OK: false,
+              OK: false
             },
-            timer: 5000,
+            timer: 5000
           });
-          if (data == "draft") {
+          if (data == 'draft') {
             navigate(`/draft-jobs`);
           } else if (isShown) {
             navigate(`/templates/list`);
@@ -1813,16 +1769,16 @@ const AdminJobsAddEdit = () => {
             navigate(`/jobs/list`);
           }
         })
-        .catch((err) => {
+        .catch(err => {
           swal({
-            title: "Error",
-            text: "Template Already Exists",
-            className: "errorAlert",
+            title: 'Error',
+            text: 'Template Already Exists',
+            className: 'errorAlert',
             icon: Images.ErrorLogo,
             buttons: {
-              OK: false,
+              OK: false
             },
-            timer: 5000,
+            timer: 5000
           });
           setIsLoading(false);
         });
@@ -1856,14 +1812,94 @@ const AdminJobsAddEdit = () => {
   };
 
   useEffect(() => {
-    let useimage = localStorage.getItem("useimage");
+    axiosPrivate
+      .get(
+        userProfile?.data?.role === ROLES.MEMBER
+          ? `${API_URL.COMPANY.MEMBER_COMPANY_LIST}`
+          : `${API_URL.COMPANY.COMPANY_LIST}?is_active=1`
+      )
+      .then(res => {
+        const responseDestructredData = hasResultsKey(res?.data) ? { ...res?.data?.data } : res?.data?.data;
+        // console.log({ res, responseDestructredData }, "Res Company");
+
+        // To append company data of selected workflow details
+        if (isEmpty(responseDestructredData?.results?.find(e => e.company_id === jobDetails?.details?.company))) {
+          responseDestructredData?.results?.push({
+            id: jobDetails?.details?.company,
+            name: jobDetails?.details?.company_name
+          });
+        }
+        if (headerCompany) {
+          console.log('else', res?.data?.data);
+        }
+
+        console.log({
+          res,
+          results: responseDestructredData?.results,
+          responseDestructredData: responseDestructredData,
+          headerCompany: headerCompany
+        });
+        setcompanydata(
+          responseDestructredData?.results ??
+            responseDestructredData?.map(item => {
+              return {
+                id: item.company_id,
+                name: item.name
+              };
+            })
+        );
+      })
+      .catch(err => {});
+
+    axiosPrivate
+      .get(
+        userProfile?.data?.role === ROLES.MEMBER
+          ? `${API_URL.WORKFLOW.MEMBER_WORKFLOW_LIST}?company=${headerCompany}`
+          : `${API_URL.WORKFLOW.WORKFLOW_LIST}?company=${jobDetails?.details?.company}`
+      )
+      .then(response => {
+        const destructuredWorkflowData = { ...response?.data?.data };
+
+        if (isEmpty(destructuredWorkflowData?.results?.find(e => e?.id === jobDetails?.details?.workflow))) {
+          destructuredWorkflowData?.results?.push({
+            id: jobDetails?.details?.workflow,
+            name: jobDetails?.details?.workflow_name
+          });
+        }
+      })
+      .catch(error => {});
+  }, [jobDetails, jobId, headerCompany]);
+
+  useUpdateEffect(() => {
+    setcompanydata(
+      companyList?.data?.results?.map(company => {
+        return {
+          id: company?.id,
+          name: company?.name
+        };
+      })
+    );
+    if (WorkFlowData?.workFlowList?.data?.results?.length) {
+      setapivalue(
+        WorkFlowData?.workFlowList?.data?.results?.map(workflow => {
+          return {
+            id: workflow?.id,
+            name: workflow?.name
+          };
+        })
+      );
+    }
+  }, [companyList?.data?.results, WorkFlowData?.workFlowList?.data?.results]);
+
+  useEffect(() => {
+    let useimage = localStorage.getItem('useimage');
     // dispatch(CollectionView(useimage));
   }, []);
 
   useEffect(() => {
-    localStorage.removeItem("damon");
-    localStorage.removeItem("jobdamid");
-    localStorage.removeItem("prev_vault");
+    localStorage.removeItem('damon');
+    localStorage.removeItem('jobdamid');
+    localStorage.removeItem('prev_vault');
   }, []);
 
   // useEffect(() => {
@@ -1893,8 +1929,8 @@ const AdminJobsAddEdit = () => {
 
   useEffect(() => {
     setTimeout(() => {
-      localStorage.removeItem("useimage");
-      localStorage.removeItem("asset");
+      localStorage.removeItem('useimage');
+      localStorage.removeItem('asset');
     }, 2500);
   }, []);
 
@@ -1933,9 +1969,9 @@ const AdminJobsAddEdit = () => {
       setIsOpen11(false);
       // setIsOpenUser(false);
     };
-    window.addEventListener("scroll", handler);
+    window.addEventListener('scroll', handler);
     return () => {
-      window.removeEventListener("scroll", handler);
+      window.removeEventListener('scroll', handler);
     };
   }, [addedSkill]);
 
@@ -1945,33 +1981,36 @@ const AdminJobsAddEdit = () => {
   //   }
   // }, []);
 
+  useSingleEffect(() => {
+    if (jobId) {
+      dispatch(GET_DETAIL_JOB_DATA(jobId));
+    }
+  });
+
+  useUpdateEffect(() => {
+    dispatch(GET_DETAIL_JOB_DATA(jobId));
+  }, [jobId]);
   useEffect(() => {
     if (jobId) {
       setShow(true);
       // setShowdraft(false);
       settextchange(true);
-      // dispatch(GET_JOBS_DETAILS(jobId));
-      if (jobDetails?.details?.message) {
-        if (userProfile?.data?.role === Roles.ADMIN) {
-          dispatch(
-            GET_IN_HOUSE_USER_LIST(
-              jobDetails?.details.company,
-              `${API_URL.IN_HOUSE_USER.ADMIN_USER_LIST}`
-            )
-          );
+      // dispatch(GET_DETAIL_JOB_DATA(jobId));
+      // console.log("jobId", jobId, jobDetails);
+
+      if (jobDetails?.details) {
+        if (userProfile?.data?.role === ROLES.ADMIN) {
+          dispatch(GET_IN_HOUSE_USER_LIST(jobDetails?.details.company, `${API_URL.IN_HOUSE_USER.ADMIN_USER_LIST}`));
         } else {
           dispatch(GET_IN_HOUSE_USER_LIST(jobDetails?.details.company));
         }
+        // console.log("jobId", jobId, jobDetails);
 
         if (jobDetails?.details.is_house_member) {
           setIsBudgetNotRequired(true);
           if (jobDetails?.details?.house_member?.length > 0) {
             const houseMembersList = [];
-            for (
-              let index = 0;
-              index < jobDetails?.details?.house_member?.length;
-              index++
-            ) {
+            for (let index = 0; index < jobDetails?.details?.house_member?.length; index++) {
               // houseMembersList.push(
               //   adminInHouseUsers?.find(
               //     (item) => item.id == jobDetails?.details?.house_member[index]
@@ -1980,54 +2019,58 @@ const AdminJobsAddEdit = () => {
             }
             setInHouseUser(houseMembersList);
           }
-          setPrice("");
+          setPrice('');
           setlevel(null);
-          setJobType("0");
+          setJobType('0');
         } else {
-          setPrice(jobDetails?.details?.details.price);
-          setlevel(jobDetails?.details?.details.level?.id);
-          setJobType(jobDetails?.details?.details.job_type);
+          setPrice(jobDetails?.details?.price);
+          setlevel(jobDetails?.details?.level?.id);
+          setJobType(jobDetails?.details?.job_type);
         }
-        if (jobDetails?.details?.details.status != 0) {
+        if (jobDetails?.details?.status != 0) {
           setShowdraft(false);
         }
-        setTitle(jobDetails?.details?.details.title);
-        setDescription(jobDetails?.details?.details.description);
+        setTitle(jobDetails?.details?.title);
+        setDescription(jobDetails?.details?.description);
         // setFiles(jobDetails.images);
         // setJobSampleDocuments(jobDetails.images)
-        setDeliveryDate(jobDetails?.details?.details.expected_delivery_date);
-        setSkills(jobDetails?.details?.details.skills);
-        setindustryname(jobDetails?.details?.details.industry);
-        setdivid(jobDetails?.details?.details.due_date_index);
-        // const success = api.get(`${BACKEND_API_URL}job-draft`).then((res) => {
-        //   const success = api
-        //     .get(`${BACKEND_API_URL}work-flow/?company=${jobDetails?.details?.company}`)
-        //     .then((res) => {
-        //       setapivalue(res.data);
-        //     });
-        // });
-        // const successTemplateApi = api
-        //   .get(
-        //     `${BACKEND_API_URL}admin-job-template/?company=${jobDetails?.details?.company}`
-        //   )
-        //   .then((res) => {
-        //     settemplatevalue(res.data);
-        //   });
-        setworkflowdata(jobDetails?.details?.workflow);
+        setDeliveryDate(jobDetails?.details?.expected_delivery_date);
+        setSkills(jobDetails?.details?.skills);
+        setindustryname(jobDetails?.details?.industry);
+        setdivid(jobDetails?.details?.due_date_index);
+        const success = axiosPrivate.get(`${API_URL.DRAFT_JOBS.DRAFT_JOBS_LIST}`).then(res => {
+          const success = axiosPrivate
+            .get(`${API_URL.WORKFLOW.WORKFLOW_LIST}?company=${jobDetails?.details?.company}`)
+            .then(res => {
+              setapivalue(res.data?.data?.results);
+            });
+        });
+        if (userProfile?.data?.role === ROLES.ADMIN) {
+          const successTemplateApi = axiosPrivate
+            .get(`${API_URL.TEMPLATES.ADMIN_JOB_TEMPLATE}?company=${jobDetails?.details?.company}`)
+            .then(res => {
+              settemplatevalue(res.data);
+            });
+        } else {
+          const successTemplateApi = axiosPrivate.get(`${API_URL}job-template/?company=${headerCompany}`).then(res => {
+            settemplatevalue(res.data);
+          });
+        }
+        setworkflowdata({
+          id: jobDetails?.details?.workflow,
+          name: jobDetails?.details?.workflow_name
+        });
         // dispatch(getAdminRelatedJobs(jobDetails?.details?.company));
         setRelatedJobs(jobDetails?.details?.related_jobs);
-        setcompanyvalue(jobDetails?.details?.company);
+        setcompanyvalue({
+          id: jobDetails?.details?.company,
+          name: jobDetails?.details?.company_name
+        });
         setItemData(jobDetails?.details?.jobtasks_job);
         setTemplatename(jobDetails?.details?.template_name);
 
-        for (
-          let index = 0;
-          index < jobDetails?.details?.images.length;
-          index++
-        ) {
-          if (
-            jobDetails?.details?.images[index].work_sample_image_name != null
-          ) {
+        for (let index = 0; index < jobDetails?.details?.images.length; index++) {
+          if (jobDetails?.details?.images[index].work_sample_image_name != null) {
             setissamplefiles(true);
           }
 
@@ -2046,12 +2089,12 @@ const AdminJobsAddEdit = () => {
 
         if (jobDetails?.details?.image_url) {
           setisfiles(true);
-          let newArray = jobDetails?.details?.image_url.split(",");
+          let newArray = jobDetails?.details?.image_url.split(',');
           setFormUrls(newArray);
         }
         if (jobDetails?.details?.sample_work_url) {
           setissamplefiles(true);
-          let newArray = jobDetails?.details?.sample_work_url.split(",");
+          let newArray = jobDetails?.details?.sample_work_url.split(',');
           setFormSampleUrls(newArray);
         }
         if (jobDetails?.details?.related_jobs?.length > 0) {
@@ -2059,14 +2102,14 @@ const AdminJobsAddEdit = () => {
         }
         // setTags(jobDetails.tags);
         if (jobDetails?.details?.tags) {
-          const tagsList = jobDetails?.details?.tags?.split(",");
+          const tagsList = jobDetails?.details?.tags?.split(',');
           if (tagsList) {
             setTags(tagsList);
           }
         }
-        if (jobDetails?.details?.images) {
+        if (jobDetails?.details?.images?.length) {
           let newImages = jobDetails?.details?.images;
-          newImages = newImages.filter((item) => item);
+          newImages = newImages.filter(item => item);
           setJobDocuments(newImages);
           let fileext = [];
           let s = [];
@@ -2074,58 +2117,42 @@ const AdminJobsAddEdit = () => {
           for (var i = 0; i < jobDetails?.details?.images.length; i++) {
             fileext.push(
               jobDetails?.details?.images[i].job_images?.slice(
-                ((jobDetails?.details?.images[i].job_images.lastIndexOf(".") -
-                  1) >>>
-                  0) +
-                  2
+                ((jobDetails?.details?.images[i].job_images.lastIndexOf('.') - 1) >>> 0) + 2
               )
             );
             // console.log(fileext);
             s.push(
               jobDetails?.details?.images[i].job_images?.slice(
-                ((jobDetails?.details?.images[i].job_images.lastIndexOf("/") -
-                  1) >>>
-                  0) +
-                  2
+                ((jobDetails?.details?.images[i].job_images.lastIndexOf('/') - 1) >>> 0) + 2
               )
             );
             b.push(jobDetails?.details?.images[i].job_images);
           }
           // console.log(s);
-          b = b.filter((item) => item);
-          s = s.filter((item) => item);
-          fileext = fileext.filter((item) => item);
+          b = b.filter(item => item);
+          s = s.filter(item => item);
+          fileext = fileext.filter(item => item);
           imgRef.current = b;
           // console.log("imgRefcurrent", imgRef.current);
           setFileNameDisplay(s);
           setFileExtension(fileext);
         }
-        if (jobDetails?.details?.images) {
+        if (jobDetails?.details?.images?.length) {
           let newImages = jobDetails?.details.images;
-          newImages = newImages.filter((item) => item);
+          newImages = newImages.filter(item => item);
           setJobSampleDocuments(newImages);
           let fileext1 = [];
           let s1 = [];
           let b1 = [];
-          for (var i = 0; i < jobDetails?.details?.details.images.length; i++) {
+          for (var i = 0; i < jobDetails?.details?.details?.images?.length; i++) {
             fileext1.push(
-              jobDetails?.details?.details.images[i].work_sample_images?.slice(
-                ((jobDetails?.details?.details.images[
-                  i
-                ].work_sample_images?.lastIndexOf(".") -
-                  1) >>>
-                  0) +
-                  2
+              jobDetails?.details?.details?.images[i]?.work_sample_images?.slice(
+                ((jobDetails?.details?.details.images[i].work_sample_images?.lastIndexOf('.') - 1) >>> 0) + 2
               )
             );
             s1.push(
-              jobDetails?.details.images[i].work_sample_images?.slice(
-                ((jobDetails?.details.images[i].work_sample_images?.lastIndexOf(
-                  "/"
-                ) -
-                  1) >>>
-                  0) +
-                  2
+              jobDetails?.details?.images[i]?.work_sample_images?.slice(
+                ((jobDetails?.details?.images[i]?.work_sample_images?.lastIndexOf('/') - 1) >>> 0) + 2
               )
             );
             b1.push(jobDetails?.details.images[i].work_sample_images);
@@ -2273,7 +2300,7 @@ const AdminJobsAddEdit = () => {
     setEditFileSampleExtension([]);
     setEditFileExtension([]);
     // }, [success, successAgencyInHouseUsers]);
-  }, []);
+  }, [jobDetails]);
 
   useEffect(() => {
     // dispatch(listAllCategories());
@@ -2291,9 +2318,9 @@ const AdminJobsAddEdit = () => {
     // const success = api.get(`${BACKEND_API_URL}job-template`).then((res) => {
     //   settemplatevalue(res.data);
     // });\
-    localStorage.removeItem("damon");
-    localStorage.removeItem("prev_vault");
-    localStorage.removeItem("jobdamid");
+    localStorage.removeItem('damon');
+    localStorage.removeItem('prev_vault');
+    localStorage.removeItem('jobdamid');
     // const tasks = api.get(`${BACKEND_API_URL}job-task`).then((res) => {
     //   settasks(res.data);
     // });
@@ -2308,63 +2335,59 @@ const AdminJobsAddEdit = () => {
   // DRAG AND DROP FUNCTIONALITY
 
   React.useEffect(() => {
-    drop.current?.addEventListener("dragover", handleDragOver);
-    drop.current?.addEventListener("drop", handleDrop);
+    drop.current?.addEventListener('dragover', handleDragOver);
+    drop.current?.addEventListener('drop', handleDrop);
 
     return () => {
-      drop.current?.removeEventListener("dragover", handleDragOver);
-      drop.current?.removeEventListener("drop", handleDrop);
+      drop.current?.removeEventListener('dragover', handleDragOver);
+      drop.current?.removeEventListener('drop', handleDrop);
     };
   }, []);
 
   useEffect(() => {
     if (headerCompany) {
-      setcompanyvalue(headerCompany);
+      setcompanyvalue({
+        id: headerCompany,
+        name: headerCompanyName
+      });
       dispatch(SET_COMPANY_LIST_LOADING(true));
 
-      if (userProfile?.data?.role === Roles.ADMIN) {
-        dispatch(
-          GET_SINGLE_COMPANY_DATA(headerCompany, `${API_URL.COMPANY.ADMIN}`)
-        )
-          .then((res) => {
+      if (userProfile?.data?.role === ROLES.ADMIN) {
+        dispatch(GET_SINGLE_COMPANY_DATA(headerCompany, `${API_URL.COMPANY.ADMIN}`))
+          .then(res => {
             // setapivalue(res.data);
             // setindustryname(res?.data?.industry);
           })
-          .catch((error) => {
+          .catch(error => {
             dispatch(SET_COMPANY_LIST_LOADING(false));
             swal({
-              title: "Error",
+              title: 'Error',
               text: error?.response?.data?.detail,
-              className: "errorAlert-login",
+              className: 'errorAlert-login',
               icon: Images.Logo,
               buttons: {
-                OK: false,
+                OK: false
               },
-              timer: 5000,
+              timer: 5000
             });
           });
       } else {
-        dispatch(
-          GET_SINGLE_COMPANY_DATA(
-            headerCompany,
-            `${API_URL.COMPANY.AGENCY_COMPANY_LIST}`
-          )
-        )
-          .then((res) => {
+        dispatch(GET_SINGLE_COMPANY_DATA(headerCompany, `${API_URL.COMPANY.COMPANY_LIST}`))
+          .then(res => {
             // setapivalue(res.data);
             // setindustryname(res?.data?.industry);
           })
-          .catch((error) => {
+          .catch(error => {
             dispatch(SET_COMPANY_LIST_LOADING(false));
             swal({
-              title: "Error",
+              title: 'Error',
               text: error?.response?.data?.detail,
-              className: "errorAlert-login",
+              className: 'errorAlert-login',
               icon: Images.Logo,
               buttons: {
-                OK: false,
+                OK: false
               },
-              timer: 5000,
+              timer: 5000
             });
           });
       }
@@ -2383,10 +2406,10 @@ const AdminJobsAddEdit = () => {
         // settemplatedata("1");
         setlevel(null);
         // setJobType("");
-        setPrice("");
+        setPrice('');
         setindustryname(null);
         // setDeliveryDate();
-        setDescription("");
+        setDescription('');
         setSkills([]);
         setTags([]);
         // setTemplatename();
@@ -2422,21 +2445,21 @@ const AdminJobsAddEdit = () => {
   }, [jobDocuments]);
 
   React.useEffect(() => {
-    dropSample.current?.addEventListener("dragover", handleDragOverSample);
-    dropSample.current?.addEventListener("drop", handleDropSample);
+    dropSample.current?.addEventListener('dragover', handleDragOverSample);
+    dropSample.current?.addEventListener('drop', handleDropSample);
 
     return () => {
-      dropSample.current?.removeEventListener("dragover", handleDragOverSample);
-      dropSample.current?.removeEventListener("drop", handleDropSample);
+      dropSample.current?.removeEventListener('dragover', handleDragOverSample);
+      dropSample.current?.removeEventListener('drop', handleDropSample);
     };
   }, []);
 
-  const handleDragOverSample = (e) => {
+  const handleDragOverSample = e => {
     e.preventDefault();
     e.stopPropagation();
   };
 
-  const handleDropSample = (e) => {
+  const handleDropSample = e => {
     e.preventDefault();
     e.stopPropagation();
     // const { files } = e.dataTransfer;
@@ -2446,40 +2469,37 @@ const AdminJobsAddEdit = () => {
     let fileSampleext: any = [];
     for (let i = 0; i < e.dataTransfer.files.length; i++) {
       // Check 'eps' file type
-      const fileExtension = e.dataTransfer.files[i].name.split(".").at(-1);
-      const allowedFileTypes = ["eps"];
+      const fileExtension = e.dataTransfer.files[i].name.split('.').at(-1);
+      const allowedFileTypes = ['eps'];
 
-      if (
-        !e.dataTransfer.files[i].type.match(imageMimeType) &&
-        !allowedFileTypes.includes(fileExtension)
-      ) {
+      if (!e.dataTransfer.files[i].type.match(imageMimeType) && !allowedFileTypes.includes(fileExtension)) {
         swal({
-          title: "Error",
-          text: "Image type is not valid",
-          className: "errorAlert",
-          icon: "/img/logonew-red.svg",
+          title: 'Error',
+          text: 'Image type is not valid',
+          className: 'errorAlert',
+          icon: Images.ErrorLogo,
           // buttons: false,
-          timer: 5000,
+          timer: 5000
         });
         // return;
       } else if (!e.dataTransfer.files[i].type.match(imageMimeType)) {
         swal({
-          title: "Error",
-          text: "Image type is not valid",
-          className: "errorAlert",
-          icon: "/img/logonew-red.svg",
+          title: 'Error',
+          text: 'Image type is not valid',
+          className: 'errorAlert',
+          icon: Images.ErrorLogo,
           // buttons: false,
-          timer: 5000,
+          timer: 5000
         });
         // return;
       } else if (e.dataTransfer.files[i]?.size > maxImageFileSize) {
         swal({
-          title: "Error",
-          text: "Max file size allowed is 10mb",
-          className: "errorAlert",
-          icon: "/img/logonew-red.svg",
+          title: 'Error',
+          text: 'Max file size allowed is 10mb',
+          className: 'errorAlert',
+          icon: Images.ErrorLogo,
           // buttons: false,
-          timer: 5000,
+          timer: 5000
         });
         // return;
       } else {
@@ -2487,9 +2507,7 @@ const AdminJobsAddEdit = () => {
         previewSampleImages.push(URL.createObjectURL(e.dataTransfer.files[i]));
         imageSampleList.push(e.dataTransfer.files[i]);
         fileSampleext.push(
-          e.dataTransfer.files[i]?.name?.slice(
-            ((e.dataTransfer.files[i]?.name.lastIndexOf(".") - 1) >>> 0) + 2
-          )
+          e.dataTransfer.files[i]?.name?.slice(((e.dataTransfer.files[i]?.name.lastIndexOf('.') - 1) >>> 0) + 2)
         );
       }
     }
@@ -2505,12 +2523,12 @@ const AdminJobsAddEdit = () => {
     // }
   };
 
-  const handleDragOver = (e) => {
+  const handleDragOver = e => {
     e.preventDefault();
     e.stopPropagation();
   };
 
-  const handleDrop = (e) => {
+  const handleDrop = e => {
     e.preventDefault();
     e.stopPropagation();
 
@@ -2519,29 +2537,26 @@ const AdminJobsAddEdit = () => {
     let fileext: any = [];
     for (let i = 0; i < e.dataTransfer.files.length; i++) {
       // Check 'eps' file type
-      const fileExtension = e.dataTransfer.files[i].name.split(".").at(-1);
-      const allowedFileTypes = ["eps"];
+      const fileExtension = e.dataTransfer.files[i].name.split('.').at(-1);
+      const allowedFileTypes = ['eps'];
 
-      if (
-        !e.dataTransfer.files[i].type.match(imageMimeType) &&
-        !allowedFileTypes.includes(fileExtension)
-      ) {
+      if (!e.dataTransfer.files[i].type.match(imageMimeType) && !allowedFileTypes.includes(fileExtension)) {
         swal({
-          title: "Error",
-          text: "Image type is not valid",
-          className: "errorAlert",
-          icon: "/img/logonew-red.svg",
+          title: 'Error',
+          text: 'Image type is not valid',
+          className: 'errorAlert',
+          icon: Images.ErrorLogo,
           // buttons: false,
-          timer: 5000,
+          timer: 5000
         });
       } else if (e.dataTransfer.files[i]?.size > maxImageFileSize) {
         swal({
-          title: "Error",
-          text: "Max file size allowed is 10mb",
-          className: "errorAlert",
-          icon: "/img/logonew-red.svg",
+          title: 'Error',
+          text: 'Max file size allowed is 10mb',
+          className: 'errorAlert',
+          icon: Images.ErrorLogo,
           // buttons: false,
-          timer: 5000,
+          timer: 5000
         });
         // return;
       } else {
@@ -2549,9 +2564,7 @@ const AdminJobsAddEdit = () => {
         previewImages.push(URL.createObjectURL(e.dataTransfer.files[i]));
         imageList.push(e.dataTransfer.files[i]);
         fileext.push(
-          e.dataTransfer.files[i]?.name?.slice(
-            ((e.dataTransfer.files[i]?.name.lastIndexOf(".") - 1) >>> 0) + 2
-          )
+          e.dataTransfer.files[i]?.name?.slice(((e.dataTransfer.files[i]?.name.lastIndexOf('.') - 1) >>> 0) + 2)
         );
       }
     }
@@ -2569,27 +2582,19 @@ const AdminJobsAddEdit = () => {
   return (
     <div className="page-container">
       <div className="">
-        <h1 className="text-2xl font-bold text-black">
-          What Service Are You Looking For?
-        </h1>
+        <h1 className="text-2xl font-bold text-black">What Service Are You Looking For?</h1>
       </div>
-      <div className="page-card card p-5">
+      <div className="page-card card ">
         <div className="w-full max-w-[560px]">
           <div className="pb-5">
             <h1 className="text-2xl font-bold text-[#1b4ea8]">Job Details</h1>
           </div>
-          <div
-            className={
-              errors.title
-                ? "input-fields-wrapper error "
-                : " input-fields-wrapper "
-            }
-          >
+          <div className={errors.title ? 'input-fields-wrapper error ' : ' input-fields-wrapper '}>
             <h4 className="flex gap-1 text-lg text-black font-bold mb-1">
-              Job Title{" "}
+              Job Title{' '}
               {!title && (
                 <>
-                  <label className="" style={{ color: "red" }}>
+                  <label className="" style={{ color: 'red' }}>
                     *
                   </label>
                 </>
@@ -2600,136 +2605,103 @@ const AdminJobsAddEdit = () => {
               type="text"
               placeholder="Title"
               name="title"
-              onChange={(e) => {
+              onChange={e => {
                 setTitle(e.target.value);
                 setErrors({ ...errors, title: null });
               }}
               value={title}
             />
-            <span className="text-[#D14F4F] flex justify-end">
-              {errors.title ?? ""}
-            </span>
+            <span className="text-[#D14F4F] flex justify-end">{errors.title ?? ''}</span>
           </div>
-          <div
-            className={
-              errors.company
-                ? "input-fields-wrapper error my-4"
-                : "input-fields-wrapper my-4"
-            }
-          >
+          <div className={errors.company ? 'input-fields-wrapper error my-4' : 'input-fields-wrapper my-4'}>
             <h4 className="flex gap-1 text-lg text-black font-bold mb-1">
-              Company{" "}
+              Company{' '}
               {companyvalue == null && (
                 <>
-                  <label className="" style={{ color: "red" }}>
+                  <label className="" style={{ color: 'red' }}>
                     *
                   </label>
                 </>
               )}
-            </h4>{" "}
+            </h4>{' '}
             <div className="">
-              <Select
-                className={`${
-                  companyvalue == "" || companyvalue == null
-                    ? "text-[#939393] hover:border-[#939393] "
-                    : "text-[#000]"
-                } bg-[rgb(249_251_252)] rounded w-full h-12 mb-1`}
-                open={isOpen9}
-                onOpen={() => {
-                  setIsOpen9(true);
-                }}
-                onClose={() => {
-                  setIsOpen9(false);
-                }}
-                // MenuProps={menuProps}
-                value={companyvalue}
-                onChange={getvalue}
-                displayEmpty
-                inputProps={{ "aria-label": "Without label" }}
-              >
-                <MenuItem value={null}>Select Company</MenuItem>
-                {companyList?.data?.results?.map((item) =>
-                  item.is_active ? (
-                    <MenuItem key={item.id} value={item.id}>
-                      {item?.name}
-                    </MenuItem>
-                  ) : null
-                )}
-              </Select>
-              <span className="text-[#D14F4F] flex justify-end">
-                {errors.company ?? ""}
-              </span>
+              <MuiAutoComplete
+                disabled={userProfile?.data?.role === ROLES.MEMBER}
+                placeholder="Select Company"
+                filterList={companydata ?? []}
+                selectedOption={companyvalue}
+                setSearchText={setSearchText}
+                // setSelectedOption={setcompanyvalue}
+                handleChange={getvalue}
+                handleSearchChange={handleCompanySearch}
+                searchText={searchText}
+                label={''}
+                // disabled={!showbutton}
+                customClass={
+                  // "rounded outline-none focus:border-theme hover:border-none"
+                  `${
+                    companyvalue == '' || companyvalue == null
+                      ? 'text-[#939393] hover:border-[#939393] '
+                      : 'text-[#000]'
+                  } bg-[rgb(249_251_252)] rounded w-full h-12 mb-1`
+                }
+              />
+
+              <span className="text-[#D14F4F] flex justify-end">{errors.company ?? ''}</span>
             </div>
           </div>
-          {show ? (
+          {userProfile?.data?.role === ROLES.MEMBER || show ? (
             <>
-              <div className={errors.workflow ? " error mb-2" : " mb-2"}>
+              <div className={errors.workflow ? ' error mb-2' : ' mb-2'}>
                 <h4 className="flex gap-1 text-lg text-black font-bold mb-1 justify-between">
                   <div>
-                    Approval Workflow ?{" "}
+                    Approval Workflow ?{' '}
                     {Workflowdata == null && (
                       <>
-                        <label className="" style={{ color: "red" }}>
+                        <label className="" style={{ color: 'red' }}>
                           *
                         </label>
                       </>
                     )}
                   </div>
-                  <Link
-                    className="text-base font-normal text-[#0d6efd]"
-                    to="/workflow/add/"
-                  >
+                  <Link className="text-base font-normal text-[#0d6efd]" to="/workflow/add/">
                     + Add Workflow
                   </Link>
-                </h4>{" "}
+                </h4>{' '}
                 <div className="input-fields-wrapper ">
-                  <Select
-                    className={`${
-                      Workflowdata == "" || Workflowdata == null
-                        ? "!text-[#939393] hover:border-[#939393] "
-                        : "text-[#000] "
-                    } bg-[rgb(249_251_252)] rounded w-full h-12 mb-1`}
-                    open={isOpen8}
-                    onOpen={() => {
-                      setIsOpen8(true);
-                    }}
-                    onClose={() => {
-                      setIsOpen8(false);
-                    }}
-                    // MenuProps={menuProps}
-                    value={Workflowdata}
-                    onChange={(e) => {
-                      setworkflowdata(e.target.value);
-                      setErrors({ ...errors, workflow: null });
-                    }}
-                    displayEmpty
-                    inputProps={{ "aria-label": "Without label" }}
-                  >
-                    <MenuItem value={null}>Select Workflow</MenuItem>
-                    {WorkFlowData?.workFlowList?.data?.results?.map((item) =>
-                      item.is_active ? (
-                        <MenuItem key={item.id} value={item.id}>
-                          {item?.name}
-                        </MenuItem>
-                      ) : null
-                    )}
-                  </Select>
-                  <span className="text-[#D14F4F]">
-                    {errors.workflow ?? ""}
-                  </span>
+                  <MuiAutoComplete
+                    placeholder="Select Workflow"
+                    filterList={apivalue ?? []}
+                    selectedOption={Workflowdata}
+                    setSearchText={setSearchText}
+                    // setSelectedOption={setcompanyvalue}
+                    handleChange={handleWorkflowChange}
+                    handleSearchChange={handleWorkFlowCompanySearch}
+                    searchText={searchText}
+                    label={''}
+                    // disabled={!showbutton}
+                    customClass={
+                      // "rounded outline-none focus:border-theme hover:border-none"
+                      `${
+                        Workflowdata == '' || Workflowdata == null
+                          ? '!text-[#939393] hover:border-[#939393] '
+                          : 'text-[#000] '
+                      } bg-[rgb(249_251_252)] rounded w-full h-12 mb-1`
+                    }
+                  />
+
+                  <span className="text-[#D14F4F]">{errors.workflow ?? ''}</span>
                 </div>
               </div>
 
               <div className="input-fields-wrapper mb-2 ">
-                <h4 className="text-lg text-black font-bold mb-1">
-                  Select Job Template
-                </h4>{" "}
+                <h4 className="text-lg text-black font-bold mb-1">Select Job Template</h4>{' '}
                 <div className="">
                   <Select
                     className={`${
-                      templatedata == "" || templatedata == null
-                        ? "!text-[#939393] hover:border-[#939393] "
-                        : "text-[#000] "
+                      templatedata == '' || templatedata == null
+                        ? '!text-[#939393] hover:border-[#939393] '
+                        : 'text-[#000] '
                     } bg-[rgb(249_251_252)] rounded w-full h-12 mb-1`}
                     open={isOpen7}
                     onOpen={() => {
@@ -2742,10 +2714,10 @@ const AdminJobsAddEdit = () => {
                     onChange={gettemplate}
                     // MenuProps={menuProps}
                     displayEmpty
-                    inputProps={{ "aria-label": "Without label" }}
+                    inputProps={{ 'aria-label': 'Without label' }}
                   >
                     <MenuItem value="1">Select Template</MenuItem>
-                    {templatevalue?.map((item) => (
+                    {templatevalue?.map(item => (
                       <MenuItem key={item.id} value={item.id}>
                         {item?.template_name}
                       </MenuItem>
@@ -2754,14 +2726,14 @@ const AdminJobsAddEdit = () => {
                 </div>
               </div>
 
-              <div className={"input-fields-wrapper mb-2"}>
-                <h4 className="text-lg text-black font-bold">Industry</h4>{" "}
+              <div className={'input-fields-wrapper mb-2'}>
+                <h4 className="text-lg text-black font-bold">Industry</h4>{' '}
                 <div className="styled-select Companyname">
                   <Select
                     className={`${
-                      industryname == "" || industryname == null
-                        ? "!text-[#939393] hover:border-[#939393] "
-                        : "text-[#000] "
+                      industryname == '' || industryname == null
+                        ? '!text-[#939393] hover:border-[#939393] '
+                        : 'text-[#000] '
                     } bg-[rgb(249_251_252)] rounded w-full h-12 mb-1`}
                     open={isOpen2}
                     onOpen={() => {
@@ -2773,15 +2745,15 @@ const AdminJobsAddEdit = () => {
                     // disabled={industryname}
                     // MenuProps={menuProps}
                     value={industryname}
-                    onChange={(e) => {
+                    onChange={e => {
                       setindustryname(e.target.value);
                       setErrors({ ...errors, level: null });
                     }}
                     displayEmpty
-                    inputProps={{ "aria-label": "Without label" }}
+                    inputProps={{ 'aria-label': 'Without label' }}
                   >
                     <MenuItem value={null}>Select Industry</MenuItem>
-                    {industriesList?.data?.results?.map((item) =>
+                    {industriesList?.data?.results?.map(item =>
                       item.is_active ? (
                         <MenuItem key={item.id} value={item.id}>
                           {item?.industry_name}
@@ -2803,34 +2775,27 @@ const AdminJobsAddEdit = () => {
               </div>
             </>
           ) : null}
-          <div
-            className={
-              errors.description
-                ? "input-fields-wrapper error"
-                : "input-fields-wrapper "
-            }
-          >
+          <div className={errors.description ? 'input-fields-wrapper error' : 'input-fields-wrapper '}>
             <h4 className="flex gap-1 text-lg text-black font-bold mb-1">
-              Describe Your Job{" "}
+              Describe Your Job{' '}
               {!description && (
                 <>
-                  <label className="jobeditdiv" style={{ color: "red" }}>
+                  <label className="jobeditdiv" style={{ color: 'red' }}>
                     *
                   </label>
                 </>
               )}
             </h4>
             <p className="text-sm my-2 text-[#474e55]">
-              This could include dimensions, colors, how you plan to use it, or
-              anything else that the content creator needs to know in order to
-              meet your expectations.
+              This could include dimensions, colors, how you plan to use it, or anything else that the content creator
+              needs to know in order to meet your expectations.
             </p>
             <textarea
               className="h-[180px] input-style bg-[rgb(249_251_252)] custom-scrollbar"
               placeholder=""
               maxLength={4000}
               value={description}
-              onChange={(e) => {
+              onChange={e => {
                 setDescription(e.target.value);
                 setErrors({ ...errors, description: null });
               }}
@@ -2838,7 +2803,7 @@ const AdminJobsAddEdit = () => {
             <p className="flex justify-end text-sm">
               <span
                 style={{
-                  color: description?.length === 4000 && "#D14F4F",
+                  color: description?.length === 4000 && '#D14F4F'
                 }}
               >
                 {description?.length ?? 0}
@@ -2849,13 +2814,13 @@ const AdminJobsAddEdit = () => {
             <span
               className="Ag_E"
               style={{
-                color: "#D14F4F",
-                opacity: errors.description ? 1 : 0,
+                color: '#D14F4F',
+                opacity: errors.description ? 1 : 0
               }}
             >
-              {errors.description ?? "valid"}
+              {errors.description ?? 'valid'}
             </span>
-          </div>{" "}
+          </div>{' '}
           <div
             className="flex gap-2 items-center"
             // style={{ display: "flex" }}
@@ -2870,18 +2835,10 @@ const AdminJobsAddEdit = () => {
                 onClick={() => setIsRelatedToPrevJob(!isRelatedToPrevJob)}
               />
             ) : (
-              <input
-                type="checkbox"
-                disabled={true}
-                name="vehicle1"
-                className="w-[20px] h-[20px] rounded-lg "
-              />
+              <input type="checkbox" disabled={true} name="vehicle1" className="w-[20px] h-[20px] rounded-lg " />
             )}
 
-            <label htmlFor="vehicle1">
-              {" "}
-              Is this related to a previous job?
-            </label>
+            <label htmlFor="vehicle1"> Is this related to a previous job?</label>
             {/* <input type="checkbox" />
                       <span style={{ marginLeft: "10px" }}>
                         Is this related to a previous job?
@@ -2889,15 +2846,13 @@ const AdminJobsAddEdit = () => {
           </div>
           {isRelatedToPrevJob && (
             <div className="input-fields-wrapper mb-2">
-              <h4 className="text-lg text-black font-bold mb-1">
-                Related Jobs (if applicable)
-              </h4>
+              <h4 className="text-lg text-black font-bold mb-1">Related Jobs (if applicable)</h4>
               <div className="">
                 <Select
                   className={`${
-                    relatedJobs == "" || relatedJobs == null
-                      ? "!text-[#939393] hover:border-[#939393] "
-                      : "text-[#000] "
+                    relatedJobs == '' || relatedJobs == null
+                      ? '!text-[#939393] hover:border-[#939393] '
+                      : 'text-[#000] '
                   } bg-[rgb(249_251_252)] rounded w-full h-12 mb-1`}
                   open={isOpen11}
                   // open={true}
@@ -2909,13 +2864,13 @@ const AdminJobsAddEdit = () => {
                   }}
                   // MenuProps={menuProps}
                   value={relatedJobs}
-                  onChange={(e) => {
+                  onChange={e => {
                     setRelatedJobs(e.target.value);
                     // setErrors({ ...errors, level: null });
                   }}
                   placeholder="Select Related Job"
                   displayEmpty
-                  inputProps={{ "aria-label": "Without label" }}
+                  inputProps={{ 'aria-label': 'Without label' }}
                 >
                   <MenuItem value={null}>Select Related Job</MenuItem>
                   {/* {adminRelatedJobs
@@ -2932,45 +2887,41 @@ const AdminJobsAddEdit = () => {
               </div>
             </div>
           )}
-          <div className={errors.skills ? "error-style mb-4 " : "mb-4"}>
-            <h4 className=" text-lg text-black font-bold mb-1 mt-3">
-              Skills Needed
-            </h4>
+          <div className={errors.skills ? 'error-style mb-4 ' : 'mb-4'}>
+            <h4 className=" text-lg text-black font-bold mb-1 mt-3">Skills Needed</h4>
             <div className=" mt-2-">
               <div className="">
                 {/* {JSON.stringify(skills)} */}
                 <Autocomplete
                   className="bg-[rgb(249_251_252)] rounded w-full h-12"
-                  value={skills}
+                  // value={skills ?? []}
                   multiple
                   id="tags-outlined"
-                  open={isOpenSkill}
-                  // open={true}
-                  onInputChange={handleInputChangeAutocomplete}
-                  filterOptions={filterOptions}
+                  // onInputChange={handleInputChangeAutocomplete}
                   options={
-                    skillsData?.skillsList?.data?.results?.filter(
-                      (item) => item.is_active
-                    ) ?? []
+                    // skillsData?.skillsList?.data?.results?.filter(
+                    //   (item) => item.is_active
+                    // ) ?? []
+                    skillsData?.skillsList?.data?.results
+                      ?.filter(item => item.is_active)
+                      ?.map(it => {
+                        return {
+                          skills_name: it?.skill_name,
+                          id: it?.id
+                        };
+                      }) ?? []
                   }
-                  getOptionLabel={(option) => option.skill_name}
+                  getOptionLabel={option => option?.skills_name}
                   // onChange={(event, value) => setSkills(value)}
                   onChange={(e, v) => {
                     changeHandler(e, v);
-                    // setErrors({ ...errors, skills: null });
+                    setErrors({ ...errors, skills: null });
                   }}
-                  // defaultValue={skills ?? []}
-                  // inputValue={skills}
-                  // inputProps={{ "aria-label": "Without label" }}
-                  filterSelectedOptions
-                  noOptionsText={
-                    "Press enter to add this skill and select again"
-                  }
-                  // hiddenLabel="true"
-                  // open={false}
+                  // filterSelectedOptions
+                  noOptionsText={'Press enter to add this skill and select again'}
                   onKeyDown={handleKeyDownSkills}
                   autoHighlight={true}
-                  renderInput={(params) => (
+                  renderInput={params => (
                     <TextField
                       {...params}
                       fullWidth
@@ -2978,11 +2929,6 @@ const AdminJobsAddEdit = () => {
                       className="bg-[rgb(249_251_252)] rounded w-full h-12 mb-1"
                     />
                   )}
-                  isOptionEqualToValue={(option, value) =>
-                    value === undefined ||
-                    value === "" ||
-                    option.id === value.id
-                  }
                 />
                 {/* <Autocomplete
                           multiple
@@ -3025,11 +2971,11 @@ const AdminJobsAddEdit = () => {
             <div className="diverrors44">
               <span
                 style={{
-                  color: "#D14F4F",
-                  opacity: errors.skills ? 1 : 0,
+                  color: '#D14F4F',
+                  opacity: errors.skills ? 1 : 0
                 }}
               >
-                {errors.skills ?? "valid"}
+                {errors.skills ?? 'valid'}
               </span>
             </div>
           </div>
@@ -3038,9 +2984,7 @@ const AdminJobsAddEdit = () => {
         <div className="border-t-4"></div>
         <div className="w-full max-w-[560px] pb-5">
           <div className="py-5">
-            <h1 className="text-2xl font-bold text-[#1b4ea8]">
-              Files and Assets
-            </h1>
+            <h1 className="text-2xl font-bold text-[#1b4ea8]">Files and Assets</h1>
           </div>
 
           <div className="switch_Agency">
@@ -3048,46 +2992,36 @@ const AdminJobsAddEdit = () => {
               <label className="switch">
                 {isfiles && (
                   <>
-                    {" "}
-                    <input
-                      type="checkbox"
-                      checked={true}
-                      onClick={handleClickfiles}
-                    />
+                    {' '}
+                    <input type="checkbox" checked={true} onClick={handleClickfiles} />
                   </>
                 )}
                 {!isfiles && (
                   <>
-                    {" "}
-                    <input
-                      type="checkbox"
-                      checked={false}
-                      onClick={handleClickfiles}
-                    />
+                    {' '}
+                    <input type="checkbox" checked={false} onClick={handleClickfiles} />
                   </>
                 )}
 
                 <span className="slider round"></span>
               </label>
               <h4 className="text-lg text-black font-semibold">
-                Files and Assets{" "}
-                <span className="text-base text-[#A0A0A0]">Optional</span>
+                Files and Assets <span className="text-base text-[#A0A0A0]">Optional</span>
               </h4>
             </div>
           </div>
 
           {isfiles && (
             <>
-              {" "}
+              {' '}
               <div className="text-content addjobseditdev">
                 {/* <h4 className="Attachment_new1">
                           Your Assets
                           <span className="optional-A">Optional</span>
                         </h4> */}
                 <p className="uptext-A">
-                  Only upload files and artwork that you own the copyright for,
-                  or that you have permission to use and distribute for
-                  commercial work.
+                  Only upload files and artwork that you own the copyright for, or that you have permission to use and
+                  distribute for commercial work.
                 </p>
                 {/* <h4 className="Attachment_new1">Attachment</h4> */}
                 <div className="flex border border-1 rounded">
@@ -3111,20 +3045,15 @@ const AdminJobsAddEdit = () => {
 
                         <p className="text-base font-bold text-[#1B4EA8]">
                           <span className="text-base font-bold">
-                            {" "}
+                            {' '}
                             <FileUploadOutlined></FileUploadOutlined>
                             Upload Files
                           </span>
                         </p>
                       </div>
-                      <p className="text-sm font-bold text-[#71757b] my-2">
-                        or
-                      </p>
+                      <p className="text-sm font-bold text-[#71757b] my-2">or</p>
                       <div className="browsevauleButton">
-                        <button
-                          onClick={handleClickOpenDam}
-                          className="btn btn-primary mx-auto"
-                        >
+                        <button onClick={handleClickOpenDam} className="btn btn-primary mx-auto">
                           Browse Vault
                         </button>
                       </div>
@@ -3133,10 +3062,8 @@ const AdminJobsAddEdit = () => {
                   <div className="w-full p-5">
                     <div className="assertSelectedArea">
                       <div>
-                        <h5 className="text-base font-bold text-black">
-                          Selected Assets
-                        </h5>
-                        <aside className={"flex flex-row flex-wrap mt-[16px]"}>
+                        <h5 className="text-base font-bold text-black">Selected Assets</h5>
+                        <aside className={'flex flex-row flex-wrap mt-[16px]'}>
                           {thumbs}
                           {existingMedia}
                           {existingMedia1}
@@ -3152,24 +3079,21 @@ const AdminJobsAddEdit = () => {
                                         <>
                                           <div className="inline-flex rounded-sm border-1-[#eaeaea] mb-[8px] mr-[8px] w-full h-full p-[4px]">
                                             <div
-                                              className="removeimgdevpage"
+                                              className="removeimgdevpage flex justify-between w-full"
                                               style={thumbInner}
                                             >
-                                              <img
-                                                className="img-upload-item"
-                                                src="/img/assertgallery.png"
-                                              />
-                                              <button
-                                                onClick={() => {
-                                                  removeDocument(index, "data");
-                                                  removeImageDocuments(
-                                                    item?.id
-                                                  );
-                                                }}
-                                              >
-                                                <img src="/img/assertbin.png" />
-                                              </button>
-                                              {item?.job_image_name}
+                                              <div className="flex gap-1">
+                                                <CollectionsOutlined />
+                                                <button
+                                                  onClick={() => {
+                                                    removeDocument(index, 'data');
+                                                    removeImageDocuments(item?.id);
+                                                  }}
+                                                >
+                                                  <DeleteOutlineOutlined />
+                                                </button>
+                                              </div>
+                                              {/* {item?.job_image_name} */}
                                             </div>
                                           </div>
                                         </>
@@ -3185,24 +3109,21 @@ const AdminJobsAddEdit = () => {
                                         <>
                                           <div className="inline-flex rounded-sm border-1-[#eaeaea] mb-[8px] mr-[8px] w-full h-full p-[4px]">
                                             <div
-                                              className="removeimgdevpage"
+                                              className="removeimgdevpage flex justify-between w-full"
                                               style={thumbInner}
                                             >
-                                              <img
-                                                className="img-upload-item"
-                                                src="/img/assertgallery.png"
-                                              />
+                                              <div className="flex gap-1">
+                                                <CollectionsOutlined />
+                                                {item?.job_image_name}
+                                              </div>
                                               <button
                                                 onClick={() => {
-                                                  removeDocument(index, "data");
-                                                  removeImageDocuments(
-                                                    item?.id
-                                                  );
+                                                  removeDocument(index, 'data');
+                                                  removeImageDocuments(item?.id);
                                                 }}
                                               >
-                                                <img src="/img/assertbin.png" />
+                                                <DeleteOutlineOutlined />
                                               </button>
-                                              {item?.job_image_name}
                                             </div>
                                           </div>
                                         </>
@@ -3220,16 +3141,14 @@ const AdminJobsAddEdit = () => {
                         <div className="form-inline" key={index}>
                           {element && (
                             <div className="assertDustbinLink">
-                              <img
-                                className="linkicon"
-                                src="/img/asserLink.png"
-                              />
+                              <img className="linkicon" src="/img/asserLink.png" />
                               <a className="adifecttesturl">{element}</a>
-                              <img
+                              <DeleteOutlineOutlined onClick={() => removeFormFieldsUrls(index)} />
+                              {/* <img
                                 className="assertbinLogo2"
                                 src="/img/assertbin.png"
                                 onClick={() => removeFormFieldsUrls(index)}
-                              />
+                              /> */}
                             </div>
                           )}
                         </div>
@@ -3238,34 +3157,26 @@ const AdminJobsAddEdit = () => {
                       {showText && (
                         <>
                           <div className="form-section">
-                            <p className="mb-2">
-                              Link must be publically accessible
-                            </p>
+                            <p className="mb-2">Link must be publically accessible</p>
                           </div>
-                          <div
-                            className={
-                              errors.formImgUrls
-                                ? "flex gap-2 error-style"
-                                : "flex gap-2 "
-                            }
-                          >
+                          <div className={errors.formImgUrls ? 'flex gap-2 error-style' : 'flex gap-2 '}>
                             <input
                               className="input-style"
                               type="text"
                               onKeyDown={handleKeyDownUrl}
                               value={imgUrl}
                               placeholder="Enter URL"
-                              onChange={(e) => {
+                              onChange={e => {
                                 setImgUrl(e.target.value);
                                 setErrors({
                                   ...errors,
-                                  formImgUrls: null,
+                                  formImgUrls: null
                                 });
                               }}
                             />
                             <div className="cursor-pointer">
                               <a
-                                onClick={(e) => {
+                                onClick={e => {
                                   // addFormFieldsUrls();
                                   handleChangeUrls(e);
                                 }}
@@ -3278,27 +3189,20 @@ const AdminJobsAddEdit = () => {
                         </>
                       )}
                       <div
-                        className={
-                          errors.formImgUrls
-                            ? "enterUrlLinkButton-error error"
-                            : "enterUrlLinkButton-error"
-                        }
+                        className={errors.formImgUrls ? 'enterUrlLinkButton-error error' : 'enterUrlLinkButton-error'}
                       >
                         <span
                           className="formurslsjobapply"
                           style={{
-                            color: "#D14F4F",
-                            opacity: errors.formUrls ? 1 : 0,
+                            color: '#D14F4F',
+                            opacity: errors.formUrls ? 1 : 0
                           }}
                         >
-                          {errors.formImgUrls ? errors.formImgUrls : ""}
+                          {errors.formImgUrls ? errors.formImgUrls : ''}
                         </span>
                       </div>
                       <div className="cursor-pointer my-3">
-                        <a
-                          onClick={onClickInclude}
-                          className="text-base font-semibold text-[#2472fc]"
-                        >
+                        <a onClick={onClickInclude} className="text-base font-semibold text-[#2472fc]">
                           <Add></Add> Include a URL
                         </a>
                       </div>
@@ -3325,46 +3229,35 @@ const AdminJobsAddEdit = () => {
               <label className="switch">
                 {issamplefiles && (
                   <>
-                    {" "}
-                    <input
-                      type="checkbox"
-                      checked={true}
-                      onClick={handleClicksamplefiles}
-                    />
+                    {' '}
+                    <input type="checkbox" checked={true} onClick={handleClicksamplefiles} />
                   </>
                 )}
                 {!issamplefiles && (
                   <>
-                    {" "}
-                    <input
-                      type="checkbox"
-                      checked={false}
-                      onClick={handleClicksamplefiles}
-                    />
+                    {' '}
+                    <input type="checkbox" checked={false} onClick={handleClicksamplefiles} />
                   </>
                 )}
                 <span className="slider round sliderround"></span>
               </label>
               <h4 className="text-lg text-black font-semibold">
-                Samples of Work You Like{" "}
-                <span className="text-base text-[#A0A0A0]">Optional</span>
+                Samples of Work You Like <span className="text-base text-[#A0A0A0]">Optional</span>
               </h4>
             </div>
           </div>
 
           {issamplefiles && (
             <>
-              {" "}
+              {' '}
               <div className="text-content addjobseditdev">
                 {/* <h4 className="Attachment_new1">
                               <span className="optional-A">Optional</span>
                             </h4> */}
                 <p className="uptext-A">
-                  This is to help the content creator understand the type of
-                  work you like. This doesn’t need to be work that you own the
-                  copyright for, but Adifect will only store it for 30 days
-                  after the completion of this job and will not use it for any
-                  other purposes.
+                  This is to help the content creator understand the type of work you like. This doesn’t need to be work
+                  that you own the copyright for, but Adifect will only store it for 30 days after the completion of
+                  this job and will not use it for any other purposes.
                 </p>
                 {/* <h4 className="Attachment_new1">Attachment</h4> */}
                 <div className="flex border border-1 rounded">
@@ -3388,20 +3281,15 @@ const AdminJobsAddEdit = () => {
 
                         <p className="text-base font-bold text-[#1B4EA8]">
                           <span className="text-base font-bold">
-                            {" "}
+                            {' '}
                             <FileUploadOutlined></FileUploadOutlined>
                             Upload Files
                           </span>
                         </p>
                       </div>
-                      <p className="text-sm font-bold text-[#71757b] my-2">
-                        or
-                      </p>
+                      <p className="text-sm font-bold text-[#71757b] my-2">or</p>
                       <div className="browsevauleButton">
-                        <button
-                          onClick={handleClickOpenDam1}
-                          className="btn btn-primary mx-auto"
-                        >
+                        <button onClick={handleClickOpenDam1} className="btn btn-primary mx-auto">
                           Browse Vault
                         </button>
                       </div>
@@ -3410,9 +3298,7 @@ const AdminJobsAddEdit = () => {
                   <div className="w-full p-5">
                     <div className="assertSelectedArea">
                       <div>
-                        <h5 className="text-base font-bold text-black">
-                          Selected Assets
-                        </h5>
+                        <h5 className="text-base font-bold text-black">Selected Assets</h5>
                         <aside className="flex flex-row flex-wrap mt-[16px]">
                           {thumbs1} {existingsampleMedia} {existingsampleMedia1}
                           {jobSampleDocuments && (
@@ -3424,27 +3310,21 @@ const AdminJobsAddEdit = () => {
                                       {item?.work_sample_image_name && (
                                         <div className="inline-flex rounded-sm border-1-[#eaeaea] mb-[8px] mr-[8px] w-full h-full p-[4px]">
                                           <div
-                                            className="removeimgdevpage"
+                                            className="removeimgdevpage flex justify-between w-full"
                                             style={thumbInner}
                                           >
-                                            <img
-                                              className="img-upload-item"
-                                              src="/img/assertgallery.png"
-                                            />
+                                            <div className="flex gap-1">
+                                              <CollectionsOutlined />
+                                              {item?.work_sample_image_name}
+                                            </div>
                                             <button
                                               onClick={() => {
-                                                removeSampleDocument(
-                                                  index,
-                                                  "data"
-                                                );
-                                                removeImageSampleDocuments(
-                                                  item?.id
-                                                );
+                                                removeSampleDocument(index, 'data');
+                                                removeImageSampleDocuments(item?.id);
                                               }}
                                             >
-                                              <img src="/img/assertbin.png" />
+                                              <DeleteOutlineOutlined />
                                             </button>
-                                            {item?.work_sample_image_name}
                                           </div>
                                         </div>
                                       )}
@@ -3461,27 +3341,21 @@ const AdminJobsAddEdit = () => {
                                           // style={thumb}
                                         >
                                           <div
-                                            className="removeimgdevpage"
+                                            className="removeimgdevpage flex justify-between w-full"
                                             style={thumbInner}
                                           >
-                                            <img
-                                              className="img-upload-item"
-                                              src="/img/assertgallery.png"
-                                            />
+                                            <div className="flex gap-1">
+                                              <CollectionsOutlined />
+                                              {item?.work_sample_image_name}
+                                            </div>
                                             <button
                                               onClick={() => {
-                                                removeSampleDocument(
-                                                  index,
-                                                  "data"
-                                                );
-                                                removeImageSampleDocuments(
-                                                  item?.id
-                                                );
+                                                removeSampleDocument(index, 'data');
+                                                removeImageSampleDocuments(item?.id);
                                               }}
                                             >
-                                              <img src="/img/assertbin.png" />
+                                              <DeleteOutlineOutlined />
                                             </button>
-                                            {item?.work_sample_image_name}
                                           </div>
                                         </div>
                                       )}
@@ -3499,18 +3373,16 @@ const AdminJobsAddEdit = () => {
                         <div className="form-inline" key={index}>
                           {element && (
                             <div className="assertDustbinLink">
-                              <img
-                                className="linkicon"
-                                src="/img/asserLink.png"
-                              />
+                              <img className="linkicon" src="/img/asserLink.png" />
                               <a className="adifecttesturl">{element}</a>
-                              <img
+                              <DeleteOutlineOutlined onClick={() => removeFormFieldsSampleUrls(index)} />
+                              {/* <img
                                 className="assertbinLogo2"
                                 src="/img/assertbin.png"
                                 onClick={() =>
                                   removeFormFieldsSampleUrls(index)
                                 }
-                              />
+                              /> */}
                             </div>
                           )}
                         </div>
@@ -3518,34 +3390,26 @@ const AdminJobsAddEdit = () => {
                       {showText1 && (
                         <>
                           <div className="form-section">
-                            <p className="mb-2">
-                              Link must be publically accessible
-                            </p>
+                            <p className="mb-2">Link must be publically accessible</p>
                           </div>
-                          <div
-                            className={
-                              errors.formsampleImgUrls
-                                ? "flex gap-2 error-style"
-                                : "flex gap-2 "
-                            }
-                          >
+                          <div className={errors.formsampleImgUrls ? 'flex gap-2 error-style' : 'flex gap-2 '}>
                             <input
                               className="input-style"
                               type="text"
                               onKeyDown={handleKeyDownSampleUrl}
                               value={sampleimgUrl}
                               placeholder="Enter URL"
-                              onChange={(e) => {
+                              onChange={e => {
                                 setsampleImgUrl(e.target.value);
                                 setErrors({
                                   ...errors,
-                                  formsampleImgUrls: null,
+                                  formsampleImgUrls: null
                                 });
                               }}
                             />
                             <div className="cursor-pointer">
                               <a
-                                onClick={(e) => {
+                                onClick={e => {
                                   handleChangesampleUrls(e);
                                 }}
                                 className="btn btn-outline"
@@ -3558,28 +3422,21 @@ const AdminJobsAddEdit = () => {
                       )}
                       <div
                         className={
-                          errors.formsampleImgUrls
-                            ? "enterUrlLinkButton-error error"
-                            : "enterUrlLinkButton-error"
+                          errors.formsampleImgUrls ? 'enterUrlLinkButton-error error' : 'enterUrlLinkButton-error'
                         }
                       >
                         <span
                           className="formurjobapply"
                           style={{
-                            color: "#D14F4F",
-                            opacity: errors.formSampleUrls ? 1 : 0,
+                            color: '#D14F4F',
+                            opacity: errors.formSampleUrls ? 1 : 0
                           }}
                         >
-                          {errors.formsampleImgUrls
-                            ? errors.formsampleImgUrls
-                            : ""}
+                          {errors.formsampleImgUrls ? errors.formsampleImgUrls : ''}
                         </span>
                       </div>
                       <div className="cursor-pointer my-3">
-                        <a
-                          onClick={onClickInclude1}
-                          className="text-base font-semibold text-[#2472fc]"
-                        >
+                        <a onClick={onClickInclude1} className="text-base font-semibold text-[#2472fc]">
                           <Add></Add> Include a URL
                         </a>
                       </div>
@@ -3613,46 +3470,36 @@ const AdminJobsAddEdit = () => {
               <label className="switch">
                 {isShowntask && (
                   <>
-                    {" "}
-                    <input
-                      type="checkbox"
-                      checked={true}
-                      onClick={handleClicktask}
-                    />
+                    {' '}
+                    <input type="checkbox" checked={true} onClick={handleClicktask} />
                   </>
                 )}
                 {!isShowntask && (
                   <>
-                    {" "}
-                    <input
-                      type="checkbox"
-                      checked={false}
-                      onClick={handleClicktask}
-                    />
+                    {' '}
+                    <input type="checkbox" checked={false} onClick={handleClicktask} />
                   </>
                 )}
 
                 <span className="slider round"></span>
               </label>
               <h4 className="text-lg text-black font-semibold">
-                This job contains multiple tasks{" "}
-                <span className="text-base text-[#A0A0A0]">Optional</span>
+                This job contains multiple tasks <span className="text-base text-[#A0A0A0]">Optional</span>
               </h4>
             </div>
           </div>
 
           {isShowntask && (
             <>
-              {" "}
+              {' '}
               <div className="text-content addjobseditdev">
                 {/* <h4 className="Attachment_new1">
                           Your Assets
                           <span className="optional-A">Optional</span>
                         </h4> */}
                 <p className="uptext-A">
-                  Only upload files and artwork that you own the copyright for,
-                  or that you have permission to use and distribute for
-                  commercial work.
+                  Only upload files and artwork that you own the copyright for, or that you have permission to use and
+                  distribute for commercial work.
                 </p>
                 {/* <h4 className="Attachment_new1">Attachment</h4> */}
                 <div className="containerPad">
@@ -3662,9 +3509,7 @@ const AdminJobsAddEdit = () => {
                         <div key={index}>
                           <h3 className="flex justify-between gap-2">
                             <div className="flex justify-between gap-3 max-w-[560px] w-full">
-                              <span className="task_title text-base font-medium  break-all">
-                                {elem.title}
-                              </span>
+                              <span className="task_title text-base font-medium  break-all">{elem.title}</span>
                               <span className="task_due_date text-base font-bold text-[#2472fc] max-w-[95px] w-full">
                                 {elem.due_date}
                               </span>
@@ -3683,13 +3528,7 @@ const AdminJobsAddEdit = () => {
                       );
                     })}
                   </div>
-                  <div
-                    className={
-                      errors.tasks
-                        ? " containerPad12 error "
-                        : " containerPad12  "
-                    }
-                  >
+                  <div className={errors.tasks ? ' containerPad12 error ' : ' containerPad12  '}>
                     <input
                       className="tastsinput tastsinputNew input-style"
                       type="text"
@@ -3698,8 +3537,8 @@ const AdminJobsAddEdit = () => {
                       value={inputData.title}
                       onChange={handleChange}
                       // onKeyDown={handleChange}
-                      onKeyPress={(event) => {
-                        if (event.key === "Enter") {
+                      onKeyPress={event => {
+                        if (event.key === 'Enter') {
                           handleSubmit(event);
                         }
                       }}
@@ -3714,11 +3553,11 @@ const AdminJobsAddEdit = () => {
                     <span
                       className="text-[#D14F4F]"
                       style={{
-                        color: "#D14F4F",
-                        opacity: errors.tasks ? 1 : 0,
+                        color: '#D14F4F',
+                        opacity: errors.tasks ? 1 : 0
                       }}
                     >
-                      {errors.tasks ?? "valid"}
+                      {errors.tasks ?? 'valid'}
                     </span>
                     <br />
 
@@ -3728,16 +3567,14 @@ const AdminJobsAddEdit = () => {
                         onClick={handleSubmit}
                         id="adddataButtonHandler"
                       >
-                        {/* <img src="/img/plus.png" /> */}{" "}
-                        <BorderColorOutlined fontSize="small" color="primary" />{" "}
-                        Add
+                        {/* <img src="/img/plus.png" /> */} <BorderColorOutlined fontSize="small" color="primary" /> Add
                       </button>
                       <div className="App_date App_datenewdiv20">
                         <label className="taskDueDate">
                           <CustomDateRangePicker
                             handleChange={handleTaskDueDateChange}
                             asSingle={true}
-                            containerClassName={"min-w-[250px]"}
+                            containerClassName={'min-w-[250px]'}
                           />
                         </label>
                         {/* <input
@@ -3759,15 +3596,13 @@ const AdminJobsAddEdit = () => {
         <div className="border-t-4"></div>
         <div className="w-full max-w-[560px] pb-5">
           <div className="py-5">
-            <h1 className="text-2xl font-bold text-[#1b4ea8]">
-              Budget and Timeline
-            </h1>
+            <h1 className="text-2xl font-bold text-[#1b4ea8]">Budget and Timeline</h1>
           </div>
 
           <div className="switch_Agency">
             <div className="flex gap-4">
               <label className="switch">
-                {" "}
+                {' '}
                 <input
                   type="checkbox"
                   value={isBudgetNotRequired}
@@ -3783,43 +3618,38 @@ const AdminJobsAddEdit = () => {
 
             {!isBudgetNotRequired && (
               <>
-                <h4 className="text-lg text-black font-semibold">
-                  Job Pricing Type *
-                </h4>
+                <h4 className="text-lg text-black font-semibold">Job Pricing Type *</h4>
 
-                <div
-                  className="job_pricing-type"
-                  style={{ margin: "16px 0px 0px 0px" }}
-                >
+                <div className="job_pricing-type" style={{ margin: '16px 0px 0px 0px' }}>
                   <div className="double_toogle_button">
                     <ToggleButtonGroup
                       className={
-                        job_type == "0"
-                          ? "first_toogle_button fixed_toogle_button firstjobPricingTypebtn"
-                          : "fixed_toogle_button firstjobPricingTypebtn"
+                        job_type == '0'
+                          ? 'first_toogle_button fixed_toogle_button firstjobPricingTypebtn'
+                          : 'fixed_toogle_button firstjobPricingTypebtn'
                       }
                       // className="fixed_toogle_button"
                       color="info"
                       value={job_type}
                       // exclusive
                       // onChange={handleChange}
-                      onClick={() => setJobType("0")}
+                      onClick={() => setJobType('0')}
                       aria-label="Platform"
                     >
                       <ToggleButton value={0}>Fixed</ToggleButton>
                     </ToggleButtonGroup>
                     <ToggleButtonGroup
                       className={
-                        job_type == "1"
-                          ? "second_toogle_button fixed_toogle_button secondjobPricingTypebtn"
-                          : "fixed_toogle_button secondjobPricingTypebtn"
+                        job_type == '1'
+                          ? 'second_toogle_button fixed_toogle_button secondjobPricingTypebtn'
+                          : 'fixed_toogle_button secondjobPricingTypebtn'
                       }
                       // className="hourly_toogle_button"
                       color="info"
                       // value={alignment}
                       // exclusive
                       // onChange={handleChange}
-                      onClick={() => setJobType("1")}
+                      onClick={() => setJobType('1')}
                       aria-label="Platform"
                     >
                       <ToggleButton value={1}>Hourly</ToggleButton>
@@ -3833,23 +3663,21 @@ const AdminJobsAddEdit = () => {
 
             {!isBudgetNotRequired && (
               <>
-                <div className={errors.level ? " mt-4 error" : " mt-4"}>
+                <div className={errors.level ? ' mt-4 error' : ' mt-4'}>
                   <h4 className="text-lg text-black font-semibold">
-                    Experience Level{" "}
+                    Experience Level{' '}
                     {!level && (
                       <>
-                        <label className="" style={{ color: "red" }}>
+                        <label className="" style={{ color: 'red' }}>
                           *
                         </label>
                       </>
                     )}
-                  </h4>{" "}
+                  </h4>{' '}
                   <div className="">
                     <Select
                       className={`${
-                        level == null
-                          ? "text-[#939393] hover:border-[#939393] "
-                          : "text-[#000]"
+                        level == null ? 'text-[#939393] hover:border-[#939393] ' : 'text-[#000]'
                       } bg-[rgb(249_251_252)] rounded w-full h-12 mb-1`}
                       open={isOpen10}
                       onOpen={() => {
@@ -3860,16 +3688,16 @@ const AdminJobsAddEdit = () => {
                       }}
                       // MenuProps={menuProps}
                       value={level}
-                      onChange={(e) => {
+                      onChange={e => {
                         setlevel(e.target.value);
                         setErrors({ ...errors, level: null });
                       }}
                       placeholder="Select Level"
                       displayEmpty
-                      inputProps={{ "aria-label": "Without label" }}
+                      inputProps={{ 'aria-label': 'Without label' }}
                     >
                       <MenuItem value="null">Select Level</MenuItem>
-                      {levelsData?.levelsList?.data?.results?.map((item) =>
+                      {levelsData?.levelsList?.data?.results?.map(item =>
                         item.is_active ? (
                           <MenuItem key={item.id} value={item.id}>
                             {item.level_name}
@@ -3895,21 +3723,12 @@ const AdminJobsAddEdit = () => {
             <div className="text-content my-2">
               {!isBudgetNotRequired && (
                 <>
-                  <div
-                    className={
-                      errors.price
-                        ? "text-content error Experiencenew"
-                        : "text-content  Experiencenew"
-                    }
-                  >
+                  <div className={errors.price ? 'text-content error Experiencenew' : 'text-content  Experiencenew'}>
                     <h4 className="text-lg text-black font-semibold">
-                      Offer Price{" "}
+                      Offer Price{' '}
                       {!price && (
                         <>
-                          <label
-                            className="jobeditdiv"
-                            style={{ color: "red" }}
-                          >
+                          <label className="jobeditdiv" style={{ color: 'red' }}>
                             *
                           </label>
                         </>
@@ -3917,9 +3736,7 @@ const AdminJobsAddEdit = () => {
                     </h4>
                     <div className="flex gap-4">
                       <FormControl fullWidth sx={{ m: 1 }}>
-                        <InputLabel htmlFor="outlined-adornment-amount">
-                          Price
-                        </InputLabel>
+                        <InputLabel htmlFor="outlined-adornment-amount">Price</InputLabel>
                         <OutlinedInput
                           className="w-full max-w-[130px]"
                           type="number"
@@ -3927,13 +3744,11 @@ const AdminJobsAddEdit = () => {
                           // pattern="[0-9]"
                           value={price}
                           placeholder="Price"
-                          onChange={(e) => {
-                            setPrice(e.target.value.replace(/[^0-9.]/g, ""));
+                          onChange={e => {
+                            setPrice(e.target.value.replace(/[^0-9.]/g, ''));
                           }}
                           id="outlined-adornment-amount"
-                          startAdornment={
-                            <InputAdornment position="start">$</InputAdornment>
-                          }
+                          startAdornment={<InputAdornment position="start">$</InputAdornment>}
                           label="Amount"
                         />
                       </FormControl>
@@ -3956,11 +3771,11 @@ const AdminJobsAddEdit = () => {
                   <div className="diverrors44 diverrors44Space">
                     <span
                       style={{
-                        color: "#D14F4F",
-                        opacity: errors.price ? 1 : 0,
+                        color: '#D14F4F',
+                        opacity: errors.price ? 1 : 0
                       }}
                     >
-                      {errors.price ?? "valid"}
+                      {errors.price ?? 'valid'}
                     </span>
                   </div>
                 </>
@@ -3982,10 +3797,8 @@ const AdminJobsAddEdit = () => {
                   onInputChange={handleInputChangeAutocompleteUsers}
                   filterOptions={filterOptionsUsers}
                   // options={adminInHouseUsers ?? []}
-                  options={
-                    inHouseUserList?.inHouseUserList?.data?.results ?? []
-                  }
-                  getOptionLabel={(option) => option?.user_full_name}
+                  options={inHouseUserList?.inHouseUserList?.data?.results ?? []}
+                  getOptionLabel={option => option?.user_full_name}
                   // onChange={(event, value) => setSkills(value)}
                   onChange={(e, v) => {
                     changeHandlerInHouseUsers(e, v);
@@ -4002,88 +3815,69 @@ const AdminJobsAddEdit = () => {
                   // hiddenLabel="true"
                   onKeyDown={handleKeyDownInHouseUsers}
                   autoHighlight={true}
-                  renderInput={(params) => (
+                  renderInput={params => (
                     <TextField
                       {...params}
                       fullWidth
-                      placeholder={
-                        !companyvalue
-                          ? "Select a company first"
-                          : "Type something"
-                      }
+                      placeholder={!companyvalue ? 'Select a company first' : 'Type something'}
                     />
                   )}
                   isOptionEqualToValue={
-                    (option, value) =>
-                      value === undefined ||
-                      value === "" ||
-                      option.id === value.id
+                    (option, value) => value === undefined || value === '' || option.id === value.id
                     // option.value == value.value
                   }
                 />
                 <div className="diverrors44 diverrors5">
                   <span
                     style={{
-                      color: "#D14F4F",
-                      opacity: errors.inHouseUser ? 1 : 0,
+                      color: '#D14F4F',
+                      opacity: errors.inHouseUser ? 1 : 0
                     }}
                   >
-                    {errors.inHouseUser ?? "valid"}
+                    {errors.inHouseUser ?? 'valid'}
                   </span>
                 </div>
               </div>
             )}
 
             <h4 className="flex gap-1 text-lg text-black font-bold mb-1">
-              Due Date{" "}
+              Due Date{' '}
               {!deliveryDate && (
                 <>
-                  <span className="text-red-500" style={{ color: "red" }}>
+                  <span className="text-red-500" style={{ color: 'red' }}>
                     *
                   </span>
                 </>
               )}
             </h4>
 
-            <div className={errors.deliveryDate ? " error" : " "}>
+            <div className={errors.deliveryDate ? ' error' : ' '}>
               <div className="flex w-full border border-1 rounded-md justify-between gap-4">
                 <div
                   id="1"
-                  onClick={() => handleDiv("1")}
-                  className={
-                    divid == 1 ? "p-2 activ3 text-center" : "p-2 text-center"
-                  }
+                  onClick={() => handleDiv('1')}
+                  className={divid == 1 ? 'p-2 activ3 text-center' : 'p-2 text-center'}
                 >
                   <h1 className="text-sm text-black font-bold">24 Hours</h1>
                   <p>{coverter}</p>
                 </div>
 
                 <div
-                  className={
-                    divid == 2 ? "p-2 activ3 text-center" : "p-2 text-center"
-                  }
-                  onClick={() => handleDiv("2")}
+                  className={divid == 2 ? 'p-2 activ3 text-center' : 'p-2 text-center'}
+                  onClick={() => handleDiv('2')}
                 >
                   <h1 className="text-sm text-black font-bold">3 Day</h1>
                   <p>{coverter1}</p>
                 </div>
                 <div
-                  className={
-                    divid == 3 ? "p-2 activ3 text-center" : "p-2 text-center"
-                  }
-                  onClick={() => handleDiv("3")}
+                  className={divid == 3 ? 'p-2 activ3 text-center' : 'p-2 text-center'}
+                  onClick={() => handleDiv('3')}
                 >
                   <h1 className="text-sm text-black font-bold">7 Day</h1>
                   <p>{coverter2}</p>
                 </div>
-                <div
-                  className={divid == 4 ? "fourth_date activ4" : "fourth_date"}
-                  onClick={() => handleDiv("4")}
-                >
-                  <CustomDateRangePicker
-                    handleChange={handleDateChange}
-                    asSingle={true}
-                  />
+                <div className={divid == 4 ? 'fourth_date activ4' : 'fourth_date'} onClick={() => handleDiv('4')}>
+                  <CustomDateRangePicker handleChange={handleDateChange} asSingle={true} />
                   {/* <CustomDateRangePicker handleChange={handleChange} /> */}
                   {/* <LocalizationProvider dateAdapter={AdapterDateFns}>
                     <label
@@ -4115,12 +3909,12 @@ const AdminJobsAddEdit = () => {
               </div>
               {alertdate && (
                 <>
-                  {" "}
+                  {' '}
                   <span
                     className="companyclass45"
                     style={{
-                      color: "#D14F4F",
-                      float: "right",
+                      color: '#D14F4F',
+                      float: 'right'
                     }}
                   >
                     Please check task date
@@ -4130,16 +3924,16 @@ const AdminJobsAddEdit = () => {
               <div className="text-[#D14F4F]">
                 <span
                   style={{
-                    color: "#D14F4F",
-                    opacity: errors.deliveryDate ? 1 : 0,
+                    color: '#D14F4F',
+                    opacity: errors.deliveryDate ? 1 : 0
                   }}
                 >
-                  {errors.deliveryDate ?? "valid"}
+                  {errors.deliveryDate ?? 'valid'}
                 </span>
               </div>
             </div>
 
-            <div className={errors.tags ? "error" : " "}>
+            <div className={errors.tags ? 'error' : ' '}>
               <h4 className="text-lg text-black font-bold mb-1">Tags</h4>
               <div className="Marketing  Marketing_2 display-f">
                 <div className="tags-input-container">
@@ -4161,7 +3955,7 @@ const AdminJobsAddEdit = () => {
                   ))}
                   <input
                     onKeyDown={handleKeyDown}
-                    onChange={(e) => {
+                    onChange={e => {
                       setErrors({ ...errors, tags: null });
                       setSavetagButton(e.target.value);
                     }}
@@ -4178,19 +3972,16 @@ const AdminJobsAddEdit = () => {
               <div className="diverrors44">
                 <span
                   style={{
-                    color: "#D14F4F",
-                    opacity: errors.tags ? 1 : 0,
+                    color: '#D14F4F',
+                    opacity: errors.tags ? 1 : 0
                   }}
                 >
-                  {errors.tags ?? "valid"}
+                  {errors.tags ?? 'valid'}
                 </span>
               </div>
               <div className="flex justify-end w-full">
-                <button
-                  onClick={(e) => handleSaveTag(e, "check")}
-                  className="btn btn-outline"
-                >
-                  {" "}
+                <button onClick={e => handleSaveTag(e, 'check')} className="btn btn-outline">
+                  {' '}
                   Save Tag
                 </button>
               </div>
@@ -4199,40 +3990,27 @@ const AdminJobsAddEdit = () => {
             <div className="switch_Agency">
               <div className="flex gap-4">
                 <label className="switch">
-                  {" "}
+                  {' '}
                   <input type="checkbox" onClick={handleClick} />
                   <span className="slider round"></span>
                 </label>
 
-                {!textchange && (
-                  <h4 className="text-lg text-black font-semibold">
-                    Save as Template
-                  </h4>
-                )}
+                {!textchange && <h4 className="text-lg text-black font-semibold">Save as Template</h4>}
 
-                {textchange && (
-                  <h4 className="text-lg text-black font-semibold">
-                    Save as New Template
-                  </h4>
-                )}
+                {textchange && <h4 className="text-lg text-black font-semibold">Save as New Template</h4>}
               </div>
             </div>
 
             {isShown && (
-              <div
-                className={
-                  errors.template ? "istoggle_Shown error " : "istoggle_Shown  "
-                }
-              >
+              <div className={errors.template ? 'istoggle_Shown error ' : 'istoggle_Shown  '}>
                 <p className="Templatetext">
-                  This will save everything except the Offer Price, Due Date,
-                  and Previous Job
+                  This will save everything except the Offer Price, Due Date, and Previous Job
                 </p>
                 <input
                   className="input-style"
                   type="text"
                   // placeholder="Please enter title"
-                  onChange={(e) => {
+                  onChange={e => {
                     setTemplatename(e.target.value);
                     setErrors({ ...errors, template: null });
                   }}
@@ -4240,11 +4018,11 @@ const AdminJobsAddEdit = () => {
                 <span
                   className="errordiv4141"
                   style={{
-                    color: "#D14F4F",
-                    opacity: errors.template ? 1 : 0,
+                    color: '#D14F4F',
+                    opacity: errors.template ? 1 : 0
                   }}
                 >
-                  {errors.template ?? "valid"}
+                  {errors.template ?? 'valid'}
                 </span>
               </div>
             )}
@@ -4262,17 +4040,14 @@ const AdminJobsAddEdit = () => {
                 )} */}
           <div className="flex justify-between">
             <div className=" flex gap-4">
-              <Link
-                to="/jobs/list"
-                className="btn btn-outline w-full max-w-[160px]"
-              >
+              <Link to="/jobs/list" className="btn btn-outline w-full max-w-[160px]">
                 Cancel
               </Link>
               <div className="">
                 <button
                   type="button"
-                  onClick={(e) => {
-                    validateSubmit(e, "post");
+                  onClick={e => {
+                    validateSubmit(e, 'post');
                     setstatus(2);
                   }}
                   className="btn btn-primary w-full max-w-[160px]"
@@ -4284,29 +4059,25 @@ const AdminJobsAddEdit = () => {
 
             {showdraft && (
               <>
-                {" "}
+                {' '}
                 <div className="buttomjobbtn draftButt">
                   <button
                     type="button"
-                    onClick={(e) => {
-                      draftValidateSubmit(e, "draft");
+                    onClick={e => {
+                      draftValidateSubmit(e, 'draft');
                       setstatus(0);
                     }}
                     className="btn btn-outline w-full max-w-[160px]"
                   >
                     Save draft
                   </button>
-                </div>{" "}
+                </div>{' '}
               </>
             )}
           </div>
         </div>
       </div>
-      <Dialog
-        className="BrowseVaultDialogMedia media"
-        open={openVault}
-        onClose={handleCloseDam}
-      >
+      <Dialog className="BrowseVaultDialogMedia media" open={openVault} onClose={handleCloseDam}>
         <DialogTitle className="profileImgHeadingAnew">
           <div className="Ajobshare">
             <span className="closebuttonsec" onClick={handleCloseDam}>
@@ -4315,9 +4086,7 @@ const AdminJobsAddEdit = () => {
           </div>
         </DialogTitle>
         <div className="dialogcontent_and_actions_new">
-          <DialogContent className="ChangeEmailAContent">
-            {/* <Admin_Media /> */}
-          </DialogContent>
+          <DialogContent className="ChangeEmailAContent">{/* <Admin_Media /> */}</DialogContent>
         </div>
         <DialogActions>
           <div className="sharebuttonjobcontent">
@@ -4325,10 +4094,7 @@ const AdminJobsAddEdit = () => {
               <button onClick={handleCloseDam} className="canceButtonnewPop">
                 Cancel
               </button>
-              <button
-                onClick={saveDamDataHandler}
-                className="shareNewPopPublic"
-              >
+              <button onClick={saveDamDataHandler} className="shareNewPopPublic">
                 Attach files
               </button>
             </div>
@@ -4336,11 +4102,7 @@ const AdminJobsAddEdit = () => {
         </DialogActions>
       </Dialog>
 
-      <Dialog
-        className="BrowseVaultDialogMedia media"
-        open={openVault1}
-        onClose={handleCloseDam1}
-      >
+      <Dialog className="BrowseVaultDialogMedia media" open={openVault1} onClose={handleCloseDam1}>
         <DialogTitle className="profileImgHeadingAnew">
           <div className="Ajobshare">
             <span className="closebuttonsec" onClick={handleCloseDam1}>
@@ -4349,9 +4111,7 @@ const AdminJobsAddEdit = () => {
           </div>
         </DialogTitle>
         <div className="dialogcontent_and_actions_new">
-          <DialogContent className="ChangeEmailAContent">
-            {/* <Admin_Media /> */}
-          </DialogContent>
+          <DialogContent className="ChangeEmailAContent">{/* <Admin_Media /> */}</DialogContent>
         </div>
         <DialogActions>
           <div className="sharebuttonjobcontent">
@@ -4359,10 +4119,7 @@ const AdminJobsAddEdit = () => {
               <button onClick={handleCloseDam1} className="canceButtonnewPop">
                 Cancel
               </button>
-              <button
-                onClick={saveDamDataHandler1}
-                className="shareNewPopPublic"
-              >
+              <button onClick={saveDamDataHandler1} className="shareNewPopPublic">
                 Attach files
               </button>
             </div>
@@ -4374,3 +4131,6 @@ const AdminJobsAddEdit = () => {
 };
 
 export default AdminJobsAddEdit;
+function setdraftid(id: any) {
+  throw new Error('Function not implemented.');
+}

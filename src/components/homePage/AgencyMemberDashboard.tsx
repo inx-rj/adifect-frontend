@@ -7,17 +7,20 @@ import { useAppDispatch, useAppSelector } from "redux/store";
 import { GET_USER_PROFILE_DATA } from "redux/reducers/auth/auth.slice";
 import { useSingleEffect, useUpdateEffect } from "react-haiku";
 
-import { FRESHERS_JOBS_DATA } from "redux/reducers/homePage/fresherJobsList.slice";
+import { FRESHERS_JOBS_DATA } from "redux/reducers/jobs/fresherJobsList.slice";
 import {
   CLEAR_MEMBERS_APPROVAL_JOBS,
   MEMBERS_APPROVAL_JOBS_DATA,
-} from "redux/reducers/homePage/membersApprovalJobsList.slice";
+} from "redux/reducers/jobs/membersApprovalJobsList.slice";
 import { formateISODateToLocaleString } from "helper/utility/customFunctions";
 import {
   GET_MEMEBERS_APPROVAL_JOBLIST,
   GET_MEMEBERS_FRESHERS_JOBLIST,
   GET_MEMEBERS_FRESHERS_LATEST_JOBLIST,
 } from "redux/actions/jobs/jobs.actions";
+import { API_URL } from "helper/env";
+import BadgeUI from "components/common/badge/BadgeUI";
+import { ROLES } from "helper/config";
 
 const AgencyMemberDashboard = () => {
   const dispatch = useAppDispatch();
@@ -42,20 +45,36 @@ const AgencyMemberDashboard = () => {
     setCurrentPage(gotopage);
   };
 
-  const openPopup = async (item_id) => {};
+  const openPopup = async (item_id) => { };
 
   useSingleEffect(() => {
+    window.scrollTo(0, 0);
+    if (userData?.data?.user_level === 1) {
+      setUserLevel("Admin");
+    } else if (userData?.data?.user_level === 2) {
+      setUserLevel("Marketer");
+    } else if (userData?.data?.user_level === 3) {
+      setUserLevel("Approver");
+    }
+    setUserFirstName(userData?.data?.first_name);
+    setUserLastName(userData?.data?.last_name);
     const data = {
       // id: headerCompany ?? "",
       status: "2",
       page: 1,
       ordering: currentPage,
     };
-    dispatch(GET_MEMEBERS_APPROVAL_JOBLIST(data));
-    if (userData?.data?.user_level === 4) {
-      dispatch(GET_MEMEBERS_FRESHERS_LATEST_JOBLIST());
+
+    if (userData?.data?.user_level === 3) {
+      dispatch(GET_MEMEBERS_APPROVAL_JOBLIST(data));
     } else {
-      dispatch(GET_MEMEBERS_FRESHERS_LATEST_JOBLIST());
+      dispatch(
+        GET_MEMEBERS_FRESHERS_LATEST_JOBLIST(
+          userData?.data?.user_level === 4
+            ? `${API_URL.JOBS.MEMBERS_LATEST_JOBS}`
+            : `${API_URL.JOBS.LATEST_JOBS}`
+        )
+      );
     }
   });
 
@@ -97,7 +116,7 @@ const AgencyMemberDashboard = () => {
   return (
     <div>
       <>
-        {userData?.data?.user_level ? (
+        {userData?.data?.user_level === 4 ? (
           // !showBlueBox ? (
           <>
             <div className="">
@@ -266,7 +285,7 @@ const AgencyMemberDashboard = () => {
           </>
         ) : (
           // ) : null
-          <div className="p-10">
+          <>
             <div className="bg-white rounded-xl mb-5">
               <h1 className="p-5 text-center font-bold text-2xl">
                 Welcome {userFirstName} {userLastName}
@@ -274,130 +293,144 @@ const AgencyMemberDashboard = () => {
                 {/* {userData?.user?.user_level === 4 ? (
         <>In-house User</>
       ) : ( */}
-                <>Permission Level - {userData?.data?.user_level}</>
+                {/* <>Permission Level - {userLevel}</> */}
                 {/* )} */}
                 <br />
               </h1>
             </div>
-          </div>
+          </>
         )}
-        <div className=" FreshJobTop">
+        <div className=" FreshJobTop grid grid-cols-1 gap-2">
           {memberApprovalJobList?.data?.results?.length > 0 &&
             userData?.data?.user_level === 3 &&
             memberApprovalJobList?.data?.results?.map((item, index) => (
-              <div className="Remotemarkeitng" key={index}>
+              <div
+                className="Remotemarkeitng relative w-full bg-[#fdfdfd] border border-[rgba(36_114_252_0.16)] rounded-lg p-7"
+                key={index}
+              >
+                {/* border: 1px solid rgba(36,114,252,.16); */}
                 <div className="bt-Title">
                   <div className="joblistTop">
                     <Link to={`/jobs/details/${item.id}`}>
-                      <div className="expdiv expdivMemberDash">
-                        <h2>
+                      <div className="expdiv expdivMemberDash flex justify-between">
+                        <h2 className="text-[#000] text-2xl font-bold">
                           {item.title.length > 50
                             ? item.title.substring(0, 50) + "..."
                             : item.title}
                         </h2>
 
-                        <p className="openappro">Waiting Approval</p>
+                        <p className="openappro flex justify-center p-3 border border-[#59cf65] text-[#59cf65] rounded-full">
+                          Waiting Approval
+                        </p>
                       </div>
                     </Link>
                   </div>
                 </div>
-                <div className="jobListDetailsAreaAndTaskbox">
-                  <div className="RemoteText RemoteTextEightyWidth">
-                    <p className="PostedDate">
+
+                <div className="jobListDetailsAreaAndTaskbox flex gap-2">
+                  <div className="RemoteText RemoteTextEightyWidth max-w-[calc(100 - 30%)] w-full">
+                    <p className="PostedDate text-[#a0a0a0] mb-1 text-base font-normal">
                       Posted on: {formateISODateToLocaleString(item?.created)}
                     </p>
-                    <div className="PostedDesc">
+                    <div className="PostedDesc mb-2">
                       {item.description?.length > 200
                         ? item.description.substring(0, 200) + "..."
                         : item.description}
                     </div>
-                    <div className="Budget-Title">
-                      <li>
-                        <h5>Budget:</h5>
-                      </li>
-                      <li>
-                        <h5>${item.price ? item.price : "N/A"}</h5>
-                      </li>
+                    <div className="Budget-Title  flex gap-2 mb-2">
+                      <h5 className="font-bold">Budget:</h5>
+                      <h5 className="font-bold">
+                        ${item.price ? item.price : "N/A"}
+                      </h5>
                     </div>
-                    <div className="Budget-Title">
-                      <li>
-                        <h5>Level:</h5>
-                      </li>
-                      <li>
-                        <h5>{item?.level ? item?.level?.level_name : "N/A"}</h5>
-                      </li>
-                    </div>
-                    <div className="Skill mt-4">
-                      <li>
-                        <h5>Skills:</h5>
-                      </li>
-                      {item?.skills?.length > 0 &&
-                        item?.skills?.map((skill, index) => (
-                          <li key={index}>
-                            <Link to="#">{skill.skill_name}</Link>
-                          </li>
-                        ))}
-                      {item?.skills?.length < 1 && (
-                        <>
-                          <li>
-                            <h3 className="colorOnNA">N/A</h3>
-                          </li>
-                        </>
-                      )}
-                    </div>
-                    <div className="Skill mt-4 ">
-                      <li>
-                        <h5>Tags:</h5>
-                      </li>
-                      {item.tags?.length > 0 &&
-                        item.tags?.split(",").map((tag, index) => (
-                          <li key={index}>
-                            <Link to="#">{tag}</Link>
-                          </li>
-                        ))}
+                    <div className="Budget-Title flex gap-2 mb-2">
+                      <h5 className="font-bold">Level:</h5>
 
-                      {item.tags?.length < 1 && (
-                        <>
-                          <li>
+                      <h5 className="font-bold">
+                        {item?.level ? item?.level?.level_name : "N/A"}
+                      </h5>
+                    </div>
+                    <div className="flex gap-2 my-3 items-center">
+                      <span className="text-base font-medium text-[#A0A0A0]">
+                        Skills:{" "}
+                      </span>
+                      <div className="flex flex-wrap gap-2">
+                        {item?.skills?.length > 0 &&
+                          item?.skills?.map((skill, index) => (
+                            <BadgeUI variant="primary" key={index}>
+                              {skill?.skill_name}
+                            </BadgeUI>
+                          ))}
+                        {item?.skills?.length < 1 && (
+                          <>
                             <h3 className="colorOnNA">N/A</h3>
-                          </li>
-                        </>
-                      )}
-                    </div>
-                    <div className="ApplyButton_2">
-                      <button
-                        type="button"
-                        className="btn btn-primary Small border-radius"
-                      >
-                        Apply Now
-                      </button>
-                    </div>
-                  </div>
-                  {item?.jobtasks_job?.length > 0 && (
-                    <div className="taskBoxJobListCard">
-                      <div className="taskBoxJobListCardFirstHead">
-                        <div className="taskBoxJobListCardFirstNoBg">
-                          <h3 className="taskMember1">Task</h3>
-                          <h3 className="taskMemberd2">Date</h3>
-                        </div>
-                        <div className="taskBoxJobListCardDetailsDate1">
-                          {item?.jobtasks_job?.map((task) => {
-                            return (
-                              <>
-                                <div className="tasksecdiv1">
-                                  <div className="tasktitlesec1">
-                                    {task?.title}
-                                  </div>
-                                  <div className="tasktitlesec2">
-                                    {task?.due_date}
-                                  </div>
-                                </div>
-                              </>
-                            );
-                          })}
-                        </div>
+                          </>
+                        )}
                       </div>
                     </div>
+                    <div className="flex gap-2 my-3 items-center">
+                      <span className="text-base font-medium text-[#A0A0A0]">
+                        Tags:{" "}
+                      </span>
+                      <div className="flex flex-wrap gap-2">
+                        {item?.tags?.length > 0 &&
+                          item?.tags?.split(",")?.map((tag, index) => (
+                            <BadgeUI variant="primary" key={index}>
+                              {tag}
+                            </BadgeUI>
+                          ))}
+                        {item?.tags?.length < 1 && (
+                          <>
+                            <h3 className="colorOnNA">N/A</h3>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                    {userData?.data?.role !== ROLES.MEMBER && (
+                      <div className="ApplyButton_2">
+                        <button
+                          type="button"
+                          className="btn btn-primary Small border-radius"
+                        >
+                          Apply Now
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                  {item?.jobtasks_job?.length > 0 && (
+                    <>
+                      <div className="taskBoxJobListCard1 max-w-[30%] w-full ">
+                        <div className="taskBoxJobListCardFirstHead p-3 border-[rgb(36_114_252_0)] rounded-lg mt-4 shadow-[1px_1px_6px_#dddddd69]">
+                          <div className="grid grid-cols-2">
+                            <h3 className="taskMember1 text-[#000] font-bold text-xl">
+                              Task
+                            </h3>
+                            <h3 className="taskMemberd2 text-[#000] font-bold text-xl">
+                              Date
+                            </h3>
+                          </div>
+                          <div className="taskBoxJobListCardDetailsDate1 ">
+                            {item?.jobtasks_job?.map((item, index) => {
+                              return (
+                                <>
+                                  <div
+                                    className="tasksecdiv1 grid grid-cols-2 "
+                                    key={index}
+                                  >
+                                    <div className="tasktitlesec1">
+                                      {item?.title}
+                                    </div>
+                                    <div className="tasktitlesec2">
+                                      {item?.due_date}
+                                    </div>
+                                  </div>
+                                </>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      </div>
+                    </>
                   )}
                 </div>
               </div>
@@ -442,19 +475,19 @@ const AgencyMemberDashboard = () => {
         )}
         {(userData?.data?.user_level === 1 ||
           userData?.data?.user_level === 2) && (
-          <div className="AllPageHight">
-            <div className="Topallpage_sec">
-              <div className="Work-D grid md:grid-cols-2 sm:grid-cols-1 gap-4">
-                <div className="inProgressDashboardComponent">
-                  <MemberDasboardInReview />
+            <div className="AllPageHight">
+              <div className="Topallpage_sec">
+                <div className="Work-D grid md:grid-cols-2 sm:grid-cols-1 gap-4">
+                  <div className="inProgressDashboardComponent">
+                    <MemberDasboardInReview />
+                  </div>
+                  <div className="inReviewDashboardComponent">
+                    <MemeberDashBoardInProgress />
+                  </div>{" "}
                 </div>
-                <div className="inReviewDashboardComponent">
-                  <MemeberDashBoardInProgress />
-                </div>{" "}
               </div>
             </div>
-          </div>
-        )}
+          )}
       </>
     </div>
   );

@@ -1,18 +1,9 @@
 import axiosPrivate from "../api/axios";
 import { useLayoutEffect } from "react";
-import { SET_PERSIST } from "../redux/reducers/config/app/app.slice";
-import { CLEAR_AUTH } from "../redux/reducers/auth/auth.slice";
-import { useNavigate } from "react-router-dom";
-import { useAppDispatch } from "../redux/store";
-import { TRIGGER_PERSIST_MODE } from "../redux/actions/config/app/app.actions";
 
 const useAxiosPrivate = () => {
   // const refresh = useRefreshToken();
-  const dispatch = useAppDispatch();
-  const navigate = useNavigate();
   const access_token = () => localStorage.getItem("access_token");
-  const refresh_token = () => localStorage.getItem("refresh_token");
-  let canReTry = false;
 
   useLayoutEffect(() => {
     const requestIntercept = axiosPrivate.interceptors.request.use(

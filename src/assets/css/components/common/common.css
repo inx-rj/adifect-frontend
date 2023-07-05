@@ -1,9 +1,20 @@
 /* Better to follow the sequence of property*/
 /* Ex: @apply <display> <alignments> <position> <h/w/> <bg> <border> <font - size, weight, color, align, ...so on> 
 <p/m/spacing> <shadow> <animation> */
-
+body .MuiTypography-root,
+body .MuiInputBase-root,
+body .MuiTableCell-root {
+  @apply font-figtree;
+}
 .login-signup-wrapper {
   @apply flex items-center justify-center min-h-screen p-5 my-0 mx-auto;
+}
+
+/* Change auto fill input color  */
+input:-webkit-autofill,
+input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 25px #fff inset;
+  /* -webkit-text-fill-color: #444444; */
 }
 
 /* Image Css  */
@@ -45,7 +56,7 @@
 }
 
 .input-style {
-  @apply h-12 w-full border border-[#0000001a] rounded outline-none focus:border-theme py-px pl-3.5 pr-0.5;
+  @apply h-12 w-full border border-[#0000001a] rounded outline-none focus:border-theme py-px pl-3.5 pr-0.5 disabled:cursor-not-allowed disabled:bg-gray-100;
 }
 
 .styled-select textarea {
@@ -94,12 +105,8 @@
   @apply bg-[#9abfff];
 }
 
-.page-title {
-  @apply text-xl font-semibold;
-}
-
 .dr-picker-input {
-  @apply w-full border border-[#0000003b] rounded hover:border-black focus:border-theme focus-visible:outline-offset-0 focus:outline-0 focus:outline-offset-[unset] focus-visible:outline-0 text-sm placeholder:text-[#0009] py-2.5 pl-4 pr-3 transition-all duration-300;
+  @apply w-full border-[#e5e7eb] rounded focus:border-theme focus-visible:outline-0 focus-visible:outline-none focus-visible:outline-offset-0 focus:outline-0 focus:outline-offset-[unset] text-sm placeholder:text-[#0009] py-2.5 pl-4 pr-3 transition-all duration-300;
 }
 
 /* ===================== Need to refactor below classes if possible ===================== */
@@ -110,10 +117,6 @@
 .flex-between {
   @apply flex justify-between items-center;
 }
-body .MuiTypography-root {
-  font-family: Figtree, sans-serif;
-}
-
 /* Select Menu */
 /* .MuiMenu-list li {
   @apply text-base pt-3 px-2.5 pb-3;
@@ -154,4 +157,16 @@ ul.MuiMenu-list {
 
 .error-style .styled-select .MuiInputBase-root fieldset {
   @apply border-danger -top-[11px];
+}
+
+.MuiOutlinedInput-root fieldset.MuiOutlinedInput-notchedOutline,
+.MuiOutlinedInput-root:hover fieldset.MuiOutlinedInput-notchedOutline {
+  @apply border-[#0000001a] border-[1px];
+}
+.MuiOutlinedInput-root.Mui-focused fieldset.MuiOutlinedInput-notchedOutline {
+  @apply border-[1px] border-theme;
+}
+
+.detailPageTitle {
+  @apply text-base font-semibold text-[#71757B];
 }

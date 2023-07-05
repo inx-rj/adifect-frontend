@@ -99,7 +99,7 @@ function AgencyDashboardInReview() {
           <div className="[&>div]:truncate">
             <Title title="Run Campaign for a jewellery business" />
           </div>
-          <h5 className="h-full max-h-[80px] overflow-y-auto">
+          <h5 className="h-full max-h-[80px] overflow-y-auto custom-scrollbar">
           In vehicula orci maecenas egestas sodales at. Senectus nec dolor id pulvinar. Vitae fringilla phasellus amet semper sagittis, neque. Sed a sed diam senectus diam. Arcu tellus ullamcorper volutpat id 
           </h5>
           <div className="mt-4 mb-2">

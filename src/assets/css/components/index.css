@@ -12,3 +12,5 @@
 @import "./tabbing/tabbing.css";
 @import "./jobs/applyJob.css";
 @import "./workflow/workflow.css";
+@import './editor/editor.css';
+@import "./profile/profile.css";
