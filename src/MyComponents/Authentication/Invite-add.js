@@ -70,7 +70,7 @@ function Invite_add() {
   } = useSelector((state) => state.detailsInvitereducer);
 
   useEffect(() => {
-    console.log(inviteid);
+    // console.log(inviteid);
     if (inviteid) {
       if (!InviteDetails || !InviteDetails.name) {
         dispatch(getInviteDetails(inviteid));

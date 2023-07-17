@@ -104,7 +104,7 @@ const MultiChoiceDropDown = (props) => {
     };
 
     reader.onerror = function (ex) {
-      console.log(ex);
+      // console.log(ex);
     };
 
     reader.readAsBinaryString(file[0]);

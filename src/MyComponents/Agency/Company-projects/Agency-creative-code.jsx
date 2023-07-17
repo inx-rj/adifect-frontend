@@ -367,7 +367,7 @@ export default function Agency_creative_code() {
         setCreativeCodeList(res?.data?.data);
       })
       .catch((err) => {
-        console.log(err, "Channel Error");
+        // console.log(err, "Channel Error");
       })
       .finally(() => {
         setCreativeCodeListLoader(false);

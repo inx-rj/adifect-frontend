@@ -1048,7 +1048,7 @@ export default function CreatorDashboard() {
     };
 
     setErrors(tempErrors);
-    console.log({ number, startDate, tempErrors });
+    // console.log({ number, startDate, tempErrors });
 
     if (Object.values(tempErrors).filter((value) => value).length) {
       return;
@@ -1642,9 +1642,9 @@ export default function CreatorDashboard() {
                                                         <h4 className="newDueDateNeg">
                                                           Due Date
                                                         </h4>
-                                                        {console.log({
+                                                        {/* {console.log({
                                                           deliveryDate,
-                                                        })}
+                                                        })} */}
                                                         <p>{deliveryDate}</p>
                                                         {deliveryhours && (
                                                           <p className="colorsec">
@@ -1691,9 +1691,9 @@ export default function CreatorDashboard() {
                                                             onChange={(
                                                               date
                                                             ) => {
-                                                              console.log({
-                                                                date,
-                                                              });
+                                                              // console.log({
+                                                              //   date,
+                                                              // });
                                                               {
                                                                 handleDate(
                                                                   date

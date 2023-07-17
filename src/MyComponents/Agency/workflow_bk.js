@@ -125,7 +125,7 @@ export default function Agency_approval_workflow_dev() {
     const success = axios
       .get(`${BACKEND_API_URL}agency/workflow/`, {})
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         setdata(res?.data);
       })
       .catch((err) => {});

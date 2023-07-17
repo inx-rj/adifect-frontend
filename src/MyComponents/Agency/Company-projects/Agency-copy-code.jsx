@@ -248,7 +248,7 @@ export default function Agency_copy_code() {
         setProgramsList(res?.data?.data);
       })
       .catch((err) => {
-        console.log(err, "Channel Error");
+        // console.log(err, "Channel Error");
       })
       .finally(() => {
         setProgramsListLoader(false);

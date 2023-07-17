@@ -6,7 +6,6 @@ import TaskQueAndAns from "./TaskQueAndAns";
 const TaskDetails = () => {
   const {
     loading: myTaskLoading,
-    success,
     myTaskDetails,
   } = useSelector((state) => state.myTasksDetailsAgencyReducer);
   return (

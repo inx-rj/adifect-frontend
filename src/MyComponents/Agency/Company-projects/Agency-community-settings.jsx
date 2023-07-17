@@ -90,7 +90,7 @@ export default function Agency_community_settings() {
 
   //set the edit mode
   const handleEdit = (item) => {
-    console.log({ item })
+    // console.log({ item })
     setShowTagModal(true);
     setIsEditMode(true);
     setErrors({ ...errors, community_id: null });
@@ -336,7 +336,7 @@ export default function Agency_community_settings() {
         setChannelList(res?.data?.data?.results || res?.data?.data);
       })
       .catch((err) => {
-        console.log(err, "Channel Error");
+        // console.log(err, "Channel Error");
       });
   };
   useEffect(() => {

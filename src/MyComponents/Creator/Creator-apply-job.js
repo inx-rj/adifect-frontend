@@ -399,7 +399,7 @@ export default function CreatorApplyJob() {
     set75value(false);
     set50value(false);
     const { value } = evt.target;
-    console.log(value);
+    // console.log(value);
 
     // check if value includes a decimal point
     if (value.match(/\./g)) {

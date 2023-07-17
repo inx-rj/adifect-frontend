@@ -118,7 +118,7 @@ const Agency_profile_private_view = () => {
   const { skillsetDetails, success: successSkillsetDetails } = useSelector(
     (state) => state.skillsetDetailsReducer
   );
-  console.log("skillsData", skillsData);
+  // console.log("skillsData", skillsData);
 
   const { success: successAddSkillset } = useSelector(
     (state) => state.skillsetAddReducer
@@ -129,7 +129,7 @@ const Agency_profile_private_view = () => {
   const { userskillsetDetails, success: successUserSkillsetDetails } =
     useSelector((state) => state.userskillsetDetailsReducer);
 
-  console.log("skills", userskillsetDetails);
+  // console.log("skills", userskillsetDetails);
 
   const navigate = useNavigate();
 
@@ -845,7 +845,7 @@ const Agency_profile_private_view = () => {
       });
     e.target.value = "";
   }
-  console.log(skill_name);
+  // console.log(skill_name);
   // SKILLS JS END
 
   // ABOUT ME JS START

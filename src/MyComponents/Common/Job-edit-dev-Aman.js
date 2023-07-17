@@ -251,8 +251,8 @@ export default function Job_edit_dev_Aman() {
     setJobDocuments(imageList);
     setFileExtension(fileext);
     imgRef.current = imageList;
-    console.log("imgRef--", imgRef);
-    console.log("jobDocuments--", jobDocuments);
+    // console.log("imgRef--", imgRef);
+    // console.log("jobDocuments--", jobDocuments);
   };
 
   const validateSubmit = (e) => {
@@ -289,8 +289,8 @@ export default function Job_edit_dev_Aman() {
       "expected_delivery_date",
       moment(deliveryDate).format("YYYY-MM-DD")
     );
-    console.log("skills - ", skills);
-    console.log("skills Length - ", skills.length);
+    // console.log("skills - ", skills);
+    // console.log("skills Length - ", skills.length);
     for (var i = 0; i < skills.length; i++) {
       formData.append("skills", skills[i].id ? skills[i].id : skills[i]);
     }
@@ -361,7 +361,7 @@ export default function Job_edit_dev_Aman() {
   const changeHandler = (e, v) => {
     let myList = [];
     for (let i = 0; i < v.length; i++) {
-      console.log(v[i].id);
+      // console.log(v[i].id);
       myList.push(v[i].id);
     }
     setSkills(myList);

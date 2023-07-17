@@ -173,7 +173,7 @@ export default function Job_add_edit_dev() {
   }, []);
 
   const downloadFile = (blob, fileNameDownload) => {
-    console.log("blob--", blob);
+    // console.log("blob--", blob);
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.style.display = "none";
@@ -222,8 +222,8 @@ export default function Job_add_edit_dev() {
     setFileExtension(fileext);
     setSelectedFile(previewImages);
     imgRef.current = imageList;
-    console.log("imgRef--", imgRef);
-    console.log("imageDisplay--", selectedFile);
+    // console.log("imgRef--", imgRef);
+    // console.log("imageDisplay--", selectedFile);
   };
 
   const validateSubmit = (e) => {
@@ -260,8 +260,8 @@ export default function Job_add_edit_dev() {
       "expected_delivery_date",
       moment(deliveryDate).format("YYYY-MM-DD")
     );
-    console.log("skills - ", skills);
-    console.log("skills Length - ", skills.length);
+    // console.log("skills - ", skills);
+    // console.log("skills Length - ", skills.length);
     for (var i = 0; i < skills.length; i++) {
       formData.append("skills", skills[i].id ? skills[i].id : skills[i]);
     }
@@ -332,12 +332,12 @@ export default function Job_add_edit_dev() {
   const changeHandler = (e, v) => {
     let myList = [];
     for (let i = 0; i < v.length; i++) {
-      console.log(v[i].id);
+      // console.log(v[i].id);
       myList.push(v[i].id);
     }
     setSkills(myList);
     setIsOpenSkill(false);
-    console.log('event - ', e);
+    // console.log('event - ', e);
   };
 
   const toDay = new Date().toISOString().substring(0, 10);

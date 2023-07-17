@@ -195,7 +195,7 @@ export default function Agency_programs() {
           })
         : [],
   };
-  console.log("Program", data);
+  // console.log("Program", data);
   // Programs fetch list API call
   const getProgramsList = async () => {
     setProgramsListLoader(true);
@@ -213,7 +213,7 @@ export default function Agency_programs() {
         setProgramsList(res?.data?.data);
       })
       .catch((err) => {
-        console.log(err, "Channel Error");
+        // console.log(err, "Channel Error");
       })
       .finally(() => {
         setProgramsListLoader(false);

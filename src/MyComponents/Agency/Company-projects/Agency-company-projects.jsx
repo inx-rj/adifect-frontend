@@ -63,7 +63,7 @@ export default function Agency_company_projects() {
 
   //set selected filter
   const handleChange = (name, value) => {
-    console.log("FilterLog", name, value);
+    // console.log("FilterLog", name, value);
     setFilterData((prevState) => {
       return { ...prevState, [name]: value };
     });
