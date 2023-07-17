@@ -226,6 +226,8 @@ import {
   projectsByFilterDuplicateReducer,
 } from "./redux/reducers/project-reducer";
 
+import { agencyMyTasksByFilterReducer, myTasksDetailsAgencyReducer } from "./redux/reducers/MyTasks-reducer"
+
 import {
   usersAdminReducer,
   UserAdminDetailsReducer,
@@ -619,6 +621,8 @@ const reducer = combineReducers({
   creatorCompanyFilterReducer,
   companydecpReducer,
   projectsByFilterDuplicateReducer,
+  agencyMyTasksByFilterReducer,
+  myTasksDetailsAgencyReducer,
   usersAdminReducer,
   UserAdminDetailsReducer,
   agencyAdminReducer,

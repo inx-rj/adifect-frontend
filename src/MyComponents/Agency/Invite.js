@@ -288,7 +288,7 @@ export default function Invite() {
           buttons: false,
           timer: 1500,
         });
-        toast.success("Successfully Saved!");
+        // toast.success("Successfully Saved!");
         navigate("/home");
       })
       .catch(

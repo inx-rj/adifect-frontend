@@ -20,6 +20,7 @@ import LoadingSpinner from "../../containers/LoadingSpinner";
 import swal from "sweetalert";
 import { defaultPageLoader } from "../../redux/actions/other-actions";
 import { Link } from "react-router-dom";
+import api from "../../utils/api";
 
 function Skill_add_edit() {
   let navigate = useNavigate();
@@ -100,7 +101,7 @@ function Skill_add_edit() {
       return;
     }
     if (skillId) {
-      axios
+      api
         .put(`${BACKEND_API_URL}skills/${skillId}/`, {
           skill_name,
           description,
@@ -119,7 +120,7 @@ function Skill_add_edit() {
           navigate("/skills/list");
         });
     } else {
-      axios
+      api
         .post(`${BACKEND_API_URL}skills/`, {
           skill_name,
           description,

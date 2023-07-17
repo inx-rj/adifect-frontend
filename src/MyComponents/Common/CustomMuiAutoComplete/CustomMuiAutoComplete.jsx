@@ -1,7 +1,8 @@
-import { Autocomplete, TextField } from "@mui/material";
+import { Autocomplete, CircularProgress, TextField } from "@mui/material";
 import React from "react";
 
 const CustomMuiAutoComplete = ({
+  loader = false,
   placeholder = "Select Value",
   label,
   disableClearable = false,
@@ -10,11 +11,13 @@ const CustomMuiAutoComplete = ({
   selectedOption,
   setSearchText,
   searchText,
+  customClass = "",
   ...props
 }) => {
   return (
     <>
       <Autocomplete
+        className={customClass}
         sx={{
           "&.MuiAutocomplete-root": {
             "& .MuiAutocomplete-endAdornment": {
@@ -42,7 +45,7 @@ const CustomMuiAutoComplete = ({
                   position: "relative",
                   zIndex: 3,
                   p: 0,
-                  marginRight: "55px",
+                  marginRight: "35px",
                 },
                 "& .MuiInputAdornment-root": {
                   marginRight: "5px",
@@ -50,10 +53,18 @@ const CustomMuiAutoComplete = ({
                 },
               },
             },
+            "&.assign_select": {
+              "& .MuiTextField-root": {
+                "& .MuiOutlinedInput-root": {
+                  height: "55px",
+                },
+              },
+            },
           },
         }}
-        onClose={() => setSearchText("")}
+        onClose={() => setSearchText && setSearchText("")}
         disableClearable={disableClearable}
+        loading={loader}
         renderInput={(params) => {
           return (
             <TextField
@@ -67,6 +78,14 @@ const CustomMuiAutoComplete = ({
               InputProps={{
                 ...params.InputProps,
                 type: "search",
+                endAdornment: (
+                  <React.Fragment>
+                    {loader && (
+                      <CircularProgress className="mr-8 text-black" size={18} />
+                    )}
+                    {params.InputProps.endAdornment}
+                  </React.Fragment>
+                ),
               }}
             />
           );

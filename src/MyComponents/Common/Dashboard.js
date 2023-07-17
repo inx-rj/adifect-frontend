@@ -11,8 +11,6 @@ import MemberDashboard from "../Member/Member-dashboard.js";
 export default function Dashboard() {
   const { userData } = useSelector((state) => state.authReducer);
 
-  console.log({ userData }, "--- Inside Dashboard");
-
   return userData?.user?.role == Object.keys(ROLE)[0] ? (
     <AdminDashboard />
   ) : userData?.user?.role == Object.keys(ROLE)[1] ? (

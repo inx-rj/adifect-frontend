@@ -119,7 +119,7 @@ export const listAllJobs = (formData) => async (dispatch) => {
     let page = formData.get("currentPage");
     let companyId = formData.get("headerCompany");
     let filter = formData.get("filter");
-    let search = formData.get("search");
+    let search = formData.get("search") ?? "";
 
     if (filter === "In Progress") {
       filter = `progress=True`;
@@ -394,7 +394,7 @@ export const listAgencyJobs = (formData) => async (dispatch) => {
     let page = formData.get("currentPage");
     let companyId = formData.get("headerCompany");
     let filter = formData.get("filter");
-    let search = formData.get("search");
+    let search = formData.get("search") ?? "";
 
     if (filter === "Completed") {
       filter = `completed=True`;
@@ -814,83 +814,83 @@ export const getJobAdmin = (id) => async (dispatch, getState) => {
 
 export const SuperAdminJobListInProgressAction =
   ({ id, status, ordering }) =>
-  async (dispatch, getState) => {
-    try {
-      dispatch({
-        type: ADMIN_DASHBOARD_IN_PROGRESS_JOBLIST_REQUEST,
-      });
-
-      const {
-        authReducer: { userData },
-      } = getState();
-
-      const config = {
-        headers: {
-          "Content-type": "application/json",
-          Authorization: `Bearer ${userData.token}`,
-        },
-      };
-      const { data } = await api.get(
-        `${BACKEND_API_URL}jobs/?&company=${id}&job_applied__status=${status}&ordering=${ordering}`,
-        config
-      );
-      dispatch({
-        type: ADMIN_DASHBOARD_IN_PROGRESS_JOBLIST_SUCCESS,
-        payload: data,
-      });
-      // return true;
-    } catch (error) {
-      if (error?.response?.data) {
+    async (dispatch, getState) => {
+      try {
         dispatch({
-          type: ADMIN_DASHBOARD_IN_PROGRESS_JOBLIST_FAIL,
-          payload:
-            error.response && error.response.data.message
-              ? error.response.data.message
-              : error.response.data,
+          type: ADMIN_DASHBOARD_IN_PROGRESS_JOBLIST_REQUEST,
         });
+
+        const {
+          authReducer: { userData },
+        } = getState();
+
+        const config = {
+          headers: {
+            "Content-type": "application/json",
+            Authorization: `Bearer ${userData.token}`,
+          },
+        };
+        const { data } = await api.get(
+          `${BACKEND_API_URL}jobs/?&company=${id}&job_applied__status=${status}&ordering=${ordering}`,
+          config
+        );
+        dispatch({
+          type: ADMIN_DASHBOARD_IN_PROGRESS_JOBLIST_SUCCESS,
+          payload: data,
+        });
+        // return true;
+      } catch (error) {
+        if (error?.response?.data) {
+          dispatch({
+            type: ADMIN_DASHBOARD_IN_PROGRESS_JOBLIST_FAIL,
+            payload:
+              error.response && error.response.data.message
+                ? error.response.data.message
+                : error.response.data,
+          });
+        }
       }
-    }
-  };
+    };
 
 export const SuperAdminJobListInReviewAction =
   ({ id, status, ordering }) =>
-  async (dispatch, getState) => {
-    try {
-      dispatch({
-        type: ADMIN_DASHBOARD_IN_REVIEW_JOBLIST_REQUEST,
-      });
-
-      const {
-        authReducer: { userData },
-      } = getState();
-
-      const config = {
-        headers: {
-          "Content-type": "application/json",
-          Authorization: `Bearer ${userData.token}`,
-        },
-      };
-      const { data } = await api.get(
-        `${BACKEND_API_URL}jobs/?&company=${id}&job_applied__status=${status}&ordering=${ordering}`,
-        config
-      );
-      dispatch({
-        type: ADMIN_DASHBOARD_IN_REVIEW_JOBLIST_SUCCESS,
-        payload: data,
-      });
-      // return true;
-    } catch (error) {
-      if (error?.response?.data) {
+    async (dispatch, getState) => {
+      try {
         dispatch({
-          type: ADMIN_DASHBOARD_IN_REVIEW_JOBLIST_FAIL,
-          payload:
-            error.response && error.response.data.message
-              ? error.response.data.message
-              : error.response.data,
+          type: ADMIN_DASHBOARD_IN_REVIEW_JOBLIST_REQUEST,
         });
+
+        const {
+          authReducer: { userData },
+        } = getState();
+
+        const config = {
+          headers: {
+            "Content-type": "application/json",
+            Authorization: `Bearer ${userData.token}`,
+          },
+        };
+        const { data } = await api.get(
+          `${BACKEND_API_URL}jobs/?&company=${id}&job_applied__status=${status}&ordering=${ordering}`,
+          config
+        );
+        dispatch({
+          type: ADMIN_DASHBOARD_IN_REVIEW_JOBLIST_SUCCESS,
+          payload: data,
+        });
+        // return true;
+      } catch (error) {
+        if (error?.response?.data) {
+          dispatch({
+            type: ADMIN_DASHBOARD_IN_REVIEW_JOBLIST_FAIL,
+            payload:
+              error.response && error.response.data.message
+                ? error.response.data.message
+                : error.response.data,
+          });
+        }
       }
-    }
-  };
+    };
 
 export const listAdminInHouseUsers = (companyId) => async (dispatch) => {
   try {

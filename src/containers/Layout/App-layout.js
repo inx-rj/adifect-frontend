@@ -1,11 +1,11 @@
-import React, { useEffect } from "react";
-import { Outlet, useLocation } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import Header from "./Header";
 import Sidebar from "./Sidebar";
 import Footer from "./Footer";
+import React, { useEffect } from "react";
+import LoadingSpinner from "../../containers/LoadingSpinner";
 import { defaultPageLoader } from "../../redux/actions/other-actions";
 import { useDispatch, useSelector } from "react-redux";
-import store from "../../store";
 
 function AppLayout(props) {
   const dispatch = useDispatch();
@@ -13,18 +13,10 @@ function AppLayout(props) {
   // setTimeout(function () {
   //   setIsLoading(false);
   // }, 1000);
-  const location = useLocation();
-
   const { loading } = useSelector((state) => state.loaderReducer);
-
-  console.log({ location, loading }, 'App-layout');
-
   useEffect(() => {
     dispatch(defaultPageLoader());
-
-    console.log({ loading, location, storeState: store.getState() }, "--- Inside AppLayout");
-
-  }, [location, store]);
+  }, []);
 
   // const [isToggle, setIsToggle] = useState(false);
 
@@ -38,7 +30,7 @@ function AppLayout(props) {
       ) : ( */}
       <>
         <div className="admin_layout_after_loader">
-          <div className="row mlr-un">
+          <div className="row mlr-un sticky top-0 z-[1010]">
             <div
               className={
                 props.isToggle
@@ -68,13 +60,22 @@ function AppLayout(props) {
                 headerCompany={props.headerCompany}
                 setHeaderCompany={props.setHeaderCompany}
               />
+              {/* <div className="toggleSidebarDiv">
+                <button
+                  className="allpagetoggle"
+                  type="button"
+                  onClick={(e) => props.setIsToggle(!props.isToggle)}
+                >
+                  <img src="/img/toggleicon.png" />
+                </button>
+              </div> */}
             </div>
           </div>
           <div className="Topdivallpage" id="Topdivallpage">
             <div
               className={
                 props.isToggle
-                  ? " sidebar DAMSidebar sidebarmenu2"
+                  ? " sidebar DAMSidebar sidebarmenu2 collapsedBar"
                   : " sidebar sidebarmenu2"
               }
             >
@@ -82,7 +83,7 @@ function AppLayout(props) {
             </div>
             <div
               className={
-                props.isToggle ? " Rightbar DAMSidebar2 " : " Rightbar "
+                props.isToggle ? " Rightbar DAMSidebar2" : " Rightbar "
               }
             >
               {/* <div className=" Rightbar" style={{ height: "100vh" }}> */}

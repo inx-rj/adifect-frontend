@@ -23,6 +23,7 @@ const Custom_MUI_Table = (props) => {
     paginationData,
     setPaginationData,
     handlePopoverClose = false,
+    handleSorting = false,
     ...restProps
   } = props;
 
@@ -53,17 +54,16 @@ const Custom_MUI_Table = (props) => {
 
   return (
     <Card
-      className="relative"
       sx={{
         boxShadow: "none",
       }}
     >
-      {loader && (
-        <Box className="w-full [&>.spinner-container-bg]:backdrop-blur-sm [&>.spinner-container-bg]:bg-white/30">
-          <LoadingSpinner />
-        </Box>
-      )}
-      <TableContainer sx={{ height: "495px" }}>
+      <TableContainer className="relative" sx={{ height: "495px" }}>
+        {loader && (
+          <Box className="w-full [&>.spinner-container-bg]:backdrop-blur-sm [&>.spinner-container-bg]:bg-white/30">
+            <LoadingSpinner />
+          </Box>
+        )}
         <Table
           stickyHeader
           sx={{
@@ -71,6 +71,7 @@ const Custom_MUI_Table = (props) => {
               background: "#d3e3fe",
               whiteSpace: "nowrap",
               fontWeight: 600,
+              cursor: 'pointer'
             },
             "& .MuiTableCell-body": {
               whiteSpace: "nowrap",
@@ -84,7 +85,8 @@ const Custom_MUI_Table = (props) => {
                   sx={{ px: 3.125, py: 1.25, minWidth: arrEle.width }}
                   width={arrEle.width}
                   key={`${arrEle.id}_${index}`}
-                // sortDirection={orderBy === arrEle.id ? order : none}
+                  // sortDirection={orderBy === arrEle.id ? order : none}
+                  onClick={() => handleSorting && handleSorting(arrEle.field)}
                 >
                   {arrEle.label}
                 </TableCell>

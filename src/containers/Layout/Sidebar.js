@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { ROLE } from "./../../constants/other-constants";
+import { ROLE } from "../../constants/other-constants";
 import SidebarMenuItem from "../../MyComponents/Frontend/SidebarMenuItem";
 
 export default function Sidebar() {
@@ -18,8 +18,6 @@ export default function Sidebar() {
   useEffect(() => {
     if (!userData) {
       navigate("/");
-
-      console.log({ userData, location }, "--- Inside Sidebar");
     }
   }, [userData]);
 
@@ -88,7 +86,7 @@ export default function Sidebar() {
       {
         title: "Intake Forms",
         imgPath: "/img/Projects.png",
-        path: "/intake_forms",
+        path: "/intake",
       },
       {
         title: "Media",
@@ -190,7 +188,11 @@ export default function Sidebar() {
         imgPath: "/img/app1.png",
         path: "/workflow",
       },
-      { title: "My Projects", imgPath: "/img/Projects.png", path: "/projects" },
+      {
+        title: "My Projects",
+        imgPath: "/img/Projects.png",
+        path: "/projects",
+      },
       {
         title: "Companies",
         imgPath: "/img/Projects.png",
@@ -242,12 +244,17 @@ export default function Sidebar() {
       {
         title: "Intake Forms",
         imgPath: "/img/Projects.png",
-        path: "/intake_forms",
+        path: "/intake",
       },
       {
         title: "Media",
         imgPath: "/img/Earnings_old.png",
         path: "/media",
+      },
+      {
+        title: "My Tasks",
+        imgPath: "/img/task.svg",
+        path: "/my_tasks",
       },
       // {
       //   title: "Earnings",
@@ -262,7 +269,11 @@ export default function Sidebar() {
       // },
     ];
     midData = [
-      { title: "My Jobs", imgPath: "/img/jobicon1.png", path: "/jobs/list" },
+      {
+        title: "My Jobs",
+        imgPath: "/img/jobicon1.png",
+        path: "/jobs/list",
+      },
       // { title: "Media", imgPath: "/img/Projects.png", path: "/Media" },
       {
         title: "Draft Jobs",
@@ -278,6 +289,11 @@ export default function Sidebar() {
         title: "Company",
         imgPath: "/img/Company-Vector.png",
         path: "/agency/company",
+      },
+      {
+        title: "Reporting",
+        imgPath: "/img/reporting.svg",
+        path: "/agency/reporting",
       },
     ];
     bottomData = [
@@ -296,7 +312,11 @@ export default function Sidebar() {
         imgPath: "/img/app1.png",
         path: "/workflow",
       },
-      { title: "My Projects", imgPath: "/img/Projects.png", path: "/projects" },
+      {
+        title: "My Projects",
+        imgPath: "/img/Projects.png",
+        path: "/projects",
+      },
       {
         title: "Companies",
         imgPath: "/img/Projects.png",
@@ -348,7 +368,7 @@ export default function Sidebar() {
       {
         title: "Intake Forms",
         imgPath: "/img/Projects.png",
-        path: "/intake_forms",
+        path: "/intake",
       },
       {
         title: "Media",
@@ -368,7 +388,11 @@ export default function Sidebar() {
       // },
     ];
     midData = [
-      { title: "My Jobs", imgPath: "/img/Projects.png", path: "/jobs/list" },
+      {
+        title: "My Jobs",
+        imgPath: "/img/Projects.png",
+        path: "/jobs/list",
+      },
       // { title: "Media", imgPath: "/img/Projects.png", path: "/Media" },
       {
         title: "Draft Jobs",
@@ -402,7 +426,11 @@ export default function Sidebar() {
         imgPath: "/img/app1.png",
         path: "/workflow",
       },
-      { title: "My Projects", imgPath: "/img/Projects.png", path: "/projects" },
+      {
+        title: "My Projects",
+        imgPath: "/img/Projects.png",
+        path: "/projects",
+      },
       {
         title: "Companies",
         imgPath: "/img/Projects.png",
@@ -463,7 +491,11 @@ export default function Sidebar() {
       // },
     ];
     midData = [
-      { title: "My Jobs", imgPath: "/img/Projects.png", path: "/jobs/list" },
+      {
+        title: "My Jobs",
+        imgPath: "/img/Projects.png",
+        path: "/jobs/list",
+      },
       {
         title: "Templates",
         imgPath: "/img/menuicon.png",
@@ -493,7 +525,11 @@ export default function Sidebar() {
       },
     ];
     midData = [
-      { title: "My Jobs", imgPath: "/img/Projects.png", path: "/jobs/list" },
+      {
+        title: "My Jobs",
+        imgPath: "/img/Projects.png",
+        path: "/jobs/list",
+      },
       {
         title: "Company",
         imgPath: "/img/Company-Vector.png",
@@ -522,10 +558,18 @@ export default function Sidebar() {
         imgPath: "/img/Earnings_old.png",
         path: "/member-media",
       },
-      { title: "My Projects", imgPath: "/img/Projects.png", path: "/projects" },
+      {
+        title: "My Projects",
+        imgPath: "/img/Projects.png",
+        path: "/projects",
+      },
     ];
     midData = [
-      { title: "My Jobs", imgPath: "/img/Projects.png", path: "/jobs/list" },
+      {
+        title: "My Jobs",
+        imgPath: "/img/Projects.png",
+        path: "/jobs/list",
+      },
 
       // {
       //   title: "Company",
@@ -563,7 +607,7 @@ export default function Sidebar() {
       document.getElementById("mySidepanel").style.width = "0px";
     }
     if (window.innerWidth > 767) {
-      document.getElementById("mySidepanel").style.width = "100%";
+      document.getElementById("mySidepanel").style.width = "256px";
     }
     return () => {
       window.removeEventListener("resize", handleWindowResize);

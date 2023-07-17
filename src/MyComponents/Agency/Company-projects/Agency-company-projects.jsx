@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { Box, Button, FormControl, Typography } from "@mui/material";
+import { Box, Button, FormControl, Tooltip, Typography } from "@mui/material";
 import LoadingSpinner from "../../../containers/LoadingSpinner";
 import { validations } from "../../../utils";
 
@@ -17,6 +17,7 @@ import {
 import CustomDateRangePicker from "../../Common/CustomDatePicker/CustomDateRangePicker";
 import SharePostToSocialMedia from "../../Common/ShareToSocialMedia/SharePostToSocialMedia";
 import { Email } from "@mui/icons-material";
+import SearchInput from "../../Common/searchInput/SearchInput";
 
 export default function Agency_company_projects() {
   const dispatch = useDispatch();
@@ -39,6 +40,7 @@ export default function Agency_company_projects() {
     status: "",
     // Channel: "",
     tag: "",
+    search: "",
   });
   const [filterArr, setFilterArr] = useState([]);
   // const [anchorEl, setAnchorEl] = useState(null);
@@ -61,7 +63,7 @@ export default function Agency_company_projects() {
 
   //set selected filter
   const handleChange = (name, value) => {
-    console.log("DATE", name, value);
+    console.log("FilterLog", name, value);
     setFilterData((prevState) => {
       return { ...prevState, [name]: value };
     });
@@ -179,82 +181,85 @@ export default function Agency_company_projects() {
     rows:
       agencyCompanyProjectsList?.length > 0
         ? agencyCompanyProjectsList?.map((data, index) => {
-            return {
-              name: (
-                <Link to={`${data.id}`} key={index}>
-                  <Typography
-                    className="truncate max-w-full"
-                    sx={{
-                      "&.MuiTypography-root": {
-                        display: "inline-block",
-                        cursor: "pointer",
-                        color: "rgba(39, 90, 208, 1)",
-                        fontSize: "14px",
-                        fontWeight: 400,
-                        p: 0,
-                        fontFamily: '"Figtree", sans-serif',
-                      },
-                    }}
-                  >
-                    {data.title}
-                  </Typography>
-                </Link>
-              ),
-              community: data?.community?.name,
-              pURL: data.p_url,
-              publishedDate: validations.formateISODateToLocaleString(
-                data?.published_at ?? ""
-              ),
-              updatedDate: validations.formateISODateToLocaleString(
-                data?.updated_at ?? ""
-              ),
-              status: (
-                <Button
-                  variant="contained"
-                  disableRipple
-                  disableFocusRipple
-                  disableElevation
+          return {
+            name: (
+              <Link to={`${data.id}`} key={index}>
+                {/* <Tooltip title={data.title} placement="top-start"> */}
+                <Typography
+                  className="truncate max-w-full"
                   sx={{
-                    width: "80px",
-                    padding: "7px 5px",
-                    background:
-                      data.status !== "Published"
-                        ? "rgba(250, 45, 32, 0.08)"
-                        : "rgba(32, 161, 68, 0.08)",
-                    color:
-                      data.status !== "Published"
-                        ? "rgba(250, 45, 32, 1)"
-                        : "#20A144",
-                    fontSize: "12px",
-                    textTransform: "capitalize",
-                    "&:hover": {
-                      background: "rgba(32, 161, 68, 0.08)",
+                    "&.MuiTypography-root": {
+                      display: "inline-block",
+                      cursor: "pointer",
+                      color: "rgba(39, 90, 208, 1)",
+                      fontSize: "14px",
+                      fontWeight: 400,
+                      p: 0,
+                      fontFamily: '"Figtree", sans-serif',
                     },
                   }}
+                  title={data.title}
                 >
-                  {data.status}
-                </Button>
-              ),
-              channel: (
-                <div className="flex items-center gap-1.5 text-[#71757b99]">
-                  {data?.community_channels?.map((channel_item, chIndex) => (
-                    <SharePostToSocialMedia
-                      key={chIndex}
-                      facebook={
-                        channel_item?.channel_data?.name?.toLowerCase() ===
-                        "facebook"
-                      }
-                      sms={
-                        channel_item?.channel_data?.name?.toLowerCase() ===
-                        "opnsesame"
-                      }
-                    />
-                  ))}
-                  <Email className="text-theme" />
-                </div>
-              ),
-            };
-          })
+                  {data.title}
+                </Typography>
+                {/* </Tooltip> */}
+              </Link>
+            ),
+            community: data?.community?.name,
+            pURL: data.p_url,
+            publishedDate: validations.formateISODateToLocaleString(
+              data?.published_at ?? ""
+            ),
+            updatedDate: validations.formateISODateToLocaleString(
+              data?.updated_at ?? ""
+            ),
+            status: (
+              <Button
+                variant="contained"
+                disableRipple
+                disableFocusRipple
+                disableElevation
+                sx={{
+                  width: "80px",
+                  padding: "7px 5px",
+                  background:
+                    data.status !== "Published"
+                      ? "rgba(250, 45, 32, 0.08)"
+                      : "rgba(32, 161, 68, 0.08)",
+                  color:
+                    data.status !== "Published"
+                      ? "rgba(250, 45, 32, 1)"
+                      : "#20A144",
+                  fontSize: "12px",
+                  textTransform: "capitalize",
+                  "&:hover": {
+                    background: "rgba(32, 161, 68, 0.08)",
+                  },
+                }}
+              >
+                {data.status}
+              </Button>
+            ),
+            channel: (
+              <div className="flex items-center gap-1.5 text-[#71757b99]">
+                {data?.community_channels?.map((channel_item, chIndex) => (
+                  <SharePostToSocialMedia
+                    key={chIndex}
+                    facebook={
+                      channel_item?.channel_data?.name?.toLowerCase() ===
+                      "facebook"
+                    }
+                    sms={
+                      channel_item?.channel_data?.name?.toLowerCase() ===
+                      "opnsesame"
+                    }
+                  />
+                ))}
+                <Email className="text-theme" />
+              </div>
+            ),
+          };
+        })
         : [],
   };
 
@@ -291,10 +296,16 @@ export default function Agency_company_projects() {
                 )}
               </FormControl>
             ))}
+          <div className="ml-auto">
+            <SearchInput
+              searchVal={filterData.search}
+              handleFilterChange={({ target: { name, value } }) => handleChange(name, value)}
+            />
+          </div>
         </div>
 
         <Custom_MUI_Table
-          // loader={loadingagencyCompanyProjectsList}
+          loader={loadingagencyCompanyProjectsList}
           data={data}
           allData={agencyCompanyProjectListData}
           paginationData={paginationData}

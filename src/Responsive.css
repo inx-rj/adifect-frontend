@@ -1,4 +1,5 @@
-@media only screen and (min-width: 320px) and (max-width: 767px) {}
+@media only screen and (min-width: 320px) and (max-width: 767px) {
+}
 
 @media (min-width: 300px) and (max-width: 500px) {
   .main_date {
@@ -477,7 +478,9 @@
     margin: 0 !important;
   }
 
-  .activ4 .lastdatesec .MuiInput-root.MuiInput-underline.MuiInputBase-root.MuiInputBase-colorPrimary.MuiInputBase-formControl.MuiInputBase-adornedEnd {
+  .activ4
+    .lastdatesec
+    .MuiInput-root.MuiInput-underline.MuiInputBase-root.MuiInputBase-colorPrimary.MuiInputBase-formControl.MuiInputBase-adornedEnd {
     border: none !important;
     height: 59px !important;
   }
@@ -773,7 +776,9 @@
     padding-left: 0 !important;
   }
 
-  .Category_p .MuiToolbar-root.MuiToolbar-gutters.MuiToolbar-regular.MuiTablePagination-toolbar p {
+  .Category_p
+    .MuiToolbar-root.MuiToolbar-gutters.MuiToolbar-regular.MuiTablePagination-toolbar
+    p {
     font-size: 12px !important;
   }
 
@@ -1208,7 +1213,8 @@
     max-width: 100% !important;
   }
 
-  .BrowseVaultDialogMedia .MuiPaper-root.MuiPaper-elevation.MuiPaper-rounded.MuiPaper-elevation24.MuiDialog-paper {
+  .BrowseVaultDialogMedia
+    .MuiPaper-root.MuiPaper-elevation.MuiPaper-rounded.MuiPaper-elevation24.MuiDialog-paper {
     max-width: 96% !important;
     margin: 10px !important;
   }
@@ -1228,7 +1234,8 @@
     padding: 10px !important;
   }
 
-  .profileImgDialog .MuiPaper-root.MuiPaper-elevation.MuiPaper-rounded.MuiPaper-elevation24.MuiDialog-paper {
+  .profileImgDialog
+    .MuiPaper-root.MuiPaper-elevation.MuiPaper-rounded.MuiPaper-elevation24.MuiDialog-paper {
     margin: 10px;
   }
 
@@ -2035,7 +2042,7 @@
   }
 
   .Rightbar {
-    width: 100% !important;
+    width: calc(100vw - 256px) !important;
     z-index: 222;
     margin: 0px 0 !important;
   }
@@ -2471,7 +2478,8 @@
     width: 100% !important;
   }
 
-  .BrowseVaultDialogMedia .MuiPaper-root.MuiPaper-elevation.MuiPaper-rounded.MuiPaper-elevation24.MuiDialog-paper {
+  .BrowseVaultDialogMedia
+    .MuiPaper-root.MuiPaper-elevation.MuiPaper-rounded.MuiPaper-elevation24.MuiDialog-paper {
     max-width: 96% !important;
   }
 
@@ -2828,7 +2836,7 @@
   }
 
   .Rightbar {
-    width: 78% !important;
+    width: calc(100vw - 256px) !important;
   }
 
   .sidemenubar a {
@@ -3030,7 +3038,8 @@
     display: block !important;
   }
 
-  .BrowseVaultDialogMedia .MuiPaper-root.MuiPaper-elevation.MuiPaper-rounded.MuiPaper-elevation24.MuiDialog-paper {
+  .BrowseVaultDialogMedia
+    .MuiPaper-root.MuiPaper-elevation.MuiPaper-rounded.MuiPaper-elevation24.MuiDialog-paper {
     max-width: 96% !important;
   }
 
@@ -3065,7 +3074,7 @@
   }
 
   .Rightbar {
-    width: 81% !important;
+    width: calc(100vw - 256px) !important;
   }
 
   .jobdes {
@@ -3177,7 +3186,8 @@
     width: 100% !important;
   }
 
-  .BrowseVaultDialogMedia .MuiPaper-root.MuiPaper-elevation.MuiPaper-rounded.MuiPaper-elevation24.MuiDialog-paper {
+  .BrowseVaultDialogMedia
+    .MuiPaper-root.MuiPaper-elevation.MuiPaper-rounded.MuiPaper-elevation24.MuiDialog-paper {
     max-width: 96% !important;
   }
 
@@ -3241,7 +3251,7 @@
   }
 
   .Rightbar {
-    width: 80% !important;
+    width: calc(100vw - 256px) !important;
   }
 
   .Remotemarkeitng {

@@ -95,8 +95,6 @@ export default function Login() {
       });
       setIsLoading(false);
     }
-
-    console.log({ userData, redirect }, '--- Inside Login.js');
   }, [dispatch, userData, error]);
 
   const submitHandler = async (e) => {

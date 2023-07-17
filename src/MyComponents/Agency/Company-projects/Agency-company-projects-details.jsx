@@ -17,17 +17,22 @@ import { validations } from "../../../utils";
 import { Link } from "@mui/icons-material";
 import { BACKEND_API_URL } from "../../../environment";
 import api from "../../../utils/api";
-import { agencyCompanyStoryDetailsAction } from "../../../redux/actions/Agency-companies-tabs-actions";
+import {
+  agencyAudiencesListAction,
+  agencyCompanyStoryDetailsAction,
+} from "../../../redux/actions/Agency-companies-tabs-actions";
 import useCopyToClipboard from "./CopyToClipBoard";
 import ReadMoreButton from "./channelAccordion/ReadMoreButton";
 import ChannelAccordion from "./channelAccordion/ChannelAccordion";
 import LoadingSpinner from "../../../containers/LoadingSpinner";
 import HelmetMetaData from "./HelmetMetaData";
+import moment from "moment";
 
 const Agency_company_projects_details = () => {
-  const APi_URL = "https://dev-api.adifect.com/community/open-sesame/";
+  const APi_URL = `${BACKEND_API_URL}community/open-sesame/`;
   const [isValueCopied, copy] = useCopyToClipboard();
   const [storyUrlVal, setStoryUrlVal] = useState("");
+  const [scheduledTimeVal, setScheduledTimeVal] = useState("");
   const { communityId } = useParams();
   const dispatch = useDispatch();
   const [expandedAccordion, setExpandedAccordion] = useState(false);
@@ -35,8 +40,10 @@ const Agency_company_projects_details = () => {
   const { loading, agencyCompanyStoryDetails } = useSelector(
     (state) => state.AgencyCompanyStoryDetailReducer
   );
+  const { agencyAudiencesData } = useSelector(
+    (state) => state.AgencyAudiencesReducer
+  );
 
-  const [audienceData, setAudienceData] = useState([]);
   const [selectPostList, setPostList] = useState({
     facebook: {
       title: true,
@@ -67,20 +74,19 @@ const Agency_company_projects_details = () => {
   useEffect(() => {
     dispatch(agencyCompanyStoryDetailsAction(communityId));
   }, [communityId]);
-  // Fetch audience data
+
+  // Audiences fetch list API call
   useEffect(() => {
-    api
-      .get(
-        `${BACKEND_API_URL}agency/community-audience/?story_id=${communityId}`
-      )
-      .then((res) => {
-        setAudienceData(res?.data?.data?.results || res?.data?.data);
-        return res;
-      })
-      .catch((error) => {
-        return console.log("agencyaudience Error", error);
-      });
-  }, [communityId]);
+    // console.log({ agencyCompanyStoryDetails, communityId, agencyAudiencesData });
+    if (agencyCompanyStoryDetails?.community?.id) {
+      dispatch(
+        agencyAudiencesListAction(
+          {},
+          { community: agencyCompanyStoryDetails.community.id }
+        )
+      );
+    }
+  }, [agencyCompanyStoryDetails, communityId]);
 
   const handleCheckedData = (e, accordionId) => {
     const { checked, name } = e.target;
@@ -349,6 +355,8 @@ const Agency_company_projects_details = () => {
       name: campUniName,
       message: `${data?.data?.title}`,
       audience: audience?.id,
+      scheduled_time: scheduledTimeVal ? scheduledTimeVal : moment().toDate(),
+      opt_out_language: true,
     };
 
     if (data?.data?.image?.[0]) {
@@ -356,6 +364,13 @@ const Agency_company_projects_details = () => {
     }
     if (data?.data?.body) {
       campaignPayload.message = `${data?.data?.title} <br/> ${data?.data?.body}`;
+    }
+
+    if (data?.data?.story_url) {
+      campaignPayload.long_url = `${data?.data?.story_url}`;
+      campaignPayload.url_shorten = true;
+      campaignPayload.url_shorten_service = "1to1";
+      campaignPayload.domain = "i.mm-news.co";
     }
 
     await api.post(APi_URL, campaignPayload).then(async (res) => {
@@ -404,13 +419,15 @@ const Agency_company_projects_details = () => {
 
   const displayedAudienceOptions = useMemo(
     () =>
-      audienceData?.map((option) => {
-        return {
-          label: option.title,
-          value: option.audience_id,
-        };
-      }),
-    [audienceData]
+      agencyAudiencesData?.length
+        ? agencyAudiencesData?.map((option) => {
+          return {
+            label: option.name,
+            value: option.audience_id,
+          };
+        })
+        : [],
+    [agencyAudiencesData]
   );
 
   // Community channel list
@@ -472,6 +489,10 @@ const Agency_company_projects_details = () => {
     setStoryUrlVal(e.target.value);
   };
 
+  const handleTimeChange = (value) => {
+    setScheduledTimeVal(value);
+  };
+
   return (
     <>
       <div className="Category_p">
@@ -496,50 +517,18 @@ const Agency_company_projects_details = () => {
         }
       />
 
-      {/* <Helmet>
-        <title>{agencyCompanyStoryDetails?.title}</title>
-        <meta property="og:locale" content="en_US" />
-        <link rel="canonical" href={window.location.origin} />
-        <meta name="description" content={agencyCompanyStoryDetails?.lede} />
-        <meta property="og:type" content="website" />
-        <meta property="og:site_name" content="Job Portal" />
-        <meta property="og:url" content={window.location.href} />
-        <meta
-          property="og:image"
-          content={agencyCompanyStoryDetails?.image?.[0]}
-        />
-        <meta
-          property="og:image:secure_url"
-          content={agencyCompanyStoryDetails?.image?.[0]}
-        />
-
-
-        <meta property="og:locale" content="en_US" />
-        <link rel="canonical" href="https://dev.adifect.com/" />
-        <meta name="description"
-          content="This four-bed, two-bath home offers 2,350 square feet of living space and a wide open feeling from the formal living room to the kitchen and beyond. The living room is massive; it offers plenty of space to create multiple conversation zones or activity zones, or a kids’ living room space and a space for adults to converse and relax. There’s a wood-burning fireplace with bricks, French doors that lead to the patio, and tall ceilings that make the rooms feel even larger." />
-        <meta property="og:title" content="Adifect" />
-        <meta property="og:description"
-          content="This four-bed, two-bath home offers 2,350 square feet of living space and a wide open feeling from the formal living room to the kitchen and beyond. The living room is massive; it offers plenty of space to create multiple conversation zones or activity zones, or a kids’ living room space and a space for adults to converse and relax. There’s a wood-burning fireplace with bricks, French doors that lead to the patio, and tall ceilings that make the rooms feel even larger." />
-        <meta property="og:type" content="website" />
-        <meta property="og:site_name" content="Job Portal" />
-        <meta property="og:url" content="https://dev.adifect.com/company-projects/507598" />
-        <meta property="og:image" content="https://dev.adifect.com/img/new.svg" />
-        <meta property="og:image:secure_url" content="https://dev.adifect.com/img/new.svg" />
-      </Helmet> */}
-
       {loading && (
-        <div className="projectsLoaderCreatorPage">
+        <Box className="w-full [&>.spinner-container-bg]:backdrop-blur-sm [&>.spinner-container-bg]:bg-white/30">
           <LoadingSpinner />
-        </div>
+        </Box>
       )}
-      {!loading && (
-        <div className="Topallpage AllPageHight Custompage">
-          <div className="ContentDiv">
-            <Box
-              sx={{ width: "100%", py: 2, pl: 2, pr: 3.125 }}
-              key={agencyCompanyStoryDetails?.id}
-            >
+      <div className="Topallpage AllPageHight Custompage">
+        <div className="ContentDiv">
+          <Box
+            sx={{ width: "100%", py: 2, pl: 2, pr: 3.125 }}
+            key={agencyCompanyStoryDetails?.id}
+          >
+            {!loading && (
               <Grid container>
                 <Grid item xs={8} p={2} pr={6}>
                   <Typography variant="h3">
@@ -617,6 +606,7 @@ const Agency_company_projects_details = () => {
                             selectPostList={selectPostList}
                             chanelPostHandle={sharingHandle}
                             handleStoryUrl={handleStoryUrl}
+                            handleTimeChange={handleTimeChange}
                             storyUrlVal={storyUrlVal}
                             storyDetailsStoryUrl={
                               agencyCompanyStoryDetails?.story_url
@@ -706,121 +696,121 @@ const Agency_company_projects_details = () => {
                   </Card>
                   {(agencyCompanyStoryDetails?.category?.length > 0 ||
                     agencyCompanyStoryDetails?.tag?.length > 0) && (
-                    <Card
-                      sx={{
-                        maxWidth: "689px",
-                        width: "100%",
-                        position: "relative",
-                        overflow: "unset",
-                        display: "flex",
-                        p: 1.875,
-                        borderRadius: "5px",
-                        "&.MuiPaper-root": {
-                          "&.MuiPaper-elevation": {
-                            "&.MuiPaper-rounded": {
-                              "&.MuiPaper-elevation1": {
-                                boxShadow: "none",
-                                border: "1px solid rgba(113, 117, 123, 0.2);",
-                                m: 0,
-                                mb: 2,
+                      <Card
+                        sx={{
+                          maxWidth: "689px",
+                          width: "100%",
+                          position: "relative",
+                          overflow: "unset",
+                          display: "flex",
+                          p: 1.875,
+                          borderRadius: "5px",
+                          "&.MuiPaper-root": {
+                            "&.MuiPaper-elevation": {
+                              "&.MuiPaper-rounded": {
+                                "&.MuiPaper-elevation1": {
+                                  boxShadow: "none",
+                                  border: "1px solid rgba(113, 117, 123, 0.2);",
+                                  m: 0,
+                                  mb: 2,
+                                },
                               },
                             },
                           },
-                        },
-                      }}
-                    >
-                      <Grid container>
-                        {agencyCompanyStoryDetails?.category?.length > 0 && (
-                          <>
-                            <Grid item xs={12}>
-                              <Typography
-                                variant="subtitle1"
-                                sx={{
-                                  fontFamily: '"Figtree", sans-serif',
-                                  fontWeight: 500,
-                                  lineHeight: "22px",
-                                  marginBottom: "15px",
-                                }}
-                              >
-                                Story Category
-                              </Typography>
-                            </Grid>
-                            <Grid item xs={12}>
-                              <Stack direction="row" spacing={1}>
-                                <Chip
-                                  label="This obituary"
-                                  color="primary"
-                                  variant="outlined"
+                        }}
+                      >
+                        <Grid container>
+                          {agencyCompanyStoryDetails?.category?.length > 0 && (
+                            <>
+                              <Grid item xs={12}>
+                                <Typography
+                                  variant="subtitle1"
                                   sx={{
-                                    background: "rgba(36, 114, 252, 0.08)",
-                                    border: 0,
-                                    borderRadius: "5px",
-                                    textTransform: "capitalize",
-                                    height: "28px",
-                                    "& span.MuiChip-label.MuiChip-labelMedium":
+                                    fontFamily: '"Figtree", sans-serif',
+                                    fontWeight: 500,
+                                    lineHeight: "22px",
+                                    marginBottom: "15px",
+                                  }}
+                                >
+                                  Story Category
+                                </Typography>
+                              </Grid>
+                              <Grid item xs={12}>
+                                <Stack direction="row" spacing={1}>
+                                  <Chip
+                                    label="This obituary"
+                                    color="primary"
+                                    variant="outlined"
+                                    sx={{
+                                      background: "rgba(36, 114, 252, 0.08)",
+                                      border: 0,
+                                      borderRadius: "5px",
+                                      textTransform: "capitalize",
+                                      height: "28px",
+                                      "& span.MuiChip-label.MuiChip-labelMedium":
                                       {
                                         fontSize: "12px",
                                       },
-                                  }}
-                                />
-                              </Stack>
-                            </Grid>
-                          </>
-                        )}
-                        {agencyCompanyStoryDetails?.category?.length > 0 &&
-                          agencyCompanyStoryDetails?.tag?.length > 0 && (
-                            <Divider
-                              light
-                              sx={{ marginY: "15px", width: "100%" }}
-                            />
+                                    }}
+                                  />
+                                </Stack>
+                              </Grid>
+                            </>
                           )}
-                        {agencyCompanyStoryDetails?.tag?.length > 0 && (
-                          <>
-                            <Grid item xs={12}>
-                              <Typography
-                                variant="subtitle1"
-                                sx={{
-                                  fontFamily: '"Figtree", sans-serif',
-                                  fontWeight: 500,
-                                  lineHeight: "22px",
-                                  marginBottom: "15px",
-                                }}
-                              >
-                                Tags
-                              </Typography>
-                            </Grid>
-                            <Grid item xs={12}>
-                              <Stack
-                                direction="row"
-                                className="flex-wrap gap-2"
-                              >
-                                {agencyCompanyStoryDetails?.tag?.map((tags) => {
-                                  return (
-                                    <Chip
-                                      label={tags?.title}
-                                      color="primary"
-                                      variant="outlined"
-                                      sx={{
-                                        background: "rgba(36, 114, 252, 0.08)",
-                                        border: 0,
-                                        borderRadius: "5px",
-                                        textTransform: "capitalize",
-                                        height: "28px",
-                                        "& span.MuiChip-label.MuiChip-labelMedium":
+                          {agencyCompanyStoryDetails?.category?.length > 0 &&
+                            agencyCompanyStoryDetails?.tag?.length > 0 && (
+                              <Divider
+                                light
+                                sx={{ marginY: "15px", width: "100%" }}
+                              />
+                            )}
+                          {agencyCompanyStoryDetails?.tag?.length > 0 && (
+                            <>
+                              <Grid item xs={12}>
+                                <Typography
+                                  variant="subtitle1"
+                                  sx={{
+                                    fontFamily: '"Figtree", sans-serif',
+                                    fontWeight: 500,
+                                    lineHeight: "22px",
+                                    marginBottom: "15px",
+                                  }}
+                                >
+                                  Tags
+                                </Typography>
+                              </Grid>
+                              <Grid item xs={12}>
+                                <Stack
+                                  direction="row"
+                                  className="flex-wrap gap-2"
+                                >
+                                  {agencyCompanyStoryDetails?.tag?.map((tags) => {
+                                    return (
+                                      <Chip
+                                        label={tags?.title}
+                                        color="primary"
+                                        variant="outlined"
+                                        sx={{
+                                          background: "rgba(36, 114, 252, 0.08)",
+                                          border: 0,
+                                          borderRadius: "5px",
+                                          textTransform: "capitalize",
+                                          height: "28px",
+                                          "& span.MuiChip-label.MuiChip-labelMedium":
                                           {
                                             fontSize: "12px",
                                           },
-                                      }}
-                                    />
-                                  );
-                                })}
-                              </Stack>
-                            </Grid>
-                          </>
-                        )}
-                      </Grid>
-                    </Card>
-                  )}
+                                        }}
+                                      />
+                                    );
+                                  })}
+                                </Stack>
+                              </Grid>
+                            </>
+                          )}
+                        </Grid>
+                      </Card>
+                    )}
                   {agencyCompanyStoryDetails?.p_url && (
                     <Card
                       sx={{
@@ -894,10 +884,10 @@ const Agency_company_projects_details = () => {
                   )}
                 </Grid>
               </Grid>
-            </Box>
-          </div>
+            )}
+          </Box>
         </div>
-      )}
+      </div>
     </>
   );
 };

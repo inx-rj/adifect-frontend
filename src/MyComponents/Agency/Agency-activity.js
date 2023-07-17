@@ -37,6 +37,7 @@ import {
 } from "../../constants/activity-constants";
 import LoadingSpinner from "../../containers/LoadingSpinner";
 import { acceptJobProposal } from "../../redux/actions/proposals-action";
+import Editor from "../../Editor/Editor";
 
 // DropZone Style Start
 const baseStyle = {
@@ -99,7 +100,14 @@ export default function Agency_Activity(props) {
   }, 2000);
 
   const [dataText, setDataText] = useState("");
-
+  const [commentCacheStore, setCommentCacheStore] = useState([]);
+  const onchangeHandler = (_editorState, editor) => {
+    _editorState.read(() => {
+      const editorState = editor.getEditorState();
+      const jsonString = JSON.stringify(editorState);
+      // setDataText(jsonString);
+    });
+  };
   const [chatbox, setChatbox] = useState("");
   const [attachfiles, setAttachfiles] = useState([]);
 
@@ -953,17 +961,37 @@ export default function Agency_Activity(props) {
                               ).format("MMMM D, h:mm A")}
                             </label>
                           </h3>
-                          {activity?.activity_job_work[0]?.approver_message && (
-                            <h3
-                              style={{ whiteSpace: "pre-line" }}
+                        
+                          {activity?.activity_job_work[0]?.approver_message &&
+                            activity?.activity_job_work[0]?.approver_message.search(
+                              "root"
+                            ) <= 0 && (
+                              <h3
                               className="rachelRejectSecLine"
-                            >
-                              {" "}
-                              {urlify(
-                                activity?.activity_job_work[0]?.approver_message
-                              )}
-                            </h3>
-                          )}
+                              style={{ whiteSpace: "pre-line" }}
+                              dangerouslySetInnerHTML={{ __html: urlify(activity?.activity_job_work[0]?.approver_message) }}
+                            />
+                            )}
+                          {activity?.activity_job_work[0]?.approver_message &&
+                            activity?.activity_job_work[0]?.approver_message.search(
+                              "root"
+                            ) > 0 && (
+                              <Editor
+                                isEditable={false}
+                                initialValue={
+                                  activity?.activity_job_work[0]
+                                    ?.approver_message
+                                    ? activity?.activity_job_work[0]
+                                        ?.approver_message
+                                    : ""
+                                }
+                                onChange={onchangeHandler}
+                                commentCacheStore={commentCacheStore}
+                                setCommentCacheStore={setCommentCacheStore}
+                                isCommentOn={false}
+                                isToolbar={false}
+                              />
+                            )}
                           {activity?.activity_job_work[0]?.job_work
                             ?.task_details?.title ? (
                             <h6
@@ -1425,14 +1453,38 @@ export default function Agency_Activity(props) {
                               )}
                             </label>
                           </h3>
-                          <h4
+                          
+                         
+                              {activity?.activity_job_work[0]?.approver_message &&
+                            activity?.activity_job_work[0]?.approver_message.search(
+                              "root"
+                            ) <= 0 && (
+                              <h4
                             style={{ whiteSpace: "pre-line" }}
                             className="approvermessageActivity"
-                          >
-                            {urlify(
-                              activity?.activity_job_work[0]?.approver_message
+                            dangerouslySetInnerHTML={{ __html: urlify(activity?.activity_job_work[0]?.approver_message) }}
+                          />
                             )}
-                          </h4>
+                          {activity?.activity_job_work[0]?.approver_message &&
+                            activity?.activity_job_work[0]?.approver_message.search(
+                              "root"
+                            ) > 0 && (
+                              <Editor
+                                isEditable={false}
+                                initialValue={
+                                  activity?.activity_job_work[0]
+                                    ?.approver_message
+                                    ? activity?.activity_job_work[0]
+                                        ?.approver_message
+                                    : ""
+                                }
+                                onChange={onchangeHandler}
+                                commentCacheStore={commentCacheStore}
+                                setCommentCacheStore={setCommentCacheStore}
+                                isCommentOn={false}
+                                isToolbar={false}
+                              />
+                            )}        
                           {activity?.activity_job_work[0]?.job_work
                             ?.task_details?.title ? (
                             <h6

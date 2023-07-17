@@ -19,7 +19,7 @@ export default function Error() {
       <div className="container">
         <div id="i13g" className="row">
           <div id="iuwh" style={{ textAlign: "center" }} className="cell">
-            <img className="error" src="img/new.svg" alt="" />
+            <img className="error" src="/img/new.svg" alt="" />
             {/* <img
                       src="img/error.jpg"
                       id="ilsq"

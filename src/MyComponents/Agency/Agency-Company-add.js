@@ -29,6 +29,7 @@ function Workflow_company_add() {
   const [userid, setuserid] = useState("");
   const [company_name, setcompanyName] = useState("");
   const [description, setDescription] = useState("");
+  const [embeddedURL, setEmbeddedURL] = useState("");
   const [checkbox, setcheckbox] = useState(false);
   const [namefield, setnamefield] = useState(false);
   const [status, setStatus] = useState(false);
@@ -49,7 +50,6 @@ function Workflow_company_add() {
     setErrors(tempErrors);
 
     if (Object.values(tempErrors).filter((value) => value).length) {
-
       return;
     }
     submitHandler();
@@ -77,6 +77,7 @@ function Workflow_company_add() {
       } else {
         setcompanyName(companyDetails.name);
         setDescription(companyDetails.description);
+        setEmbeddedURL(companyDetails?.embedded_url);
         setStatus(companyDetails.is_active);
       }
     }
@@ -110,6 +111,7 @@ function Workflow_company_add() {
         .put(`${BACKEND_API_URL}agency/company/${companyid}/`, {
           name: company_name,
           description,
+          embedded_url: embeddedURL ?? "",
           is_active: status,
           is_check: checkbox,
           is_name: namefield,
@@ -217,6 +219,36 @@ function Workflow_company_add() {
                     }}
                   >
                     {errors.company_name ?? "valid"}
+                  </span>
+                </div>
+
+                <div
+                  className={
+                    errors?.embedded_url
+                      ? "inputCntnr error"
+                      : "inputCntnr CategoryinputH"
+                  }
+                >
+                  <h4>Reporting in bed</h4>
+                  <input
+                    className="category_name validateInput w-100 h-47 border-radius border-1"
+                    type="url"
+                    placeholder="Enter URL"
+                    name="embedded_url"
+                    onChange={(e) => {
+                      setEmbeddedURL(e.target.value);
+                      setnamefield(true);
+                      setErrors({ ...errors, embedded_url: null });
+                    }}
+                    value={embeddedURL}
+                  />
+                  <span
+                    style={{
+                      color: "#D14F4F",
+                      opacity: errors?.embedded_url ? 1 : 0,
+                    }}
+                  >
+                    {errors?.embedded_url ?? "valid"}
                   </span>
                 </div>
 

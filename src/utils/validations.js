@@ -1,4 +1,3 @@
-import moment from "moment";
 import { CREATE_JOB_TYPES } from "../helper/utility/constants";
 
 export const firstName = (value) => {
@@ -273,15 +272,19 @@ export const isEmpty = (checkValue, customMsg) => {
 // To handle multiple errors object
 export const handleErrors = (errObj, setErr) => {
   for (const [key, values] of Object.entries(errObj)) {
-    setErr(prevState => ({ ...prevState, [`${key}`]: `${values}` }))
+    setErr((prevState) => ({ ...prevState, [`${key}`]: `${values}` }));
   }
-}
+};
 
 export const jobDetailsTitle = (selectedJobType) => {
-  return selectedJobType === CREATE_JOB_TYPES.MEDIA ? "Media" :
-    selectedJobType === CREATE_JOB_TYPES.SMS ? "SMS" :
-      selectedJobType === CREATE_JOB_TYPES.TEXT_COPY ? "Text Copy" : "Media"
-}
+  return selectedJobType === CREATE_JOB_TYPES.MEDIA
+    ? "Media"
+    : selectedJobType === CREATE_JOB_TYPES.SMS
+    ? "SMS"
+    : selectedJobType === CREATE_JOB_TYPES.TEXT_COPY
+    ? "Text Copy"
+    : "Media";
+};
 
 // export const convertCurrentTimeToEST = () => {
 //   const currentTime = moment(); // Get the current time in local time zone

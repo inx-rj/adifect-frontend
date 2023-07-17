@@ -90,6 +90,7 @@ export default function Agency_community_settings() {
 
   //set the edit mode
   const handleEdit = (item) => {
+    console.log({ item })
     setShowTagModal(true);
     setIsEditMode(true);
     setErrors({ ...errors, community_id: null });
@@ -208,122 +209,122 @@ export default function Agency_community_settings() {
     rows:
       agencyCommunitySettingsData?.results?.length > 0
         ? agencyCommunitySettingsData?.results?.map((item, index) => {
-            return {
-              community: (
-                <Typography
-                  sx={{
-                    "&.MuiTypography-root": {
-                      // display: "inline-block",
-                      // cursor: "pointer",
-                      color: "#71757B",
-                      fontSize: "14px",
-                      fontWeight: 400,
-                      p: 0,
-                      fontFamily: '"Figtree", sans-serif',
-                    },
-                  }}
-                  key={index}
-                >
-                  {item.community.name}
-                </Typography>
-              ),
+          return {
+            community: (
+              <Typography
+                sx={{
+                  "&.MuiTypography-root": {
+                    // display: "inline-block",
+                    // cursor: "pointer",
+                    color: "#71757B",
+                    fontSize: "14px",
+                    fontWeight: 400,
+                    p: 0,
+                    fontFamily: '"Figtree", sans-serif',
+                  },
+                }}
+                key={index}
+              >
+                {item.community.name}
+              </Typography>
+            ),
 
-              channel: item?.["community_channels"]?.length ? (
-                <div
-                  className="flex gap-1.5 text-[#71757b99] [&>:not(:first-child)]:border-l-2 [&>:not(:first-child)]:border-solid [&>:not(:first-child)]:border-[#71757b99] [&>.MuiTypography-root:not(:first-child)]:pl-2"
-                  key={`${item.community.name}_${index}`}
-                >
-                  {item?.community_channels?.map((channel_item) => (
-                    <>
-                      <Typography
-                        key={`${item.id}_${channel_item.channel_data.id}`}
-                        id={`${item.id}_${channel_item.channel_data.id}`}
-                        aria-owns={
-                          open
-                            ? `${item.id}_${channel_item.channel_data.id}`
-                            : undefined
-                        }
-                        aria-haspopup="true"
-                        onMouseEnter={(event) =>
-                          handlePopoverOpen(
-                            event,
-                            `${item.id}_${channel_item.channel_data.id}`
-                          )
-                        }
-                        sx={{
-                          "&.MuiTypography-root": {
-                            position: "relative",
-                            display: "inline-block",
-                            cursor: "pointer",
-                            // color: 'rgba(39, 90, 208, 1)',
-                            color: "#71757b99",
-                            fontSize: "14px",
-                            fontWeight: 400,
-                            p: 0,
-                            fontFamily: '"Figtree", sans-serif',
-                            "& .MuiTypography-channelName": {
-                              color: "#71757B",
-                              pl: 0.5,
-                            },
+            channel: item?.["community_channels"]?.length ? (
+              <div
+                className="flex gap-1.5 text-[#71757b99] [&>:not(:first-child)]:border-l-2 [&>:not(:first-child)]:border-solid [&>:not(:first-child)]:border-[#71757b99] [&>.MuiTypography-root:not(:first-child)]:pl-2"
+                key={`${item.community.name}_${index}`}
+              >
+                {item?.community_channels?.map((channel_item) => (
+                  <>
+                    <Typography
+                      key={`${item.id}_${channel_item.channel_data.id}`}
+                      id={`${item.id}_${channel_item.channel_data.id}`}
+                      aria-owns={
+                        open
+                          ? `${item.id}_${channel_item.channel_data.id}`
+                          : undefined
+                      }
+                      aria-haspopup="true"
+                      onMouseEnter={(event) =>
+                        handlePopoverOpen(
+                          event,
+                          `${item.id}_${channel_item.channel_data.id}`
+                        )
+                      }
+                      sx={{
+                        "&.MuiTypography-root": {
+                          position: "relative",
+                          display: "inline-block",
+                          cursor: "pointer",
+                          // color: 'rgba(39, 90, 208, 1)',
+                          color: "#71757b99",
+                          fontSize: "14px",
+                          fontWeight: 400,
+                          p: 0,
+                          fontFamily: '"Figtree", sans-serif',
+                          "& .MuiTypography-channelName": {
+                            color: "#71757B",
+                            pl: 0.5,
                           },
-                        }}
-                      >
-                        <SharePostToSocialMedia
-                          facebook={
-                            channel_item?.channel_data?.name?.toLowerCase() ===
-                            "facebook"
-                          }
-                          sms={
-                            channel_item?.channel_data?.name?.toLowerCase() ===
-                            "opnsesame"
-                          }
-                        />
-                        <Typography variant="channelName" component="span">
-                          {channel_item.channel_data.name}
-                        </Typography>
-                      </Typography>
-                      <PopoverTooltip
-                        id={`${item.id}_${channel_item.channel_data.id}`}
-                        anchorEl={anchorEl}
-                        openPopover={
-                          open &&
-                          selectedRowId ===
-                            `${item.id}_${channel_item.channel_data.id}`
+                        },
+                      }}
+                    >
+                      <SharePostToSocialMedia
+                        facebook={
+                          channel_item?.channel_data?.name?.toLowerCase() ===
+                          "facebook"
                         }
-                        handlePopoverClose={handlePopoverClose}
-                      >
-                        <CustomPopoverCard
-                          urlTitle={`${channel_item?.channel_data?.name} URL: `}
-                          urlApiValue={channel_item}
-                          apiTitle={`${channel_item?.channel_data?.name} API Key: `}
-                        />
-                      </PopoverTooltip>
-                    </>
-                  ))}
-                </div>
-              ) : (
-                ""
-              ),
+                        sms={
+                          channel_item?.channel_data?.name?.toLowerCase() ===
+                          "opnsesame"
+                        }
+                      />
+                      <Typography variant="channelName" component="span">
+                        {channel_item.channel_data.name}
+                      </Typography>
+                    </Typography>
+                    <PopoverTooltip
+                      id={`${item.id}_${channel_item.channel_data.id}`}
+                      anchorEl={anchorEl}
+                      openPopover={
+                        open &&
+                        selectedRowId ===
+                        `${item.id}_${channel_item.channel_data.id}`
+                      }
+                      handlePopoverClose={handlePopoverClose}
+                    >
+                      <CustomPopoverCard
+                        urlTitle={`${channel_item?.channel_data?.name} URL: `}
+                        urlApiValue={channel_item}
+                        apiTitle={`${channel_item?.channel_data?.name} API Key: `}
+                      />
+                    </PopoverTooltip>
+                  </>
+                ))}
+              </div>
+            ) : (
+              ""
+            ),
 
-              action: (
-                <div>
-                  <ActionMenuButton
-                    handleChannelPopoverClose={handlePopoverClose}
-                    selectedItem={selectedItem}
-                    setSelectedItem={setSelectedItem}
-                    setAnchorEl={setAnchorActionEl}
-                    anchorEl={anchorActionEl}
-                    handleEdit={() => handleEdit(item)}
-                    handleDelete={() => handleDelete(item)}
-                    showDelete={true}
-                    showEdit={true}
-                    isEditMode={isEditMode}
-                    item={{ id: item?.id, isActive: item?.is_active }}
-                  />
-                </div>
-              ),
-            };
-          })
+            action: (
+              <div>
+                <ActionMenuButton
+                  handleChannelPopoverClose={handlePopoverClose}
+                  selectedItem={selectedItem}
+                  setSelectedItem={setSelectedItem}
+                  setAnchorEl={setAnchorActionEl}
+                  anchorEl={anchorActionEl}
+                  handleEdit={() => handleEdit(item)}
+                  handleDelete={() => handleDelete(item)}
+                  showDelete={true}
+                  showEdit={true}
+                  isEditMode={isEditMode}
+                  item={{ id: item?.id, isActive: item?.is_active }}
+                />
+              </div>
+            ),
+          };
+        })
         : [],
   };
 
@@ -490,7 +491,7 @@ export default function Agency_community_settings() {
       }
 
       // API call
-      if (!isEditMode) {
+      if (!selectedItem.currentId) {
         handleAddCommunity(channel);
       } else {
         handleEditCommunity(channel);
@@ -532,6 +533,10 @@ export default function Agency_community_settings() {
                 type="button"
                 onClick={(e) => {
                   setShowTagModal(true);
+                  setSelectedItem({
+                    currentId: null,
+                    currentTooltip: null
+                  })
                 }}
               >
                 {" "}
@@ -541,7 +546,7 @@ export default function Agency_community_settings() {
           </div>
 
           <CustomPopup
-            dialogTitle="Add Community Settings"
+            dialogTitle={selectedItem.currentId ? "Edit Community Settings" : "Add Community Settings"}
             textAlign="left"
             dialogContent={
               <CustomAddModal

@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { getActivityFilesListAdmin } from "../../redux/actions/file-actions";
 import { postActivityChat } from "../../redux/actions/activity-actions";
+import Editor from "../../Editor/Editor";
 
 const thumb = {
   borderRadius: 2,
@@ -35,7 +36,8 @@ const thumbsContainer = {
 export default function Admin_job_detail_files(props) {
   const dispatch = useDispatch();
   const { jobId } = useParams();
-
+  const [textEditor, SetTextEditor] = useState(``);
+  const [commentCacheStore, setCommentCacheStore] = useState([]);
   const {
     success: job_detail_success,
     jobDetails,
@@ -258,7 +260,15 @@ export default function Admin_job_detail_files(props) {
       </div>
     </div>
   ));
-
+  // Text editor
+  const onchangeHandler = (_editorState, editor) => {
+    _editorState.read(() => {
+      const editorState = editor.getEditorState();
+      const jsonString = JSON.stringify(editorState);
+      SetTextEditor(jsonString);
+    });
+  };
+  console.log("Editor", textEditor, commentCacheStore);
   return (
     <>
       {loadingActivityFilesList || loadingJobDetails || postActivityLoading ? (
@@ -267,6 +277,12 @@ export default function Admin_job_detail_files(props) {
         <>
           <div className="Marketingcamaign">
             <h4 className="ProvidedTitle">Job Attachments</h4>
+            <Editor
+              initialValue={textEditor}
+              onChange={onchangeHandler}
+              commentCacheStore={commentCacheStore}
+              setCommentCacheStore={setCommentCacheStore}
+            />
             <div className="mediaimgfile1 media_file_contnet mediaimgfile1NoMargin">
               {ActivityFilesList?.final_approved_data?.length > 0 && (
                 <>
@@ -386,74 +402,80 @@ export default function Admin_job_detail_files(props) {
 
               {(jobDocuments?.length > 0 ||
                 jobDocumentsIsVideo?.length > 0) && (
-                  <>
-                    <div className="job_media_list_section">
-                      <h5 className="headingJobDetailsFiles">Files and Assets</h5>
-                      {jobDocuments?.map((item, index) => (
-                        <div className="agencyjobimgupload" key={index}>
-                          <a index_item={index} target="_blank" href={`${item}`}>
-                            <li className="agencyjobimguploaddiv" key={index}>
-                              <img
-                                className=""
-                                src={`${jobDocumentsThumbs[index]}`}
-                                alt=""
+                <>
+                  <div className="job_media_list_section">
+                    <h5 className="headingJobDetailsFiles">Files and Assets</h5>
+                    {jobDocuments?.map((item, index) => (
+                      <div className="agencyjobimgupload" key={index}>
+                        <a index_item={index} target="_blank" href={`${item}`}>
+                          <li className="agencyjobimguploaddiv" key={index}>
+                            <img
+                              className=""
+                              src={`${jobDocumentsThumbs[index]}`}
+                              alt=""
+                            />
+                          </li>
+                        </a>
+                      </div>
+                    ))}
+                    {jobDocumentsIsVideo?.map((item, index) => (
+                      <div className="agencyjobimgupload" key={index}>
+                        <a index_item={index} target="_blank" href={`${item}`}>
+                          <li className="agencyjobimguploaddiv" key={index}>
+                            <video
+                              className="videoIsvideoShow addvideoShowSeconddiv"
+                              controls
+                            >
+                              <source
+                                src={`${jobDocumentsIsVideoThumbs[index]}`}
+                                type="video/mp4"
                               />
-                            </li>
-                          </a>
-                        </div>
-                      ))}
-                      {jobDocumentsIsVideo?.map((item, index) => (
-                        <div className="agencyjobimgupload" key={index}>
-                          <a index_item={index} target="_blank" href={`${item}`}>
-                            <li className="agencyjobimguploaddiv" key={index}>
-                              <video className="videoIsvideoShow addvideoShowSeconddiv" controls>
-                                <source
-                                  src={`${jobDocumentsIsVideoThumbs[index]}`}
-                                  type="video/mp4"
-                                />
-                              </video>
-                            </li>
-                          </a>
-                        </div>
-                      ))}
-                    </div>
-                  </>
-                )}
+                            </video>
+                          </li>
+                        </a>
+                      </div>
+                    ))}
+                  </div>
+                </>
+              )}
 
               {(jobSampleDocuments?.length > 0 ||
                 jobSampleDocumentsIsVideo?.length > 0) && (
-                  <>
-                    <div className="job_media_list_section">
-                      <h5 className="headingJobDetailsFiles">Sample Files</h5>
-                      {jobSampleDocuments?.map((item, index) => (
-                        <div className="agencyjobimgupload" key={index}>
-                          <a index_item={index} target="_blank" href={`${item}`}>
-                            <li className="agencyjobimguploaddiv" key={index}>
-                              <img
-                                className=""
-                                src={`${jobSampleDocumentsThumbs[index]}`}
-                                alt=""
+                <>
+                  <div className="job_media_list_section">
+                    <h5 className="headingJobDetailsFiles">Sample Files</h5>
+                    {jobSampleDocuments?.map((item, index) => (
+                      <div className="agencyjobimgupload" key={index}>
+                        <a index_item={index} target="_blank" href={`${item}`}>
+                          <li className="agencyjobimguploaddiv" key={index}>
+                            <img
+                              className=""
+                              src={`${jobSampleDocumentsThumbs[index]}`}
+                              alt=""
+                            />
+                          </li>
+                        </a>
+                      </div>
+                    ))}
+                    {jobSampleDocumentsIsVideo?.map((item, index) => (
+                      <div className="agencyjobimgupload" key={index}>
+                        <a index_item={index} target="_blank" href={`${item}`}>
+                          <li className="agencyjobimguploaddiv" key={index}>
+                            <video
+                              className="videoIsvideoShow addvideoShowSeconddiv"
+                              controls
+                            >
+                              <source
+                                src={`${jobSampleDocumentsIsVideothumbs[index]}`}
                               />
-                            </li>
-                          </a>
-                        </div>
-                      ))}
-                      {jobSampleDocumentsIsVideo?.map((item, index) => (
-                        <div className="agencyjobimgupload" key={index}>
-                          <a index_item={index} target="_blank" href={`${item}`}>
-                            <li className="agencyjobimguploaddiv" key={index}>
-                              <video className="videoIsvideoShow addvideoShowSeconddiv" controls>
-                                <source
-                                  src={`${jobSampleDocumentsIsVideothumbs[index]}`}
-                                />
-                              </video>
-                            </li>
-                          </a>
-                        </div>
-                      ))}
-                    </div>
-                  </>
-                )}
+                            </video>
+                          </li>
+                        </a>
+                      </div>
+                    ))}
+                  </div>
+                </>
+              )}
 
               {ActivityFilesList?.job_activity_attachments?.length > 0 && (
                 <>

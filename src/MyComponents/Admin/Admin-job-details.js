@@ -224,7 +224,7 @@ const Admin_job_details = () => {
                               }
                               icon={imageThree}
                               iconPosition="start"
-                              label="files"
+                              label="Assets"
                               value="3"
                             />
                             <Tab

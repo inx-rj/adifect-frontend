@@ -36,7 +36,7 @@ import axios from "axios";
 import { id } from "date-fns/locale";
 
 export const MemberAdminGetJobListAction =
-  (id, page, search) => async (dispatch, getState) => {
+  (id = "", page = "", search = "") => async (dispatch, getState) => {
     try {
       dispatch({
         type: MEMBER_ADMIN_JOB_LIST_REQUEST,
@@ -231,7 +231,7 @@ export const MemberAdminDraftJobDeleteAction =
   };
 
 export const MemberInHouseGetJobListAction =
-  (company, page, search, ordering) => async (dispatch, getState) => {
+  (company = "", page = "", search = "", ordering) => async (dispatch, getState) => {
     try {
       dispatch({
         type: MEMBER_INHOUSE_JOB_LIST_REQUEST,

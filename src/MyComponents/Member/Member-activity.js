@@ -33,6 +33,7 @@ import LoadingSpinner from "../../containers/LoadingSpinner";
 import { useDropzone } from "react-dropzone";
 import { memberAdminCompanyListAction } from "../../redux/actions/Member-Company-List-Action";
 import Rating from "@mui/material/Rating";
+import Editor from "../../Editor/Editor";
 
 // DropZone Style Start
 const baseStyle = {
@@ -97,7 +98,8 @@ export default function Member_Activity(props) {
   // const [submitjobopen, setSubmitjobopen] = useState(false);
 
   const [errors, setErrors] = useState({ chatboxOrFile: null });
-  const [dataText, setDataText] = useState("");
+  const [dataText, setDataText] = useState(``);
+  const [commentCacheStore, setCommentCacheStore] = useState([]);
 
   const [invitedUsersMap, setInvitedUsersMap] = useState([]);
 
@@ -138,6 +140,10 @@ export default function Member_Activity(props) {
     error: inviteUsersListError,
     loading: inviteUsersListLoading,
   } = useSelector((state) => state.getInvitedUsersListReducer);
+
+  const status = memberActivityDetails?.slice(-1)
+  const approverID = props?.memberJobDetailsApproverId?.find((approvalId, index) => approvalId?.id === status?.[0]?.activity_job_work?.[0]?.approver)
+  // console.log("approverID", approverID)
 
   useEffect(() => {
     dispatch({ type: MEMBER_ACTIVITY_RESET });
@@ -278,6 +284,22 @@ export default function Member_Activity(props) {
     </div>
   ));
 
+  const handleEditMemeber = (id) => {
+    dispatch(MemberViewApproveAction(id, { status: 1, message: dataText }));
+    setDataText("");
+    props.handleCloseSubmit();
+    props.handleCloseMultipleSubmit();
+    props.handleCloseMultipleSubmit1();
+    swal({
+      title: "Successfully Complete",
+      text: "Job successfully approved!",
+      className: "successAlert",
+      icon: "/img/logonew.svg",
+      buttons: false,
+      timer: 3000,
+    });
+  };
+
   const handleRejectMemeber = (id) => {
     dispatch(MemberViewApproveAction(id, { status: 2, message: dataText }));
     setDataText("");
@@ -345,11 +367,20 @@ export default function Member_Activity(props) {
     }
   }
 
+  const onchangeHandler = (_editorState, editor) => {
+    _editorState.read(() => {
+      const editorState = editor.getEditorState();
+      const jsonString = JSON.stringify(editorState);
+      setDataText(jsonString);
+    });
+  };
+  console.log("Editor", dataText, commentCacheStore);
+
   return (
     <>
       {memberActivityLoading ||
-        postActivityLoading ||
-        inviteUsersListLoading ? (
+      postActivityLoading ||
+      inviteUsersListLoading ? (
         <LoadingSpinner />
       ) : (
         <>
@@ -670,13 +701,13 @@ export default function Member_Activity(props) {
                                       className={
                                         activity?.job_applied_data[0]
                                           ?.proposed_price >
-                                          1.5 * props?.jobPrice
+                                        1.5 * props?.jobPrice
                                           ? "TonnyProposedPrice"
                                           : activity?.job_applied_data[0]
-                                            ?.proposed_price >
+                                              ?.proposed_price >
                                             1.25 * props?.jobPrice
-                                            ? "orangeTonnyProposedPrice"
-                                            : undefined
+                                          ? "orangeTonnyProposedPrice"
+                                          : undefined
                                       }
                                     >
                                       <h3>Proposed Price</h3>
@@ -700,32 +731,32 @@ export default function Member_Activity(props) {
 
                                   {activity?.job_applied_data[0]
                                     ?.proposed_due_date && (
-                                      <div
-                                        className={
-                                          handleDateDiff(
-                                            props?.jobDueDate,
-                                            activity?.job_applied_data[0]
-                                              ?.proposed_due_date
-                                          ) > 7
-                                            ? "redProposedDueDate"
-                                            : handleDateDiff(
+                                    <div
+                                      className={
+                                        handleDateDiff(
+                                          props?.jobDueDate,
+                                          activity?.job_applied_data[0]
+                                            ?.proposed_due_date
+                                        ) > 7
+                                          ? "redProposedDueDate"
+                                          : handleDateDiff(
                                               props?.jobDueDate,
                                               activity?.job_applied_data[0]
                                                 ?.proposed_due_date
                                             ) > 3
-                                              ? "orangetonnyProposedDueDate"
-                                              : "tonnyProposedDueDate"
+                                          ? "orangetonnyProposedDueDate"
+                                          : "tonnyProposedDueDate"
+                                      }
+                                    >
+                                      <h3>Proposed Due Date</h3>
+                                      <p>
+                                        {
+                                          activity?.job_applied_data[0]
+                                            ?.proposed_due_date
                                         }
-                                      >
-                                        <h3>Proposed Due Date</h3>
-                                        <p>
-                                          {
-                                            activity?.job_applied_data[0]
-                                              ?.proposed_due_date
-                                          }
-                                        </p>
-                                      </div>
-                                    )}
+                                      </p>
+                                    </div>
+                                  )}
                                 </div>
                               </div>
                             </div>
@@ -760,12 +791,12 @@ export default function Member_Activity(props) {
                                           ?.job_applied_attachments_name[index]
                                           .length > 20
                                           ? `${activity?.job_applied_data[0]?.job_applied_attachments_name[
-                                            index
-                                          ].substring(0, 20)}...`
+                                              index
+                                            ].substring(0, 20)}...`
                                           : activity?.job_applied_data[0]
-                                            ?.job_applied_attachments_name[
-                                          index
-                                          ]}
+                                              ?.job_applied_attachments_name[
+                                              index
+                                            ]}
                                       </a>
                                     </>
                                   )
@@ -839,7 +870,7 @@ export default function Member_Activity(props) {
                   {/* {activity.activity_type === 4 && activity.activity_status === 0 ( */}
                   {activity?.activity_status === 3 &&
                     activity?.activity_job_work[0]?.work_activity ===
-                    "rejected" && (
+                      "rejected" && (
                       <div className="newAgencyActivity">
                         <div className="MessImg">
                           {activity?.activity_job_work[0]?.approver_image ? (
@@ -874,17 +905,41 @@ export default function Member_Activity(props) {
                               ).format("MMMM D, h:mm A")}
                             </label>
                           </h3>
-                          {activity?.activity_job_work[0]?.approver_message && (
-                            <h3
-                              style={{ whiteSpace: "pre-line" }}
-                              className="rachelRejectSecLine"
-                            >
-                              {" "}
-                              {urlify(
-                                activity?.activity_job_work[0]?.approver_message
-                              )}
-                            </h3>
-                          )}
+                          {activity?.activity_job_work[0]?.approver_message &&
+                            activity?.activity_job_work[0]?.approver_message.search(
+                              "root"
+                            ) <= 0 && (
+                              <h3
+                                className="rachelRejectSecLine"
+                                style={{ whiteSpace: "pre-line" }}
+                                dangerouslySetInnerHTML={{
+                                  __html: urlify(
+                                    activity?.activity_job_work[0]
+                                      ?.approver_message
+                                  ),
+                                }}
+                              />
+                            )}
+                          {activity?.activity_job_work[0]?.approver_message &&
+                            activity?.activity_job_work[0]?.approver_message.search(
+                              "root"
+                            ) > 0 && (
+                              <Editor
+                                isEditable={false}
+                                initialValue={
+                                  activity?.activity_job_work[0]
+                                    ?.approver_message
+                                    ? activity?.activity_job_work[0]
+                                        ?.approver_message
+                                    : ""
+                                }
+                                onChange={onchangeHandler}
+                                commentCacheStore={commentCacheStore}
+                                setCommentCacheStore={setCommentCacheStore}
+                                isCommentOn={false}
+                                isToolbar={false}
+                              />
+                            )}
                           {activity?.activity_job_work[0]?.job_work
                             ?.task_details?.title ? (
                             <h6
@@ -915,7 +970,7 @@ export default function Member_Activity(props) {
                       <div className="newAgencyActivity">
                         <div className="MessImg">
                           {activity?.activity_job_chat[0]?.sender ===
-                            activity?.user_full_name.id ? (
+                          activity?.user_full_name.id ? (
                             <img
                               src={
                                 activity?.user_img
@@ -946,12 +1001,12 @@ export default function Member_Activity(props) {
                         <div className="NewMessText">
                           <h3>
                             {activity?.activity_job_chat[0]?.sender ===
-                              activity?.user_full_name?.id
+                            activity?.user_full_name?.id
                               ? activity?.user_full_name?.user_name
                               : activity?.activity_job_chat[0]?.sender ===
                                 activity?.agency_name?.id
-                                ? activity?.agency_name?.agency_name
-                                : "N/A"}
+                              ? activity?.agency_name?.agency_name
+                              : "N/A"}
                             <label className="Mess_Agen_Date">
                               {moment(activity?.created).format(
                                 "MMMM D, h:mm A"
@@ -1003,9 +1058,9 @@ export default function Member_Activity(props) {
                                         {" "}
                                         {item?.image_name?.length > 15
                                           ? `${item?.image_name?.substring(
-                                            0,
-                                            15
-                                          )}...`
+                                              0,
+                                              15
+                                            )}...`
                                           : item?.image_name}{" "}
                                       </p>
                                     </div>
@@ -1120,7 +1175,7 @@ export default function Member_Activity(props) {
                   <div className="newAgencyActivity">
                     {activity?.activity_status === 2 &&
                       activity?.activity_job_work[0]?.work_activity ===
-                      "submit_approval" && (
+                        "submit_approval" && (
                         <>
                           <div className="MessImg">
                             {activity?.user_img ? (
@@ -1150,7 +1205,7 @@ export default function Member_Activity(props) {
                     <div className="ActivityBFourthMessage">
                       {activity?.activity_status === 2 &&
                         activity?.activity_job_work[0]?.work_activity ===
-                        "submit_approval" && (
+                          "submit_approval" && (
                           <>
                             {activity?.activity_job_work[0]?.message_work ? (
                               <div className="letsDotext">
@@ -1188,7 +1243,43 @@ export default function Member_Activity(props) {
                                   </div>
                                 )}
                               </div>
-                            ) : (
+                            ) : activity?.activity_job_work[0]?.job_work?.message ? <>
+                              <div className="letsDotext">
+                                <p
+                                  style={{ whiteSpace: "pre-line" }}
+                                  className="letsDoJohn"
+                                >
+                                  {urlify(
+                                    activity?.activity_job_work[0]?.job_work?.message
+                                  )}
+                                </p>
+                                {activity?.activity_job_work[0]?.job_work
+                                  ?.task_details?.title ? (
+                                  <div
+                                    style={{ marginTop: "5px" }}
+                                    className="jobSubmitTaskTitleActivity"
+                                  >
+                                    <h5>
+                                      <strong>1Task submitted:</strong>{" "}
+                                      {
+                                        activity?.activity_job_work[0]?.job_work
+                                          ?.task_details?.title
+                                      }
+                                    </h5>
+                                  </div>
+                                ) : (
+                                  <div
+                                    style={{ marginTop: "5px" }}
+                                    className="jobSubmitTaskTitleActivity"
+                                  >
+                                    <h5>
+                                      <strong>Task submitted:</strong> Entire
+                                      Job
+                                    </h5>
+                                  </div>
+                                )}
+                              </div>
+                            </> : (
                               <div className="NoMessageWithAttachmentActivity"></div>
                             )}
                           </>
@@ -1197,7 +1288,7 @@ export default function Member_Activity(props) {
                       <div className="jobSubmitAttachmentsActivity">
                         {activity?.activity_status === 2 &&
                           activity?.activity_job_work[0]?.work_activity ===
-                          "submit_approval" && (
+                            "submit_approval" && (
                             <>
                               {activity?.activity_job_work[0]
                                 ?.job_work_activity_attachments?.length > 0 &&
@@ -1223,9 +1314,9 @@ export default function Member_Activity(props) {
                                           {" "}
                                           {item?.attachment_name?.length > 15
                                             ? `${item?.attachment_name?.substring(
-                                              0,
-                                              15
-                                            )}...`
+                                                0,
+                                                15
+                                              )}...`
                                             : item?.attachment_name}{" "}
                                         </p>
                                       </div>
@@ -1282,7 +1373,7 @@ export default function Member_Activity(props) {
                   {/* ------------------------- JOB MOVED TO STAGE ------------------------- */}
                   {activity?.activity_status === 3 &&
                     activity?.activity_job_work[0]?.work_activity ===
-                    "moved" && (
+                      "moved" && (
                       <div className="newAgencyActivity">
                         <div className="MessImg">
                           <img src="/img/adifectnewLogo.png" alt="" />
@@ -1329,7 +1420,7 @@ export default function Member_Activity(props) {
                   {/* ------------------------- JOB APPROVED NOTIFICATION ?? ------------------------- */}
                   {activity?.activity_status === 3 &&
                     activity?.activity_job_work[0]?.work_activity ===
-                    "approved" && (
+                      "approved" && (
                       <div className="newAgencyActivity">
                         <div className="MessImg">
                           {activity?.activity_job_work[0]?.work_activity
@@ -1369,14 +1460,41 @@ export default function Member_Activity(props) {
                               )}
                             </label>
                           </h3>
-                          <h3
-                            style={{ whiteSpace: "pre-line" }}
-                            className="approvermessageActivity"
-                          >
-                            {urlify(
-                              activity?.activity_job_work[0]?.approver_message
+                          {activity?.activity_job_work[0]?.approver_message &&
+                            activity?.activity_job_work[0]?.approver_message.search(
+                              "root"
+                            ) <= 0 && (
+                              <h3
+                                style={{ whiteSpace: "pre-line" }}
+                                className="approvermessageActivity"
+                                dangerouslySetInnerHTML={{
+                                  __html: urlify(
+                                    activity?.activity_job_work[0]
+                                      ?.approver_message
+                                  ),
+                                }}
+                              />
                             )}
-                          </h3>
+                          {activity?.activity_job_work[0]?.approver_message &&
+                            activity?.activity_job_work[0]?.approver_message.search(
+                              "root"
+                            ) > 0 && (
+                              <Editor
+                                isEditable={false}
+                                initialValue={
+                                  activity?.activity_job_work[0]
+                                    ?.approver_message
+                                    ? activity?.activity_job_work[0]
+                                        ?.approver_message
+                                    : ""
+                                }
+                                onChange={onchangeHandler}
+                                commentCacheStore={commentCacheStore}
+                                setCommentCacheStore={setCommentCacheStore}
+                                isCommentOn={false}
+                                isToolbar={false}
+                              />
+                            )}
                           {activity?.activity_job_work[0]?.job_work
                             ?.task_details?.title ? (
                             <h6
@@ -1539,9 +1657,12 @@ export default function Member_Activity(props) {
                   )}
                 </>
               ))}
-            {memberJobDetails?.length > 0 &&
+            {
+              memberJobDetails?.length > 0 &&
               memberJobDetails?.length <= 1 &&
-              userData?.user?.user_level != 2 && (
+              userData?.user?.user_level != 2 &&
+              status?.[0]?.activity_type != 6 &&
+              (
                 <div className="submitjobApprovelPopup">
                   <button
                     onClick={props.handleOpenSubmit}
@@ -1553,7 +1674,7 @@ export default function Member_Activity(props) {
               )}
 
             {memberJobDetails?.length > 1 &&
-              userData?.user?.user_level != 2 && (
+              userData?.user?.user_level != 2 && status?.[0]?.activity_type != 6 && (
                 <div className="submitjobApprovelPopup">
                   <button
                     onClick={props.handleOpenMultipleSubmit1}
@@ -1617,7 +1738,7 @@ export default function Member_Activity(props) {
                       </Carousel>
                     )}
                     {Object.keys(imagess?.job_work?.task_details)?.length >
-                      0 ? (
+                    0 ? (
                       <>
                         <p
                           style={{ marginLeft: "25px" }}
@@ -1657,7 +1778,7 @@ export default function Member_Activity(props) {
                     )}
                     <div className="sendButtontextArea">
                       <div className="textareacommentsSlider">
-                        <textarea
+                        {/* <textarea
                           id="storynewSlider"
                           name="story"
                           maxLength={4000}
@@ -1665,14 +1786,20 @@ export default function Member_Activity(props) {
                           onChange={(e) => setDataText(e.target.value)}
                           rows="5"
                           cols="33"
-                        ></textarea>
+                        ></textarea> */}
+                        <Editor
+                          initialValue={dataText}
+                          onChange={onchangeHandler}
+                          commentCacheStore={commentCacheStore}
+                          setCommentCacheStore={setCommentCacheStore}
+                        />
                         <span
                           style={{
                             color: dataText?.length === 4000 && "#D14F4F",
                           }}
                           className="limitWordsNew"
                         >
-                          {dataText?.length}/4000
+                          {dataText?.length}/160
                         </span>
                       </div>
                     </div>
@@ -1680,6 +1807,13 @@ export default function Member_Activity(props) {
                   <DialogActions>
                     <div className="sharebuttonjobcontent">
                       <div className="cancelButtonnewWithSave">
+                        <button
+                          className="canceButtonnewPop"
+                          onClick={() => handleEditMemeber(imagess.id)}
+                        // disabled={dataText.length === 0}
+                        >
+                          Edit
+                        </button>
                         <button
                           className="canceButtonnewPop"
                           onClick={() => handleRejectMemeber(imagess.id)}
@@ -1749,6 +1883,7 @@ export default function Member_Activity(props) {
                         {imagess?.job_work?.task_details?.title
                           ? `('${imagess?.job_work?.task_details?.title}' task)`
                           : `(Entire Job)`}
+                        <div><span className="bg-blue-400/50 rounded-full p-1">Stage - {imagess?.workflow_stage} </span></div>
                       </ListItemText>
                     </ListItem>
                   </>
@@ -1800,7 +1935,7 @@ export default function Member_Activity(props) {
                       </Carousel>
                     )}
                     {Object.keys(imagess?.job_work?.task_details)?.length >
-                      0 ? (
+                    0 ? (
                       <>
                         <p
                           style={{ marginLeft: "25px" }}
@@ -1841,7 +1976,7 @@ export default function Member_Activity(props) {
 
                     <div className="sendButtontextArea">
                       <div className="textareacommentsSlider">
-                        <textarea
+                        {/* <textarea
                           id="storynewSlider"
                           name="story"
                           maxLength={4000}
@@ -1849,14 +1984,20 @@ export default function Member_Activity(props) {
                           onChange={(e) => setDataText(e.target.value)}
                           rows="5"
                           cols="33"
-                        ></textarea>
+                        ></textarea> */}
+                        <Editor
+                          initialValue={dataText}
+                          onChange={onchangeHandler}
+                          commentCacheStore={commentCacheStore}
+                          setCommentCacheStore={setCommentCacheStore}
+                        />
                         <span
                           style={{
                             color: dataText?.length === 4000 && "#D14F4F",
                           }}
                           className="limitWordsNew"
                         >
-                          {dataText?.length}/4000
+                          {dataText?.length}/160
                         </span>
                       </div>
                     </div>
@@ -1864,6 +2005,13 @@ export default function Member_Activity(props) {
                   <DialogActions>
                     <div className="sharebuttonjobcontent">
                       <div className="cancelButtonnewWithSave">
+                        <button
+                          className="canceButtonnewPop"
+                          onClick={() => handleEditMemeber(imagess.id)}
+                        // disabled={dataText.length === 0}
+                        >
+                          Edit
+                        </button>
                         <button
                           className="canceButtonnewPop"
                           onClick={() => handleRejectMemeber(imagess.id)}

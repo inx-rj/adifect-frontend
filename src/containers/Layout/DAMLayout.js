@@ -1,13 +1,11 @@
-import React, { useState, useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import Footer from "./Footer";
+import React, { useState, useEffect } from "react";
 import { defaultPageLoader } from "../../redux/actions/other-actions";
 import { useDispatch, useSelector } from "react-redux";
 import Sidebar from "./Sidebar";
 import DAMHeader from "./DAMHeader";
 import { Link } from "react-router-dom";
-
-console.log({ React }, 'React DamLayout');
 
 function DAMLayout(props) {
   const dispatch = useDispatch();

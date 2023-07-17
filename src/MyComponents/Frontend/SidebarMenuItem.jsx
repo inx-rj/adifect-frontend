@@ -28,6 +28,7 @@ const SidebarMenuItem = ({ navItem }) => {
               "&.MuiAccordion-root": {
                 boxShadow: "none",
                 margin: "0 9px",
+                position: "inherit",
               },
             },
           }}
@@ -64,10 +65,9 @@ const SidebarMenuItem = ({ navItem }) => {
           >
             <li
               className={`
-                ${
-                  children.find((item) => pathname.includes(item.path))
-                    ? "active"
-                    : ""
+                ${children.find((item) => pathname.includes(item.path))
+                  ? "active"
+                  : ""
                 } m-0
               `}
             >

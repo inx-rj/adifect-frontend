@@ -209,8 +209,6 @@ export const logout = () => (dispatch) => {
   localStorage.removeItem("userData");
   dispatch({ type: USER_LOGOUT });
   dispatch({ type: USER_DETAILS_RESET });
-
-  console.log({ userData: localStorage.getItem('userData') }, "--- Inside logout() actions");
 };
 
 export const getCreatorProfileJobsInProgressAction =
@@ -410,7 +408,7 @@ export const getAgencyRatingDetails = () => async (dispatch, getState) => {
 // };
 
 export const getCreatorRatingDetails =
-  (search, ordering) => async (dispatch, getState) => {
+  (search = "", ordering = "-created") => async (dispatch, getState) => {
     try {
       dispatch({
         type: GET_PROFILE_RATING_CREATOR_REQUEST,

@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react'
 import CustomMuiAutoComplete from '../../Common/CustomMuiAutoComplete/CustomMuiAutoComplete';
 
-const CommunityMuiAutoComplete = ({ communityOptions, setSelectedOption, selectedOption, setSearchText, searchText }) => {
+const CommunityMuiAutoComplete = ({ loader = false, communityOptions, setSelectedOption, selectedOption, setSearchText, searchText }) => {
 
     const matchStr = (searchVal, matchVal) =>
         searchVal.toLowerCase().match(new RegExp(matchVal.toLowerCase(), "g"));
@@ -13,12 +13,14 @@ const CommunityMuiAutoComplete = ({ communityOptions, setSelectedOption, selecte
                 ?.filter((communityItem) => matchStr(communityItem.name, searchText))
                 ?.map((e) => {
                     return { value: e.id, label: `${e.id} - ${e.name}` };
-                }) || [],
+                })
+            || [],
         [communityOptions, searchText]
     );
 
     return (
         <CustomMuiAutoComplete
+            loader={loader}
             placeholder={"Select Community"}
             filterList={filteredData.slice(0, 20)}
             setSelectedOption={setSelectedOption}

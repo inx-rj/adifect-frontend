@@ -36,6 +36,7 @@ const ChannelAccordion = (props) => {
     selectPostList,
     chanelPostHandle,
     handleStoryUrl,
+    handleTimeChange,
     storyDetailsStoryUrl,
     storyUrlVal = "",
     setPostList,
@@ -68,6 +69,9 @@ const ChannelAccordion = (props) => {
 
   const { agencyCompanyStoryDetails } = useSelector(
     (state) => state.AgencyCompanyStoryDetailReducer
+  );
+  const { loading: loadingAgencyAudiencesData } = useSelector(
+    (state) => state.AgencyAudiencesReducer
   );
 
   const [selectedOption, setSelectedOption] = useState("");
@@ -431,7 +435,7 @@ const ChannelAccordion = (props) => {
                   <Divider sx={{ my: "12px" }} />
                   <FormGroup>
                     <Grid container spacing={2}>
-                      <Grid item lg={3}>
+                      <Grid item lg={6}>
                         <FormControl sx={{ width: "100%" }}>
                           <Typography
                             htmlFor="start-time"
@@ -441,11 +445,11 @@ const ChannelAccordion = (props) => {
                               marginBottom: "10px",
                             }}
                           >
-                            Start Time
+                            Scheduled Time
                           </Typography>
                           <TextField
-                            type="time"
-                            id="start-time"
+                            type="datetime-local"
+                            id="scheduled-time"
                             sx={{
                               "& .MuiInputBase-input": {
                                 px: "10px",
@@ -453,34 +457,35 @@ const ChannelAccordion = (props) => {
                                 borderRadius: "5px",
                               },
                             }}
+                            onChange={(e) => handleTimeChange(e.target.value)}
                           />
                         </FormControl>
                       </Grid>
-                      <Grid item lg={3}>
-                        <FormControl sx={{ width: "100%" }}>
-                          <Typography
-                            htmlFor="end-time"
-                            sx={{
-                              fontSize: "14px",
-                              lineHeight: "18px",
-                              marginBottom: "10px",
-                            }}
-                          >
-                            End Time
-                          </Typography>
-                          <TextField
-                            type="time"
-                            id="end-time"
-                            sx={{
-                              "& .MuiInputBase-input": {
-                                px: "10px",
-                                py: "12px",
-                                borderRadius: "5px",
-                              },
-                            }}
-                          />
-                        </FormControl>
-                      </Grid>
+                      {/*<Grid item lg={3}>*/}
+                      {/*  <FormControl sx={{ width: "100%" }}>*/}
+                      {/*    <Typography*/}
+                      {/*      htmlFor="end-time"*/}
+                      {/*      sx={{*/}
+                      {/*        fontSize: "14px",*/}
+                      {/*        lineHeight: "18px",*/}
+                      {/*        marginBottom: "10px",*/}
+                      {/*      }}*/}
+                      {/*    >*/}
+                      {/*      End Time*/}
+                      {/*    </Typography>*/}
+                      {/*    <TextField*/}
+                      {/*      type="time"*/}
+                      {/*      id="end-time"*/}
+                      {/*      sx={{*/}
+                      {/*        "& .MuiInputBase-input": {*/}
+                      {/*          px: "10px",*/}
+                      {/*          py: "12px",*/}
+                      {/*          borderRadius: "5px",*/}
+                      {/*        },*/}
+                      {/*      }}*/}
+                      {/*    />*/}
+                      {/*  </FormControl>*/}
+                      {/*</Grid>*/}
                     </Grid>
 
                     <Divider sx={{ my: "12px" }} />
@@ -497,6 +502,7 @@ const ChannelAccordion = (props) => {
                           Audience
                         </Typography>
                         <CustomMuiAutoComplete
+                          loader={loadingAgencyAudiencesData}
                           filterList={displayedAudienceOptions}
                           setSelectedOption={setSelectedOption}
                           selectedOption={selectedOption}

@@ -35,7 +35,7 @@ export const listAllUser = () => async (dispatch, getState) => {
 
     dispatch({
       type: USER_ADMIN_LIST_SUCCESS,
-      payload: data,
+      payload: data?.data?.results,
     });
 
     return true;

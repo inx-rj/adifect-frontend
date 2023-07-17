@@ -82,6 +82,12 @@ const Member_job_details = () => {
     (state) => state.proposalsSeenCountReducer
   );
 
+  const {
+    memberActivityDetails,
+  } = useSelector((state) => state.memberActivityReducer);
+
+  const status = memberActivityDetails?.slice(-1)
+
   useEffect(() => {
     if (jobCompletedUsers) {
       let filterUser = jobCompletedUsers?.filter(
@@ -303,7 +309,7 @@ const Member_job_details = () => {
                               }
                               icon={imageThree}
                               iconPosition="start"
-                              label="files"
+                              label="Assets"
                               value="3"
                             />
                             <Tab
@@ -343,6 +349,7 @@ const Member_job_details = () => {
                               submitjobopen={submitjobopen}
                               submitjobMultipleopen={submitjobMultipleopen}
                               submitjobMultipleopen1={submitjobMultipleopen1}
+                              memberJobDetailsApproverId={memberJobDetails}
                               handleCloseSubmit={handleCloseSubmit}
                               handleOpenSubmit={handleOpenSubmit}
                               handleCloseMultipleSubmit={
@@ -398,7 +405,7 @@ const Member_job_details = () => {
                         {userData?.user?.user_level !== 4 &&
                           memberJobDetails?.length > 0 &&
                           memberJobDetails?.length <= 1 &&
-                          userData?.user?.user_level != 2 && (
+                          userData?.user?.user_level != 2 && status?.[0]?.activity_type != 6 && (
                             // <div className="submitjobApprovelPopup">
                             <button
                               onClick={handleOpenSubmit}
@@ -411,7 +418,7 @@ const Member_job_details = () => {
                         {/* Multiple Approvals */}
                         {userData?.user?.user_level !== 4 &&
                           memberJobDetails?.length > 1 &&
-                          userData?.user?.user_level != 2 && (
+                          userData?.user?.user_level != 2 && status?.[0]?.activity_type != 6 && (
                             // <div className="submitjobApprovelPopup">
                             <button
                               onClick={handleOpenMultipleSubmit1}

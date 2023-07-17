@@ -177,7 +177,9 @@ function Creator_projects_in_review(props) {
                   <>
                     <LinkContainer
                       key={x + 1}
-                      to={`/projects?page=${x + 1}`}
+                      to={{
+                        pathName: `/projects?page=${x + 1}`
+                      }}
                       onClick={() => pageHandler(x + 1)}
                     >
                       <Pagination.Item active={x + 1 === currentPage}>

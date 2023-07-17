@@ -3,7 +3,7 @@
 <p/m/spacing> <shadow> <animation> */
 
 .login-signup-wrapper {
-  @apply flex items-center justify-center min-h-screen p-5 my-0 mx-auto;
+  @apply flex items-center justify-center min-h-screen p-5 mx-auto my-0;
 }
 
 body .MuiTypography-root,
@@ -24,16 +24,16 @@ body .MuiInputBase-root {
 
 /* Card general styling class */
 .new-card {
-  @apply w-full bg-white rounded p-5 drop-shadow;
+  @apply w-full p-5 bg-white rounded drop-shadow;
 }
 
 /* Title header text style for both card and page */
 .card-page-title {
-  @apply text-lg sm:text-2xl font-semibold mb-2 sm:mb-4;
+  @apply mb-2 text-lg font-semibold sm:text-2xl sm:mb-4;
 }
 
 .card-page-info {
-  @apply text-sm sm:text-base font-normal break-words mb-2 sm:mb-4;
+  @apply mb-2 text-sm font-normal break-words sm:text-base sm:mb-4;
 }
 
 /* To add unique(uni) gap between any of 2 element */
@@ -46,7 +46,16 @@ body .MuiInputBase-root {
 }
 
 .input-fields-wrapper label {
-  @apply block text-base font-medium mb-0.5;
+  @apply block text-base font-medium mb-0.5 px-1 bg-white;
+}
+
+.input-fields-wrapper input[type="number"] {
+  /* all: revert; */
+ @apply bg-white w-full border-none pl-4
+}
+
+.input-fields-wrapper .formPreviewCheckBox span:last-child{
+  @apply relative top-[2px]
 }
 
 .input-style {
@@ -58,7 +67,7 @@ body .MuiInputBase-root {
 }
 
 .err-tag {
-  @apply block h-5 text-sm text-danger text-right;
+  @apply block h-5 text-sm text-right text-danger;
 }
 
 /* Custom scrollbar design css */
@@ -74,7 +83,7 @@ body .MuiInputBase-root {
 }
 
 .dr-picker-input {
-  @apply w-full border border-[#e5e7eb] rounded hover:border-black focus:border-theme focus-visible:outline-offset-0 focus:outline-0 focus:outline-offset-[unset] focus-visible:outline-0 text-sm placeholder:text-[#0009] py-2.5 pl-4 pr-3 transition-all duration-300;
+  @apply w-full border-[#e5e7eb] rounded focus:border-theme focus-visible:outline-offset-0 focus:outline-0 focus:outline-offset-[unset] focus-visible:outline-0 text-sm placeholder:text-[#0009] py-2.5 pl-4 pr-3 transition-all duration-300;
 }
 
 input[type="search"]::-webkit-search-cancel-button {
@@ -93,9 +102,22 @@ input[type="search"]::-webkit-search-cancel-button {
 .custom-date-picker
   .input-style
   button.MuiButtonBase-root.MuiIconButton-root.MuiIconButton-edgeEnd {
-  @apply justify-end;
+  @apply flex justify-end;
 }
 
 .mui-select .MuiSelect-select.MuiInputBase-input {
   @apply py-2 px-3 min-h-[30px] leading-[30px];
 }
+
+
+.intake-form-textarea .MuiInputBase-inputMultiline {
+  @apply min-h-[80px]
+}
+.intake-form-textarea .MuiInputBase-inputMultiline:focus {
+  @apply !border-0
+}
+
+.agency-reporting iframe {
+  @apply block m-0;
+}
+

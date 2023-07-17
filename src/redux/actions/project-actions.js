@@ -25,11 +25,11 @@ export const agencyProjectsByFilter = (params) => async (dispatch) => {
     let data = [];
     if (params.company) {
       data = await api.get(
-        `${BACKEND_API_URL}agency/my-project/?page=${params.page}&status=${params.status}&job__company=${params.company}&ordering=${params.ordering}&job___is_active=${params.is_active}&search=${params.search}`
+        `${BACKEND_API_URL}agency/my-project/?page=${params.page}&status=${params.status}&job__company=${params.company}&ordering=${params.ordering}&job___is_active=${params.is_active}&search=${params.search ?? ""}`
       );
     } else {
       data = await api.get(
-        `${BACKEND_API_URL}agency/my-project/?page=${params.page}&status=${params.status}&ordering=${params.ordering}&job___is_active=${params.is_active}&search=${params.search}`
+        `${BACKEND_API_URL}agency/my-project/?page=${params.page}&status=${params.status}&ordering=${params.ordering}&job___is_active=${params.is_active}&search=${params.search ?? ""}`
       );
     }
 
@@ -50,6 +50,7 @@ export const agencyProjectsByFilter = (params) => async (dispatch) => {
   }
 };
 
+//for dashboard
 export const agencyProjectsByFilterDuplicate = (params) => async (dispatch) => {
   try {
     dispatch({
@@ -84,6 +85,7 @@ export const agencyProjectsByFilterDuplicate = (params) => async (dispatch) => {
   }
 };
 
+//for creator role
 export const projectsByFilter = (params) => async (dispatch) => {
   try {
     dispatch({
@@ -118,6 +120,7 @@ export const projectsByFilter = (params) => async (dispatch) => {
   }
 };
 
+//for creator and member dashboard in review 
 export const projectsByFilterDuplicate = (params) => async (dispatch) => {
   try {
     dispatch({

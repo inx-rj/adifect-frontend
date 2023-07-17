@@ -1,82 +1,79 @@
+import React, { useState } from "react";
+import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import "./Responsive.css";
-import React, { useEffect, useState } from "react";
-import {
-  Routes,
-  Route,
-} from "react-router-dom";
 
 // Common
 // import Job_add_edit from "./MyComponents/Common/Job-add-edit";
 import Job_add_edit from "./MyComponents/Common/Job-add-edit";
 // import Job_add_edit_dev from "./MyComponents/Common/Job-add-edit-dev";
-import Projects from "./MyComponents/Common/Projects";
-import Company_projects from "./MyComponents/Common/Company-projects.jsx";
-import Dashboard from "./MyComponents/Common/Dashboard";
-import Analytics from "./MyComponents/Common/Analytics";
-import Job_list from "./MyComponents/Common/Job-list";
-import Earnings from "./MyComponents/Common/Earnings";
-import Job_details from "./MyComponents/Common/Job-details";
-import Settings from "./MyComponents/Common/Settings";
-import Transactions from "./MyComponents/Common/Transactions";
-import Error from "./MyComponents/Common/Error";
 import Activity from "./MyComponents/Common/Activity";
+import Analytics from "./MyComponents/Common/Analytics";
 import Approval_workflow from "./MyComponents/Common/Approval-workflow";
 import Approval_workflow_list from "./MyComponents/Common/Approval-workflow-list";
+import Company_projects from "./MyComponents/Common/Company-projects.jsx";
+import Dashboard from "./MyComponents/Common/Dashboard";
+import Earnings from "./MyComponents/Common/Earnings";
+import Error from "./MyComponents/Common/Error";
 import Help_Common from "./MyComponents/Common/Help-Common";
 import Help_info_table from "./MyComponents/Common/Help-info-table";
 import Help_view_message from "./MyComponents/Common/Help-view-message";
+import Job_details from "./MyComponents/Common/Job-details";
+import Job_list from "./MyComponents/Common/Job-list";
+import Projects from "./MyComponents/Common/Projects";
+import Settings from "./MyComponents/Common/Settings";
+import Transactions from "./MyComponents/Common/Transactions";
 
 // Authentication
+import ForgotPassword from "./MyComponents/Authentication/Forgot-password";
+import Invite_accept_reject from "./MyComponents/Authentication/Invite-accept-reject";
 import Login from "./MyComponents/Authentication/Login";
-import Signup from "./MyComponents/Authentication/Signup";
 import Profile from "./MyComponents/Authentication/Profile";
 import Profileedit from "./MyComponents/Authentication/Profile-edit";
-import Profile_dev from "./MyComponents/Authentication/Profile_dev";
 import Profile_design from "./MyComponents/Authentication/Profile_design";
+import Profile_dev from "./MyComponents/Authentication/Profile_dev";
 import Profile_new from "./MyComponents/Authentication/Profile_new";
 import ResetPassword from "./MyComponents/Authentication/Reset-password";
-import ForgotPassword from "./MyComponents/Authentication/Forgot-password";
-import VerifyEmail from "./MyComponents/Authentication/Verify-email";
-import Thank_you from "./MyComponents/Authentication/Thank-you";
+import Signup from "./MyComponents/Authentication/Signup";
 import Signup_invite from "./MyComponents/Authentication/Signup-invite";
-import Invite_accept_reject from "./MyComponents/Authentication/Invite-accept-reject";
+import Thank_you from "./MyComponents/Authentication/Thank-you";
+import VerifyEmail from "./MyComponents/Authentication/Verify-email";
 
 // Admin
-import Agency_data from "./MyComponents/Admin/Agency-data";
-import Workflow_stage_add from "./MyComponents/Admin/workflowstage-add.js";
-import Admin_jobs_workflowlevels from "./MyComponents/Admin/Admin-jobs-workflowlevels";
-import Admin_jobs_workflowstage from "./MyComponents/Admin/Workflow-stages";
-import Workflow_level_add from "./MyComponents/Admin/Workflow-level-add.js";
-import Skill_add_edit from "./MyComponents/Admin/Skill-add-edit";
-import SkillsList from "./MyComponents/Admin/Skills-list";
-import Level_add_edit from "./MyComponents/Admin/Level-add-edit";
-import LevelsList from "./MyComponents/Admin/Levels-list";
-import IndustryList from "./MyComponents/Admin/Industry-list";
-import Industry_add_edit from "./MyComponents/Admin/Industry-add-edit";
-import CategoryList from "./MyComponents/Admin/Category-list";
-import Category_add_edit from "./MyComponents/Admin/Category-add-edit";
-import Company_add_edit from "./MyComponents/Admin/Company-add-edit";
-import CompanyList from "./MyComponents/Admin/Company-list";
-import Admin_agency_users_list from "./MyComponents/Admin/Admin-agency-users-list";
-import Admin_Media from "./MyComponents/Admin/Admin-Media";
-import Admin_Media_datatable from "./MyComponents/Admin/Admin-Tableview";
-import Admin_collectionData from "./MyComponents/Admin/Amin-Collectiondata";
 import TableViewAdmin_collectionData from "./MyComponents/Admin/Admin-Collectiondata-table.js";
-import Admin_Movemedia from "./MyComponents/Admin/Admin-movefolderdam";
 import Admin_Help_Chat from "./MyComponents/Admin/Admin-Help-Chat";
 import Admin_Help_Table from "./MyComponents/Admin/Admin-Help-Table";
+import Admin_Media from "./MyComponents/Admin/Admin-Media";
+import Admin_Media_datatable from "./MyComponents/Admin/Admin-Tableview";
+import Admin_agency_users_list from "./MyComponents/Admin/Admin-agency-users-list";
+import Admin_jobs_workflowlevels from "./MyComponents/Admin/Admin-jobs-workflowlevels";
+import Admin_Movemedia from "./MyComponents/Admin/Admin-movefolderdam";
+import Agency_data from "./MyComponents/Admin/Agency-data";
+import Admin_collectionData from "./MyComponents/Admin/Amin-Collectiondata";
+import Category_add_edit from "./MyComponents/Admin/Category-add-edit";
+import CategoryList from "./MyComponents/Admin/Category-list";
+import Company_add_edit from "./MyComponents/Admin/Company-add-edit";
+import CompanyList from "./MyComponents/Admin/Company-list";
+import Industry_add_edit from "./MyComponents/Admin/Industry-add-edit";
+import IndustryList from "./MyComponents/Admin/Industry-list";
+import Level_add_edit from "./MyComponents/Admin/Level-add-edit";
+import LevelsList from "./MyComponents/Admin/Levels-list";
+import Skill_add_edit from "./MyComponents/Admin/Skill-add-edit";
+import SkillsList from "./MyComponents/Admin/Skills-list";
+import Workflow_level_add from "./MyComponents/Admin/Workflow-level-add.js";
+import Admin_jobs_workflowstage from "./MyComponents/Admin/Workflow-stages";
+import Workflow_stage_add from "./MyComponents/Admin/workflowstage-add.js";
 
-import UserList from "./MyComponents/Admin/user-list";
 import AgencyList from "./MyComponents/Admin/agency-list";
+import UserList from "./MyComponents/Admin/user-list";
 
 // Development
-import Admin_jobs_add_edit_dev from "./MyComponents/Admin/Admin-jobs-add-edit-dev";
-import Admin_jobs_list_dev from "./MyComponents/Admin/Admin-job-list-dev";
 import Job_details_dev from "./MyComponents/Admin/Admin-job-details-dev";
+import Admin_jobs_list_dev from "./MyComponents/Admin/Admin-job-list-dev";
+import Admin_jobs_add_edit_dev from "./MyComponents/Admin/Admin-jobs-add-edit-dev";
 
-import Agency_jobs_add_edit from "./MyComponents/Agency/Agency-jobs-add-edit-dev";
 import Agency_approval_workflow_dev2 from "./MyComponents/Agency/Agency-approval-workflow-dev.js";
+import Agency_jobs_add_edit from "./MyComponents/Agency/Agency-jobs-add-edit-dev";
 
 import Creator_apply_job_dev from "./MyComponents/Creator/Creator-apply-job-dev.js";
 // Dev Design
@@ -88,19 +85,19 @@ import Creator_Apply_Job from "./MyComponents/Creator/Creator-apply-job";
 import DAMLayout from "./containers/Layout/DAMLayout";
 
 // Agency
-import Workflow_agency_stage_add from "./MyComponents/Agency/Agency-workflow-stage-add-edit";
 import Workflow_company_add from "./MyComponents/Agency/Agency-Company-add";
-import Agency_jobs_workflowstage from "./MyComponents/Agency/Agency-workflow-stage-list.js";
+import Agency_Notifications_view from "./MyComponents/Agency/Agency-Notifications-view";
+import Agency_company_datalist from "./MyComponents/Agency/Agency-company-datalist";
 import Agency_jobs_company from "./MyComponents/Agency/Agency-company-list";
-import Agency_jobs_workflowlevels from "./MyComponents/Agency/Agency-workflow-level-list.js";
+import Agency_template_edit from "./MyComponents/Agency/Agency-template-edit";
+import Agency_template_list from "./MyComponents/Agency/Agency-template-list";
 import Workflow_agency_level_add from "./MyComponents/Agency/Agency-workflow-level-add-edit.js";
+import Agency_jobs_workflowlevels from "./MyComponents/Agency/Agency-workflow-level-list.js";
+import Workflow_agency_stage_add from "./MyComponents/Agency/Agency-workflow-stage-add-edit";
+import Agency_jobs_workflowstage from "./MyComponents/Agency/Agency-workflow-stage-list.js";
+import Agency_company_projects_details from "./MyComponents/Agency/Company-projects/Agency-company-projects-details.jsx";
 import Agency_approval_workflow_dev from "./MyComponents/Agency/Workflowdev.js";
 import DragDrop from "./MyComponents/Agency/test-reorder.js";
-import Agency_template_list from "./MyComponents/Agency/Agency-template-list";
-import Agency_template_edit from "./MyComponents/Agency/Agency-template-edit";
-import Agency_company_datalist from "./MyComponents/Agency/Agency-company-datalist";
-import Agency_Notifications_view from "./MyComponents/Agency/Agency-Notifications-view";
-import Agency_company_projects_details from "./MyComponents/Agency/Company-projects/Agency-company-projects-details.jsx";
 
 import Agency_draft_jobs_list from "./MyComponents/Agency/Agency-draft-jobs-list.js";
 
@@ -108,63 +105,60 @@ import Agency_draft_jobs_list from "./MyComponents/Agency/Agency-draft-jobs-list
 import AppLayout from "./containers/Layout/App-layout";
 
 // Frontend
+import Allcollection from "./MyComponents/Frontend/Collectiondata.js";
+import JobPublicview from "./MyComponents/Frontend/Job_public_view";
 import Media from "./MyComponents/Frontend/Media";
 import Media_datatable from "./MyComponents/Frontend/Media-datatable";
-import PopupMedia from "./MyComponents/Frontend/media-popup";
-import JobPublicview from "./MyComponents/Frontend/Job_public_view";
-import Movemedia from "./MyComponents/Frontend/MovefolderDam.js";
-import Allcollection from "./MyComponents/Frontend/Collectiondata.js";
 import TableViewAllcollection from "./MyComponents/Frontend/Media-tableview-collectiondata.js";
+import Movemedia from "./MyComponents/Frontend/MovefolderDam.js";
+import PopupMedia from "./MyComponents/Frontend/media-popup";
 
 // Email Template
 import EmailTemplates from "./containers/EmailTemplates";
 
 // Routing
-import PublicRoute from "./routing/PublicRoute";
-import ProtectedRoute from "./routing/ProtectedRoute";
 import AdminRoute from "./routing/AdminRoute";
+import ProtectedRoute from "./routing/ProtectedRoute";
+import PublicRoute from "./routing/PublicRoute";
 
 // Member
 import Member_Company from "./MyComponents/Member/Member-Company";
 // import Member_Approver_Company_datalist from "./MyComponents/Member/Member-Approver-Company-datalist";
-import Member_Admin_invite from "./MyComponents/Member/Member-Admin-invite";
 import Member_Admin_draft_jobs_list from "./MyComponents/Member/Member-Admin-draft-jobs-list";
-import Member_Admin_template_list from "./MyComponents/Member/Member-Admin-template-list";
+import Member_Admin_invite from "./MyComponents/Member/Member-Admin-invite";
 import Member_Admin_template_Edit from "./MyComponents/Member/Member-Admin-template-Edit";
+import Member_Admin_template_list from "./MyComponents/Member/Member-Admin-template-list";
+import Member_All_Collection from "./MyComponents/Member/Member-All-Collection";
 import Member_Media from "./MyComponents/Member/Member-Media";
 import Member_MovefolderDam from "./MyComponents/Member/Member-MovefolderDam";
-import Member_media_dataTable from "./MyComponents/Member/Member-media-dataTable";
-import Member_All_Collection from "./MyComponents/Member/Member-All-Collection";
 import TableViewMember_All_Collection from "./MyComponents/Member/Member-Tableview-Collectiondata";
+import Member_media_dataTable from "./MyComponents/Member/Member-media-dataTable";
 // import Member_Company_list from "./MyComponents/Member/Member-Company-list";
 // import AdminMember_Company_add from "./MyComponents/Member/AdminMember-Company-add";
+import Company_projects_tags from "./MyComponents/Common/Company-projects-tags";
 import Member_Admin_Company_Add_Edit from "./MyComponents/Member/Member-Admin-Company-Add-Edit";
 import Member_Company_Datalist from "./MyComponents/Member/Member-Company-Datalist";
-import Company_projects_tags from "./MyComponents/Common/Company-projects-tags";
 
 // invite
 import Main_Invite from "./MyComponents/Common/Main-Invite";
 
-import Community_settings from "./MyComponents/Common/Community-settings";
+import AgencyReporting from "./MyComponents/Agency/AgencyReporting";
+import IntakeFormResponseList from "./MyComponents/Agency/IntakeFormDynamic/listing/IntakeFormResponseList";
+import ShareFormWrapper from "./MyComponents/Agency/IntakeFormDynamic/view/IntakeFormWrapper";
+import CreateIntakeFormsDynamic from "./MyComponents/Agency/IntakeFormDynamic/create/CreateOrUpdateDynamicForm";
+import IntakeFormsDynamic from "./MyComponents/Agency/IntakeFormDynamic/IntakeFormsDynamic";
+import GlobalFormResponseDetails from "./MyComponents/Agency/IntakeFormDynamic/global/GlobalFormResponseDetails";
+import MyTasks from "./MyComponents/Agency/MyTasks/List/MyTasks";
+import MyTaskDetails from "./MyComponents/Agency/MyTasks/View/MyTaskDetails";
 import Audiences from "./MyComponents/Common/Audiences";
-import Programs from "./MyComponents/Common/Programs";
-import Creative_code from "./MyComponents/Common/Creative-code";
+import Community_settings from "./MyComponents/Common/Community-settings";
 import Copy_code from "./MyComponents/Common/Copy-code";
-// import IntakeForms from "./MyComponents/Common/IntakeForms";
-// // import AddIntakeForms from "./MyComponents/Agency/Intake-Forms/AddIntakeForms";
-// import ShareFormWrapper from "./MyComponents/Agency/Intake-Forms/ShareFormWrapper";
-// import IntakeFormResponseList from "./MyComponents/Agency/Intake-Forms/IntakeFormResponseList";
-// import DynamicForm from "./MyComponents/Agency/Intake-Forms/DynamicForm";
+import Creative_code from "./MyComponents/Common/Creative-code";
+import Programs from "./MyComponents/Common/Programs";
 
 const App = () => {
   const [isToggle, setIsToggle] = useState(false);
   const [headerCompany, setHeaderCompany] = useState(null);
-
-  // debugger;
-
-  useEffect(() => {
-    console.log({ headerCompany }, 'headerCompany');
-  }, [headerCompany])
 
   return (
     <Routes>
@@ -274,12 +268,19 @@ const App = () => {
           </PublicRoute>
         }
       ></Route>
+      <Route
+        exact
+        path="/intake/:formID"
+        element={
+          <ProtectedRoute>
+            <ShareFormWrapper />
+          </ProtectedRoute>
+        }
+      ></Route>
 
       {/* DAM Layout Routes */}
       <Route
-        element={
-          <DAMLayout isToggle={isToggle} setIsToggle={setIsToggle} />
-        }
+        element={<DAMLayout isToggle={isToggle} setIsToggle={setIsToggle} />}
       >
         <Route
           exact
@@ -557,16 +558,6 @@ const App = () => {
       >
         <Route
           exact
-          path="/home"
-          element={
-            <ProtectedRoute>
-              <Dashboard />
-            </ProtectedRoute>
-          }
-        ></Route>
-
-        <Route
-          exact
           path="/member/company"
           element={
             <ProtectedRoute>
@@ -658,6 +649,7 @@ const App = () => {
             </ProtectedRoute>
           }
         ></Route>
+
         <Route
           exact
           path="/Workflow/"
@@ -667,6 +659,7 @@ const App = () => {
             </ProtectedRoute>
           }
         ></Route>
+
         <Route
           exact
           path="/draft-jobs/"
@@ -676,6 +669,7 @@ const App = () => {
             </ProtectedRoute>
           }
         ></Route>
+
         <Route
           exact
           path="/member-draft-jobs/"
@@ -685,6 +679,7 @@ const App = () => {
             </ProtectedRoute>
           }
         ></Route>
+
         <Route
           exact
           path="/member-templates/list"
@@ -846,6 +841,15 @@ const App = () => {
           element={
             <ProtectedRoute>
               <Workflow_company_add />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          exact
+          path="/agency/reporting"
+          element={
+            <ProtectedRoute>
+              <AgencyReporting />
             </ProtectedRoute>
           }
         ></Route>
@@ -1017,6 +1021,24 @@ const App = () => {
         ></Route>
         <Route
           exact
+          path="/my_tasks"
+          element={
+            <ProtectedRoute>
+              <MyTasks />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          exact
+          path="/my_tasks/details/:myTaskId"
+          element={
+            <ProtectedRoute>
+              <MyTaskDetails />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          exact
           path="/jobs/list"
           element={
             <ProtectedRoute>
@@ -1033,6 +1055,7 @@ const App = () => {
             </ProtectedRoute>
           }
         ></Route>
+
         <Route
           exact
           path="/jobs/add"
@@ -1240,7 +1263,6 @@ const App = () => {
             </ProtectedRoute>
           }
         ></Route>
-
         <Route
           exact
           path="/company-project/community-settings"
@@ -1259,7 +1281,6 @@ const App = () => {
             </ProtectedRoute>
           }
         />
-
         <Route
           exact
           path="/company-project/programs"
@@ -1287,6 +1308,68 @@ const App = () => {
             </ProtectedRoute>
           }
         />
+        {/*<Route*/}
+        {/*  exact*/}
+        {/*  path="/intake_forms"*/}
+        {/*  element={*/}
+        {/*    <ProtectedRoute>*/}
+        {/*      <IntakeForms />*/}
+        {/*    </ProtectedRoute>*/}
+        {/*  }*/}
+        {/*></Route>*/}
+        <Route
+          exact
+          path="/intake"
+          element={
+            <ProtectedRoute>
+              <IntakeFormsDynamic />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          path="/intake/create"
+          element={
+            <ProtectedRoute>
+              <CreateIntakeFormsDynamic action="CREATE" />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          path="/intake/edit/:formName"
+          element={
+            <ProtectedRoute>
+              <CreateIntakeFormsDynamic action="EDIT" />
+            </ProtectedRoute>
+          }
+        ></Route>
+
+        {/*<Route*/}
+        {/*  exact*/}
+        {/*  path="/intake_forms/createform"*/}
+        {/*  element={*/}
+        {/*    <ProtectedRoute>*/}
+        {/*      <DynamicForm />*/}
+        {/*    </ProtectedRoute>*/}
+        {/*  }*/}
+        {/*></Route>*/}
+        <Route
+          exact
+          path="/intake/view/:formID"
+          element={
+            <ProtectedRoute>
+              <IntakeFormResponseList />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          exact
+          path="/intake/responses/:id"
+          element={
+            <ProtectedRoute>
+              <GlobalFormResponseDetails />
+            </ProtectedRoute>
+          }
+        ></Route>
         <Route
           exact
           path="/earnings"
@@ -1380,6 +1463,15 @@ const App = () => {
             </ProtectedRoute>
           }
         ></Route>
+        <Route
+          exact
+          path="/home"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        ></Route>
 
         <Route
           exact
@@ -1447,7 +1539,6 @@ const App = () => {
             </ProtectedRoute>
           }
         ></Route>
-
       </Route>
 
       {/* Error Route */}
@@ -1458,6 +1549,6 @@ const App = () => {
       ></Route>
     </Routes>
   );
-}
+};
 
 export default App;

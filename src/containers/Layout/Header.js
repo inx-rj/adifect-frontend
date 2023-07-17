@@ -339,8 +339,6 @@ export default function Header(props) {
     setOpenLogoutPopup(false);
     props.setHeaderCompany(null);
     dispatch(logout());
-
-    console.log({ userData }, "--- Inside logoutHandler");
   };
 
   const handleOpenLogoutPopup = () => {

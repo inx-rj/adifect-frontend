@@ -5,8 +5,15 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.sort_asc_icon {
+  transform: rotate(0deg);
+}
+.sort_des_icon {
+  transform: rotate(180deg);
+}
+
 .icon-style {
-  color: rgba(113, 117, 123, 0.6)
+  color: rgba(113, 117, 123, 0.6);
 }
 
 code {
@@ -1292,11 +1299,16 @@ body {
   padding: 0;
 }
 
-.Approval441 .MuiAutocomplete-hasPopupIcon.MuiAutocomplete-hasClearIcon.css-viou3o-MuiAutocomplete-root .MuiOutlinedInput-root {
+.Approval441
+  .MuiAutocomplete-hasPopupIcon.MuiAutocomplete-hasClearIcon.css-viou3o-MuiAutocomplete-root
+  .MuiOutlinedInput-root {
   padding-right: 0;
 }
 
-.Approval441 .css-viou3o-MuiAutocomplete-root .MuiOutlinedInput-root .MuiAutocomplete-input {
+.Approval441
+  .css-viou3o-MuiAutocomplete-root
+  .MuiOutlinedInput-root
+  .MuiAutocomplete-input {
   padding: 0;
   height: 45px;
   background: #f8f8f8;
@@ -1313,12 +1325,16 @@ p.selectworklabel {
   border-style: unset !important;
 }
 
-.Approval441 .MuiAutocomplete-endAdornment.css-1q60rmi-MuiAutocomplete-endAdornment {
+.Approval441
+  .MuiAutocomplete-endAdornment.css-1q60rmi-MuiAutocomplete-endAdornment {
   display: none;
 }
 
-.Approval441 .MuiAutocomplete-hasPopupIcon.css-viou3o-MuiAutocomplete-root .MuiOutlinedInput-root,
-.MuiAutocomplete-hasClearIcon.css-viou3o-MuiAutocomplete-root .MuiOutlinedInput-root {
+.Approval441
+  .MuiAutocomplete-hasPopupIcon.css-viou3o-MuiAutocomplete-root
+  .MuiOutlinedInput-root,
+.MuiAutocomplete-hasClearIcon.css-viou3o-MuiAutocomplete-root
+  .MuiOutlinedInput-root {
   padding-right: 0;
 }
 
@@ -1385,6 +1401,10 @@ p.Searchuser2 {
 
   .sidemenubar a {
     padding: 16px 16px !important;
+  }
+
+  .collapsedBar .sidemenubar a {
+    padding: 8px 8px !important;
   }
 }
 

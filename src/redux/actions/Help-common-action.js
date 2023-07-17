@@ -91,7 +91,7 @@ export const GetHelpCommonAction = () => async (dispatch, getState) => {
 
     dispatch({
       type: GET_HELP_POST_COMMON_SUCCESS,
-      payload: data,
+      payload: data?.data?.results,
     });
 
     return true;
@@ -209,7 +209,7 @@ export const AdminGetHelpUserListAction = (id) => async (dispatch, getState) => 
 
     dispatch({
       type: ADMIN_GET_HELP_USER_LIST_SUCCESS,
-      payload: data,
+      payload: data?.data?.results,
     });
 
     return true;

@@ -28,7 +28,7 @@ export const MemberProjectsByFilterAction =
       };
 
       const { data } = await api.get(
-        `${BACKEND_API_URL}members/admin-my-project/?page=${params.page}&status=${params.status}&job__company=${params.company}&ordering=${params.ordering}&job___is_active=${params.is_active}&search=${params.search}`
+        `${BACKEND_API_URL}members/admin-my-project/?page=${params.page}&status=${params.status}&job__company=${params.company}&ordering=${params.ordering}&job___is_active=${params.is_active}&search=${params.search ?? ""}`
       );
 
       dispatch({

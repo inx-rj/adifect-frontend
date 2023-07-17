@@ -4,7 +4,7 @@ import Datepicker from "react-tailwindcss-datepicker";
 const CustomDateRangePicker = ({
   handleChange,
   containerClassName,
-  inputClassName = "dr-picker-input",
+  inputClassName = "border dr-picker-input",
   ...props
 }) => {
   const [value, setValue] = useState({ startDate: null, endDate: null });

@@ -35,6 +35,7 @@ import {
 } from "../../constants/activity-constants";
 import LoadingSpinner from "../../containers/LoadingSpinner";
 import { getJobDetailsCreator } from "../../redux/actions/job-actions";
+import Editor from "../../Editor/Editor";
 
 // DropZone Style Start
 const baseStyle = {
@@ -94,6 +95,7 @@ export default function Creator_Activity(props) {
   }, 2000);
 
   const [filter, setFilter] = useState("");
+  const [commentCacheStore, setCommentCacheStore] = useState([]);
 
   const [chatbox, setChatbox] = useState("");
   const [attachfiles, setAttachfiles] = useState([]);
@@ -609,12 +611,20 @@ export default function Creator_Activity(props) {
     setUserIdData();
   };
 
+  const onchangeHandler = (_editorState, editor) => {
+    _editorState.read(() => {
+      const editorState = editor.getEditorState();
+      const jsonString = JSON.stringify(editorState);
+      // setDataText(jsonString);
+    });
+  };
+
   return (
     <>
       {creatorActivityLoading ||
-        postActivityLoading ||
-        activitySubmitLoading ||
-        isLoading ? (
+      postActivityLoading ||
+      activitySubmitLoading ||
+      isLoading ? (
         <LoadingSpinner />
       ) : (
         <>
@@ -944,13 +954,13 @@ export default function Creator_Activity(props) {
                                           className={
                                             activity?.job_applied_data[0]
                                               ?.proposed_price >
-                                              1.5 * props.jobPrice
+                                            1.5 * props.jobPrice
                                               ? "TonnyProposedPrice"
                                               : activity?.job_applied_data[0]
-                                                ?.proposed_price >
+                                                  ?.proposed_price >
                                                 1.25 * props?.jobPrice
-                                                ? "orangeTonnyProposedPrice"
-                                                : undefined
+                                              ? "orangeTonnyProposedPrice"
+                                              : undefined
                                           }
                                         >
                                           <h3>Proposed Price</h3>
@@ -974,32 +984,32 @@ export default function Creator_Activity(props) {
 
                                       {activity?.job_applied_data[0]
                                         ?.proposed_due_date && (
-                                          <div
-                                            className={
-                                              handleDateDiff(
-                                                props?.jobDueDate,
-                                                activity?.job_applied_data[0]
-                                                  ?.proposed_due_date
-                                              ) > 7
-                                                ? "redProposedDueDate"
-                                                : handleDateDiff(
+                                        <div
+                                          className={
+                                            handleDateDiff(
+                                              props?.jobDueDate,
+                                              activity?.job_applied_data[0]
+                                                ?.proposed_due_date
+                                            ) > 7
+                                              ? "redProposedDueDate"
+                                              : handleDateDiff(
                                                   props?.jobDueDate,
                                                   activity?.job_applied_data[0]
                                                     ?.proposed_due_date
                                                 ) > 3
-                                                  ? "orangetonnyProposedDueDate"
-                                                  : "tonnyProposedDueDate"
+                                              ? "orangetonnyProposedDueDate"
+                                              : "tonnyProposedDueDate"
+                                          }
+                                        >
+                                          <h3>Proposed Due Date</h3>
+                                          <p>
+                                            {
+                                              activity?.job_applied_data[0]
+                                                ?.proposed_due_date
                                             }
-                                          >
-                                            <h3>Proposed Due Date</h3>
-                                            <p>
-                                              {
-                                                activity?.job_applied_data[0]
-                                                  ?.proposed_due_date
-                                              }
-                                            </p>
-                                          </div>
-                                        )}
+                                          </p>
+                                        </div>
+                                      )}
                                     </div>
                                   </div>
                                 </div>
@@ -1035,12 +1045,12 @@ export default function Creator_Activity(props) {
                                               index
                                             ]?.length > 20
                                               ? `${activity?.job_applied_data[0]?.job_applied_attachments_name[
-                                                index
-                                              ]?.substring(0, 20)}...`
+                                                  index
+                                                ]?.substring(0, 20)}...`
                                               : activity?.job_applied_data[0]
-                                                ?.job_applied_attachments_name[
-                                              index
-                                              ]}
+                                                  ?.job_applied_attachments_name[
+                                                  index
+                                                ]}
                                           </a>
                                         </>
                                       )
@@ -1114,7 +1124,7 @@ export default function Creator_Activity(props) {
                       {/* {activity.activity_type === 4 && activity.activity_status === 0 ( */}
                       {activity?.activity_status === 3 &&
                         activity?.activity_job_work[0]?.work_activity ===
-                        "rejected" && (
+                          "rejected" && (
                           <div className="newAgencyActivity">
                             <div className="MessImg">
                               {activity?.activity_job_work[0]
@@ -1151,18 +1161,50 @@ export default function Creator_Activity(props) {
                                   ).format("MMMM D, h:mm A")}
                                 </label>
                               </h3>
-                              {activity?.activity_job_work[0]
+                              {/* {activity?.activity_job_work[0]
                                 ?.approver_message && (
                                   <h3
                                     style={{ whiteSpace: "pre-line" }}
                                     className="rachelRejectSecLine"
-                                  >
-                                    {" "}
-                                    {urlify(
+                                    dangerouslySetInnerHTML={{ __html: urlify(activity?.activity_job_work[0]?.approver_message) }}
+                                  />
+                                )} */}
+                              {activity?.activity_job_work[0]
+                                ?.approver_message &&
+                                activity?.activity_job_work[0]?.approver_message.search(
+                                  "root"
+                                ) <= 0 && (
+                                  <h3
+                                    style={{ whiteSpace: "pre-line" }}
+                                    className="rachelRejectSecLine"
+                                    dangerouslySetInnerHTML={{
+                                      __html: urlify(
+                                        activity?.activity_job_work[0]
+                                          ?.approver_message
+                                      ),
+                                    }}
+                                  />
+                                )}
+                              {activity?.activity_job_work[0]
+                                ?.approver_message &&
+                                activity?.activity_job_work[0]?.approver_message.search(
+                                  "root"
+                                ) > 0 && (
+                                  <Editor
+                                    isEditable={false}
+                                    initialValue={
                                       activity?.activity_job_work[0]
                                         ?.approver_message
-                                    )}
-                                  </h3>
+                                        ? activity?.activity_job_work[0]
+                                            ?.approver_message
+                                        : ""
+                                    }
+                                    onChange={onchangeHandler}
+                                    commentCacheStore={commentCacheStore}
+                                    setCommentCacheStore={setCommentCacheStore}
+                                    isCommentOn={false}
+                                    isToolbar={false}
+                                  />
                                 )}
                               {activity?.activity_job_work[0]?.job_work
                                 ?.task_details?.title ? (
@@ -1194,7 +1236,7 @@ export default function Creator_Activity(props) {
                           <div className="newAgencyActivity">
                             <div className="MessImg">
                               {activity?.activity_job_chat[0]?.sender ===
-                                activity?.user_full_name?.id ? (
+                              activity?.user_full_name?.id ? (
                                 <img
                                   src={
                                     activity?.user_img
@@ -1225,12 +1267,12 @@ export default function Creator_Activity(props) {
                             <div className="NewMessText">
                               <h3>
                                 {activity?.activity_job_chat[0]?.sender ===
-                                  activity?.user_full_name?.id
+                                activity?.user_full_name?.id
                                   ? activity?.user_full_name?.user_name
                                   : activity?.activity_job_chat[0]?.sender ===
                                     activity?.agency_name?.id
-                                    ? activity?.agency_name?.agency_name
-                                    : "N/A"}
+                                  ? activity?.agency_name?.agency_name
+                                  : "N/A"}
                                 <label className="Mess_Agen_Date">
                                   {moment(activity?.created).format(
                                     "MMMM D, h:mm A"
@@ -1281,9 +1323,9 @@ export default function Creator_Activity(props) {
                                             {" "}
                                             {item?.image_name?.length > 15
                                               ? `${item?.image_name?.substring(
-                                                0,
-                                                15
-                                              )}...`
+                                                  0,
+                                                  15
+                                                )}...`
                                               : item?.image_name}{" "}
                                           </p>
                                         </div>
@@ -1401,7 +1443,7 @@ export default function Creator_Activity(props) {
                       <div className="newAgencyActivity">
                         {activity?.activity_status === 2 &&
                           activity?.activity_job_work[0]?.work_activity ===
-                          "submit_approval" && (
+                            "submit_approval" && (
                             <>
                               <div className="MessImg">
                                 {activity?.user_img ? (
@@ -1431,7 +1473,7 @@ export default function Creator_Activity(props) {
                         <div className="ActivityBFourthMessage">
                           {activity?.activity_status === 2 &&
                             activity?.activity_job_work[0]?.work_activity ===
-                            "submit_approval" && (
+                              "submit_approval" && (
                               <>
                                 {activity?.activity_job_work[0]
                                   ?.message_work ? (
@@ -1471,6 +1513,46 @@ export default function Creator_Activity(props) {
                                       </div>
                                     )}
                                   </div>
+                                ) : activity?.activity_job_work[0]?.job_work
+                                    ?.message ? (
+                                  <>
+                                    <div className="letsDotext">
+                                      <p
+                                        style={{ whiteSpace: "pre-line" }}
+                                        className="letsDoJohn"
+                                      >
+                                        {urlify(
+                                          activity?.activity_job_work[0]
+                                            ?.job_work?.message
+                                        )}
+                                      </p>
+                                      {activity?.activity_job_work[0]?.job_work
+                                        ?.task_details?.title ? (
+                                        <div
+                                          style={{ marginTop: "5px" }}
+                                          className="jobSubmitTaskTitleActivity"
+                                        >
+                                          <h5>
+                                            <strong>Task submitted:</strong>{" "}
+                                            {
+                                              activity?.activity_job_work[0]
+                                                ?.job_work?.task_details?.title
+                                            }
+                                          </h5>
+                                        </div>
+                                      ) : (
+                                        <div
+                                          style={{ marginTop: "5px" }}
+                                          className="jobSubmitTaskTitleActivity"
+                                        >
+                                          <h5>
+                                            <strong>Task submitted:</strong>{" "}
+                                            Entire Job
+                                          </h5>
+                                        </div>
+                                      )}
+                                    </div>
+                                  </>
                                 ) : (
                                   <div className="NoMessageWithAttachmentActivity"></div>
                                 )}
@@ -1480,7 +1562,7 @@ export default function Creator_Activity(props) {
                           <div className="jobSubmitAttachmentsActivity">
                             {activity?.activity_status === 2 &&
                               activity?.activity_job_work[0]?.work_activity ===
-                              "submit_approval" && (
+                                "submit_approval" && (
                                 <>
                                   {activity?.activity_job_work[0]
                                     ?.job_work_activity_attachments?.length >
@@ -1506,11 +1588,11 @@ export default function Creator_Activity(props) {
                                             <p style={{ fontSize: "10px" }}>
                                               {" "}
                                               {item?.attachment_name?.length >
-                                                15
+                                              15
                                                 ? `${item?.attachment_name?.substring(
-                                                  0,
-                                                  15
-                                                )}...`
+                                                    0,
+                                                    15
+                                                  )}...`
                                                 : item?.attachment_name}{" "}
                                             </p>
                                           </div>
@@ -1572,7 +1654,7 @@ export default function Creator_Activity(props) {
                       {/* ------------------------- JOB MOVED TO STAGE ------------------------- */}
                       {activity?.activity_status === 3 &&
                         activity?.activity_job_work[0]?.work_activity ===
-                        "moved" && (
+                          "moved" && (
                           <div className="newAgencyActivity">
                             <div className="MessImg">
                               <img src="/img/adifectnewLogo.png" alt="" />
@@ -1619,7 +1701,7 @@ export default function Creator_Activity(props) {
                       {/* ------------------------- JOB APPROVED NOTIFICATION ?? ------------------------- */}
                       {activity?.activity_status === 3 &&
                         activity?.activity_job_work[0]?.work_activity ===
-                        "approved" && (
+                          "approved" && (
                           <div className="newAgencyActivity">
                             <div className="MessImg">
                               {activity?.activity_job_work[0]?.work_activity
@@ -1659,15 +1741,44 @@ export default function Creator_Activity(props) {
                                   )}
                                 </label>
                               </h3>
-                              <h3
-                                style={{ whiteSpace: "pre-line" }}
-                                className="approvermessageActivity"
-                              >
-                                {urlify(
-                                  activity?.activity_job_work[0]
-                                    ?.approver_message
+
+                              {activity?.activity_job_work[0]
+                                ?.approver_message &&
+                                activity?.activity_job_work[0]?.approver_message.search(
+                                  "root"
+                                ) <= 0 && (
+                                  <h3
+                                    style={{ whiteSpace: "pre-line" }}
+                                    className="approvermessageActivity"
+                                    dangerouslySetInnerHTML={{
+                                      __html: urlify(
+                                        activity?.activity_job_work[0]
+                                          ?.approver_message
+                                      ),
+                                    }}
+                                  />
                                 )}
-                              </h3>
+                              {activity?.activity_job_work[0]
+                                ?.approver_message &&
+                                activity?.activity_job_work[0]?.approver_message.search(
+                                  "root"
+                                ) > 0 && (
+                                  <Editor
+                                    isEditable={false}
+                                    initialValue={
+                                      activity?.activity_job_work[0]
+                                        ?.approver_message
+                                        ? activity?.activity_job_work[0]
+                                            ?.approver_message
+                                        : ""
+                                    }
+                                    onChange={onchangeHandler}
+                                    commentCacheStore={commentCacheStore}
+                                    setCommentCacheStore={setCommentCacheStore}
+                                    isCommentOn={false}
+                                    isToolbar={false}
+                                  />
+                                )}
                               {activity?.activity_job_work[0]?.job_work
                                 ?.task_details?.title ? (
                                 <h6
@@ -1695,7 +1806,7 @@ export default function Creator_Activity(props) {
                       {/* ------------------------- JOB RATING NOTIFICATION RECIEVER ------------------------- */}
                       {activity?.activity_type === 7 &&
                         Object.keys(activity?.job_rating_receiver)?.length >
-                        0 && (
+                          0 && (
                           <>
                             <div className="newAgencyActivity">
                               <div className="MessImg">
@@ -1752,7 +1863,7 @@ export default function Creator_Activity(props) {
                       {/* ------------------------- JOB RATING NOTIFICATION SENDER ------------------------- */}
                       {activity?.activity_type === 7 &&
                         Object.keys(activity?.job_rating_sender)?.length >
-                        0 && (
+                          0 && (
                           <>
                             <div className="newAgencyActivity">
                               <div className="MessImg">

@@ -242,7 +242,7 @@ export const postActivityChat = (params) => async (dispatch, getState) => {
 
     const config = {
       headers: {
-        "Content-type": "application/json",
+        "Content-type": "multipart/form-data",
         Authorization: `Bearer ${userData.token}`,
       },
     };
@@ -322,7 +322,7 @@ export const creatorActivityJobSubmitAction =
 
       const config = {
         headers: {
-          "Content-type": "application/json",
+          "Content-type": "multipart/form-data",
           Authorization: `Bearer ${userData.token}`,
         },
       };

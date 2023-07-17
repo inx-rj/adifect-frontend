@@ -21,6 +21,7 @@ import {
   AGENCY_AUDIENCES_LIST_FAIL,
   AGENCY_COMPANY_STORY_DETAILS_FAIL,
   AGENCY_COMPANY_STORY_DETAILS_SUCCESS,
+  AGENCY_COMPANY_STORY_DETAILS_REQUEST,
 } from "../../constants/Agency-companies-constants";
 
 import { BACKEND_API_URL } from "../../environment";
@@ -626,7 +627,7 @@ export const agencyAudiencesListAction =
         };
 
         const { data } = await api.get(
-          `${BACKEND_API_URL}agency/audience/`,
+          `${BACKEND_API_URL}community/audience/`,
           config
         );
 
@@ -652,7 +653,7 @@ export const agencyCompanyStoryDetailsAction =
   (communityId) => async (dispatch, getState) => {
     try {
       dispatch({
-        type: AGENCY_COMPANY_STORY_DETAILS_SUCCESS,
+        type: AGENCY_COMPANY_STORY_DETAILS_REQUEST,
         payload: true,
       });
       const {
@@ -670,10 +671,10 @@ export const agencyCompanyStoryDetailsAction =
         config
       );
       if (status === 200) {
-        dispatch({
-          type: AGENCY_COMPANY_STORY_DETAILS_SUCCESS,
-          payload: false,
-        });
+        // dispatch({
+        //   type: AGENCY_COMPANY_STORY_DETAILS_SUCCESS,
+        //   payload: false,
+        // });
         dispatch({
           type: AGENCY_COMPANY_STORY_DETAILS_SUCCESS,
           payload: data?.data,
