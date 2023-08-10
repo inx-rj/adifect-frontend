@@ -263,7 +263,7 @@ export default function Member_InHouse_job_list() {
                                     index_item={index}
                                     target="_blank"
                                     href={`${item}`}
-                                    // href={item}
+                                  // href={item}
                                   >
                                     <li key={index}>
                                       <img
@@ -286,7 +286,7 @@ export default function Member_InHouse_job_list() {
                                     index_item={index}
                                     target="_blank"
                                     href={`${item}`}
-                                    // href={item}
+                                  // href={item}
                                   >
                                     <li key={index}>
                                       <img
@@ -486,7 +486,7 @@ export default function Member_InHouse_job_list() {
                       <div
                         className="Remotemarkeitng Remotagencylist memberinhosejoblist"
                         key={index}
-                        // onClick={() => openPopup(item.id)}
+                      // onClick={() => openPopup(item.id)}
                       >
                         <div className="bt-Title">
                           <div className="joblistcreator">
@@ -651,7 +651,7 @@ export default function Member_InHouse_job_list() {
                       <>
                         <LinkContainer
                           key={x + 1}
-                          to={`/jobs/list?page=${x + 1}`}
+                          to={{ pathName: `/jobs/list?page=${x + 1}` }}
                           onClick={() => pageHandler(x + 1)}
                         >
                           <Pagination.Item active={x + 1 === currentPage}>

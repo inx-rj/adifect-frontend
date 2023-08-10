@@ -14,7 +14,7 @@ import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import MenuItem from "@mui/material/MenuItem";
-import Select  from "@mui/material/Select";
+import Select from "@mui/material/Select";
 
 import axios from "axios";
 // import {listAgencyJobs } from "../../redux/actions/job-actions";
@@ -641,10 +641,10 @@ function Agency_jobList_data() {
                       <div className="userforminput Roleuserpage">
                         <label>Job Status</label>
                         <Select
-                        className={
-                          userStatus === "null"
-                          ? "selectinputcolor"
-                          : "menuiteminputcolor"
+                          className={
+                            userStatus === "null"
+                              ? "selectinputcolor"
+                              : "menuiteminputcolor"
                           }
                           value={userStatus}
                           onChange={(e) => setUserStatus(e.target.value)}
@@ -695,9 +695,10 @@ function Agency_jobList_data() {
                       <>
                         <LinkContainer
                           key={x + 1}
-                          to={`/companydata/${companyid}/${agencyId}?page=${
-                            x + 1
-                          }`}
+                          to={{
+                            pathName: `/companydata/${companyid}/${agencyId}?page=${x + 1
+                              }`
+                          }}
                           onClick={() => pageHandler(x + 1)}
                         >
                           <Pagination.Item active={x + 1 === currentPage}>

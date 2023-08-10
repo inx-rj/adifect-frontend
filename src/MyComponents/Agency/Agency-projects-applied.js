@@ -138,9 +138,9 @@ function Agency_projects_applied(props) {
                                 <p>
                                   {item?.job?.description?.length > 300
                                     ? `${item?.job?.description.slice(
-                                        0,
-                                        300
-                                      )}...`
+                                      0,
+                                      300
+                                    )}...`
                                     : item?.job?.description}{" "}
                                 </p>{" "}
                                 {/* <Link to="#" className="progresstext Review">
@@ -162,20 +162,20 @@ function Agency_projects_applied(props) {
                                   </li>
                                 </div>
                                 {item?.job?.skills.length > 0 && (
-                                      <div className="Skill mt-2">
-                                      <li>
-                                          <h4>Skills:</h4>
+                                  <div className="Skill mt-2">
+                                    <li>
+                                      <h4>Skills:</h4>
+                                    </li>
+                                    {item?.job?.skills
+                                      ?.slice(0, 5)
+                                      ?.map((skill) => (
+                                        <li>
+                                          <Link to="#">{skill.skill_name}</Link>
                                         </li>
-                                        {item?.job?.skills
-                                          ?.slice(0, 5)
-                                          ?.map((skill) => (
-                                            <li>
-                                              <Link to="#">{skill.skill_name}</Link>
-                                            </li>
-                                          ))}
-                                      </div>
+                                      ))}
+                                  </div>
                                 )}
-                               
+
                               </div>
                             </div>
                           </div>
@@ -200,7 +200,9 @@ function Agency_projects_applied(props) {
                   <>
                     <LinkContainer
                       key={x + 1}
-                      to={`/projects?page=${x + 1}`}
+                      to={{
+                        pathName: `/projects?page=${x + 1}`,
+                      }}
                       onClick={() => pageHandler(x + 1)}
                     >
                       <Pagination.Item active={x + 1 === currentPage}>
