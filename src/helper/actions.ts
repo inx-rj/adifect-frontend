@@ -1,7 +1,0 @@
-export const ActionTypes = {
-  CREATE: 'CREATE',
-  UPDATED: 'UPDATED',
-  VIEW: 'VIEW',
-  DELETE: 'DELETE',
-  DESTROY_SESSION: 'DESTROY_SESSION'
-};
