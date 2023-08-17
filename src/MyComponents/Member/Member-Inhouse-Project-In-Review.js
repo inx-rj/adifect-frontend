@@ -63,11 +63,11 @@ function Member_Inhouse_Project_In_Review(props) {
           page: currentPage,
           company: props.company,
           ordering: props.ordering,
-          search:props.searchfeedback,
+          search: props.searchfeedback,
         })
       );
     }
-  }, [currentPage, props.company, props.ordering,props.searchfeedback]);
+  }, [currentPage, props.company, props.ordering, props.searchfeedback]);
 
   useEffect(() => {
     setCurrentPage(1);
@@ -122,83 +122,83 @@ function Member_Inhouse_Project_In_Review(props) {
             </h6>{" "} */}
           </div>
           <div className="Performanceadsapplied ">
-          {MemberInhouseProjectsByFilterData?.length > 0 ? (
-                  <>
-                    {MemberInhouseProjectsByFilterData?.map((item) => (
-                      <div className="Topallpageprojects">
-                        <Link to={`/jobs/details/${item.id}`}>
-                          <div className="InProgress-4">
-                            <div className="Work-D_contnet">
-                              <div className="Work-In_contnet">
-                                <div className="InProgress"></div>
-                                <div className="Marketingcampaign">
-                                  <div className="Marketingcampaign1_contnet"></div>
-                                  <div className="Marketingcampaign2">
-                                    <div className="businesstext">
-                                      <h3>
-                                        {item.title?.length > 30
-                                          ? `${item.title.slice(0, 30)}...`
-                                          : item.title}
-                                      </h3>
-                                      {item?.flag && (
-                                        <Link
-                                          style={{ marginLeft: "5px" }}
-                                          to="#"
-                                          className="progresstext Review lateFlagProjects"
-                                        >
-                                          Late
-                                        </Link>
-                                      )}
-                                      {/* <span className="NewText">
+            {MemberInhouseProjectsByFilterData?.length > 0 ? (
+              <>
+                {MemberInhouseProjectsByFilterData?.map((item) => (
+                  <div className="Topallpageprojects">
+                    <Link to={`/jobs/details/${item.id}`}>
+                      <div className="InProgress-4">
+                        <div className="Work-D_contnet">
+                          <div className="Work-In_contnet">
+                            <div className="InProgress"></div>
+                            <div className="Marketingcampaign">
+                              <div className="Marketingcampaign1_contnet"></div>
+                              <div className="Marketingcampaign2">
+                                <div className="businesstext">
+                                  <h3>
+                                    {item.title?.length > 30
+                                      ? `${item.title.slice(0, 30)}...`
+                                      : item.title}
+                                  </h3>
+                                  {item?.flag && (
+                                    <Link
+                                      style={{ marginLeft: "5px" }}
+                                      to="#"
+                                      className="progresstext Review lateFlagProjects"
+                                    >
+                                      Late
+                                    </Link>
+                                  )}
+                                  {/* <span className="NewText">
                                         <img
                                           className="mailicon"
                                           src="img/mail.png"
                                         />{" "}
                                         +1 New
                                       </span> */}
-                                    </div>
-                                    <p>
-                                      {item.description?.length > 300
-                                        ? `${item.description.slice(0, 300)}...`
-                                        : item.description}
-                                    </p>{" "}
-                                    <Link
-                                      to="#"
-                                      className="progresstext_contnet"
-                                    >
-                                      In Progress
-                                    </Link>
-                                    <div className="duadate">
+                                </div>
+                                <p>
+                                  {item.description?.length > 300
+                                    ? `${item.description.slice(0, 300)}...`
+                                    : item.description}
+                                </p>{" "}
+                                <Link
+                                  to="#"
+                                  className="progresstext_contnet"
+                                >
+                                  In Progress
+                                </Link>
+                                <div className="duadate">
+                                  <li>
+                                    <h4>Due on:</h4>
+                                  </li>
+                                  <li>
+                                    <h4>{item.job_due_date}</h4>
+                                  </li>
+                                </div>
+                                <div className="Skill mt-2">
+                                  {item.skills
+                                    ?.slice(0, 5)
+                                    ?.map((skill) => (
                                       <li>
-                                        <h4>Due on:</h4>
+                                        <Link to="#">
+                                          {skill.skill_name}
+                                        </Link>
                                       </li>
-                                      <li>
-                                        <h4>{item.job_due_date}</h4>
-                                      </li>
-                                    </div>
-                                    <div className="Skill mt-2">
-                                      {item.skills
-                                        ?.slice(0, 5)
-                                        ?.map((skill) => (
-                                          <li>
-                                            <Link to="#">
-                                              {skill.skill_name}
-                                            </Link>
-                                          </li>
-                                        ))}
-                                    </div>
-                                  </div>
+                                    ))}
                                 </div>
                               </div>
                             </div>
                           </div>
-                        </Link>
+                        </div>
                       </div>
-                    ))}
-                  </>
-                ) : (
-                  <div className="NoJobsProjectsPage">No jobs found</div>
-                )}
+                    </Link>
+                  </div>
+                ))}
+              </>
+            ) : (
+              <div className="NoJobsProjectsPage">No jobs found</div>
+            )}
           </div>
           {pages > 1 && (
             <div className="adminjobpagination">
@@ -211,7 +211,9 @@ function Member_Inhouse_Project_In_Review(props) {
                   <>
                     <LinkContainer
                       key={x + 1}
-                      to={`/projects?page=${x + 1}`}
+                      to={{
+                        pathName: `/projects?page=${x + 1}`,
+                      }}
                       onClick={() => pageHandler(x + 1)}
                     >
                       <Pagination.Item active={x + 1 === currentPage}>

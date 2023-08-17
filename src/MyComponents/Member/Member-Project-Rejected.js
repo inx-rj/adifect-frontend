@@ -64,11 +64,11 @@ function Member_Project_Rejected(props) {
           page: currentPage,
           company: props.company,
           ordering: props.ordering,
-          search:props.searchfeedback,
+          search: props.searchfeedback,
         })
       );
     }
-  }, [currentPage, props.company, props.ordering,props.searchfeedback]);
+  }, [currentPage, props.company, props.ordering, props.searchfeedback]);
 
   useEffect(() => {
     setCurrentPage(1);
@@ -155,9 +155,9 @@ function Member_Project_Rejected(props) {
                                 <p>
                                   {item?.job?.description?.length > 300
                                     ? `${item?.job?.description.slice(
-                                        0,
-                                        300
-                                      )}...`
+                                      0,
+                                      300
+                                    )}...`
                                     : item?.job?.description}{" "}
                                 </p>{" "}
                                 {/* <Link to="#" className="progresstext Review">
@@ -211,7 +211,9 @@ function Member_Project_Rejected(props) {
                   <>
                     <LinkContainer
                       key={x + 1}
-                      to={`/projects?page=${x + 1}`}
+                      to={{
+                        pathName: `/projects?page=${x + 1}`,
+                      }}
                       onClick={() => pageHandler(x + 1)}
                     >
                       <Pagination.Item active={x + 1 === currentPage}>

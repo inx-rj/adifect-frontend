@@ -35,7 +35,7 @@ function Agency_projects_in_review(props) {
           status: 3,
           page: currentPage,
           ordering: props.ordering,
-          search:props.searchfeedback,
+          search: props.searchfeedback,
         })
       );
     } else {
@@ -45,11 +45,11 @@ function Agency_projects_in_review(props) {
           page: currentPage,
           company: props.company,
           ordering: props.ordering,
-          search:props.searchfeedback,
+          search: props.searchfeedback,
         })
       );
     }
-  }, [currentPage, props.company, props.ordering,props.searchfeedback]);
+  }, [currentPage, props.company, props.ordering, props.searchfeedback]);
 
   useEffect(() => {
     setCurrentPage(1);
@@ -141,9 +141,9 @@ function Agency_projects_in_review(props) {
                                   <p>
                                     {item?.job?.description?.length > 300
                                       ? `${item?.job?.description.slice(
-                                          0,
-                                          300
-                                        )}...`
+                                        0,
+                                        300
+                                      )}...`
                                       : item?.job?.description}{" "}
                                   </p>{" "}
                                   <Link to="#" className="progresstext Review">
@@ -198,7 +198,9 @@ function Agency_projects_in_review(props) {
                   <>
                     <LinkContainer
                       key={x + 1}
-                      to={`/projects?page=${x + 1}`}
+                      to={{
+                        pathName: `/projects?page=${x + 1}`,
+                      }}
                       onClick={() => pageHandler(x + 1)}
                     >
                       <Pagination.Item active={x + 1 === currentPage}>
