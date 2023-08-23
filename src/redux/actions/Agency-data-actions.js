@@ -184,7 +184,7 @@ export const AllInvite = (id) => async (dispatch, getState) => {
 
     dispatch({
       type: ALL_INVITE_LIST_SUCCESS,
-      payload: data,
+      payload: data?.data?.results,
     });
 
     return true;
