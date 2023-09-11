@@ -4488,7 +4488,7 @@ function Media(currentFolder) {
       mydata.current = Collectionviewdata;
     }
   }, [Collectionviewdata]);
-  
+
   const handleOpenShareMedia = () => {
     let view = [];
     if (count?.length > 0) {
@@ -8721,6 +8721,118 @@ function Media(currentFolder) {
                       {!hidefolder && !searchfolder && yourfilter && (
                         <>
                           <div className="folderImagesNewDFlex">
+                            {DamData?.length > 0 && (
+                              <>
+                                {DamData?.map(item => (
+                                  <>
+                                    <>
+                                      {item?.dam_media.map(value => (
+                                        <>
+                                          <div
+                                            className={
+                                              count.includes(value?.id) || detailsid == value?.id
+                                                ? 'recent_pics1NewImages selected'
+                                                : 'recent_pics1NewImages '
+                                            }
+                                          >
+                                            <img className="selected_check_icon" src="/img/allok.png" alt="allok" />
+                                            <div className="react_pics_contnetNewImages">
+                                              {value?.is_video == false && (
+                                                <>
+                                                  <img
+                                                    onContextMenu={event =>
+                                                      handleFileContextMenu(
+                                                        value?.root,
+                                                        value?.media,
+                                                        event,
+                                                        value?.dam,
+                                                        value?.upload_by,
+                                                        value?.created,
+                                                        value?.title,
+                                                        value?.description,
+                                                        value?.files_size,
+                                                        value?.id,
+                                                        value?.file_type,
+                                                        value?.limit_usage,
+                                                        value?.thumbnail,
+                                                        value?.skill,
+                                                        value?.usage,
+                                                        value?.company
+                                                      )
+                                                    }
+                                                    onClick={() =>
+                                                      countimages(value?.id, value?.dam, value?.type, value?.media)
+                                                    }
+                                                    className="scene_contnetNew"
+                                                    src={value?.thumbnail}
+                                                  />
+                                                  {isOpenImg && (
+                                                    <ModalImg
+                                                      src={fullview}
+                                                      alt="recent images"
+                                                      onClose={() => setIsOpenImg(false)}
+                                                    />
+                                                  )}
+                                                </>
+                                              )}{' '}
+                                              {value?.is_video == true && (
+                                                <>
+                                                  <video
+                                                    className="videoSWithDamData"
+                                                    controls
+                                                    onClick={() =>
+                                                      countimages(value?.id, value?.dam, value?.type, value?.media)
+                                                    }
+                                                    onContextMenu={event =>
+                                                      handleFileVideoContextMenu(
+                                                        value?.root,
+                                                        value?.media,
+                                                        event,
+                                                        value?.dam,
+                                                        value?.upload_by,
+                                                        value?.created,
+                                                        value?.title,
+                                                        value?.description,
+                                                        value?.files_size,
+                                                        value?.id,
+                                                        value?.file_type,
+                                                        value?.limit_usage,
+                                                        value?.thumbnail,
+                                                        value?.skill,
+                                                        value?.usage,
+                                                        value?.company
+                                                      )
+                                                    }
+                                                  >
+                                                    <source src={value?.thumbnail} type="video/mp4" />
+                                                  </video>
+                                                </>
+                                              )}
+                                              {countfav?.includes(value?.dam) && (
+                                                <>
+                                                  {' '}
+                                                  <img
+                                                    className="startimgst updaterecent updaterecentSetDes"
+                                                    src="/img/startimg.png"
+                                                  />
+                                                </>
+                                              )}
+                                              <div className="valuename">
+                                                <p className="looking_title">{value?.title}</p>
+                                                <span className="price_contnet11">
+                                                  <i className="fas fa-shopping-bag"></i>
+                                                  {value?.job_count}
+                                                </span>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </>
+                                      ))}
+                                    </>
+                                  </>
+                                ))}
+                              </>
+                            )}
                             {DamDataImages?.map((item) => (
                               <>
                                 {item?.dam_media.map((value) => (
